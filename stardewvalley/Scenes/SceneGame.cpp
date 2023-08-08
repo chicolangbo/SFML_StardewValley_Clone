@@ -74,15 +74,15 @@ void SceneGame::Init()
 
 	// 김민지, 230807, 테스트용 추가
 	player2 = (Player2*)AddGo(new Player2());
-	/*AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo", "logo"));
-	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load", "load"));
+	/*AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
+	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load"));
 	SpriteGo* logo = (SpriteGo*)FindGo("logo");
-	SpriteGo* load = (SpriteGo*)FindGo("load");*/
-	//logo->SetOrigin(Origins::MC);
-	//logo->SetPosition(0, 0);
-	//load->SetOrigin(Origins::MC);
-	//load->SetPosition(0, 0);
-	//
+	SpriteGo* load = (SpriteGo*)FindGo("load");
+	logo->SetOrigin(Origins::MC);
+	logo->SetPosition(0, 0);
+	load->SetOrigin(Origins::MC);
+	load->SetPosition(0, 0);*/
+	
 
 	for (auto go : gameObjects)
 	{
@@ -138,6 +138,9 @@ void SceneGame::Update(float dt)
 	// 김민지, 230807, 테스트용 주석처리
 	//worldView.setCenter(player2->GetPosition());
 	//
+	
+	//뷰를 플레이어에 고정
+	worldView.setCenter(player2->GetPosition());
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

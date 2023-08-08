@@ -34,5 +34,8 @@ public:
 	
 	string GetCurrentClipId();
 	void SetFrame(const AnimationFrame& frame);
+
+	int GetTotalFrame() { return totalFrame; }
+	int GetCurrentFrame() { return currentFrame; }
 };
 
