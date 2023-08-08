@@ -23,3 +23,6 @@
 3,animations/player_Tool-side.csv,N,-1,-1,-1,-1
 3,animations/player_Tool-up.csv,N,-1,-1,-1,-1
 0,graphics/farmer_base.png,N,-1,-1,-1,-1
+3,animations/player_Attack.csv,N,-1,-1,-1,-1
+3,animations/player_Attack-side.csv,N,-1,-1,-1,-1
+3,animations/player_Attack-up.csv,N,-1,-1,-1,-1

@@ -74,14 +74,14 @@ void SceneGame::Init()
 
 	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë Ãß°¡
 	player2 = (Player2*)AddGo(new Player2());
-	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo", "logo"));
+	/*AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo", "logo"));
 	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load", "load"));
 	SpriteGo* logo = (SpriteGo*)FindGo("logo");
-	SpriteGo* load = (SpriteGo*)FindGo("load");
-	logo->SetOrigin(Origins::MC);
-	logo->SetPosition(0, 0);
-	load->SetOrigin(Origins::MC);
-	load->SetPosition(0, 0);
+	SpriteGo* load = (SpriteGo*)FindGo("load");*/
+	//logo->SetOrigin(Origins::MC);
+	//logo->SetPosition(0, 0);
+	//load->SetOrigin(Origins::MC);
+	//load->SetPosition(0, 0);
 	//
 
 	for (auto go : gameObjects)
