@@ -1,0 +1,7 @@
+ID,FPS,LOOPTYPE,,
+title_leaf_1,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/TitleButtons.ko-KR.png,296,187,26,20
+graphics/TitleButtons.ko-KR.png,323,187,26,20
+graphics/TitleButtons.ko-KR.png,350,187,26,20

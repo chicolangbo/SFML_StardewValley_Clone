@@ -1,0 +1,14 @@
+﻿RESOURCE_TYPES,RESOURCE_PATH
+3,tables/IdleFront.csv
+3,tables/IdleBack.csv
+3,tables/IdleLeft.csv
+3,tables/MoveFront.csv
+3,tables/MoveBack.csv
+3,tables/MoveLeft.csv
+3,tables/player_Idle.csv
+3,tables/playerarm_Idle.csv
+3,tables/playershirt_Idle.csv
+3,tables/playerheir_Idle.csv
+3,tables/player_Move.csv
+3,tables/playerarm_Move.csv
+3,tables/playerpents_Move.csv
