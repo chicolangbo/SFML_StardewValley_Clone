@@ -117,7 +117,7 @@ float Utils::SqrMagnitude(const sf::Vector2f& vector)
 {
 	return vector.x * vector.x + vector.y * vector.y;
 }
-
+//두 객체의 거리
 float Utils::Distance(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
 	return Magnitude(p2 - p1);

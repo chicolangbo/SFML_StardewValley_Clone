@@ -14,7 +14,7 @@ protected:
 
 	//Player* player;
 	Player2* player2;
-	Farmer* player;
+	//Farmer* player;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

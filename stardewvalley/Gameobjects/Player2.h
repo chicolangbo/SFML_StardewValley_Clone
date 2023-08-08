@@ -20,11 +20,18 @@ protected:
 	float speed = 500.f;
 
 	bool filpX = false;
-	bool isGround = true;
+	//bool isGround = true;
 
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
+	//test
+	int item=1;
 
+	//기력 도구 사용시 -2씩 차감
+	int maxEnergy = 270;
+	int energy = 270;
+
+	bool playingAnimation = false;
 
 public:
 	Player2(const std::string& textureId = "", const std::string& n = "")

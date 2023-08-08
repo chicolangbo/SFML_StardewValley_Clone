@@ -160,6 +160,9 @@ void SceneGame::Update(float dt)
 	worldView.setCenter(player2->GetPosition());
 	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
+	
+	//뷰를 플레이어에 고정
+	worldView.setCenter(player2->GetPosition());
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

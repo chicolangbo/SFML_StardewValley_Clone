@@ -3,124 +3,54 @@
 #include "InputMgr.h"
 #include "Framework.h"
 #include "ResourceMgr.h"
+#include "SceneMgr.h"
 
 void Player2::Init()
 {
 	SpriteGo::Init();
-	std::string textureId = "graphics/RubySheet.png";
+	std::string textureId = "graphics/farmer_base.png";
 
-	////Idle
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Idle_Side";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-side.csv"));
 
-	//	clip.frames.push_back({ textureId,sf::IntRect(0,256 * 3,256,256) });
-	//	clip.frames.push_back({ textureId,sf::IntRect(256,256 * 5,256,256) });
-	//	animation.AddClip(clip);
-	//}
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Idle_Down";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move.csv"));
 
-	//	clip.frames.push_back({ textureId,sf::IntRect(256,256 * 3,256,256) });
-	//	clip.frames.push_back({ textureId,sf::IntRect(256 * 2,256 * 5,256,256) });
-	//	animation.AddClip(clip);
-	//}
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Idle_Up";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-up.csv"));
 
-	//	clip.frames.push_back({ textureId,sf::IntRect(256 * 2,256 * 3,256,256) });
-	//	clip.frames.push_back({ textureId,sf::IntRect(256 * 3,256 * 5,256,256) });
-	//	animation.AddClip(clip);
-	//}
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-up.csv"));
 
-	////Move
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Move_Side";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
+	
 
-	//	sf::IntRect coord(0, 0, 256, 256);
-	//	for (int i = 0; i < 4; ++i)
-	//	{
-	//		clip.frames.push_back({ textureId,coord });
-	//		coord.left += coord.width;
-	//	}
-	//	animation.AddClip(clip);
-	//}
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Move_Up";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
-
-	//	sf::IntRect coord(0, 256, 256, 256);
-	//	for (int i = 0; i < 4; ++i)
-	//	{
-	//		clip.frames.push_back({ textureId,coord });
-	//		coord.left += coord.width;
-	//	}
-	//	animation.AddClip(clip);
-	//}
-	//{
-	//	AnimationClip clip;
-	//	clip.id = "Move_Down";
-	//	clip.fps = 10;
-	//	clip.loopType = AnimationLoopTypes::Loop;
-
-	//	sf::IntRect coord(0, 256 * 2, 256, 256);
-	//	for (int i = 0; i < 4; ++i)
-	//	{
-	//		clip.frames.push_back({ textureId,coord });
-	//		coord.left += coord.width;
-	//	}
-	//	animation.AddClip(clip);
-	//}
-
-	//파싱으로 로드하는 것 추가, at resourceMgr
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/IdleBack.csv");
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/IdleFront.csv");
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/IdleLeft.csv");
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/MoveLeft.csv");
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/MoveBack.csv");
-	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/MoveFront.csv");
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleBack.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleFront.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleLeft.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveLeft.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveBack.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveFront.csv"));
 	animation.SetTarget(&sprite);
+	sprite.setScale(5.f, 5.f);
+	SetOrigin(Origins::MC);
 
-	SetOrigin(Origins::BC);
 
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({-1.f, -1.f})});
+	clipInfos.push_back({ "IdleUp", "MoveUp", true, {0.f, -1.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, -1.f }) });
 
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, Utils::Normalize({ -1.f, -1.f }) });
-	clipInfos.push_back({ "IdleBack", "MoveBack", true, {0.f, -1.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, Utils::Normalize({ 1.f, -1.f }) });
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, {-1.f, 0.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, {1.f, 0.f} });
 
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, {-1.f, 0.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, {1.f, 0.f} });
-
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, Utils::Normalize({ -1.f, 1.f }) });
-	clipInfos.push_back({ "IdleFront", "MoveFront", true,{0.f, 1.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, Utils::Normalize({ 1.f, 1.f }) });
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({ -1.f, 1.f }) });
+	clipInfos.push_back({ "Idle", "Move", true,{0.f, 1.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, 1.f }) });
 
 }
 
 void Player2::Reset()
 {
-	animation.Play("IdleFront");
+	animation.Play("Idle");
 	SetOrigin(origin);
+	
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
 
@@ -129,36 +59,78 @@ void Player2::Reset()
 
 void Player2::Update(float dt)
 {
+
+	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
+	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
+	//sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(position);
+	
+	sf::Vector2f playerPos = GetPosition();
+	std::cout << playerPos.x << " " << playerPos.y << std::endl;
 	//이동
-	direction.x = INPUT_MGR.GetAxis(Axis::Horizontal);
-	direction.y = INPUT_MGR.GetAxis(Axis::Vertical);
-	float magnitude = Utils::Magnitude(direction);
+	direction.x = INPUT_MGR.GetAxis(Axis::Horizontal); 
+	direction.y = INPUT_MGR.GetAxis(Axis::Vertical); 
+	float magnitude = Utils::Magnitude(direction); 
 	if (magnitude > 1.f)
 	{
 		direction /= magnitude;
 	}
+	
 
 	position += direction * speed * dt;
 	SetPosition(position);
+	
 
-	if (direction.x != 0.f || direction.y != 0.f)
+	if ((direction.x != 0.f || direction.y != 0.f))
 	{
-		auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
-			[this](const ClipInfo& lhs, const ClipInfo& rhs) {
-				return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+		auto min = std::min_element(clipInfos.begin(), clipInfos.end(), 
+			[this](const ClipInfo& lhs, const ClipInfo& rhs) { 
+				return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction); 
 			});
 		currentClipInfo = *min;
 	}
-
+	//이동이 있으면 true 없으면 false
 	std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
 	if (GetFlipX() != currentClipInfo.flipX)
 	{
 		SetFlipX(currentClipInfo.flipX);
 	}
-
-	if (animation.GetCurrentClipId() != clipId)
+	if (!playingAnimation)
 	{
-		animation.Play(clipId);
+		if (animation.GetCurrentClipId() != clipId)
+		{
+			animation.Play(clipId);
+		}
+	}
+
+	//test
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+	{
+		item = 1;
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
+	{
+		item = 2;
+	}
+
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+	{
+		switch (item)
+		{
+		case 1:
+			animation.Play("Attack");
+			energy -= 2;
+			playingAnimation = true;
+			break;
+		case 2:
+			animation.Play("Tool");
+			energy -= 2;
+			playingAnimation = true;
+			break;
+		}
+	}
+	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
+	{
+		playingAnimation = false;
 	}
 
 	animation.Update(dt);
@@ -174,6 +146,6 @@ void Player2::SetFlipX(bool filp)
 	filpX = filp;
 
 	sf::Vector2f scale = sprite.getScale();
-	scale.x = !filpX ? abs(scale.x) : -abs(scale.x);
+	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
 }
