@@ -379,7 +379,7 @@ sf::IntRect ResourceMgr::GetTextureRect(const std::string& name)
 	{
 		return it->second;
 	}
-	std::cout << "ERR: can't find single image" << std::endl;
+	//std::cout << "ERR: can't find single image" << std::endl;
 	return { 0,0,0,0 };
 }
 

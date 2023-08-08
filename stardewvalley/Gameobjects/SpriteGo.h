@@ -14,7 +14,7 @@ public:
 	// 김민지, 230807, 스프라이트시트 속 단일이미지 사용 가능하게끔 추가
 	//SpriteGo(const std::string& textureId, const std::string& n);
 
-	SpriteGo(const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
+	SpriteGo(const std::string& textureId = "", const std::string& n = "");
 	//
 
 	virtual ~SpriteGo() override;

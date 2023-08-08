@@ -101,7 +101,7 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveFront.csv"));
 	animation.SetTarget(&sprite);
 
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 
 
 	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, Utils::Normalize({ -1.f, -1.f }) });

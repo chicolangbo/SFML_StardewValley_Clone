@@ -3,8 +3,8 @@
 #include "Utils.h"
 #include "ResourceMgr.h"
 
-SpriteGo::SpriteGo(const std::string& textureId, const std::string& n, const std::string& nickName)
-	: GameObject(n), textureId(textureId), nickName(nickName)
+SpriteGo::SpriteGo(const std::string& textureId, const std::string& n)
+	: GameObject(n), textureId(textureId), nickName(n)
 {
 }
 
@@ -61,8 +61,12 @@ void SpriteGo::Reset()
 	// 김민지, 230807, 스프라이트시트 속 단일이미지 사용 가능하게끔 추가
 	if (tex != nullptr && &nickName != nullptr)
 	{
+		// 김민지, 230808, 생성자 매개변수 1개로 줄이려고 수정
 		sf::IntRect tempRect = RESOURCE_MGR.GetTextureRect(nickName);
-		sprite.setTextureRect(tempRect);
+		if (tempRect != sf::IntRect{ 0,0,0,0 })
+		{
+			sprite.setTextureRect(tempRect);
+		}
 	}
 	//
 	SetOrigin(origin);
