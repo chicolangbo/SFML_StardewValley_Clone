@@ -7,7 +7,7 @@
 void Player2::Init()
 {
 	SpriteGo::Init();
-	std::string textureId = "graphics/RubySheet.png";
+	std::string textureId = "graphics/farmer_base.png";
 
 	////Idle
 	//{
@@ -93,34 +93,39 @@ void Player2::Init()
 	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/MoveBack.csv");
 	//RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "tables/MoveFront.csv");
 
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleBack.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleFront.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/IdleLeft.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveLeft.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveBack.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("tables/MoveFront.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-side.csv"));
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move.csv"));
+
+	sprite.setScale(5.f, 5.f);
+
 	animation.SetTarget(&sprite);
 
 	SetOrigin(Origins::MC);
 
 
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, Utils::Normalize({ -1.f, -1.f }) });
-	clipInfos.push_back({ "IdleBack", "MoveBack", true, {0.f, -1.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, Utils::Normalize({ 1.f, -1.f }) });
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({ -1.f, -1.f }) });
+	clipInfos.push_back({ "IdleUp", "MoveUp", true, {0.f, -1.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, -1.f }) });
 
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, {-1.f, 0.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, {1.f, 0.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, {-1.f, 0.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, {1.f, 0.f} });
 
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", false, Utils::Normalize({ -1.f, 1.f }) });
-	clipInfos.push_back({ "IdleFront", "MoveFront", true,{0.f, 1.f} });
-	clipInfos.push_back({ "IdleLeft", "MoveLeft", true, Utils::Normalize({ 1.f, 1.f }) });
+	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({ -1.f, 1.f }) });
+	clipInfos.push_back({ "Idle", "Move", true,{0.f, 1.f} });
+	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, 1.f }) });
 
 }
 
 void Player2::Reset()
 {
-	animation.Play("IdleFront");
+	animation.Play("Idle");
 	SetOrigin(origin);
+	
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
 
@@ -174,6 +179,6 @@ void Player2::SetFlipX(bool filp)
 	filpX = filp;
 
 	sf::Vector2f scale = sprite.getScale();
-	scale.x = !filpX ? abs(scale.x) : -abs(scale.x);
+	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
 }

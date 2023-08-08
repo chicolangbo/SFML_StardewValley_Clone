@@ -1,0 +1,10 @@
+﻿ID,FPS,LOOPTYPE,,
+ToolUp,6,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,2,196,12,28
+graphics/farmer_base.png,18,196,12,28
+graphics/farmer_base.png,34,195,12,27
+graphics/farmer_base.png,50,195,12,27
+graphics/farmer_base.png,66,196,12,28
+graphics/farmer_base.png,82,196,12,28
