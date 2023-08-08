@@ -74,7 +74,7 @@ void SceneGame::Init()
 
 	// 김민지, 230807, 테스트용 추가
 	// 김민지, 230808, 테스트용 코드 변경(textureId와 nickName 통일)
-	player2 = (Player2*)AddGo(new Player2());
+	//player2 = (Player2*)AddGo(new Player2());
 	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
 	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load1"));
 	//SpriteGo* logo = (SpriteGo*)FindGo("logo");
@@ -86,7 +86,22 @@ void SceneGame::Init()
 	//
 
 	// 김민지, 230808, 임시맵 코드 추가
-	AddGo(new SpriteGo("graphics/testFarmMap.png", "testFarmMap"));
+	AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap"));
+	SpriteGo* testFarmMap = (SpriteGo*)FindGo("testFarmMap");
+	testFarmMap->sprite.setScale(3.f, 3.f);
+	testFarmMap->SetOrigin(Origins::MC);
+	testFarmMap->SetPosition(0, 0);
+	AddGo(new SpriteGo("map/houses.png", "house"));
+	SpriteGo* house = (SpriteGo*)FindGo("house");
+	house->sprite.setScale(4.f, 4.f);
+	house->SetOrigin(Origins::BC);
+	house->SetPosition(473, -785);
+	AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop"));
+	SpriteGo* shop = (SpriteGo*)FindGo("shop");
+	shop->sprite.setScale(4.f, 4.f);
+	shop->SetOrigin(Origins::BC);
+	shop->SetPosition(-537, -785);
+	player2 = (Player2*)AddGo(new Player2());
 	//
 
 	for (auto go : gameObjects)
@@ -141,7 +156,9 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);
 	
 	// 김민지, 230807, 테스트용 주석처리
-	//worldView.setCenter(player2->GetPosition());
+	// 김민지, 230808, 테스트용 주석해제, 플레이어 포지션 로그
+	worldView.setCenter(player2->GetPosition());
+	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
 }
 
