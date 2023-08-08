@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 #include "SceneGame.h"
+#include "SceneEditor.h"
 #include "DataTableMgr.h"
 #include "StringTable.h"
 
@@ -11,6 +12,9 @@ void SceneMgr::Init()
 		Release();
 	}
 
+	//230808, À±À¯¸², ¿¡µðÅÍ ¾À Ãß°¡
+	scenes.push_back(new SceneEditor());
+	//
 	scenes.push_back(new SceneGame());
 
 	for (auto scene : scenes)
@@ -21,8 +25,6 @@ void SceneMgr::Init()
 	currentSceneId = startSceneId;
 	currentScene = scenes[(int)currentSceneId];
 	currentScene->Enter();
-
-
 }
 
 void SceneMgr::Release()

@@ -3,8 +3,8 @@
 #include "Utils.h"
 #include "ResourceMgr.h"
 
-SpriteGo::SpriteGo(const std::string& textureId, const std::string& n, const std::string& nickName)
-	: GameObject(n), textureId(textureId), nickName(nickName)
+SpriteGo::SpriteGo(const std::string& textureId, const std::string& n)
+	: GameObject(n), textureId(textureId), nickName(n)
 {
 }
 
@@ -62,7 +62,10 @@ void SpriteGo::Reset()
 	if (tex != nullptr && &nickName != nullptr)
 	{
 		sf::IntRect tempRect = RESOURCE_MGR.GetTextureRect(nickName);
-		sprite.setTextureRect(tempRect);
+		if (tempRect != sf::IntRect{ 0, 0, 0, 0 })
+		{
+			sprite.setTextureRect(tempRect);
+		}
 	}
 	//
 	SetOrigin(origin);
