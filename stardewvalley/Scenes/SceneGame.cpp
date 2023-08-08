@@ -73,15 +73,20 @@ void SceneGame::Init()
 	//
 
 	// 김민지, 230807, 테스트용 추가
+	// 김민지, 230808, 테스트용 코드 변경(textureId와 nickName 통일)
 	player2 = (Player2*)AddGo(new Player2());
-	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
-	AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load1"));
-	SpriteGo* logo = (SpriteGo*)FindGo("logo");
-	SpriteGo* load = (SpriteGo*)FindGo("load1");
-	logo->SetOrigin(Origins::MC);
-	logo->SetPosition(0, 0);
-	load->SetOrigin(Origins::MC);
-	load->SetPosition(0, 0);
+	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
+	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load1"));
+	//SpriteGo* logo = (SpriteGo*)FindGo("logo");
+	//SpriteGo* load = (SpriteGo*)FindGo("load1");
+	//logo->SetOrigin(Origins::MC);
+	//logo->SetPosition(0, 0);
+	//load->SetOrigin(Origins::MC);
+	//load->SetPosition(0, 0);
+	//
+
+	// 김민지, 230808, 임시맵 코드 추가
+	AddGo(new SpriteGo("graphics/testFarmMap.png", "testFarmMap"));
 	//
 
 	for (auto go : gameObjects)
