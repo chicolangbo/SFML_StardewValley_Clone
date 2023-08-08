@@ -168,6 +168,7 @@
     <ClCompile Include="GameObjects\Player2.cpp" />
     <ClCompile Include="GameObjects\RectangleGo.cpp" />
     <ClCompile Include="GameObjects\SpriteEffect.cpp" />
+    <ClCompile Include="Gameobjects\TileMap.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
     <ClCompile Include="GameObjects\Ground.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="GameObjects\Player2.h" />
     <ClInclude Include="GameObjects\RectangleGo.h" />
     <ClInclude Include="GameObjects\SpriteEffect.h" />
+    <ClInclude Include="Gameobjects\TileMap.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />
