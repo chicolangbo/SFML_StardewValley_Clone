@@ -75,9 +75,6 @@
     <ClCompile Include="GameObjects\Ground.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="Farmer.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\Player.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
@@ -110,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Scenes\SceneGame.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobjects\TileMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SceneEditor.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +161,6 @@
     <ClInclude Include="GameObjects\Ground.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="Farmer.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Player.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
@@ -199,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="Scenes\Scene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\TileMap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneEditor.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

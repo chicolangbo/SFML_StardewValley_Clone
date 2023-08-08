@@ -63,7 +63,7 @@ void SpriteGo::Reset()
 	{
 		// 김민지, 230808, 생성자 매개변수 1개로 줄이려고 수정
 		sf::IntRect tempRect = RESOURCE_MGR.GetTextureRect(nickName);
-		if (tempRect != sf::IntRect{ 0,0,0,0 })
+		if (tempRect != sf::IntRect{ 0, 0, 0, 0 })
 		{
 			sprite.setTextureRect(tempRect);
 		}
