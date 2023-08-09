@@ -42,49 +42,6 @@ void SceneGame::Init()
 	worldView.setCenter(0,0);
 	//
 
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ÁÖ¼®Ã³¸®
-	//sf::Vector2f tileWorldSize = { 50.f, 50.f };
-	//sf::Vector2f tileTexSize = { 50.f ,50.f };
-	//background = CreateBackGround({ 100, 100 }, { 50.f, 50.f }, { 50.f, 50.f }, "graphics/background_sheet.png");
-	//AddGo(background);
-	//player2 = (Player2*)AddGo(new Player2());
-	//UiButton* button = (UiButton*)AddGo(new UiButton("graphics/TitleButtons1.png", "button"));
-	//button->sprite.setScale(2.0f, 2.0f);
-	//button->SetOrigin(Origins::TR);
-	//button->sortLayer = 100;
-	//button->SetPosition(size.x, 0);
-	//button->OnEnter = [button]()
-	//{
-	//	cout << "Enter" << endl;
-	//	sf::Texture* tex = RESOURCE_MGR.GetTexture("graphics/TitleButtons2.png");
-	//	button->sprite.setTexture(*tex);
-	//};
-	//button->OnExit = [button]()
-	//{
-	//	cout << "OnExit" << endl;
-	//	sf::Texture* tex = RESOURCE_MGR.GetTexture(button->textureId);
-	//	button->sprite.setTexture(*tex);
-	//};
-	//button->OnClick = [this]()
-	//{
-	//	SCENE_MGR.ChangeScene(sceneId);
-	//	cout << "OnClick" << endl;
-	//};
-	//
-
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë Ãß°¡
-	// ±è¹ÎÁö, 230808, Å×½ºÆ®¿ë ÄÚµå º¯°æ(textureId¿Í nickName ÅëÀÏ)
-	//player2 = (Player2*)AddGo(new Player2());
-	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
-	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load1"));
-	//SpriteGo* logo = (SpriteGo*)FindGo("logo");
-	//SpriteGo* load = (SpriteGo*)FindGo("load1");
-	//logo->SetOrigin(Origins::MC);
-	//logo->SetPosition(0, 0);
-	//load->SetOrigin(Origins::MC);
-	//load->SetPosition(0, 0);
-	//
-
 	// ±è¹ÎÁö, 230808, ÀÓ½Ã¸Ê ÄÚµå Ãß°¡
 	AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap"));
 	SpriteGo* testFarmMap = (SpriteGo*)FindGo("testFarmMap");
@@ -101,6 +58,38 @@ void SceneGame::Init()
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
+	AddGo(new SpriteGo("map/shopInside.png", "shopInside"));
+	SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
+	shopInside->sprite.setScale(4.f, 4.f);
+	shopInside->SetOrigin(Origins::TL);
+	shopInside->SetPosition(0, 0);
+	shopInside->SetActive(false);
+	AddGo(new SpriteGo("graphics/Pierre.png", "pierre"));
+	SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
+	pierre->sprite.setScale(5.f, 5.f);
+	pierre->SetOrigin(Origins::MC);
+	pierre->SetPosition(244.f, 1086.f);
+	pierre->SetActive(false);
+	AddGo(new SpriteGo("graphics/Robin.png", "robin"));
+	SpriteGo* robin = (SpriteGo*)FindGo("robin");
+	robin->sprite.setScale(5.f, 5.f);
+	robin->SetOrigin(Origins::MC);
+	robin->SetPosition(352.f, 1086.f);
+	robin->SetActive(false);
+
+	AddGo(new SpriteGo("map/shopInside.png", "shopCounter1"));
+	SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
+	shopCounter1->sprite.setScale(4.f, 4.f);
+	shopCounter1->SetOrigin(Origins::TL);
+	shopCounter1->SetPosition(48.f*4, 275.f*4);
+	shopCounter1->SetActive(false);
+	AddGo(new SpriteGo("map/shopInside.png", "shopCounter2"));
+	SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
+	shopCounter2->sprite.setScale(4.f, 4.f);
+	shopCounter2->SetOrigin(Origins::TL);
+	shopCounter2->SetPosition(128.f*4, 254.f*4);
+	shopCounter2->SetActive(false);
+
 	player2 = (Player2*)AddGo(new Player2());
 	//
 
@@ -109,16 +98,6 @@ void SceneGame::Init()
 		go->Init();
 	}
 
-	//background->sortLayer = -1;
-	//background->SetOrigin(Origins::MC);
-	//background->SetPosition(centerPos);
-
-	//wallBounds = background->vertexArray.getBounds();
-	//
-
-	//player->SetWallBounds(wallBounds);
-
-	//player->sortLayer = 1;
 }
 
 void SceneGame::Release()
@@ -163,6 +142,51 @@ void SceneGame::Update(float dt)
 	
 	//ºä¸¦ ÇÃ·¹ÀÌ¾î¿¡ °íÁ¤
 	worldView.setCenter(player2->GetPosition());
+
+	// ±è¹ÎÁö, 230809, ¼¥³»ºÎ
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+	{
+		if (enterShop)
+		{
+			enterShop = false;
+			for (auto go : gameObjects)
+			{
+				go->SetActive(false);
+			}
+			player2->SetActive(true);
+			player2->SetPosition(419.f, 1823.f);
+			SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
+			SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
+			SpriteGo* robin = (SpriteGo*)FindGo("robin");
+			SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
+			SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
+			shopInside->SetActive(true);
+			pierre->SetActive(true);
+			robin->SetActive(true);
+			shopCounter1->SetActive(true);
+			shopCounter2->SetActive(true);
+		}
+		else
+		{
+			enterShop = true;
+			player2->SetPosition(-463.f, -845.f); // Æ÷Áö¼Ç ÀÓ½Ã ¼¼ÆÃ
+			for (auto go : gameObjects)
+			{
+				go->SetActive(true);
+			}
+			SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
+			SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
+			SpriteGo* robin = (SpriteGo*)FindGo("robin");
+			SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
+			SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
+			shopInside->SetActive(false);
+			pierre->SetActive(false);
+			robin->SetActive(false);
+			shopCounter1->SetActive(false);
+			shopCounter2->SetActive(false);
+		}
+	}
+	//
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

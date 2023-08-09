@@ -11,6 +11,9 @@ class SceneGame : public Scene
 protected:
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
+	// ±è¹ÎÁö, 230809, Ãß°¡
+	bool enterShop = false;
+	//
 
 	//Player* player;
 	Player2* player2;
