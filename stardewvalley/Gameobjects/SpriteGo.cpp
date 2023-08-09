@@ -6,8 +6,8 @@
 #include "InputMgr.h"
 //
 
-SpriteGo::SpriteGo(const std::string& textureId, const std::string& n)
-	: GameObject(n), textureId(textureId), nickName(n)
+SpriteGo::SpriteGo(const std::string& textureId, const std::string& n, const std::string& nickName)
+	: GameObject(n), textureId(textureId), nickName(nickName)
 {
 }
 

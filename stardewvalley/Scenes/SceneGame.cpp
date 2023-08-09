@@ -43,47 +43,47 @@ void SceneGame::Init()
 	//
 
 	// ±è¹ÎÁö, 230808, ÀÓ½Ã¸Ê ÄÚµå Ãß°¡
-	AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap"));
+	AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	SpriteGo* testFarmMap = (SpriteGo*)FindGo("testFarmMap");
 	testFarmMap->sprite.setScale(3.f, 3.f);
 	testFarmMap->SetOrigin(Origins::MC);
 	testFarmMap->SetPosition(0, 0);
-	AddGo(new SpriteGo("map/houses.png", "house"));
+	AddGo(new SpriteGo("map/houses.png", "house", "house"));
 	SpriteGo* house = (SpriteGo*)FindGo("house");
 	house->sprite.setScale(4.f, 4.f);
 	house->SetOrigin(Origins::BC);
 	house->SetPosition(473, -785);
-	AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop"));
+	AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 	SpriteGo* shop = (SpriteGo*)FindGo("shop");
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
-	AddGo(new SpriteGo("map/shopInside.png", "shopInside"));
+	AddGo(new SpriteGo("map/shopInside.png", "shopInside", "shopInside"));
 	SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
 	shopInside->sprite.setScale(4.f, 4.f);
 	shopInside->SetOrigin(Origins::TL);
 	shopInside->SetPosition(0, 0);
 	shopInside->SetActive(false);
-	AddGo(new SpriteGo("graphics/Pierre.png", "pierre"));
+	AddGo(new SpriteGo("graphics/Pierre.png", "pierre", "pierre"));
 	SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
 	pierre->sprite.setScale(5.f, 5.f);
 	pierre->SetOrigin(Origins::MC);
 	pierre->SetPosition(244.f, 1086.f);
 	pierre->SetActive(false);
-	AddGo(new SpriteGo("graphics/Robin.png", "robin"));
+	AddGo(new SpriteGo("graphics/Robin.png", "robin", "robin"));
 	SpriteGo* robin = (SpriteGo*)FindGo("robin");
 	robin->sprite.setScale(5.f, 5.f);
 	robin->SetOrigin(Origins::MC);
 	robin->SetPosition(352.f, 1086.f);
 	robin->SetActive(false);
 
-	AddGo(new SpriteGo("map/shopInside.png", "shopCounter1"));
+	AddGo(new SpriteGo("map/shopInside.png", "shopCounter1", "shopCounter1"));
 	SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
 	shopCounter1->sprite.setScale(4.f, 4.f);
 	shopCounter1->SetOrigin(Origins::TL);
 	shopCounter1->SetPosition(48.f*4, 275.f*4);
 	shopCounter1->SetActive(false);
-	AddGo(new SpriteGo("map/shopInside.png", "shopCounter2"));
+	AddGo(new SpriteGo("map/shopInside.png", "shopCounter2", "shopCounter2"));
 	SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
 	shopCounter2->sprite.setScale(4.f, 4.f);
 	shopCounter2->SetOrigin(Origins::TL);
