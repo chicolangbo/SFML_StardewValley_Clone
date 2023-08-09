@@ -10,6 +10,10 @@ public:
 	// 김민지, 230807, 추가
 	std::string nickName = nullptr;
 	//
+	// 김민지, 230809, 콜라이더 추가
+	sf::RectangleShape collider;
+	bool colliderOnOff = true;
+	//
 
 	// 김민지, 230807, 스프라이트시트 속 단일이미지 사용 가능하게끔 추가
 	// 윤유림, 230808, 닉네임 수정
@@ -25,6 +29,11 @@ public:
 
 	virtual void SetOrigin(Origins origin);
 	virtual void SetOrigin(float x, float y);
+
+	// 김민지, 230808, 콜라이더 연동 가능하게끔 추가
+	virtual void SetScale(float x, float y);
+	virtual void SetScale(const sf::Vector2f& p);
+	//
 
 	virtual void Init() override;
 	virtual void Release() override;

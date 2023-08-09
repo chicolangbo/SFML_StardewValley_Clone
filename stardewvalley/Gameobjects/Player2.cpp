@@ -48,17 +48,30 @@ void Player2::Init()
 
 void Player2::Reset()
 {
+	// 김민지, 230809, 콜라이더용 추가
+	SpriteGo::Reset();
+	//
 	animation.Play("Idle");
-	SetOrigin(origin);
+	// 김민지, 230809, 위치 이동
+	//SetOrigin(origin);
+	//
 	
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
 
 	currentClipInfo = clipInfos[6];
+
+	// 김민지, 230809, 콜라이더용 추가
+	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
+	SetOrigin(origin);
+	//
 }
 
 void Player2::Update(float dt)
 {
+	// 김민지, 230809, 콜라이더용 추가
+	SpriteGo::Update(dt);
+	//
 
 	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
 	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
@@ -134,6 +147,13 @@ void Player2::Update(float dt)
 	}
 
 	animation.Update(dt);
+}
+
+void Player2::Draw(sf::RenderWindow& window)
+{
+	// 김민지, 230809, 콜라이더용 추가
+	SpriteGo::Draw(window);
+	//
 }
 
 bool Player2::GetFlipX() const

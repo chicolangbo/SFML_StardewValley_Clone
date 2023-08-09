@@ -41,6 +41,9 @@ public:
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
+	// 김민지, 230809, 콜라이더 연동용
+	virtual void Draw(sf::RenderWindow& window) override;
+	//
 
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
