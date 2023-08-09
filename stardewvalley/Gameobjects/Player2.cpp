@@ -4,11 +4,14 @@
 #include "Framework.h"
 #include "ResourceMgr.h"
 #include "SceneMgr.h"
+#include "GameObject.h"
+#include "SceneGame.h"
+#include "Scene.h"
+#include "Axe.h"
 
 void Player2::Init()
 {
 	SpriteGo::Init();
-	std::string textureId = "graphics/farmer_base.png";
 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-up.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle.csv"));
@@ -26,8 +29,6 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-up.csv"));
 
-	
-
 	animation.SetTarget(&sprite);
 	sprite.setScale(5.f, 5.f);
 	SetOrigin(Origins::MC);
@@ -44,6 +45,9 @@ void Player2::Init()
 	clipInfos.push_back({ "Idle", "Move", true,{0.f, 1.f} });
 	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, 1.f }) });
 
+	//axe = (Axe*)SCENE_MGR.GetCurrScene()->AddGo(new Axe());
+	axe.Init();
+	pickax.Init();
 }
 
 void Player2::Reset()
@@ -54,18 +58,21 @@ void Player2::Reset()
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
 
+	axe.Reset();
+	pickax.Reset();
+
 	currentClipInfo = clipInfos[6];
 }
 
 void Player2::Update(float dt)
 {
-
+	
 	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
 	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
 	//sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(position);
 	
 	sf::Vector2f playerPos = GetPosition();
-	std::cout << playerPos.x << " " << playerPos.y << std::endl;
+	//std::cout << playerPos.x << " " << playerPos.y << std::endl;
 	//이동
 	direction.x = INPUT_MGR.GetAxis(Axis::Horizontal); 
 	direction.y = INPUT_MGR.GetAxis(Axis::Vertical); 
@@ -74,13 +81,19 @@ void Player2::Update(float dt)
 	{
 		direction /= magnitude;
 	}
-	
-
 	position += direction * speed * dt;
-	SetPosition(position);
-	
 
-	if ((direction.x != 0.f || direction.y != 0.f))
+	SetPosition(position);
+
+	axe.Update(dt);
+	axe.SetPosition(position);
+	axe.SetOrigins();
+
+	pickax.Update(dt);
+	pickax.SetPosition(position);
+	pickax.SetOrigins(); 
+
+	if ((direction.x != 0.f || direction.y != 0.f)) 
 	{
 		auto min = std::min_element(clipInfos.begin(), clipInfos.end(), 
 			[this](const ClipInfo& lhs, const ClipInfo& rhs) { 
@@ -109,7 +122,11 @@ void Player2::Update(float dt)
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
 	{
-		item = 2;
+		item = 2;//도끼
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
+	{
+		item = 3;//곡괭이
 	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
@@ -117,16 +134,78 @@ void Player2::Update(float dt)
 		switch (item)
 		{
 		case 1:
-			animation.Play("Attack");
+			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+			{
+				animation.Play("Attack");
+			}
+			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+			{
+				animation.Play("AttackSide");
+			}
+			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+			{
+				animation.Play("AttackUp");
+			}
 			energy -= 2;
 			playingAnimation = true;
 			break;
 		case 2:
-			animation.Play("Tool");
+			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+			{
+				animation.Play("Tool");
+				//여기다가 클립ID넘기면 실행됨
+				axe.PlayAnimation("AxeFront");
+			}
+			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+			{
+				animation.Play("ToolSide");
+				if (filpX)
+				{
+					//왼쪽 방향하는 애니매이션 실행
+				}
+				else
+				{
+					//오른쪽 방향
+				}
+			}
+			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+			{
+				animation.Play("ToolUp");
+				axe.PlayAnimation("AxeBack");
+			}
 			energy -= 2;
 			playingAnimation = true;
 			break;
+		case 3:
+			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+			{
+				animation.Play("Tool");
+				pickax.PlayAnimation("PickaxFront");
+			}
+			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+			{
+				animation.Play("ToolSide");
+				if (filpX)
+				{
+					//왼쪽 방향하는 애니매이션 실행
+				}
+				else
+				{
+					//오른쪽 방향
+				}
+			}
+			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+			{
+				animation.Play("ToolUp");
+				pickax.PlayAnimation("PickaxBack"); 
+			}
+			energy -= 2;
+			playingAnimation = true;
+			break;
+
 		}
+		
+
 	}
 	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
 	{
@@ -134,6 +213,13 @@ void Player2::Update(float dt)
 	}
 
 	animation.Update(dt);
+}
+
+void Player2::Draw(sf::RenderWindow& window)
+{
+	SpriteGo::Draw(window);
+	window.draw(axe.sprite); 
+	window.draw(pickax.sprite); 
 }
 
 bool Player2::GetFlipX() const
@@ -149,3 +235,4 @@ void Player2::SetFlipX(bool filp)
 	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
 }
+

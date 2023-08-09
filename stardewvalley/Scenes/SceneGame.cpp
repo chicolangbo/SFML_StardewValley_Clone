@@ -11,6 +11,7 @@
 #include "VertexArrayGo.h"
 #include "Player2.h"
 #include "UiButton.h"
+#include "Axe.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -91,18 +92,29 @@ void SceneGame::Init()
 	testFarmMap->sprite.setScale(3.f, 3.f);
 	testFarmMap->SetOrigin(Origins::MC);
 	testFarmMap->SetPosition(0, 0);
+
 	AddGo(new SpriteGo("map/houses.png", "house"));
 	SpriteGo* house = (SpriteGo*)FindGo("house");
 	house->sprite.setScale(4.f, 4.f);
 	house->SetOrigin(Origins::BC);
 	house->SetPosition(473, -785);
+
 	AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop"));
 	SpriteGo* shop = (SpriteGo*)FindGo("shop");
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
+
 	player2 = (Player2*)AddGo(new Player2());
-	//
+	//임형준 테스트 코드...
+	AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
+	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
+	axe->sprite.setScale(5.f, 5.f);
+	axe->SetOrigin(Origins::BC);
+	axe->SetPosition(player2->GetPosition());
+	axe->SetActive(false);
+
+
 
 	for (auto go : gameObjects)
 	{
@@ -119,6 +131,8 @@ void SceneGame::Init()
 	//player->SetWallBounds(wallBounds);
 
 	//player->sortLayer = 1;
+
+
 }
 
 void SceneGame::Release()
@@ -158,11 +172,46 @@ void SceneGame::Update(float dt)
 	// 김민지, 230807, 테스트용 주석처리
 	// 김민지, 230808, 테스트용 주석해제, 플레이어 포지션 로그
 	worldView.setCenter(player2->GetPosition());
-	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
+	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
+
+	//임형준 테스트코드 옆면에서 곡도끼 휘두르는 모션
+	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
+	axe->sprite.setScale(5.f, 5.f);
+	axe->SetOrigin(Origins::BC);
+	axe->SetPosition(player2->GetPosition());
+	
+	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+	//{
+	//	axeRotation = true;
+	//}
+	if (axeRotation)
+	{
+		axe->SetActive(true);
+		float rotationLimit = 90.f; // 회전 각도 제한 
+		float rotation = 500.f * dt; // 회전
+		if (totalRotation + rotation > rotationLimit)
+		{
+			rotation = rotationLimit - totalRotation; // 회전 총 각도 제한 
+		}
+		totalRotation += rotation; // 회전 총 각도 누적 
+		axe->sprite.setRotation(totalRotation); // 회전 적용
+
+		if (totalRotation >= rotationLimit)
+		{
+			axeRotation = false;
+			axe->SetActive(false);
+		}
+	}
+	if (axe->GetActive() == false)
+	{
+		totalRotation = 0.f;
+	}
+	
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

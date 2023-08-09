@@ -1,6 +1,9 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "Scene.h"
+#include "Axe.h"
+#include "Pickax.h"
 
 class Player2 :  public SpriteGo
 {
@@ -15,7 +18,8 @@ public:
 
 protected:
 	AnimationController animation;
-	
+	Axe axe;
+	Pickax pickax;
 	sf::Vector2f direction;
 	float speed = 500.f;
 
@@ -34,6 +38,7 @@ protected:
 	bool playingAnimation = false;
 
 public:
+
 	Player2(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}
 	virtual ~Player2() override { Release(); }
@@ -41,8 +46,12 @@ public:
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
+	virtual void Draw(sf::RenderWindow& window) override;
 
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
-};//스프라이트 객체 2개사용
+
+
+
+};
 

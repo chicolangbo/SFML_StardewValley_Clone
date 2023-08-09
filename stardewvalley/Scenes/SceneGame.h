@@ -4,7 +4,9 @@
 class VertexArrayGo;
 class Player;
 class Player2;
-class Farmer;
+
+//±èÇìÁØ ±òÂ¦
+class Axe;
 
 class SceneGame : public Scene
 {
@@ -12,9 +14,13 @@ protected:
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
 
-	//Player* player;
+	//±èÇìÁØ ±òÂ¦
+	Axe* axe2;
+
 	Player2* player2;
-	//Farmer* player;
+	//ÀÓÇüÁØ Å×½ºÆ®
+	float totalRotation=0.f;
+	bool axeRotation = false;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
