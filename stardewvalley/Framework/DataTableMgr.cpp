@@ -2,11 +2,13 @@
 #include "DataTableMgr.h"
 #include "StringTable.h"
 #include "ClipTable.h"
+#include "WallTable.h"
 
 void DataTableMgr::LoadAll()
 {
 	tables.insert({ DataTable::Ids::String, new StringTable() });
 	tables.insert({ DataTable::Ids::Clip, new ClipTable() });
+	tables.insert({ DataTable::Ids::Wall, new WallTable() });
 
 	for (auto pair : tables)
 	{

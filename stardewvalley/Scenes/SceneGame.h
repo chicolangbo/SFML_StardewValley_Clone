@@ -5,6 +5,7 @@ class VertexArrayGo;
 class Player;
 class Player2;
 class Farmer;
+class SpriteGo;
 
 class SceneGame : public Scene
 {
@@ -32,6 +33,7 @@ protected:
 	SpriteGo* shopMid3_1;
 	SpriteGo* shopMid3_2;
 	SpriteGo* shopBox;
+	//
 	//Farmer* player;
 public:
 	SceneGame();

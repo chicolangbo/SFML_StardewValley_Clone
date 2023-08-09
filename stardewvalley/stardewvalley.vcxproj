@@ -185,6 +185,8 @@
     <ClCompile Include="GameObjects\SpriteGo.cpp" />
     <ClCompile Include="Global\Variables.cpp" />
     <ClCompile Include="GameObjects\UiButton.cpp" />
+    <ClCompile Include="Gameobjects\Wall.cpp" />
+    <ClCompile Include="DataTables\WallTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -214,6 +216,8 @@
     <ClInclude Include="Framework\SceneMgr.h" />
     <ClInclude Include="Global\Singleton.h" />
     <ClInclude Include="GameObjects\SpriteGo.h" />
+    <ClInclude Include="Gameobjects\Wall.h" />
+    <ClInclude Include="DataTables\WallTable.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />
