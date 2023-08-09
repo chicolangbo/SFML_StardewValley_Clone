@@ -29,7 +29,7 @@ void Player2::Init()
 	
 
 	animation.SetTarget(&sprite);
-	sprite.setScale(5.f, 5.f);
+	sprite.setScale(4.5f, 4.5f);
 	SetOrigin(Origins::MC);
 
 

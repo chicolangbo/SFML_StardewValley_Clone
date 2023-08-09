@@ -11,6 +11,7 @@
 #include "VertexArrayGo.h"
 #include "Player2.h"
 #include "UiButton.h"
+#include "Wall.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -111,8 +112,10 @@ void SceneGame::Init()
 	shopBox->SetOrigin(Origins::TL);
 	shopBox->SetPosition(288.f*4, 434.f*4);
 	shopBox->SetActive(false);
-
-
+	shopWalls = (Wall*)AddGo(new Wall("shopWall"));
+	shopWalls->SetType(Wall::Location::Shop);
+	shopWalls->SetPos();
+	shopWalls->SetActive(false);
 
 	player2 = (Player2*)AddGo(new Player2());
 	//

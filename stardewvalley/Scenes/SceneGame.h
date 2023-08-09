@@ -6,6 +6,7 @@ class Player;
 class Player2;
 class Farmer;
 class SpriteGo;
+class Wall;
 
 class SceneGame : public Scene
 {
@@ -33,6 +34,8 @@ protected:
 	SpriteGo* shopMid3_1;
 	SpriteGo* shopMid3_2;
 	SpriteGo* shopBox;
+	Wall* homeWalls;
+	Wall* shopWalls;
 	//
 	//Farmer* player;
 public:

@@ -6,8 +6,7 @@ class Wall : public GameObject
 public:
 	enum class Types
 	{
-		Home,
-		Shop_L = 10,
+		Shop_L,
 		Shop_T1,
 		Shop_T2,
 		Shop_R1,
@@ -15,13 +14,15 @@ public:
 		Shop_B1,
 		Shop_B2,
 		Shop_B3,
-		Shop_B4
+		Shop_B4,
+		Shop_B5,
+		Home,
 	};
 
 	enum class Location
 	{
-		Home,
-		Shop
+		Shop,
+		Home
 	};
 
 protected:
@@ -32,6 +33,7 @@ protected:
 	float top;
 	float width;
 	float height;
+	bool colliderOnOff;
 
 public:
 	Wall(const std::string& n = "");
@@ -44,7 +46,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SetPos(Types t);
+	void SetPos();
 	void SetType(Location l);
 };
 
