@@ -17,6 +17,21 @@ protected:
 
 	//Player* player;
 	Player2* player2;
+	// ±è¹ÎÁö, 230809, Ãß°¡
+	SpriteGo* testFarmMap;
+	SpriteGo* house;
+	SpriteGo* shop;
+	SpriteGo* shopInside;
+	SpriteGo* pierre;
+	SpriteGo* robin;
+	SpriteGo* shopCounter1;
+	SpriteGo* shopCounter2;
+	SpriteGo* shopMid1;
+	SpriteGo* shopMid2_1;
+	SpriteGo* shopMid2_2;
+	SpriteGo* shopMid3_1;
+	SpriteGo* shopMid3_2;
+	SpriteGo* shopBox;
 	//Farmer* player;
 public:
 	SceneGame();

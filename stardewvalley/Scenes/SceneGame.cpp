@@ -89,6 +89,39 @@ void SceneGame::Init()
 	shopCounter2->SetOrigin(Origins::TL);
 	shopCounter2->SetPosition(128.f*4, 254.f*4);
 	shopCounter2->SetActive(false);
+	shopMid1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid1", "shopMid1"));
+	shopMid1->sprite.setScale(4.f, 4.f);
+	shopMid1->SetOrigin(Origins::TL);
+	shopMid1->SetPosition(48.f*4, 332.f*4);
+	shopMid1->SetActive(false);
+	shopMid2_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_1", "shopMid2"));
+	shopMid2_1->sprite.setScale(4.f, 4.f);
+	shopMid2_1->SetOrigin(Origins::TL);
+	shopMid2_1->SetPosition(160.f*4, 277.f*4);
+	shopMid2_1->SetActive(false);
+	shopMid2_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_2", "shopMid2"));
+	shopMid2_2->sprite.setScale(4.f, 4.f);
+	shopMid2_2->SetOrigin(Origins::TL);
+	shopMid2_2->SetPosition(160.f*4, 325.f*4);
+	shopMid2_2->SetActive(false);
+	shopMid3_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_1", "shopMid3"));
+	shopMid3_1->sprite.setScale(4.f, 4.8f);
+	shopMid3_1->SetOrigin(Origins::TL);
+	shopMid3_1->SetPosition(160.f*4, 375.f*4);
+	//shopMid3_1->SetScale(1.f, 1.3f);
+	shopMid3_1->SetActive(false);
+	shopMid3_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_2", "shopMid3"));
+	shopMid3_2->sprite.setScale(4.f, 4.8f);
+	shopMid3_2->SetOrigin(Origins::TL);
+	shopMid3_2->SetPosition(224.f*4, 375.f*4);
+	shopMid3_2->SetActive(false);
+	shopBox = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopBox", "shopBox"));
+	shopBox->sprite.setScale(4.f, 4.f);
+	shopBox->SetOrigin(Origins::TL);
+	shopBox->SetPosition(288.f*4, 434.f*4);
+	shopBox->SetActive(false);
+
+
 
 	player2 = (Player2*)AddGo(new Player2());
 	//
@@ -151,39 +184,35 @@ void SceneGame::Update(float dt)
 			enterShop = false;
 			for (auto go : gameObjects)
 			{
-				go->SetActive(false);
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
 			}
 			player2->SetActive(true);
-			player2->SetPosition(419.f, 1823.f);
-			SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
-			SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
-			SpriteGo* robin = (SpriteGo*)FindGo("robin");
-			SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
-			SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
-			shopInside->SetActive(true);
-			pierre->SetActive(true);
-			robin->SetActive(true);
-			shopCounter1->SetActive(true);
-			shopCounter2->SetActive(true);
+			player2->SetPosition(-463.f, -845.f);
 		}
 		else
 		{
 			enterShop = true;
-			player2->SetPosition(-463.f, -845.f); // 포지션 임시 세팅
 			for (auto go : gameObjects)
 			{
-				go->SetActive(true);
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
 			}
-			SpriteGo* shopInside = (SpriteGo*)FindGo("shopInside");
-			SpriteGo* pierre = (SpriteGo*)FindGo("pierre");
-			SpriteGo* robin = (SpriteGo*)FindGo("robin");
-			SpriteGo* shopCounter1 = (SpriteGo*)FindGo("shopCounter1");
-			SpriteGo* shopCounter2 = (SpriteGo*)FindGo("shopCounter2");
-			shopInside->SetActive(false);
-			pierre->SetActive(false);
-			robin->SetActive(false);
-			shopCounter1->SetActive(false);
-			shopCounter2->SetActive(false);
+
+			player2->SetActive(true);	
+			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
 		}
 	}
 	//
