@@ -1,0 +1,7 @@
+﻿ID,FPS,LOOPTYPE,,
+HoeBack,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/tools.png,273,25,14,65
+graphics/tools.png,289,25,14,65
+graphics/tools.png,271,190,3,3

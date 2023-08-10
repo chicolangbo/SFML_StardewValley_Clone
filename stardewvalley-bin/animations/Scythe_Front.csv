@@ -1,0 +1,11 @@
+﻿ID,FPS,LOOPTYPE,,
+ScytheFront,30,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/scythe.png,0,49,45,45
+graphics/scythe.png,45,49,45,45
+graphics/scythe.png,90,49,45,45
+graphics/scythe.png,135,49,45,45
+graphics/scythe.png,180,49,45,45
+graphics/scythe.png,225,49,45,45
+graphics/tools.png,271,190,3,3

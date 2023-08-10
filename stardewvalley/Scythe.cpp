@@ -1,6 +1,5 @@
 #include "stdafx.h"
-#include "Pickax.h"
-#include "Player2.h"
+#include "Scythe.h"
 #include "InputMgr.h"
 #include "Framework.h"
 #include "ResourceMgr.h"
@@ -8,13 +7,13 @@
 #include "GameObject.h"
 #include "Scene.h"
 
-void Pickax::Init()
+void Scythe::Init()
 {
 	SpriteGo::Init();
 
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Pickax_Front.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Pickax_Back.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Pickax_Side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Scythe_Front.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Scythe_Side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Scythe_Back.csv"));
 
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
@@ -22,43 +21,44 @@ void Pickax::Init()
 	SetOrigin(Origins::BC);
 }
 
-void Pickax::Reset()
+void Scythe::Reset()
 {
 	SetOrigin(origin);
 	SetPosition({ 0, 0 });
+	SetFlipX(false);
 }
 
-void Pickax::Update(float dt)
+void Scythe::Update(float dt)
 {
 	animation.Update(dt);
 }
 
-void Pickax::Draw(sf::RenderWindow& window)
+void Scythe::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
 }
 
-void Pickax::PlayAnimation(sf::String name)
+void Scythe::PlayAnimation(sf::String name)
 {
 	animation.Play(name);
 }
 
-void Pickax::SetPostion(sf::Vector2f pos)
+void Scythe::SetPostion(sf::Vector2f pos)
 {
 	SetPosition(pos);
 }
 
-void Pickax::SetOrigins()
+void Scythe::SetOrigins()
 {
 	SetOrigin(Origins::MC);
 }
 
-bool Pickax::GetFlipX() const
+bool Scythe::GetFlipX() const
 {
 	return flipX;
 }
 
-void Pickax::SetFlipX(bool flip)
+void Scythe::SetFlipX(bool flip)
 {
 	flipX = flip;
 

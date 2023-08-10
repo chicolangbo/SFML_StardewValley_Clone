@@ -7,7 +7,7 @@ class Axe : public SpriteGo
 protected:
 	AnimationController animation;
 
-	bool playingAnimation = false; 
+	bool flipX;
 
 public:
 
@@ -22,5 +22,8 @@ public:
 	void PlayAnimation(sf::String name);
 	void SetPostion(sf::Vector2f pos);
 	void SetOrigins(); 
+
+	bool GetFlipX() const;           
+	void SetFlipX(bool flip);
 };
 

@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Axe.h"
 #include "Pickax.h"
+#include "Hoe.h"
+#include "Scythe.h"
 
 class Player2 :  public SpriteGo
 {
@@ -20,6 +22,9 @@ protected:
 	AnimationController animation;
 	Axe axe;
 	Pickax pickax;
+	Hoe hoe;
+	Scythe scythe;
+
 	sf::Vector2f direction;
 	float speed = 500.f;
 

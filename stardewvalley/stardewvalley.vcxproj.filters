@@ -126,6 +126,12 @@
     <ClCompile Include="DataTables\WallTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Scythe.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -228,6 +234,12 @@
       <Filter>Gameobjects</Filter>
     </ClInclude>
     <ClInclude Include="Pickax.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Hoe.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scythe.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
   </ItemGroup>

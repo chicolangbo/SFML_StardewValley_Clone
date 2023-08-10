@@ -1,0 +1,8 @@
+﻿ID,FPS,LOOPTYPE,,
+AxeSide,12,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/tools.png,0,129,50,50
+graphics/tools.png,50,129,50,50
+graphics/tools.png,100,129,50,50
+graphics/tools.png,271,190,3,3
