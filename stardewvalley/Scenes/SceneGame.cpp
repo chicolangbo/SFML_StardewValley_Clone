@@ -11,6 +11,7 @@
 #include "VertexArrayGo.h"
 #include "Player2.h"
 #include "UiButton.h"
+#include "Wall.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -42,65 +43,80 @@ void SceneGame::Init()
 	worldView.setCenter(0,0);
 	//
 
-	// 김민지, 230807, 테스트용 주석처리
-	//sf::Vector2f tileWorldSize = { 50.f, 50.f };
-	//sf::Vector2f tileTexSize = { 50.f ,50.f };
-	//background = CreateBackGround({ 100, 100 }, { 50.f, 50.f }, { 50.f, 50.f }, "graphics/background_sheet.png");
-	//AddGo(background);
-	//player2 = (Player2*)AddGo(new Player2());
-	//UiButton* button = (UiButton*)AddGo(new UiButton("graphics/TitleButtons1.png", "button"));
-	//button->sprite.setScale(2.0f, 2.0f);
-	//button->SetOrigin(Origins::TR);
-	//button->sortLayer = 100;
-	//button->SetPosition(size.x, 0);
-	//button->OnEnter = [button]()
-	//{
-	//	cout << "Enter" << endl;
-	//	sf::Texture* tex = RESOURCE_MGR.GetTexture("graphics/TitleButtons2.png");
-	//	button->sprite.setTexture(*tex);
-	//};
-	//button->OnExit = [button]()
-	//{
-	//	cout << "OnExit" << endl;
-	//	sf::Texture* tex = RESOURCE_MGR.GetTexture(button->textureId);
-	//	button->sprite.setTexture(*tex);
-	//};
-	//button->OnClick = [this]()
-	//{
-	//	SCENE_MGR.ChangeScene(sceneId);
-	//	cout << "OnClick" << endl;
-	//};
-	//
-
-	// 김민지, 230807, 테스트용 추가
-	// 김민지, 230808, 테스트용 코드 변경(textureId와 nickName 통일)
-	//player2 = (Player2*)AddGo(new Player2());
-	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo"));
-	//AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "load1"));
-	//SpriteGo* logo = (SpriteGo*)FindGo("logo");
-	//SpriteGo* load = (SpriteGo*)FindGo("load1");
-	//logo->SetOrigin(Origins::MC);
-	//logo->SetPosition(0, 0);
-	//load->SetOrigin(Origins::MC);
-	//load->SetPosition(0, 0);
-	//
-
 	// 김민지, 230808, 임시맵 코드 추가
-	AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap"));
-	SpriteGo* testFarmMap = (SpriteGo*)FindGo("testFarmMap");
+	testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	testFarmMap->sprite.setScale(3.f, 3.f);
 	testFarmMap->SetOrigin(Origins::MC);
 	testFarmMap->SetPosition(0, 0);
-	AddGo(new SpriteGo("map/houses.png", "house"));
-	SpriteGo* house = (SpriteGo*)FindGo("house");
+	house = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
 	house->sprite.setScale(4.f, 4.f);
 	house->SetOrigin(Origins::BC);
 	house->SetPosition(473, -785);
-	AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop"));
-	SpriteGo* shop = (SpriteGo*)FindGo("shop");
+	shop = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
+	shopInside = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopInside", "shopInside"));
+	shopInside->sprite.setScale(4.f, 4.f);
+	shopInside->SetOrigin(Origins::TL);
+	shopInside->SetPosition(0, 0);
+	shopInside->SetActive(false);
+	pierre = (SpriteGo*)AddGo(new SpriteGo("graphics/Pierre.png", "pierre", "pierre"));
+	pierre->sprite.setScale(5.f, 5.f);
+	pierre->SetOrigin(Origins::MC);
+	pierre->SetPosition(244.f, 1086.f);
+	pierre->SetActive(false);
+	robin = (SpriteGo*)AddGo(new SpriteGo("graphics/Robin.png", "robin", "robin"));
+	robin->sprite.setScale(5.f, 5.f);
+	robin->SetOrigin(Origins::MC);
+	robin->SetPosition(352.f, 1086.f);
+	robin->SetActive(false);
+
+	shopCounter1 = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopCounter1", "shopCounter1"));
+	shopCounter1->sprite.setScale(4.f, 4.f);
+	shopCounter1->SetOrigin(Origins::TL);
+	shopCounter1->SetPosition(48.f*4, 275.f*4);
+	shopCounter1->SetActive(false);
+	shopCounter2 = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopCounter2", "shopCounter2"));
+	shopCounter2->sprite.setScale(4.f, 4.f);
+	shopCounter2->SetOrigin(Origins::TL);
+	shopCounter2->SetPosition(128.f*4, 254.f*4);
+	shopCounter2->SetActive(false);
+	shopMid1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid1", "shopMid1"));
+	shopMid1->sprite.setScale(4.f, 4.f);
+	shopMid1->SetOrigin(Origins::TL);
+	shopMid1->SetPosition(48.f*4, 332.f*4);
+	shopMid1->SetActive(false);
+	shopMid2_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_1", "shopMid2"));
+	shopMid2_1->sprite.setScale(4.f, 4.f);
+	shopMid2_1->SetOrigin(Origins::TL);
+	shopMid2_1->SetPosition(160.f*4, 277.f*4);
+	shopMid2_1->SetActive(false);
+	shopMid2_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_2", "shopMid2"));
+	shopMid2_2->sprite.setScale(4.f, 4.f);
+	shopMid2_2->SetOrigin(Origins::TL);
+	shopMid2_2->SetPosition(160.f*4, 325.f*4);
+	shopMid2_2->SetActive(false);
+	shopMid3_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_1", "shopMid3"));
+	shopMid3_1->sprite.setScale(4.f, 4.8f);
+	shopMid3_1->SetOrigin(Origins::TL);
+	shopMid3_1->SetPosition(160.f*4, 375.f*4);
+	shopMid3_1->SetActive(false);
+	shopMid3_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_2", "shopMid3"));
+	shopMid3_2->sprite.setScale(4.f, 4.8f);
+	shopMid3_2->SetOrigin(Origins::TL);
+	shopMid3_2->SetPosition(224.f*4, 375.f*4);
+	shopMid3_2->SetActive(false);
+	shopBox = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopBox", "shopBox"));
+	shopBox->sprite.setScale(4.f, 4.f);
+	shopBox->SetOrigin(Origins::TL);
+	shopBox->SetPosition(288.f*4, 434.f*4);
+	shopBox->SetActive(false);
+	shopWalls = (Wall*)AddGo(new Wall("shopWall"));
+	shopWalls->SetType(Wall::Location::Shop);
+	shopWalls->SetPos();
+	shopWalls->SetActive(false);
+
 	player2 = (Player2*)AddGo(new Player2());
 	//
 
@@ -109,16 +125,6 @@ void SceneGame::Init()
 		go->Init();
 	}
 
-	//background->sortLayer = -1;
-	//background->SetOrigin(Origins::MC);
-	//background->SetPosition(centerPos);
-
-	//wallBounds = background->vertexArray.getBounds();
-	//
-
-	//player->SetWallBounds(wallBounds);
-
-	//player->sortLayer = 1;
 }
 
 void SceneGame::Release()
@@ -163,6 +169,47 @@ void SceneGame::Update(float dt)
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
+
+	// 김민지, 230809, 샵내부
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	{
+		if (enterShop)
+		{
+			enterShop = false;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+			player2->SetActive(true);
+			player2->SetPosition(-463.f, -845.f);
+		}
+		else
+		{
+			enterShop = true;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+
+			player2->SetActive(true);	
+			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
+		}
+	}
+	//
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
