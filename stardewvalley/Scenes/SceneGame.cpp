@@ -171,7 +171,7 @@ void SceneGame::Update(float dt)
 	worldView.setCenter(player2->GetPosition());
 
 	// ±è¹ÎÁö, 230809, ¼¥³»ºÎ
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
 	{
 		if (enterShop)
 		{
