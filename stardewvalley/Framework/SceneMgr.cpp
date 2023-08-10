@@ -12,9 +12,10 @@ void SceneMgr::Init()
 		Release();
 	}
 
-	//230808, 윤유림, 에디터 씬 추가
 	scenes.push_back(new SceneGame());
+	//230808, 윤유림, 에디터 씬 추가
 	//
+	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
 
 	for (auto scene : scenes)

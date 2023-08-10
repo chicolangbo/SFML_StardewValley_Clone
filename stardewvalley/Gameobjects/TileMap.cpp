@@ -73,6 +73,63 @@ bool TileMap::Load(const std::string& filePath)
     return true;
 }
 
+//230809, 윤유림, 행+렬 수로 로드
+bool TileMap::Load(int col, int row, float texX, float texY)
+{
+    size = sf::Vector2i(col, row);
+
+    for (int i = 0; i < size.y; ++i)
+    {
+        for (int j = 0; j < size.x; ++j)
+        {
+            Tile tile;
+            tile.x = j;
+            tile.y = i;
+            tiles.push_back(tile);
+        }
+    }
+    // resize the vertex array to fit the level size
+    vertexArray.setPrimitiveType(sf::Quads);
+    vertexArray.resize(size.x * size.y * 4);
+    sf::Vector2f startPos = { 0, 0 };
+    sf::Vector2f currPos = startPos;
+
+    sf::Vector2f texOffsets[4] =
+    {
+        { texX, texY },
+        { texSize.x + texX, texY },
+        { texSize.x + texX, texSize.y + texY},
+        { texX, texSize.y + texY }
+    };
+    sf::Vector2f offsets[4] =
+    {
+        { 0.f, 0.f },
+        { tileSize.x, 0.f },
+        { tileSize.x, tileSize.y },
+        { 0.f, tileSize.y }
+    };
+
+    for (int i = 0; i < size.y; ++i)
+    {
+        for (int j = 0; j < size.x; ++j)
+        {
+            int tileIndex = size.x * i + j;
+            int texIndex = tiles[tileIndex].texIndex;
+            for (int k = 0; k < 4; ++k)
+            {
+                int vertexIndex = tileIndex * 4 + k;
+                vertexArray[vertexIndex].position = currPos + offsets[k];
+                vertexArray[vertexIndex].texCoords = texOffsets[k];
+            }
+            currPos.x += tileSize.x;
+        }
+        currPos.x = startPos.x;
+        currPos.y += tileSize.y;
+    }
+    isLood = true;
+    return true;
+}
+
 sf::Vector2f TileMap::GetTileMapSize()
 {
     return sf::Vector2f{tileSize.x* size.x, tileSize.y* size.y};
@@ -103,6 +160,16 @@ Tile& TileMap::GetTile(const int x, const int y)
     }
     cout << "ERR: No Tile" << endl;
     exit(1);
+}
+
+void TileMap::setTilesize(float x, float y)
+{
+    tileSize = { x, y };
+}
+
+void TileMap::setTexSize(float x, float y)
+{
+    texSize = { x, y };
 }
 
 void TileMap::setScale(float scaleX, float scaleY)

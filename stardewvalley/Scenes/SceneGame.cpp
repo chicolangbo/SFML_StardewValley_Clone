@@ -210,6 +210,11 @@ void SceneGame::Update(float dt)
 		}
 	}
 	//
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	{
+		SCENE_MGR.ChangeScene(SceneId::Editor);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
