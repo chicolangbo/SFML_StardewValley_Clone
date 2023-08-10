@@ -120,8 +120,7 @@ void SceneGame::Init()
 	shopWalls->SetActive(false);
 
 	// ±è¹ÎÁö, 230810, Å×½ºÆ®ÄÚµå Ãß°¡
-	test = (NineSlice*)AddGo(new NineSlice("graphics/box1.png", "box1", 5.f, 6.f));
-	test->SetScale(10.f, 5.f);
+	test = (NineSlice*)AddGo(new NineSlice("graphics/box1.png", { 56,67,88,77 }, {0,0,200,200}, "box1"));
 	//test->SetPosition(0, 0);
 	//
 
@@ -165,6 +164,10 @@ void SceneGame::Enter()
 	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ÁÖ¼®Ã³¸®
 	//player2->SetOrigin(Origins::MC);
 	//player2->SetPosition(centerPos);
+	//
+
+	// ±è¹ÎÁö, 230810, 9slice Å×½ºÆ®
+	test->SetSize({ 500.f, 800.f });
 	//
 }
 

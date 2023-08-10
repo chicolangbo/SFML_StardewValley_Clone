@@ -1,41 +1,19 @@
 #pragma once
-#include "GameObject.h"
-
-class NineSlice :
-    public GameObject
+#include "VertexArrayGo.h"
+class NineSlice : public VertexArrayGo
 {
 protected:
-	sf::Sprite cornerSprite[4];
-	sf::Sprite edgeSprite[4];
-	sf::Sprite centerSprite;
-	
-	sf::FloatRect centerRect;
-	int c_width;
-	int c_height;
-	int width;
-	int height;
-
-	std::string textureId;
-
+	sf::Rect<float> centerRect;
+	sf::Rect<float> spriteSize;
 public:
-	NineSlice(const std::string& textureId, const std::string& n, float w, float h);
-	virtual ~NineSlice() override;
+	NineSlice(const std::string& textureID, sf::Rect<float> centerRect, sf::Rect<float> size, const string& name = "");
 
-	virtual void SetPosition(const sf::Vector2f& p);
-	virtual void SetPosition(float x, float y);
-
-	virtual void SetOrigin(Origins origin);
-	virtual void SetOrigin(float x, float y);
-
-	virtual void SetScale(float x, float y);
-	virtual void SetScale(const sf::Vector2f& p);
+	virtual void SetTexture(sf::Texture& texture, sf::Rect<float> centerRect, sf::Rect<float> size);
+	void SetTextureSize(sf::Rect<float> centerRect, sf::Rect<float> spriteSize);
+	virtual void SetSize(sf::Vector2f size);
 
 	virtual void Init() override;
+	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
-	virtual void Draw(sf::RenderWindow& window) override;
-
-	void SliceImages();
-	void SetSlicePosition();
 };
-
