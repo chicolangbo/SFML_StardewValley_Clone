@@ -38,6 +38,7 @@ void ResourceMgr::Init()
 	// ±è¹ÎÁö, 230807, Æú´õ ¼öÁ¤
 	//LoadFromCSV("tables/defalutResource.csv", true);
 	LoadFromCSV("scripts/defaultResourceList.csv", true);
+			    
 	//
 }
 

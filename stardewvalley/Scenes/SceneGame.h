@@ -2,9 +2,7 @@
 #include "Scene.h"
 
 class VertexArrayGo;
-class Player;
 class Player2;
-class Farmer;
 class SpriteGo;
 class Wall;
 
@@ -17,7 +15,6 @@ protected:
 	bool enterShop = false;
 	//
 
-	//Player* player;
 	Player2* player2;
 	// 김민지, 230809, 추가
 	SpriteGo* testFarmMap;
@@ -38,6 +35,9 @@ protected:
 	Wall* shopWalls;
 	//
 	//Farmer* player;
+	//임형준 테스트
+	float totalRotation=0.f;
+	bool axeRotation = false;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

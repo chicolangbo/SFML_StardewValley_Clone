@@ -133,3 +133,9 @@
 1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,À±À¯¸²
 0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,
 0,map/walls_and_floors.png,N,-1,-1,-1,-1,
+0,graphics/tools.png,SideAxe,260,158,10,23,
+3,animations/Axe_Back.csv,N,-1,-1,-1,-1,
+3,animations/Axe_Front.csv,N,-1,-1,-1,-1,
+0,graphics/tools.png,N,-1,-1,-1,-1,
+3,animations/Pickax_Front.csv,N,-1,-1,-1,-1,
+3,animations/Pickax_Back.csv,N,-1,-1,-1,-1,

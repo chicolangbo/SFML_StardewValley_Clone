@@ -114,6 +114,12 @@
     <ClCompile Include="Scenes\SceneEditor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Axe.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickax.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
     <ClCompile Include="Gameobjects\Wall.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="DataTables\WallTable.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Axe.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickax.h">
+      <Filter>Gameobjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

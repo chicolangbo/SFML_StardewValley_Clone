@@ -1,0 +1,7 @@
+﻿ID,FPS,LOOPTYPE,,
+PickaxBack,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/tools.png,273,90,14,65
+graphics/tools.png,289,90,14,65
+graphics/tools.png,271,190,3,3
