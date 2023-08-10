@@ -29,6 +29,10 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-up.csv"));
 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water.csv"));
+
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
 	SetOrigin(Origins::MC);
@@ -156,6 +160,10 @@ void Player2::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
 	{
 		item = 4;//호미
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
+	{
+		item = 5;//물뿌리개
 	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
@@ -289,6 +297,34 @@ void Player2::Update(float dt)
 				animation.Play("ToolUp");
 				hoe.SetFlipX(true);
 				hoe.PlayAnimation("HoeBack");
+			}
+			energy -= 2;
+			playingAnimation = true;
+			break;
+
+		case 5:
+			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+			{
+				animation.Play("Water");
+			
+			}
+			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+			{
+				animation.Play("WaterSide");
+			
+				if (filpX)
+				{
+					
+				}
+				else
+				{
+					
+
+				}
+			}
+			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+			{
+				animation.Play("WaterUp");
 			}
 			energy -= 2;
 			playingAnimation = true;
