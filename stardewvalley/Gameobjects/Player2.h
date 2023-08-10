@@ -40,6 +40,7 @@ protected:
 	int maxEnergy = 270;
 	int energy = 270;
 
+	bool playerDie = false;
 	bool playingAnimation = false;
 
 public:

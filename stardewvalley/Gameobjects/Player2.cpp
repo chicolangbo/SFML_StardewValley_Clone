@@ -33,6 +33,8 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water.csv"));
 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Die.csv"));
+
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
 	SetOrigin(Origins::MC);
@@ -95,6 +97,8 @@ void Player2::Update(float dt)
 	sf::Vector2f playerPos = GetPosition();
 	//std::cout << playerPos.x << " " << playerPos.y << std::endl;
 	//ÀÌµ¿
+
+	
 	direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
 	direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
 	float magnitude = Utils::Magnitude(direction); 
