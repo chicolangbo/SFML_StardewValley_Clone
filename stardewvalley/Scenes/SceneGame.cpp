@@ -119,15 +119,6 @@ void SceneGame::Init()
 	shopWalls->SetActive(false);
 
 	player2 = (Player2*)AddGo(new Player2());
-	//임형준 테스트 코드...
-	AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
-	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	axe->sprite.setScale(5.f, 5.f);
-	axe->SetOrigin(Origins::BC);
-	axe->SetPosition(player2->GetPosition());
-	axe->SetActive(false);
-
-
 
 	for (auto go : gameObjects)
 	{
@@ -178,40 +169,6 @@ void SceneGame::Update(float dt)
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
-
-	//임형준 테스트코드 옆면에서 곡도끼 휘두르는 모션
-	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	axe->sprite.setScale(5.f, 5.f);
-	axe->SetOrigin(Origins::BC);
-	axe->SetPosition(player2->GetPosition());
-	
-	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-	//{
-	//	axeRotation = true;
-	//}
-	if (axeRotation)
-	{
-		axe->SetActive(true);
-		float rotationLimit = 90.f; // 회전 각도 제한 
-		float rotation = 500.f * dt; // 회전
-		if (totalRotation + rotation > rotationLimit)
-		{
-			rotation = rotationLimit - totalRotation; // 회전 총 각도 제한 
-		}
-		totalRotation += rotation; // 회전 총 각도 누적 
-		axe->sprite.setRotation(totalRotation); // 회전 적용
-
-		if (totalRotation >= rotationLimit)
-		{
-			axeRotation = false;
-			axe->SetActive(false);
-		}
-	}
-	if (axe->GetActive() == false)
-	{
-		totalRotation = 0.f;
-	}
-	
 
 
 	// 김민지, 230809, 샵내부

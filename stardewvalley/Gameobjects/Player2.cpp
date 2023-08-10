@@ -78,6 +78,10 @@ void Player2::Reset()
 
 	currentClipInfo = clipInfos[6];
 
+	playerDie = false;
+	one = true;
+	energy = maxEnergy;
+
 	// 김민지, 230809, 콜라이더용 추가
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	SetOrigin(origin);
@@ -98,250 +102,271 @@ void Player2::Update(float dt)
 	//std::cout << playerPos.x << " " << playerPos.y << std::endl;
 	//이동
 
-	
-	direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
-	direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
-	float magnitude = Utils::Magnitude(direction); 
-	if (magnitude > 1.f)
+	if (!playerDie)
 	{
-		direction /= magnitude;
-	}
-	position += direction * speed * dt;
-
-	SetPosition(position);
-
-	axe.Update(dt);
-	axe.SetPosition(position);
-	axe.SetOrigins();
-
-	pickax.Update(dt);
-	pickax.SetPosition(position);
-	pickax.SetOrigins(); 
-
-	hoe.Update(dt);
-	hoe.SetPosition(position);
-	hoe.SetOrigins();
-
-	scythe.Update(dt);
-	scythe.SetPosition(position);
-	scythe.SetOrigins(); 
-
-	if ((direction.x != 0.f || direction.y != 0.f)) 
-	{
-		auto min = std::min_element(clipInfos.begin(), clipInfos.end(), 
-			[this](const ClipInfo& lhs, const ClipInfo& rhs) { 
-				return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction); 
-			});
-		currentClipInfo = *min;
-	}
-	//이동이 있으면 true 없으면 false
-	std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
-	if (GetFlipX() != currentClipInfo.flipX)
-	{
-		SetFlipX(currentClipInfo.flipX);
-	}
-	if (!playingAnimation)
-	{
-		if (animation.GetCurrentClipId() != clipId)
+		direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+		direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+		float magnitude = Utils::Magnitude(direction);
+		if (magnitude > 1.f)
 		{
-			animation.Play(clipId);
+			direction /= magnitude;
 		}
-	}
+		position += direction * speed * dt;
 
-	//test
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-	{
-		item = 1;//낫
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-	{
-		item = 2;//도끼
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-	{
-		item = 3;//곡괭이
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-	{
-		item = 4;//호미
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-	{
-		item = 5;//물뿌리개
-	}
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-	{
-		switch (item)
+		SetPosition(position);
+
+
+		axe.Update(dt);
+		axe.SetPosition(position);
+		axe.SetOrigins();
+
+		pickax.Update(dt);
+		pickax.SetPosition(position);
+		pickax.SetOrigins();
+
+		hoe.Update(dt);
+		hoe.SetPosition(position);
+		hoe.SetOrigins();
+
+		scythe.Update(dt);
+		scythe.SetPosition(position);
+		scythe.SetOrigins();
+
+		if ((direction.x != 0.f || direction.y != 0.f))
 		{
-		case 1:
-			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+			auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
+				[this](const ClipInfo& lhs, const ClipInfo& rhs) {
+					return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+				});
+			currentClipInfo = *min;
+		}
+		//이동이 있으면 true 없으면 false
+		std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
+		if (GetFlipX() != currentClipInfo.flipX)
+		{
+			SetFlipX(currentClipInfo.flipX);
+		}
+		if (!playingAnimation)
+		{
+			if (animation.GetCurrentClipId() != clipId)
 			{
-				animation.Play("Attack");
-				scythe.SetFlipX(true);
-				scythe.PlayAnimation("ScytheFront");
+				animation.Play(clipId);
 			}
-			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+		}
+
+		//test
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+		{
+			item = 1;//낫
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
+		{
+			item = 2;//도끼
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
+		{
+			item = 3;//곡괭이
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
+		{
+			item = 4;//호미
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
+		{
+			item = 5;//물뿌리개
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
+		{
+			energy = 0;
+		}
+
+		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+		{
+			switch (item)
 			{
-				animation.Play("AttackSide");
-				if (filpX)
+			case 1:
+				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
-					//오른쪽 방향
+					animation.Play("Attack");
 					scythe.SetFlipX(true);
-					scythe.PlayAnimation("ScytheSide");
+					scythe.PlayAnimation("ScytheFront");
 				}
-				else
+				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
 				{
-					//왼쪽 방향하는 애니매이션 실행
-					scythe.SetFlipX(false);
-					scythe.PlayAnimation("ScytheSide");
+					animation.Play("AttackSide");
+					if (filpX)
+					{
+						//오른쪽 방향
+						scythe.SetFlipX(true);
+						scythe.PlayAnimation("ScytheSide");
+					}
+					else
+					{
+						//왼쪽 방향하는 애니매이션 실행
+						scythe.SetFlipX(false);
+						scythe.PlayAnimation("ScytheSide");
 
+					}
 				}
-			}
-			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
-			{
-				animation.Play("AttackUp");
-				scythe.SetFlipX(true);
-				scythe.PlayAnimation("ScytheBack");
-			}
-			energy -= 2;
-			playingAnimation = true;
-			break;
-
-		case 2:
-			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
-			{
-				animation.Play("Tool");
-				//여기다가 클립ID넘기면 실행됨
-				axe.SetFlipX(true);
-				axe.PlayAnimation("AxeFront");
-			}
-			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
-			{
-				animation.Play("ToolSide");
-				if (filpX)
+				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
 				{
-					//오른쪽 방향
+					animation.Play("AttackUp");
+					scythe.SetFlipX(true);
+					scythe.PlayAnimation("ScytheBack");
+				}
+				energy -= 2;
+				playingAnimation = true;
+				break;
+
+			case 2:
+				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				{
+					animation.Play("Tool");
+					//여기다가 클립ID넘기면 실행됨
 					axe.SetFlipX(true);
-					axe.PlayAnimation("AxeSide");
+					axe.PlayAnimation("AxeFront");
 				}
-				else
+				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
 				{
-					//왼쪽 방향하는 애니매이션 실행
-					axe.SetFlipX(false);
-					axe.PlayAnimation("AxeSide");
-					
+					animation.Play("ToolSide");
+					if (filpX)
+					{
+						//오른쪽 방향
+						axe.SetFlipX(true);
+						axe.PlayAnimation("AxeSide");
+					}
+					else
+					{
+						//왼쪽 방향하는 애니매이션 실행
+						axe.SetFlipX(false);
+						axe.PlayAnimation("AxeSide");
+
+					}
 				}
-			}
-			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
-			{
-				animation.Play("ToolUp");
-				axe.SetFlipX(true);
-				axe.PlayAnimation("AxeBack");
-			}
-			energy -= 2;
-			playingAnimation = true;
-			break;
-		case 3:
-			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
-			{
-				animation.Play("Tool");
-				pickax.SetFlipX(true);
-				pickax.PlayAnimation("PickaxFront");
-			}
-			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
-			{
-				animation.Play("ToolSide");
-				if (filpX)
+				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
 				{
+					animation.Play("ToolUp");
+					axe.SetFlipX(true);
+					axe.PlayAnimation("AxeBack");
+				}
+				energy -= 2;
+				playingAnimation = true;
+				break;
+			case 3:
+				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				{
+					animation.Play("Tool");
 					pickax.SetFlipX(true);
-					pickax.PlayAnimation("PickaxSide");
+					pickax.PlayAnimation("PickaxFront");
 				}
-				else
+				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
 				{
-					pickax.SetFlipX(false);
-					pickax.PlayAnimation("PickaxSide");
+					animation.Play("ToolSide");
+					if (filpX)
+					{
+						pickax.SetFlipX(true);
+						pickax.PlayAnimation("PickaxSide");
+					}
+					else
+					{
+						pickax.SetFlipX(false);
+						pickax.PlayAnimation("PickaxSide");
+					}
 				}
-			}
-			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
-			{
-				animation.Play("ToolUp");
-				pickax.SetFlipX(true);
-				pickax.PlayAnimation("PickaxBack"); 
-			}
-			energy -= 2;
-			playingAnimation = true;
-			break;
+				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				{
+					animation.Play("ToolUp");
+					pickax.SetFlipX(true);
+					pickax.PlayAnimation("PickaxBack");
+				}
+				energy -= 2;
+				playingAnimation = true;
+				break;
 
-		case 4:
-			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
-			{
-				animation.Play("Tool");
-				hoe.SetFlipX(true);
-				hoe.PlayAnimation("HoeFront");
-			}
-			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
-			{
-				animation.Play("ToolSide");
-				if (filpX)
+			case 4:
+				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
-					//왼쪽 방향하는 애니매이션 실행
+					animation.Play("Tool");
 					hoe.SetFlipX(true);
-					hoe.PlayAnimation("HoeSide");
+					hoe.PlayAnimation("HoeFront");
 				}
-				else
+				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
 				{
-					//오른쪽 방향
-					hoe.SetFlipX(false);
-					hoe.PlayAnimation("HoeSide");
+					animation.Play("ToolSide");
+					if (filpX)
+					{
+						//왼쪽 방향하는 애니매이션 실행
+						hoe.SetFlipX(true);
+						hoe.PlayAnimation("HoeSide");
+					}
+					else
+					{
+						//오른쪽 방향
+						hoe.SetFlipX(false);
+						hoe.PlayAnimation("HoeSide");
+					}
 				}
-			}
-			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
-			{
-				animation.Play("ToolUp");
-				hoe.SetFlipX(true);
-				hoe.PlayAnimation("HoeBack");
-			}
-			energy -= 2;
-			playingAnimation = true;
-			break;
+				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				{
+					animation.Play("ToolUp");
+					hoe.SetFlipX(true);
+					hoe.PlayAnimation("HoeBack");
+				}
+				energy -= 2;
+				playingAnimation = true;
+				break;
 
-		case 5:
-			if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
-			{
-				animation.Play("Water");
-			
-			}
-			else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
-			{
-				animation.Play("WaterSide");
-			
-				if (filpX)
+			case 5:
+				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
-					
-				}
-				else
-				{
-					
+					animation.Play("Water");
 
 				}
+				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				{
+					animation.Play("WaterSide");
+
+					if (filpX)
+					{
+
+					}
+					else
+					{
+
+					}
+				}
+				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				{
+					animation.Play("WaterUp");
+				}
+				energy -= 2;
+				playingAnimation = true;
+				break;
 			}
-			else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
-			{
-				animation.Play("WaterUp");
-			}
-			energy -= 2;
-			playingAnimation = true;
-			break;
+
+
 		}
-		
-
 	}
+    else if (playerDie&&one)
+	{
+		animation.Play("Die");
+		one = false;
+	}
+
+	if (energy == 0)
+	{
+		playerDie = true;
+	}
+
 	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
 	{
 		playingAnimation = false;
 	}
-
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
+	{
+		Reset(); 
+	}
 	animation.Update(dt);
 }
 

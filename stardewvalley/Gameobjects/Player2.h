@@ -42,6 +42,7 @@ protected:
 
 	bool playerDie = false;
 	bool playingAnimation = false;
+	bool one = true;
 
 public:
 
