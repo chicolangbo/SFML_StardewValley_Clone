@@ -1,0 +1,7 @@
+﻿ID,FPS,LOOPTYPE,,
+WateringFront,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/tools.png,224,217,14,30
+graphics/tools.png,244,217,14,30
+graphics/tools.png,271,190,1,1

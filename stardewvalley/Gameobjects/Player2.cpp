@@ -56,6 +56,7 @@ void Player2::Init()
 	pickax.Init();
 	hoe.Init();
 	scythe.Init();
+	watering.Init(); 
 }
 
 void Player2::Reset()
@@ -75,6 +76,7 @@ void Player2::Reset()
 	pickax.Reset();
 	hoe.Reset();
 	scythe.Reset();
+	watering.Reset();
 
 	currentClipInfo = clipInfos[6];
 
@@ -132,6 +134,10 @@ void Player2::Update(float dt)
 		scythe.Update(dt);
 		scythe.SetPosition(position);
 		scythe.SetOrigins();
+
+		watering.Update(dt);
+		watering.SetPosition(position);
+		watering.SetOrigins();
 
 		if ((direction.x != 0.f || direction.y != 0.f))
 		{
@@ -321,7 +327,8 @@ void Player2::Update(float dt)
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Water");
-
+					watering.SetFlipX(true);
+					watering.PlayAnimation("WateringFront");
 				}
 				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
 				{
@@ -329,16 +336,20 @@ void Player2::Update(float dt)
 
 					if (filpX)
 					{
-
+						watering.SetFlipX(true);
+						watering.PlayAnimation("WateringSide");
 					}
 					else
 					{
-
+						watering.SetFlipX(false);
+						watering.PlayAnimation("WateringSide");
 					}
 				}
 				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
 				{
 					animation.Play("WaterUp");
+					watering.SetFlipX(true);
+					watering.PlayAnimation("WateringBack");
 				}
 				energy -= 2;
 				playingAnimation = true;
@@ -377,6 +388,7 @@ void Player2::Draw(sf::RenderWindow& window)
 	window.draw(pickax.sprite); 
 	window.draw(hoe.sprite);
 	window.draw(scythe.sprite);
+	window.draw(watering.sprite);
 }
 
 bool Player2::GetFlipX() const

@@ -1,0 +1,7 @@
+﻿ID,FPS,LOOPTYPE,,
+WateringSide,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/tools.png,257,211,24,31
+graphics/tools.png,281,211,24,31
+graphics/tools.png,271,190,1,1

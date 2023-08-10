@@ -6,6 +6,7 @@
 #include "Pickax.h"
 #include "Hoe.h"
 #include "Scythe.h"
+#include "Wateringcan.h"
 
 class Player2 :  public SpriteGo
 {
@@ -24,6 +25,7 @@ protected:
 	Pickax pickax;
 	Hoe hoe;
 	Scythe scythe;
+	Wateringcan watering;
 
 	sf::Vector2f direction;
 	float speed = 500.f;

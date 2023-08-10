@@ -191,6 +191,7 @@
     <ClCompile Include="Gameobjects\Wall.cpp" />
     <ClCompile Include="DataTables\WallTable.cpp" />
     <ClCompile Include="Scythe.cpp" />
+    <ClCompile Include="Wateringcan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />
+    <ClInclude Include="Wateringcan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -132,6 +132,9 @@
     <ClCompile Include="Scythe.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
+    <ClCompile Include="Wateringcan.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -240,6 +243,9 @@
       <Filter>Gameobjects</Filter>
     </ClInclude>
     <ClInclude Include="Scythe.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Wateringcan.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
   </ItemGroup>
