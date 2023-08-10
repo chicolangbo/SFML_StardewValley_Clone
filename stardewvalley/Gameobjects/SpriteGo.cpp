@@ -73,34 +73,6 @@ void SpriteGo::SetScale(const sf::Vector2f& p)
 	//
 }
 
-void SpriteGo::NineSlice()
-{
-	sf::Sprite tempSprite;
-	float width = sprite.getGlobalBounds().width;
-	float height = sprite.getGlobalBounds().height;
-	sf::IntRect corner0 = { 0.f, 0.f, width / 3.f, height / 3.f };
-	sf::IntRect corner1 = { width - (width / 3.f), 0.f, width/3.f, height / 3.f };
-	sf::IntRect corner2 = { 0.f, height - (height / 3.f), width / 3.f, height / 3.f};
-	sf::IntRect corner3 = { width - (width / 3.f), height - (height / 3.f), width / 3.f, height / 3.f};
-	sf::IntRect edge0 = { width / 3.f, 0.f, width / 3.f, height / 3.f};
-	sf::IntRect edge1 = { width / 3.f * 2.f, height / 3.f, width / 3.f, height / 3.f};
-	sf::IntRect edge2 = { width / 3.f, height / 3.f * 2.f, width / 3.f, height / 3.f};
-	sf::IntRect edge3 = { 0.f, height / 3.f, width / 3.f, height / 3.f};
-	sf::IntRect center = { width / 3.f, height / 3.f, width / 3.f, height / 3.f};
-
-	cornerSprite[0].setTextureRect(corner0);
-	cornerSprite[1].setTextureRect(corner1);
-	cornerSprite[2].setTextureRect(corner2);
-	cornerSprite[3].setTextureRect(corner3);
-
-	edgeSprite[0].setTextureRect(edge0);
-	edgeSprite[1].setTextureRect(edge1);
-	edgeSprite[2].setTextureRect(edge2);
-	edgeSprite[3].setTextureRect(edge3);
-
-	centerSprite.setTextureRect(center);
-}
-
 void SpriteGo::Init()
 {
 
@@ -117,15 +89,6 @@ void SpriteGo::Reset()
 	if (tex != nullptr)
 	{
 		sprite.setTexture(*tex);
-
-		// 김민지, 230810, 9slice
-		centerSprite.setTexture(*tex);
-		for (int i = 0; i < 4; ++i)
-		{
-			cornerSprite[i].setTexture(*tex);
-			edgeSprite[i].setTexture(*tex);
-		}
-		//
 	}
 
 	// 김민지, 230807, 스프라이트시트 속 단일이미지 사용 가능하게끔 추가

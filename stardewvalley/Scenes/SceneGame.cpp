@@ -13,6 +13,7 @@
 #include "UiButton.h"
 #include "Wall.h"
 #include "Axe.h"
+#include "NineSlice.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -117,6 +118,12 @@ void SceneGame::Init()
 	shopWalls->SetType(Wall::Location::Shop);
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
+
+	// 김민지, 230810, 테스트코드 추가
+	test = (NineSlice*)AddGo(new NineSlice("graphics/box1.png", "box1", 5.f, 6.f));
+	test->SetScale(10.f, 5.f);
+	//test->SetPosition(0, 0);
+	//
 
 	player2 = (Player2*)AddGo(new Player2());
 	//임형준 테스트 코드...
