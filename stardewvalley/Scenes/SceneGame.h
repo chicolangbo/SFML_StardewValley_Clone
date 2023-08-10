@@ -2,20 +2,13 @@
 #include "Scene.h"
 
 class VertexArrayGo;
-class Player;
 class Player2;
-
-//±èÇìÁØ ±òÂ¦
-class Axe;
 
 class SceneGame : public Scene
 {
 protected:
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
-
-	//±èÇìÁØ ±òÂ¦
-	Axe* axe2;
 
 	Player2* player2;
 	//ÀÓÇüÁØ Å×½ºÆ®

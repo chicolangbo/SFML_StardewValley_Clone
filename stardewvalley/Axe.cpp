@@ -16,6 +16,8 @@ void Axe::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Axe_Back.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Axe_Front.csv"));
 	
+	//AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
+
 	animation.SetTarget(&sprite);
 	sprite.setScale(5.f, 5.f);
 
