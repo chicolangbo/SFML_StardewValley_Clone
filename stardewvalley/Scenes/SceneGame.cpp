@@ -163,6 +163,11 @@ void SceneGame::Update(float dt)
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	{
+		SCENE_MGR.ChangeScene(SceneId::Editor);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
