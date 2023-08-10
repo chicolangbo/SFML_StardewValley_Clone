@@ -2,8 +2,8 @@
 #include "NineSlice.h"
 #include "ResourceMgr.h"
 
-NineSlice::NineSlice(const std::string& textureID, sf::Rect<float> centerRect, sf::Rect<float> size, const string& name)
-	:VertexArrayGo(textureID, name), centerRect(centerRect), spriteSize(size)
+NineSlice::NineSlice(const std::string& textureId, const string& name, sf::Rect<float> centerRect, sf::Rect<float> size )
+	:VertexArrayGo(textureId, name), centerRect(centerRect), fullSize(size)
 {
 }
 
@@ -14,26 +14,26 @@ void NineSlice::SetTexture(sf::Texture& texture, sf::Rect<float> centerRect, sf:
 	vertexArray.resize(36);
 
 	this->centerRect = centerRect;
-	this->spriteSize = size;
+	this->fullSize = size;
 
-	SetTextureSize(centerRect, spriteSize);
+	SetTextureSize(centerRect, fullSize);
 	SetSize({ size.width, size.height });
 }
 
-void NineSlice::SetTextureSize(sf::Rect<float> centerRect, sf::Rect<float> spriteSize)
+void NineSlice::SetTextureSize(sf::Rect<float> centerRect, sf::Rect<float> fullSize)
 {
 	vector<float> textureHorizontal;
 	vector<float> textureVertical;
 
-	textureHorizontal.push_back(spriteSize.left);
+	textureHorizontal.push_back(fullSize.left);
 	textureHorizontal.push_back(centerRect.left);
 	textureHorizontal.push_back(centerRect.left + centerRect.width);
-	textureHorizontal.push_back(spriteSize.left + spriteSize.width);
+	textureHorizontal.push_back(fullSize.left + fullSize.width);
 
-	textureVertical.push_back(spriteSize.top);
+	textureVertical.push_back(fullSize.top);
 	textureVertical.push_back(centerRect.top);
 	textureVertical.push_back(centerRect.top + centerRect.height);
-	textureVertical.push_back(spriteSize.top + spriteSize.height);
+	textureVertical.push_back(fullSize.top + fullSize.height);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -52,36 +52,35 @@ void NineSlice::SetSize(sf::Vector2f size)
 {
 	vector<float> positionX;
 	vector<float> positionY;
-	sf::Vector2f borderSize = { spriteSize.width - centerRect.width, spriteSize.height - centerRect.height };
-	//size -= borderSize;
+	sf::Vector2f borderSize = { fullSize.width - centerRect.width, fullSize.height - centerRect.height };
 
 	if (borderSize.x < size.x)
 	{
-		positionX.push_back(spriteSize.left);
+		positionX.push_back(fullSize.left);
 		positionX.push_back(centerRect.left);
 		positionX.push_back(centerRect.left + (size.x - borderSize.x));
-		positionX.push_back(spriteSize.left + spriteSize.width - (centerRect.width - (size.x - borderSize.x)));
+		positionX.push_back(fullSize.left + size.x);
 	}
 	else
 	{
-		positionX.push_back(spriteSize.left);
-		positionX.push_back(size.x * 0.5f);
-		positionX.push_back(size.x * 0.5f);
+		positionX.push_back(fullSize.left);
+		positionX.push_back(borderSize.x * 0.5f);
+		positionX.push_back(borderSize.x * 0.5f);
 		positionX.push_back(size.x);
 	}
 
 	if (borderSize.y < size.y)
 	{
-		positionY.push_back(spriteSize.top);
+		positionY.push_back(fullSize.top);
 		positionY.push_back(centerRect.top);
 		positionY.push_back(centerRect.top + (size.y - borderSize.y));
-		positionY.push_back(spriteSize.top + spriteSize.height - (centerRect.height - (size.y - borderSize.y)));
+		positionY.push_back(fullSize.top + size.y);
 	}
 	else
 	{
-		positionY.push_back(spriteSize.top);
-		positionY.push_back(size.y * 0.5f);
-		positionY.push_back(size.y * 0.5f);
+		positionY.push_back(fullSize.top);
+		positionY.push_back(borderSize.y * 0.5f);
+		positionY.push_back(borderSize.y * 0.5f);
 		positionY.push_back(size.y);
 	}
 
@@ -102,6 +101,7 @@ void NineSlice::SetSize(sf::Vector2f size)
 void NineSlice::Init()
 {
 	VertexArrayGo::Init();
+	SetTexture(*RESOURCE_MGR.GetTexture(textureId), centerRect, fullSize);
 }
 
 void NineSlice::Release()
@@ -111,7 +111,7 @@ void NineSlice::Release()
 
 void NineSlice::Reset()
 {
-	SetTexture(*RESOURCE_MGR.GetTexture(textureId), centerRect, spriteSize);
+	//SetTexture(*RESOURCE_MGR.GetTexture(textureId), centerRect, fullSize);
 }
 
 void NineSlice::Update(float dt)
