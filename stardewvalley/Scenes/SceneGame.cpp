@@ -13,7 +13,6 @@
 #include "UiButton.h"
 #include "Wall.h"
 #include "Axe.h"
-#include "SliceImageGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -119,32 +118,21 @@ void SceneGame::Init()
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
 
-	// 김민지, 230810, 테스트코드 추가
-	test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 54,0,90,200 }, {0,0,200,200}, THREE_SLICE));
-	//test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 55,67,89,78 }, {0,0,200,200}, NINE_SLICE));
-	//test->SetPosition(0, 0);
-	//
-
 	player2 = (Player2*)AddGo(new Player2());
 	//임형준 테스트 코드...
-	//AddGo(new SpriteGo("graphics/tools.png", "SideAxe", "SideAxe"));
-	//SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	//axe->sprite.setScale(5.f, 5.f);
-	//axe->SetOrigin(Origins::BC);
-	//axe->SetPosition(player2->GetPosition());
-	//axe->SetActive(false);
-	//
+	AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
+	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
+	axe->sprite.setScale(5.f, 5.f);
+	axe->SetOrigin(Origins::BC);
+	axe->SetPosition(player2->GetPosition());
+	axe->SetActive(false);
+
 
 
 	for (auto go : gameObjects)
 	{
 		go->Init();
 	}
-
-	// 김민지, 230810, 9slice 테스트
-	test->SetSize(400.f);
-	//test->SetSize({300.f,500.f});
-	//
 
 }
 
@@ -171,7 +159,6 @@ void SceneGame::Enter()
 	//player2->SetOrigin(Origins::MC);
 	//player2->SetPosition(centerPos);
 	//
-
 }
 
 void SceneGame::Exit()
@@ -193,37 +180,38 @@ void SceneGame::Update(float dt)
 	worldView.setCenter(player2->GetPosition());
 
 	//임형준 테스트코드 옆면에서 곡도끼 휘두르는 모션
-	//SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	//axe->sprite.setScale(5.f, 5.f);
-	//axe->SetOrigin(Origins::BC);
-	//axe->SetPosition(player2->GetPosition());
+	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
+	axe->sprite.setScale(5.f, 5.f);
+	axe->SetOrigin(Origins::BC);
+	axe->SetPosition(player2->GetPosition());
+	
 	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 	//{
 	//	axeRotation = true;
 	//}
-	//if (axeRotation)
-	//{
-	//	axe->SetActive(true);
-	//	float rotationLimit = 90.f; // 회전 각도 제한 
-	//	float rotation = 500.f * dt; // 회전
-	//	if (totalRotation + rotation > rotationLimit)
-	//	{
-	//		rotation = rotationLimit - totalRotation; // 회전 총 각도 제한 
-	//	}
-	//	totalRotation += rotation; // 회전 총 각도 누적 
-	//	axe->sprite.setRotation(totalRotation); // 회전 적용
+	if (axeRotation)
+	{
+		axe->SetActive(true);
+		float rotationLimit = 90.f; // 회전 각도 제한 
+		float rotation = 500.f * dt; // 회전
+		if (totalRotation + rotation > rotationLimit)
+		{
+			rotation = rotationLimit - totalRotation; // 회전 총 각도 제한 
+		}
+		totalRotation += rotation; // 회전 총 각도 누적 
+		axe->sprite.setRotation(totalRotation); // 회전 적용
 
-	//	if (totalRotation >= rotationLimit)
-	//	{
-	//		axeRotation = false;
-	//		axe->SetActive(false);
-	//	}
-	//}
-	//if (axe->GetActive() == false)
-	//{
-	//	totalRotation = 0.f;
-	//}
-	//
+		if (totalRotation >= rotationLimit)
+		{
+			axeRotation = false;
+			axe->SetActive(false);
+		}
+	}
+	if (axe->GetActive() == false)
+	{
+		totalRotation = 0.f;
+	}
+	
 
 
 	// 김민지, 230809, 샵내부

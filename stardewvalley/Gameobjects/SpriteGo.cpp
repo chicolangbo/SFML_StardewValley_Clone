@@ -61,18 +61,16 @@ void SpriteGo::SetScale(float x, float y)
 {
 	sprite.setScale(x, y);
 	// 김민지, 230809, 콜라이더 연동
-	//collider.setScale(x, y);
+	collider.setScale(x, y);
 	//
-	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 }
 
 void SpriteGo::SetScale(const sf::Vector2f& p)
 {
 	sprite.setScale(p);
 	// 김민지, 230809, 콜라이더 연동
-	//collider.setScale(p);
+	collider.setScale(p);
 	//
-	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 }
 
 void SpriteGo::Init()

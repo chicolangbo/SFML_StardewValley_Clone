@@ -5,12 +5,6 @@
 #include "Axe.h"
 #include "Pickax.h"
 
-enum class Equipment
-{
-	tool1,
-	tool2,
-};
-
 class Player2 :  public SpriteGo
 {
 public:

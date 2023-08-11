@@ -5,7 +5,6 @@ class VertexArrayGo;
 class Player2;
 class SpriteGo;
 class Wall;
-class SliceImageGo;
 
 class SceneGame : public Scene
 {
@@ -39,10 +38,6 @@ protected:
 	//임형준 테스트
 	float totalRotation=0.f;
 	bool axeRotation = false;
-
-	// 김민지, 230810, 9slice 테스트 추가
-	SliceImageGo* test;
-	//
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
