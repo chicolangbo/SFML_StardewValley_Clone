@@ -3,8 +3,8 @@
 #include "InputMgr.h"
 #include "SceneMgr.h"
 
-UiButton::UiButton(const std::string& textureId, const std::string& n)
-	:SpriteGo(textureId, n)
+UiButton::UiButton(const std::string& textureId, const std::string& n, const std::string& nickname)
+	:SpriteGo(textureId, n, nickname)
 {
 }
 

@@ -9,6 +9,7 @@
 #include "RectangleGo.h"
 #include "InputMgr.h"
 #include "SceneMgr.h"
+#include "TextGo.h"
 
 SceneEditor::SceneEditor()
 	:Scene(SceneId::Editor)
@@ -23,13 +24,11 @@ void SceneEditor::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 	centerPos = size * 0.5f;
 
-	buttonCreate = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "ok"));
+	buttonCreate = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "ok", "ok"));
 
 	//buttonCreate->sprite.setScale(2.0f, 2.0f);
 	buttonCreate->SetOrigin(Origins::TL);
 	buttonCreate->sortLayer = 101;
-	
-
 	buttonCreate->OnClick = [this]()
 	{
 		cout << "OnClick" << endl;
@@ -55,10 +54,30 @@ void SceneEditor::Init()
 		//cout << MapLT.x << ", " << MapLT.y << endl;
 	};
 	
-	sellectTile = (RectangleGo*)AddGo(new RectangleGo(tilesize));
-	sellectTile->rectangle.setFillColor(sf::Color::Green);
-	sellectTile->SetOrigin(Origins::TL);
+	buttonRowUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
+	buttonRowUp->SetOrigin(Origins::MC);
+	buttonRowUp->sortLayer = 101;
+
+	buttonRowDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
+	buttonRowDown->SetOrigin(Origins::MC);
+	buttonRowDown->sortLayer = 101;
+
+	buttonColUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
+	buttonColUp->SetOrigin(Origins::MC);
+	buttonColUp->sortLayer = 101;
+
+	buttonColDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
+	buttonColDown->SetOrigin(Origins::MC);
+	buttonColDown->sortLayer = 101;
+
+	selectTile = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut1.png", "selectTile"));
+	selectTile->SetOrigin(Origins::TL);
+	selectTile->SetActive(false);
+	selectTile->sortLayer = 3;
 	//sellectTile->sortLayer = 100;
+
+	numUI = (SpriteGo*)AddGo(new SpriteGo("graphics/numUI.png", "numUI"));
+	numUI->SetOrigin(Origins::ML);
 
 	palletBg = (TileMap*)AddGo(new TileMap("map/walls_and_floors.png", "palletBg")); 
 	palletBg->setTexSize(32.f, 32.f);
@@ -87,6 +106,8 @@ void SceneEditor::Release()
 
 void SceneEditor::Enter()
 {
+	Scene::Enter();
+
 	auto size = FRAMEWORK.GetWindowSize();
 	centerPos = size * 0.5f;
 
@@ -99,7 +120,21 @@ void SceneEditor::Enter()
 
 	buttonCreate->SetPosition(20.f, 20.f);
 
-	Scene::Enter();
+	buttonRowUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
+	buttonRowUp->SetOrigin(Origins::MC);
+	buttonRowUp->sortLayer = 101;
+
+	buttonRowDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
+	buttonRowDown->SetOrigin(Origins::MC);
+	buttonRowDown->sortLayer = 101;
+
+	buttonColUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
+	buttonColUp->SetOrigin(Origins::MC);
+	buttonColUp->sortLayer = 101;
+
+	buttonColDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
+	buttonColDown->SetOrigin(Origins::MC);
+	buttonColDown->sortLayer = 101;
 }
 
 void SceneEditor::Exit()
@@ -123,7 +158,7 @@ void SceneEditor::Update(float dt)
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
 		//cout << tileX << ", " << tileY << endl;
-		sellectTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
+		selectTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
 		//auto tile = farmMap->tiles[tileY * row + tileX];
 	}
 

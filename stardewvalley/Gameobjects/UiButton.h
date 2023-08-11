@@ -8,7 +8,7 @@ protected:
 public:
 	sf::Text text;
 
-	UiButton(const std::string& textureId, const std::string& n);
+	UiButton(const std::string& textureId, const std::string& n, const std::string& nickname);
 	virtual ~UiButton() override;
 
 	virtual void Init() override;
