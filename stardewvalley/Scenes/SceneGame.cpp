@@ -14,6 +14,7 @@
 #include "Wall.h"
 #include "Axe.h"
 #include "SliceImageGo.h"
+#include "Inventory.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -118,11 +119,10 @@ void SceneGame::Init()
 	shopWalls->SetType(Wall::Location::Shop);
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
+	//
 
-	// ±è¹ÎÁö, 230810, Å×½ºÆ®ÄÚµå Ãß°¡
-	test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 54,0,90,200 }, {0,0,200,200}, THREE_SLICE));
-	//test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 55,67,89,78 }, {0,0,200,200}, NINE_SLICE));
-	//test->SetPosition(0, 0);
+	// ±è¹ÎÁö, 230811, ÀÎº¥Åä¸® Ãß°¡
+	inven = (Inventory*)AddGo(new Inventory("inven"));
 	//
 
 	player2 = (Player2*)AddGo(new Player2());
@@ -140,12 +140,6 @@ void SceneGame::Init()
 	{
 		go->Init();
 	}
-
-	// ±è¹ÎÁö, 230810, 9slice Å×½ºÆ®
-	test->SetSize(400.f);
-	//test->SetSize({300.f,500.f});
-	//
-
 }
 
 void SceneGame::Release()
@@ -165,12 +159,6 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
-
-
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ÁÖ¼®Ã³¸®
-	//player2->SetOrigin(Origins::MC);
-	//player2->SetPosition(centerPos);
-	//
 
 }
 

@@ -6,6 +6,7 @@ class Player2;
 class SpriteGo;
 class Wall;
 class SliceImageGo;
+class Inventory;
 
 class SceneGame : public Scene
 {
@@ -42,6 +43,10 @@ protected:
 
 	// 김민지, 230810, 9slice 테스트 추가
 	SliceImageGo* test;
+	//
+
+	// 김민지, 230811, 인벤토리 추가
+	Inventory* inven;
 	//
 public:
 	SceneGame();

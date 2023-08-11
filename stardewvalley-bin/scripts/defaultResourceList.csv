@@ -55,6 +55,7 @@
 0,graphics/Craftables.png,craftBox,32,529,16,25,
 0,graphics/Craftables.png,craftContainer,112,37,16,27,
 0,graphics/Craftables.png,craftScareCrow,0,32,16,32,
+0,graphics/invenBoxLine.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,invenHomi,81,34,15,13,
 0,graphics/tools.png,invenPick,81,96,15,15,
 0,graphics/tools.png,invenAx,80,160,16,15,

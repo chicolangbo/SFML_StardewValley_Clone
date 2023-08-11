@@ -7,8 +7,10 @@ protected:
 
 public:
 	sf::Text text;
-
-	UiButton(const std::string& textureId, const std::string& n);
+	// 김민지, 230811, SpriteGo에 맞춰서 수정
+	//UiButton(const std::string& textureId, const std::string& n);
+	UiButton(const std::string& textureId, const std::string& n, const std::string& nickName = "");
+	//
 	virtual ~UiButton() override;
 
 	virtual void Init() override;
@@ -17,7 +19,7 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
-
+	void Click();
 
 	function<void()> OnClick;
 	function<void()> OnEnter; //커서가 영역에 들어올 때

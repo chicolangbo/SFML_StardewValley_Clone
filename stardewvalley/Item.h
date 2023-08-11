@@ -1,7 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
-
+#include<string>
 
 enum class ITEM
 {
@@ -22,6 +22,17 @@ struct tagItemInfo
 	int attribute;
 	int price;
 	int count;
+
+	tagItemInfo& operator=(const tagItemInfo& other)
+	{
+		attribute = other.attribute;
+		count = other.count;
+		description = other.description;
+		itemkind = other.itemkind;
+		name = other.name;
+		price = other.price;
+		return *this;
+	}
 };
 
 
