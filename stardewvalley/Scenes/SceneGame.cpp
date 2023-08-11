@@ -44,6 +44,9 @@ void SceneGame::Init()
 	worldView.setCenter(0,0);
 	//
 
+	uiView.setSize(size);
+	uiView.setCenter(size * 0.5f);
+
 	// 김민지, 230808, 임시맵 코드 추가
 	testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	testFarmMap->sprite.setScale(3.f, 3.f);
@@ -53,10 +56,15 @@ void SceneGame::Init()
 	house->sprite.setScale(4.f, 4.f);
 	house->SetOrigin(Origins::BC);
 	house->SetPosition(473, -785);
+	house->collider.setScale(1.f, 0.3f);
+	house->sortLayer = 11;
+
 	shop = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
+	shop->collider.setScale(1.f, 0.3f); 
+
 	shopInside = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopInside", "shopInside"));
 	shopInside->sprite.setScale(4.f, 4.f);
 	shopInside->SetOrigin(Origins::TL);
@@ -119,6 +127,25 @@ void SceneGame::Init()
 	shopWalls->SetActive(false);
 
 	player2 = (Player2*)AddGo(new Player2());
+	player2->sortLayer=10;
+	//player2->collider.setScale(1.f, 0.3f); 
+
+	
+
+
+	//에너지 바 UI 일단 구현만/임형준
+	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
+	energy->SetOrigin(Origins::BR);
+	energy->SetPosition(size);
+	energy->SetScale(4.5f, 4.5f);
+	energy->sortLayer = 100;
+
+	info = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Info", "Info"));
+	info->SetOrigin(Origins::TR);
+	info->SetScale(4.5f, 4.5f);
+	info->SetPosition(size.x, 0);
+	info->sortLayer = 100;
+
 
 	for (auto go : gameObjects)
 	{
@@ -142,9 +169,9 @@ void SceneGame::Enter()
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
-
+	// 김주현, 230811, uiview를 Init에서 주는 것이 더 좋아 보임. 주석처리
+	//uiView.setSize(size);
+	//uiView.setCenter(centerPos);
 
 	// 김민지, 230807, 테스트용 주석처리
 	//player2->SetOrigin(Origins::MC);
@@ -163,16 +190,22 @@ void SceneGame::Update(float dt)
 	
 	// 김민지, 230807, 테스트용 주석처리
 	// 김민지, 230808, 테스트용 주석해제, 플레이어 포지션 로그
-	worldView.setCenter(player2->GetPosition());
+	//worldView.setCenter(player2->GetPosition());
 	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
-
+	//임형준 테스트 코드
+	houseBound = house->GetCollider(); 
+	playerBound = player2->GetCollider(); 
+	mapBound = testFarmMap->GetCollider();
+	player2->SetWallBounds(houseBound);
+	player2->SetCollider(playerBound);
+	//
 
 	// 김민지, 230809, 샵내부
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 	{
 		if (enterShop)
 		{
@@ -210,7 +243,10 @@ void SceneGame::Update(float dt)
 			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
 		}
 	}
-	//
+	
+	//UI위치 수정 완료 (김주현)
+	
+	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{

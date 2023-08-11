@@ -57,6 +57,12 @@ void Player2::Init()
 	hoe.Init();
 	scythe.Init();
 	watering.Init(); 
+
+	energyBar.setSize(sf::Vector2f(26.f, (float)energy * 0.15f));  
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y); 
+	energyBar.setPosition(GetPosition().x+900.f, GetPosition().y+450.f);
+	energyBar.setFillColor(sf::Color::Green);
+	
 }
 
 void Player2::Reset()
@@ -95,7 +101,7 @@ void Player2::Update(float dt)
 	// ±è¹ÎÁö, 230809, ÄÝ¶óÀÌ´õ¿ë Ãß°¡
 	SpriteGo::Update(dt);
 	//
-
+	sf::Vector2f poss = position;  
 	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
 	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
 	//sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(position);
@@ -115,9 +121,31 @@ void Player2::Update(float dt)
 		}
 		position += direction * speed * dt;
 
-
-		SetPosition(position);
-
+		if (wallBounds.intersects(playerBound))
+		{
+			sf::Vector2f position2 = Utils::Clamp(position, wallBoundsLT, wallBoundsRB);
+			//position = poss;
+			if (position.x < position2.x)
+			{
+				position.x = position2.x - 35.f;
+			}
+			else if (position.x > position2.x)
+			{
+				position.x = position2.x + 40.f;
+			}
+			else if (position.y < position2.y)
+			{
+				position.y = position2.y - 70.f;
+			}
+			else if (position.y > position2.y)
+			{
+				position.y = position2.y + 70.f;
+			}
+		}
+	
+		
+		SetPosition(position); 
+	
 
 		axe.Update(dt);
 		axe.SetPosition(position);
@@ -164,23 +192,23 @@ void Player2::Update(float dt)
 		//test
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 		{
-			item = 1;//³´
+			item = Tool::Scythe;//³´ 
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
 		{
-			item = 2;//µµ³¢
+			item = Tool::Axe;//µµ³¢
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
 		{
-			item = 3;//°î±ªÀÌ
+			item = Tool::Pickax;//°î±ªÀÌ
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
 		{
-			item = 4;//È£¹Ì
+			item = Tool::Hoe;//È£¹Ì
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
 		{
-			item = 5;//¹°»Ñ¸®°³
+			item = Tool::WateringCan;//¹°»Ñ¸®°³
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
 		{
@@ -191,7 +219,7 @@ void Player2::Update(float dt)
 		{
 			switch (item)
 			{
-			case 1:
+			case Tool::Scythe:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Attack");
@@ -225,7 +253,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case 2:
+			case Tool::Axe:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -259,7 +287,7 @@ void Player2::Update(float dt)
 				energy -= 2;
 				playingAnimation = true;
 				break;
-			case 3:
+			case Tool::Pickax:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -290,7 +318,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case 4:
+			case Tool::Hoe:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -323,7 +351,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case 5:
+			case Tool::WateringCan: 
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Water");
@@ -364,7 +392,9 @@ void Player2::Update(float dt)
 		animation.Play("Die");
 		one = false;
 	}
-
+	energyBar.setSize(sf::Vector2f(26.f, (float)energy*0.67f));
+	energyBar.setPosition(GetPosition().x + 900.f, GetPosition().y + 440.f); 
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y); 
 	if (energy == 0)
 	{
 		playerDie = true;
@@ -389,6 +419,7 @@ void Player2::Draw(sf::RenderWindow& window)
 	window.draw(hoe.sprite);
 	window.draw(scythe.sprite);
 	window.draw(watering.sprite);
+	window.draw(energyBar); 
 }
 
 bool Player2::GetFlipX() const
@@ -403,5 +434,19 @@ void Player2::SetFlipX(bool filp)
 	sf::Vector2f scale = sprite.getScale();
 	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
+}
+
+void Player2::SetWallBounds(const sf::FloatRect& bounds)
+{
+	wallBounds = bounds; 
+
+	wallBoundsLT = { wallBounds.left, wallBounds.top }; 
+	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height }; 
+
+}
+
+void Player2::SetCollider(const sf::FloatRect& coll)
+{
+	playerBound = coll;
 }
 

@@ -8,7 +8,19 @@
 #include "Scythe.h"
 #include "Wateringcan.h"
 
-class Player2 :  public SpriteGo
+enum class Tool
+{
+	Scythe,
+	Axe,
+	Pickax,
+	Hoe,
+	WateringCan,
+};
+
+
+
+
+class Player2 : public SpriteGo
 {
 public:
 	struct ClipInfo
@@ -36,15 +48,23 @@ protected:
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
 	//test
-	int item=1;
+	Tool item;
 
 	//기력 도구 사용시 -2씩 차감
 	int maxEnergy = 270;
 	int energy = 270;
+	int money = 500;
+	sf::RectangleShape energyBar;
+
+	sf::FloatRect wallBounds;
+	sf::Vector2f wallBoundsLT;
+	sf::Vector2f wallBoundsRB;
+	sf::FloatRect playerBound;
 
 	bool playerDie = false;
 	bool playingAnimation = false;
 	bool one = true;
+	bool boundwall = false;
 
 public:
 
@@ -62,6 +82,11 @@ public:
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
 
+	int GetEnergy() { return energy; }
+	int GetMoney() { return money; }
+
+	void SetWallBounds(const sf::FloatRect& bounds);
+	void SetCollider(const sf::FloatRect& coll);
 
 
 };

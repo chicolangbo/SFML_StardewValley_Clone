@@ -33,11 +33,17 @@ protected:
 	SpriteGo* shopBox;
 	Wall* homeWalls;
 	Wall* shopWalls;
-	//
-	//Farmer* player;
+    //
+	
 	//임형준 테스트
-	float totalRotation=0.f;
-	bool axeRotation = false;
+	SpriteGo* energy;
+	SpriteGo* info;
+	sf::RectangleShape energyBar;
+	int energys;
+	sf::FloatRect houseBound; 
+	sf::FloatRect playerBound; 
+	sf::FloatRect mapBound;
+	//
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
