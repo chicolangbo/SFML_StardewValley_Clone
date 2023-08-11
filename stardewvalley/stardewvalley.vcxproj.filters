@@ -126,6 +126,12 @@
     <ClCompile Include="DataTables\WallTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Gameobjects\TextGo.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobjects\SliceImageGo.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="Pickax.h">
       <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\TextGo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\SliceImageGo.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

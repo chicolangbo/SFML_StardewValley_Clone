@@ -5,7 +5,7 @@ class VertexArrayGo;
 class Player2;
 class SpriteGo;
 class Wall;
-class NineSlice;
+class SliceImageGo;
 
 class SceneGame : public Scene
 {
@@ -41,7 +41,7 @@ protected:
 	bool axeRotation = false;
 
 	// ±è¹ÎÁö, 230810, 9slice Å×½ºÆ® Ãß°¡
-	NineSlice* test;
+	SliceImageGo* test;
 	//
 public:
 	SceneGame();

@@ -13,7 +13,7 @@
 #include "UiButton.h"
 #include "Wall.h"
 #include "Axe.h"
-#include "NineSlice.h"
+#include "SliceImageGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -120,7 +120,8 @@ void SceneGame::Init()
 	shopWalls->SetActive(false);
 
 	// ±è¹ÎÁö, 230810, Å×½ºÆ®ÄÚµå Ãß°¡
-	test = (NineSlice*)AddGo(new NineSlice("graphics/box1.png", "box1", { 56,67,88,77 }, {0,0,200,200}));
+	test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 54,0,90,200 }, {0,0,200,200}, THREE_SLICE));
+	//test = (SliceImageGo*)AddGo(new SliceImageGo("graphics/box1.png", "box1", { 55,67,89,78 }, {0,0,200,200}, NINE_SLICE));
 	//test->SetPosition(0, 0);
 	//
 
@@ -141,7 +142,8 @@ void SceneGame::Init()
 	}
 
 	// ±è¹ÎÁö, 230810, 9slice Å×½ºÆ®
-	test->SetSize({ 500.f, 1000.f });
+	test->SetSize(500.f);
+	//test->SetSize({300.f,500.f});
 	//
 
 }
