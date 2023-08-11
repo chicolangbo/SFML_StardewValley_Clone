@@ -133,9 +133,9 @@ void SliceImageGo::SetSize(float w)
 	else
 	{
 		positionX.push_back(fullSize.left);
-		positionX.push_back(borderSize.x * 0.5f);
-		positionX.push_back(borderSize.x * 0.5f);
-		positionX.push_back(w);
+		positionX.push_back(centerRect.left);
+		positionX.push_back(centerRect.left);
+		positionX.push_back(fullSize.left + borderSize.x);
 	}
 
 	if (vertexCount == THREE_SLICE)

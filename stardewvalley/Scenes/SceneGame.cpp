@@ -142,7 +142,7 @@ void SceneGame::Init()
 	}
 
 	// ±è¹ÎÁö, 230810, 9slice Å×½ºÆ®
-	test->SetSize(500.f);
+	test->SetSize(1.f);
 	//test->SetSize({300.f,500.f});
 	//
 
