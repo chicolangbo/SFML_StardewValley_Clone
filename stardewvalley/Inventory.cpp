@@ -3,6 +3,8 @@
 #include "InputMgr.h"
 #include "DataTableMgr.h"
 #include "StringTable.h"
+#include "ResourceMgr.h"
+#include "Player2.h"
 
 GameObject* Inventory::AddUi(GameObject* go)
 {
@@ -47,6 +49,8 @@ Inventory::Inventory(const std::string& n)
     make("graphics/Cursors.ko-KR.png", "invenMake", "invenMake"),
     changeScene("graphics/Cursors.ko-KR.png", "invenSetting", "invenSetting"),
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
+    title("graphics/setButton.png", "title"),
+    end("graphics/setButton.png", "end"),
     mapImage("graphics/map.png", "map", "map"),
     ring("graphics/MenuTiles.png", "invenRing", "invenRing"),
     shoes("graphics/MenuTiles.png", "invenShoes", "invenShoes"),
@@ -81,25 +85,6 @@ Inventory::Inventory(const std::string& n)
     addItem(waterCan);
     addItem(hook);
 
-    
-    //AddUi(&invenBox);
-    //AddUi(&invenLine);
-    //AddUi(&bag);
-    //AddUi(&map);
-    //AddUi(&make);
-    //AddUi(&changeScene);
-    //AddUi(&xButton);
-    //AddUi(&mapImage);
-    //AddUi(&ring);
-    //AddUi(&shoes);
-    //AddUi(&hat);
-    //AddUi(&charBg);
-    //AddUi(&curFunds);
-    //AddUi(&totalEarnings);
-    //AddUi(&curFundsValue);
-    //AddUi(&totalEarningsValue);
-
-    // multiMap
     AddUi2(UiType::BOX, &invenBox);
     AddUi2(UiType::LINE, &invenLine);
     AddUi2(UiType::BUTTON, &bag);
@@ -116,6 +101,8 @@ Inventory::Inventory(const std::string& n)
     AddUi2(UiType::ITEM, &totalEarnings);
     AddUi2(UiType::ITEM, &curFundsValue);
     AddUi2(UiType::ITEM, &totalEarningsValue);
+    AddUi2(UiType::CHANEGE, &title);
+    AddUi2(UiType::CHANEGE, &end);
 }
 
 Inventory::~Inventory()
@@ -266,6 +253,26 @@ void Inventory::Reset()
         totalEarningsValue.text.setFillColor(sf::Color::Black);
         totalEarningsValue.SetPosition(totalEarnings.GetPosition().x + 50.f, totalEarnings.GetPosition().y);
         totalEarningsValue.SetOrigin(Origins::ML);
+        title.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
+        title.text.setString(stringTable1->Get("TOTITLE"));
+        title.text.setCharacterSize(100);
+        title.text.setFillColor(sf::Color::Black);
+        title.SetPosition(position.x, position.y - 80.f);
+        title.text.setPosition(title.GetPosition().x, title.GetPosition().y - 40.f);
+        title.SetScale(1.5f, 1.5f);
+        title.SetOrigin(Origins::MC);
+        std::cout << title.text.getPosition().x << "," << title.text.getPosition().y << std::endl;
+        std::cout << title.sprite.getPosition().x << "," << title.sprite.getPosition().y << std::endl;
+        end.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
+        end.text.setString(stringTable1->Get("END"));
+        end.text.setCharacterSize(100);
+        end.text.setFillColor(sf::Color::Black);
+        end.SetPosition(title.GetPosition().x,title.GetPosition().y + title.sprite.getGlobalBounds().height + 30.f);
+        end.text.setPosition(end.GetPosition().x, end.GetPosition().y - 40.f);
+        end.SetScale(1.5f, 1.5f);
+        end.SetOrigin(Origins::MC);
+
+        sf::Sprite pl = player->sprite;
     }
 
     SetWindowClear();
@@ -481,4 +488,9 @@ void Inventory::ButtonSetUp()
     xButton.OnClick = [this]() {
         SetWindowClear();
     };
+}
+
+void Inventory::SetPlayer(Player2* p)
+{
+    player = p;
 }

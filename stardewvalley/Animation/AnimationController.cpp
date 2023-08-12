@@ -38,6 +38,8 @@ void AnimationController::Update(float dt)
 			{
 			case AnimationLoopTypes::Single:
 				currentFrame = totalFrame - 1; //마지막 프레임 유지
+				// 김민지, 230813, 루프타입 싱글이면 마지막 클립에서 플레이 스탑
+				isPlaying = false;
 				return;
 			case AnimationLoopTypes::Loop:
 				currentFrame = 0; //첫 프레임으로 돌아가기

@@ -59,7 +59,9 @@ public:
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
 
-
+	// 김민지, 230813, 인벤토리에 이미지 복사용
+	AnimationController GetAnimation() { return animation; }
+	//
 
 };
 

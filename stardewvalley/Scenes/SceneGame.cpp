@@ -125,6 +125,7 @@ void SceneGame::Init()
 	inven = (Inventory*)AddGo(new Inventory("inven"));
 	inven->sortLayer = 100;
 	inven->SetPosition(windowSize / 2.f);
+	inven->SetPlayer(player2);
 	//
 
 	player2 = (Player2*)AddGo(new Player2());

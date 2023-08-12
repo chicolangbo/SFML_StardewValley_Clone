@@ -29,6 +29,31 @@ void UiButton::Reset()
 	isHover = false;
 }
 
+void UiButton::SetPosition(const sf::Vector2f& p)
+{
+	SpriteGo::SetPosition(p);
+	text.setPosition(p);
+}
+
+void UiButton::SetPosition(float x, float y)
+{
+	SpriteGo::SetPosition(x, y);
+	text.setPosition(x, y);
+}
+
+void UiButton::SetOrigin(Origins origin)
+{
+	SpriteGo::SetOrigin(origin);
+	Utils::SetOrigin(text, origin);
+	//text.setOrigin(text.getLocalBounds().width / 2.f, text.getLocalBounds().height / 2.f);
+}
+
+void UiButton::SetOrigin(float x, float y)
+{
+	SpriteGo::SetOrigin(x,y);
+	text.setOrigin(x, y);
+}
+
 void UiButton::Update(float dt)
 {
 	SpriteGo::Update(dt);
@@ -66,6 +91,8 @@ void UiButton::Update(float dt)
 void UiButton::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	// ±è¹ÎÁö, 230813, Ãß°¡
+	window.draw(text);
 }
 
 void UiButton::Click()

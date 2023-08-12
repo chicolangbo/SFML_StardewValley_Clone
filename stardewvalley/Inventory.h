@@ -46,6 +46,8 @@ private:
 	UiButton make;
 	UiButton changeScene;
 	UiButton xButton;
+	UiButton title;
+	UiButton end;
 	sf::Vector2f bagPos;
 	sf::Vector2f mapPos;
 	sf::Vector2f makePos;
@@ -61,6 +63,7 @@ private:
 	SpriteGo shoes;
 	SpriteGo hat;
 	SpriteGo charBg;
+
 	TextGo curFunds;
 	TextGo curFundsValue;
 	TextGo totalEarnings;
@@ -86,4 +89,5 @@ public:
 	void SetWindowClear();
 
 	void ButtonSetUp();
+	void SetPlayer(Player2* p);
 };
