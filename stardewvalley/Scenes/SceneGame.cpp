@@ -217,7 +217,7 @@ void SceneGame::Update(float dt)
 
 
 	// ±è¹ÎÁö, 230809, ¼¥³»ºÎ
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)
 		{

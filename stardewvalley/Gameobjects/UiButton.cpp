@@ -15,6 +15,7 @@ UiButton::~UiButton()
 void UiButton::Init()
 {
 	SpriteGo::Init();
+	colliderOnOff = false;
 }
 
 void UiButton::Release()
