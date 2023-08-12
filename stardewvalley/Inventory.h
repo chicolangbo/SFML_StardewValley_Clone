@@ -6,7 +6,6 @@
 #include "UiButton.h"
 
 class Player2;
-class UiButton;
 
 class Inventory : public GameObject
 {
@@ -15,6 +14,11 @@ private:
 	std::vector<tagItemInfo> item; // 플레이어가 가진 아이템
 	std::vector<tagItemInfo>::iterator itemI;
 
+	GameObject* AddUi(GameObject* go);
+	bool Exist(GameObject* go);
+	std::list<GameObject*> uiObjects;
+	//std::list<GameObject*> removeUiObjects;
+
 	Player2* player;
 	UiButton bag;
 	UiButton map;
@@ -22,7 +26,7 @@ private:
 	UiButton changeScene;
 
 	SliceImageGo invenBox;
-	SliceImageGo invenBoxLine;
+	SliceImageGo invenLine;
 	std::vector<SpriteGo> cell;
 
 

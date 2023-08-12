@@ -1,23 +1,37 @@
 #include "stdafx.h"
 #include "Inventory.h"
 
+GameObject* Inventory::AddUi(GameObject* go)
+{
+    if (!Exist(go))
+    {
+        uiObjects.push_back(go);
+    }
+    return go;
+}
+
+bool Inventory::Exist(GameObject* go)
+{
+    return std::find(uiObjects.begin(), uiObjects.end(), go) != uiObjects.end();
+}
+
 Inventory::Inventory(const std::string& n)
-    : GameObject(n), invenBox("graphics/box1.png", "invenBox", { 22,27,36,37 }, { 0,0,80,80 }, NINE_SLICE), 
-    invenBoxLine("graphics/invenBoxLine.png", "invenBoxLine", { 24,0,52,27 }, { 0,0,100,27 }, THREE_SLICE),
+    : GameObject(n), invenBox("graphics/box1.png", "invenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE), 
+    invenLine("graphics/invenBoxLine.png", "invenBoxLine", { 24,0,52,27 }, { 0,0,100,27 }, THREE_SLICE),
     bag("graphics/Cursors.ko-KR.png", "invenBag", "invenBag"), 
     map("graphics/Cursors.ko-KR.png", "invenMap", "invenMap"), 
     make("graphics/Cursors.ko-KR.png", "invenMake", "invenMake"), 
     changeScene("graphics/Cursors.ko-KR.png", "invenSetting", "invenSetting")
 {
 
-    sf::Vector2f initPosition = { 0.f, 0.f };
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 12; ++j)
         {
             SpriteGo tempCell = SpriteGo("graphics/MenuTiles.png", "invenCell", "invenCell");
             cell.push_back(tempCell);
-            cell[i].SetPosition(initPosition.x + (j*60.f), initPosition.y + (i*60.f));
+            cell[(i * 12) + j].SetOrigin(Origins::MC);
+            cell[(i * 12) + j].colliderOnOff = false;
         }
     }
 
@@ -32,6 +46,14 @@ Inventory::Inventory(const std::string& n)
     addItem(homi);
     addItem(waterCan);
     addItem(hook);
+
+    
+    AddUi(&invenBox);
+    AddUi(&invenLine);
+    AddUi(&bag);
+    AddUi(&map);
+    AddUi(&make);
+    AddUi(&changeScene);
 }
 
 Inventory::~Inventory()
@@ -130,23 +152,76 @@ void Inventory::Init()
 
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
+
+    for (auto go : uiObjects)
+    {
+        if (go->GetActive())
+        {
+            go->Init();
+        }
+    }
+
+    for (int i = 0; i < cell.size(); ++i)
+    {
+        cell[i].Init();
+    }
 }
 
 void Inventory::Reset()
 {
+    for (auto go : uiObjects)
+    {
+        if (go->GetActive())
+        {
+            go->Reset();
+        }
+    }
+    for (int i = 0; i < cell.size(); ++i)
+    {
+        cell[i].Reset();
+    }
+
+    invenBox.SetSize({ 1040.f, 800.f });
+    invenBox.SetOrigin(Origins::MC);
+    invenBox.SetPosition(position);
+
+    sf::Vector2f initPosition = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 12; ++j)
+        {
+            cell[(i * 12) + j].SetPosition(initPosition.x + (j * 80.f), initPosition.y + (i * 80.f));
+        }
+    }
+
+    invenLine.SetSize(1040.f);
+    invenLine.SetOrigin(Origins::MC);
+    invenLine.SetPosition(position.x, cell[35].GetPosition().y + 80.f);
 }
 
 void Inventory::Update(float dt)
 {
+    for (auto go : uiObjects)
+    {
+        if (go->GetActive())
+        {
+            go->Update(dt);
+        }
+    }
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
 {
-    bag.SetPosition(0, 0);
-    bag.Draw(window);
-    map.Draw(window);
-    make.Draw(window);
-    changeScene.Draw(window);
-    invenBox.Draw(window);
-    invenBoxLine.Draw(window);
+    for (auto go : uiObjects)
+    {
+        if (go->GetActive())
+        {
+            go->Draw(window);
+        }
+    }
+
+    for (int i = 0; i < cell.size(); ++i)
+    {
+        cell[i].Draw(window);
+    }
 }

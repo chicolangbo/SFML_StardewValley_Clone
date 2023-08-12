@@ -123,6 +123,8 @@ void SceneGame::Init()
 
 	// ±è¹ÎÁö, 230811, ÀÎº¥Åä¸® Ãß°¡
 	inven = (Inventory*)AddGo(new Inventory("inven"));
+	inven->sortLayer = 100;
+	inven->SetPosition(windowSize / 2.f);
 	//
 
 	player2 = (Player2*)AddGo(new Player2());
