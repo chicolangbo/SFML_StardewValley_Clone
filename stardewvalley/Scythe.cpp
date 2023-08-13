@@ -50,7 +50,7 @@ void Scythe::SetPostion(sf::Vector2f pos)
 
 void Scythe::SetOrigins()
 {
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 }
 
 bool Scythe::GetFlipX() const

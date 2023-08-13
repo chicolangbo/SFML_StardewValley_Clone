@@ -37,7 +37,7 @@ void Player2::Init()
 
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 
 
 	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({-1.f, -1.f})});
@@ -354,6 +354,7 @@ void Player2::Update(float dt)
 				break;
 
 			case Tool::WateringCan: 
+				SetOrigin(Origins::BC);
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Water");

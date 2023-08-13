@@ -52,7 +52,7 @@ void Wateringcan::SetPostion(sf::Vector2f pos)
 
 void Wateringcan::SetOrigins()
 {
-    SetOrigin(Origins::MC);
+    SetOrigin(Origins::BC);
 }
 
 bool Wateringcan::GetFlipX() const

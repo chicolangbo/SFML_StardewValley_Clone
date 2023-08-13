@@ -1,12 +1,12 @@
 ﻿ID,FPS,LOOPTYPE,,
-Water,15,0,,
+Water,5,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/farmer_base.png,127,130,16,30
-graphics/farmer_base.png,146,130,16,30
-graphics/farmer_base.png,165,130,16,30
-graphics/farmer_base.png,165,130,16,30
-graphics/farmer_base.png,165,130,16,30
-graphics/farmer_base.png,165,130,16,30
-graphics/farmer_base.png,165,130,16,30
-graphics/farmer_base.png,65,355,14,28
+graphics/farmer_base.png,0,312,20,30
+graphics/farmer_base.png,20,312,20,30
+graphics/farmer_base.png,40,312,20,30
+graphics/farmer_base.png,60,312,20,30
+graphics/farmer_base.png,60,312,20,30
+graphics/farmer_base.png,60,312,20,30
+graphics/farmer_base.png,60,312,20,30
+graphics/farmer_base.png,60,312,20,30

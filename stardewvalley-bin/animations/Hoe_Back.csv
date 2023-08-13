@@ -1,7 +1,11 @@
 ﻿ID,FPS,LOOPTYPE,,
-HoeBack,10,0,,
+HoeBack,15,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/tools.png,273,25,14,65
-graphics/tools.png,289,25,14,65
-graphics/tools.png,271,190,3,3
+graphics/Pickax.png,0,303,14,40
+graphics/Pickax.png,14,303,14,40
+graphics/Pickax.png,28,303,14,40
+graphics/Pickax.png,42,303,14,40
+graphics/Pickax.png,56,303,14,40
+graphics/Pickax.png,70,303,14,40
+graphics/Pickax.png,109,321,6,6

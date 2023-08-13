@@ -2,9 +2,9 @@
 AttackUp,20,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/farmer_base.png,116,196,13,28
-graphics/farmer_base.png,131,196,14,28
-graphics/farmer_base.png,148,195,14,27
-graphics/farmer_base.png,164,195,14,27
-graphics/farmer_base.png,179,196,16,28
-graphics/farmer_base.png,200,196,16,28
+graphics/farmer_base.png,0,250,20,29
+graphics/farmer_base.png,20,250,20,29
+graphics/farmer_base.png,40,250,20,29
+graphics/farmer_base.png,80,250,20,29
+graphics/farmer_base.png,100,250,20,29
+graphics/farmer_base.png,120,250,20,29

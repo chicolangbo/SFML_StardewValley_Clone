@@ -2,6 +2,12 @@
 WateringFront,5,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/tools.png,224,217,14,30
-graphics/tools.png,244,217,14,30
-graphics/tools.png,271,190,1,1
+graphics/Pickax.png,0,433,16,30
+graphics/Pickax.png,16,433,16,30
+graphics/Pickax.png,32,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,79,415,2,4

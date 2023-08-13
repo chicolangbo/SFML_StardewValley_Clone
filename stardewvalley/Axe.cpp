@@ -59,7 +59,7 @@ void Axe::SetPostion(sf::Vector2f pos)
 
 void Axe::SetOrigins()
 {
-	SetOrigin(Origins::MC);  
+	SetOrigin(Origins::BC);  
 }
 
 bool Axe::GetFlipX() const

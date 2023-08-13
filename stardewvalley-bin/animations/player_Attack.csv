@@ -2,10 +2,10 @@
 Attack,20,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/farmer_base.png,1,130,15,30
-graphics/farmer_base.png,17,130,15,30
-graphics/farmer_base.png,33,132,15,28
-graphics/farmer_base.png,49,132,15,27
-graphics/farmer_base.png,73,134,16,25
-graphics/farmer_base.png,96,133,16,26
-graphics/farmer_base.png,1,3,14,29
+graphics/farmer_base.png,0,189,20,30
+graphics/farmer_base.png,20,189,20,30
+graphics/farmer_base.png,40,189,20,30
+graphics/farmer_base.png,60,189,20,30
+graphics/farmer_base.png,80,189,20,30
+graphics/farmer_base.png,100,189,20,30
+graphics/farmer_base.png,120,189,20,30

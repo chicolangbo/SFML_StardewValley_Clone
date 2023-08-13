@@ -2,6 +2,12 @@
 WateringSide,5,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/tools.png,257,211,24,31
-graphics/tools.png,281,211,24,31
-graphics/tools.png,271,190,1,1
+graphics/Pickax.png,0,464,38,32
+graphics/Pickax.png,38,464,38,32
+graphics/Pickax.png,76,464,38,32
+graphics/Pickax.png,114,464,38,32
+graphics/Pickax.png,114,464,38,32
+graphics/Pickax.png,114,464,38,32
+graphics/Pickax.png,114,464,38,32
+graphics/Pickax.png,114,464,38,32
+graphics/Pickax.png,107,450,7,2

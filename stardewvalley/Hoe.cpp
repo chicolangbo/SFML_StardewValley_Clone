@@ -50,7 +50,7 @@ void Hoe::SetPostion(sf::Vector2f pos)
 
 void Hoe::SetOrigins()
 {
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 }
 
 bool Hoe::GetFlipX() const

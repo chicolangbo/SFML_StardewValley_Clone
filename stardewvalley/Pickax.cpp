@@ -50,7 +50,7 @@ void Pickax::SetPostion(sf::Vector2f pos)
 
 void Pickax::SetOrigins()
 {
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 }
 
 bool Pickax::GetFlipX() const

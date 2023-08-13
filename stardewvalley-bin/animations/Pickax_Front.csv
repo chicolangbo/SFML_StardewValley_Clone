@@ -1,8 +1,11 @@
 ﻿ID,FPS,LOOPTYPE,,
-PickaxFront,10,0,,
+PickaxFront,15,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/tools.png,229,88,14,44
-graphics/tools.png,241,79,14,44
-graphics/tools.png,241,79,14,44
-graphics/tools.png,271,190,3,3
+graphics/Pickax.png,0,46,20,42
+graphics/Pickax.png,20,46,20,42
+graphics/Pickax.png,40,46,20,42
+graphics/Pickax.png,60,46,20,42
+graphics/Pickax.png,80,46,20,42
+graphics/Pickax.png,100,46,20,42
+graphics/Pickax.png,66,28,1,1
