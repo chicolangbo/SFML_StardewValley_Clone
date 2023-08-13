@@ -6,32 +6,18 @@
 #include "ResourceMgr.h"
 #include "Player2.h"
 
-//GameObject* Inventory::AddUi(GameObject* go)
-//{
-//    if (!Exist(go))
-//    {
-//        uiObjects.push_back(go);
-//    }
-//    return go;
-//}
-
-GameObject* Inventory::AddUi2(UiType t, GameObject* go)
+GameObject* Inventory::AddUi(UiType t, GameObject* go)
 {
-    if (!Exist2(go))
+    if (!Exist(go))
     {
-        multiMap.insert(std::make_pair(t, go));
+        invenUiObjects.insert(std::make_pair(t, go));
     }
     return nullptr;
 }
 
-//bool Inventory::Exist(GameObject* go)
-//{
-//    return std::find(uiObjects.begin(), uiObjects.end(), go) != uiObjects.end();
-//}
-
-bool Inventory::Exist2(GameObject* go)
+bool Inventory::Exist(GameObject* go)
 {
-    for (auto& m : multiMap)
+    for (auto& m : invenUiObjects)
     {
         if (m.second == go)
         {
@@ -79,42 +65,49 @@ Inventory::Inventory(const std::string& n)
     tagItemInfo homi = { ITEM::ITEM_TOOL, "곡괭이", "곡괭이", 0, 0, 1 };
     tagItemInfo waterCan = { ITEM::ITEM_TOOL, "물뿌리개", "물뿌리개", 0, 0, 1 };
     tagItemInfo hook = { ITEM::ITEM_TOOL, "낫", "낫", 0, 0, 1 };
-    addItem(pick);
-    addItem(ax);
-    addItem(homi);
-    addItem(waterCan);
-    addItem(hook);
+    //addItem(pick);
+    //addItem(ax);
+    //addItem(homi);
+    //addItem(waterCan);
+    //addItem(hook);
 
-    AddUi2(UiType::BOX, &invenBox);
-    AddUi2(UiType::LINE, &invenLine);
-    AddUi2(UiType::BUTTON, &bag);
-    AddUi2(UiType::BUTTON, &map);
-    AddUi2(UiType::BUTTON, &make);
-    AddUi2(UiType::BUTTON, &changeScene);
-    AddUi2(UiType::COMMON, &xButton);
-    AddUi2(UiType::MAP, &mapImage);
-    AddUi2(UiType::ITEM, &ring);
-    AddUi2(UiType::ITEM, &shoes);
-    AddUi2(UiType::ITEM, &hat);
-    AddUi2(UiType::ITEM, &charBg);
-    AddUi2(UiType::ITEM, &curFunds);
-    AddUi2(UiType::ITEM, &totalEarnings);
-    AddUi2(UiType::ITEM, &curFundsValue);
-    AddUi2(UiType::ITEM, &totalEarningsValue);
-    AddUi2(UiType::ITEM, &pl);
-    AddUi2(UiType::CHANEGE, &title);
-    AddUi2(UiType::CHANEGE, &end);
+    AddUi(UiType::BOX, &invenBox);
+    AddUi(UiType::LINE, &invenLine);
+    AddUi(UiType::BUTTON, &bag);
+    AddUi(UiType::BUTTON, &map);
+    AddUi(UiType::BUTTON, &make);
+    AddUi(UiType::BUTTON, &changeScene);
+    AddUi(UiType::COMMON, &xButton);
+    AddUi(UiType::MAP, &mapImage);
+    AddUi(UiType::ITEM, &ring);
+    AddUi(UiType::ITEM, &shoes);
+    AddUi(UiType::ITEM, &hat);
+    AddUi(UiType::ITEM, &charBg);
+    AddUi(UiType::ITEM, &curFunds);
+    AddUi(UiType::ITEM, &totalEarnings);
+    AddUi(UiType::ITEM, &curFundsValue);
+    AddUi(UiType::ITEM, &totalEarningsValue);
+    AddUi(UiType::ITEM, &pl);
+    AddUi(UiType::CHANEGE, &title);
+    AddUi(UiType::CHANEGE, &end);
 }
 
 Inventory::~Inventory()
 {
 }
 
-void Inventory::addItem(tagItemInfo item)
+void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
 {
-    if (item.itemkind != ITEM::ITEM_EMPTY)
+    if (allItemMap.find(name) != allItemMap.end()) // 전체 아이템에 포함되어 있을 때
     {
-        this->item.push_back(item);
+        if (playerItemMap.find(name) == playerItemMap.end()) // 플레이어 아이템에 없을 때
+        {
+            playerItemMap.insert(std::make_pair(name, allItemMap.find(name)->second));
+        }
+        else
+        {
+            playerItemMap.find(name)->second.count++;
+        }
     }
 }
 
@@ -136,7 +129,7 @@ void Inventory::Init()
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
 
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         m.second->Init();
     }
@@ -149,7 +142,7 @@ void Inventory::Init()
 
 void Inventory::Reset()
 {
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         m.second->Reset();
     }
@@ -285,7 +278,7 @@ void Inventory::Update(float dt)
     //    }
     //}
 
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         m.second->Update(dt);
     }
@@ -306,7 +299,7 @@ void Inventory::Draw(sf::RenderWindow& window)
     //    }
     //}
 
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         if (m.second->GetActive())
         {
@@ -325,7 +318,7 @@ void Inventory::Draw(sf::RenderWindow& window)
 
 void Inventory::SetItemWindow()
 {
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         if (m.first == UiType::COMMON || m.first == UiType::ITEM || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE)
         {
@@ -363,7 +356,7 @@ void Inventory::SetItemWindow()
 
 void Inventory::SetMapWindow()
 {
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         if (m.first == UiType::COMMON || m.first == UiType::MAP)
         {
@@ -392,7 +385,7 @@ void Inventory::SetMapWindow()
 
 void Inventory::SetMakeWindow()
 {
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         if (m.first == UiType::COMMON || m.first == UiType::MAKE || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE)
         {
@@ -423,7 +416,7 @@ void Inventory::SetMakeWindow()
 
 void Inventory::SetChangeSceneWindow()
 {
-    for (auto m : multiMap)
+    for (auto m : invenUiObjects)
     {
         if (m.first == UiType::COMMON || m.first == UiType::CHANEGE || m.first == UiType::BUTTON || m.first == UiType::BOX)
         {
@@ -453,7 +446,7 @@ void Inventory::SetChangeSceneWindow()
 
 void Inventory::SetWindowClear()
 {
-    for (auto& m : multiMap)
+    for (auto& m : invenUiObjects)
     {
         m.second->SetActive(false);
     }

@@ -18,19 +18,21 @@ struct tagItemInfo
 {
 	ITEM itemkind;
 	std::string name;
+	std::string nickName = "";
 	std::string description;
-	int attribute;
+	std::string resource;
 	int price;
 	int count;
 
 	tagItemInfo& operator=(const tagItemInfo& other)
 	{
-		attribute = other.attribute;
 		count = other.count;
 		description = other.description;
 		itemkind = other.itemkind;
 		name = other.name;
+		nickName = other.nickName;
 		price = other.price;
+		resource = other.resource;
 		return *this;
 	}
 };

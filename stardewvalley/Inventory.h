@@ -20,25 +20,20 @@ enum class UiType
 	CHANEGE
 };
 
-
 class Inventory : public GameObject
 {
 private:
-	std::vector<tagItemInfo> allItem; // 데이터테이블 읽어와야 함
-	std::vector<tagItemInfo> item; // 플레이어가 가진 아이템, 36개까지만 가능
+	//std::vector<tagItemInfo> allItem; // 데이터테이블 읽어와야 함
+	//std::vector<tagItemInfo> item; // 플레이어가 가진 아이템, 36개까지만 가능
 	std::vector<tagItemInfo>::iterator itemI;
 
-	int curFundsInt = 0;
-	int totalEarningsInt = 0;
+	std::unordered_map<std::string, tagItemInfo> allItemMap;
+	std::unordered_map<std::string, tagItemInfo> playerItemMap;
 
-	//GameObject* AddUi(GameObject* go);
-	GameObject* AddUi2(UiType t, GameObject* go);
-	//bool Exist(GameObject* go);
-	bool Exist2(GameObject* go);
+	int curFundsInt = 0; // 현재 소지금
+	int totalEarningsInt = 0; // 총합 자금
 
-
-	//std::list<GameObject*> uiObjects;
-	std::multimap<UiType, GameObject*> multiMap; // 멀티맵으로 ui오브젝트 탐색
+	std::multimap<UiType, GameObject*> invenUiObjects; // 멀티맵으로 ui오브젝트 탐색(키 중복 가능)
 
 	Player2* player;
 	SpriteGo pl;
@@ -76,7 +71,9 @@ public:
 	Inventory(const std::string& n = "");
 	~Inventory();
 
-	void addItem(tagItemInfo item);
+	void AddItem(std::string name);
+	GameObject* AddUi(UiType t, GameObject* go);
+	bool Exist(GameObject* go);
 
 	virtual void Init();
 	virtual void Reset();
