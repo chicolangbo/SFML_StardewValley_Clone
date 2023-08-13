@@ -36,6 +36,10 @@ private:
 	std::multimap<UiType, GameObject*> invenUiObjects; // 멀티맵으로 ui오브젝트 탐색(키 중복 가능)
 
 	Player2* player;
+
+	bool invenOnOff = false;
+
+	// ui
 	SpriteGo pl;
 	UiButton bag;
 	UiButton map;
@@ -50,7 +54,6 @@ private:
 	sf::Vector2f changeScenePos;
 	sf::Vector2f xButtonPos;
 	sf::Vector2f cellPos;
-
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
 	std::vector<SpriteGo> cell;
@@ -59,7 +62,6 @@ private:
 	SpriteGo shoes;
 	SpriteGo hat;
 	SpriteGo charBg;
-
 	TextGo curFunds;
 	TextGo curFundsValue;
 	TextGo totalEarnings;
@@ -71,7 +73,7 @@ public:
 	Inventory(const std::string& n = "");
 	~Inventory();
 
-	void AddItem(std::string name);
+	void AddPlayerItem(std::string name);
 	GameObject* AddUi(UiType t, GameObject* go);
 	bool Exist(GameObject* go);
 

@@ -235,6 +235,7 @@ void SceneGame::Update(float dt)
 				}
 			}
 			player2->SetActive(true);
+			inven->SetActive(true);
 			player2->SetPosition(-463.f, -845.f);
 		}
 		else
@@ -252,7 +253,8 @@ void SceneGame::Update(float dt)
 				}
 			}
 
-			player2->SetActive(true);	
+			player2->SetActive(true);
+			inven->SetActive(true);
 			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
 		}
 	}

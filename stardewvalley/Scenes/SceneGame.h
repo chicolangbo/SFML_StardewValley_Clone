@@ -41,10 +41,6 @@ protected:
 	float totalRotation=0.f;
 	bool axeRotation = false;
 
-	// 김민지, 230810, 9slice 테스트 추가
-	SliceImageGo* test;
-	//
-
 	// 김민지, 230811, 인벤토리 추가
 	Inventory* inven;
 	//

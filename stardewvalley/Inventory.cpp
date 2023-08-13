@@ -5,6 +5,7 @@
 #include "StringTable.h"
 #include "ResourceMgr.h"
 #include "Player2.h"
+#include "AllItemTable.h"
 
 GameObject* Inventory::AddUi(UiType t, GameObject* go)
 {
@@ -59,12 +60,12 @@ Inventory::Inventory(const std::string& n)
         }
     }
 
-    tagItemInfo itemEmpty = { ITEM::ITEM_EMPTY ,"","",0,0,0 };
-    tagItemInfo pick = { ITEM::ITEM_TOOL, "°î±ªÀÌ", "°î±ªÀÌ", 0, 0, 1 };
-    tagItemInfo ax = { ITEM::ITEM_TOOL, "µµ³¢", "µµ³¢", 0, 0, 1 };
-    tagItemInfo homi = { ITEM::ITEM_TOOL, "°î±ªÀÌ", "°î±ªÀÌ", 0, 0, 1 };
-    tagItemInfo waterCan = { ITEM::ITEM_TOOL, "¹°»Ñ¸®°³", "¹°»Ñ¸®°³", 0, 0, 1 };
-    tagItemInfo hook = { ITEM::ITEM_TOOL, "³´", "³´", 0, 0, 1 };
+    //tagItemInfo itemEmpty = { ITEM::ITEM_EMPTY ,"","",0,0,0 };
+    //tagItemInfo pick = { ITEM::ITEM_TOOL, "°î±ªÀÌ", "°î±ªÀÌ", 0, 0, 1 };
+    //tagItemInfo ax = { ITEM::ITEM_TOOL, "µµ³¢", "µµ³¢", 0, 0, 1 };
+    //tagItemInfo homi = { ITEM::ITEM_TOOL, "°î±ªÀÌ", "°î±ªÀÌ", 0, 0, 1 };
+    //tagItemInfo waterCan = { ITEM::ITEM_TOOL, "¹°»Ñ¸®°³", "¹°»Ñ¸®°³", 0, 0, 1 };
+    //tagItemInfo hook = { ITEM::ITEM_TOOL, "³´", "³´", 0, 0, 1 };
     //addItem(pick);
     //addItem(ax);
     //addItem(homi);
@@ -285,7 +286,16 @@ void Inventory::Update(float dt)
 
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
-        SetItemWindow();
+        if (!invenOnOff)
+        {
+            SetItemWindow();
+            invenOnOff = true;
+        }
+        else
+        {
+            invenOnOff = false;
+            SetWindowClear();
+        }
     }
 }
 
