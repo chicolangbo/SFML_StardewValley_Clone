@@ -23,13 +23,9 @@ enum class UiType
 class Inventory : public GameObject
 {
 private:
-	//std::vector<tagItemInfo> allItem; // 데이터테이블 읽어와야 함
-	//std::vector<tagItemInfo> item; // 플레이어가 가진 아이템, 36개까지만 가능
-	std::vector<tagItemInfo>::iterator itemI;
-
-	std::unordered_map<std::string, tagItemInfo> allItemMap;
 	std::unordered_map<std::string, tagItemInfo> playerItemMap;
 
+	int itemCapacity = 36;
 	int curFundsInt = 0; // 현재 소지금
 	int totalEarningsInt = 0; // 총합 자금
 

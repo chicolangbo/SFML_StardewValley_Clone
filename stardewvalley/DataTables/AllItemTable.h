@@ -6,9 +6,9 @@ class AllItemTable :
     public DataTable
 {
 protected:
-    std::unordered_map<std::string, tagItemInfo> table;
 
 public:
+    std::unordered_map<std::string, tagItemInfo> table;
     int size;
 
     AllItemTable() : DataTable(DataTable::Ids::Wall) {};

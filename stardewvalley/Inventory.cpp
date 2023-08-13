@@ -99,11 +99,13 @@ Inventory::~Inventory()
 
 void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
 {
-    if (allItemMap.find(name) != allItemMap.end()) // 전체 아이템에 포함되어 있을 때
+    auto Allitem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->table;
+
+    if (Allitem.find(name) != Allitem.end()) // 전체 아이템에 포함되어 있을 때
     {
-        if (playerItemMap.find(name) == playerItemMap.end()) // 플레이어 아이템에 없을 때
+        if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
         {
-            playerItemMap.insert(std::make_pair(name, allItemMap.find(name)->second));
+            playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
         }
         else
         {
@@ -263,6 +265,12 @@ void Inventory::Reset()
         pl.sprite = player->sprite;
         pl.SetOrigin(Origins::MC);
         pl.SetPosition(charBg.GetPosition());
+
+        AddPlayerItem("pick");
+        AddPlayerItem("ax");
+        AddPlayerItem("homi");
+        AddPlayerItem("waterCan");
+        AddPlayerItem("hook");
     }
 
     SetWindowClear();
