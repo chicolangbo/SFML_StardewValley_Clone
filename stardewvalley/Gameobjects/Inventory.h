@@ -24,6 +24,7 @@ class Inventory : public GameObject
 {
 private:
 	std::unordered_map<std::string, tagItemInfo> playerItemMap;
+	std::vector<UiButton*> playerItemIcon;
 
 	int itemCapacity = 36;
 	int curFundsInt = 0; // 현재 소지금
@@ -52,7 +53,7 @@ private:
 	sf::Vector2f cellPos;
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
-	std::vector<SpriteGo> cell;
+	std::vector<SpriteGo*> cell;
 	SpriteGo mapImage;
 	SpriteGo ring;
 	SpriteGo shoes;
@@ -75,6 +76,7 @@ public:
 
 	virtual void Init();
 	virtual void Reset();
+	virtual void Release();
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window);
 

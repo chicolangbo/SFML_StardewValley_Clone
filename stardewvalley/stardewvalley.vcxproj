@@ -175,7 +175,7 @@
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
     <ClCompile Include="GameObjects\Ground.cpp" />
-    <ClCompile Include="Inventory.cpp">
+    <ClCompile Include="Gameobjects\Inventory.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -222,7 +222,7 @@
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="GameObjects\Ground.h" />
     <ClInclude Include="Gameobjects\SliceImageGo.h" />
-    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Gameobjects\Inventory.h" />
     <ClInclude Include="Gameobjects\Item.h" />
     <ClInclude Include="Pickax.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />

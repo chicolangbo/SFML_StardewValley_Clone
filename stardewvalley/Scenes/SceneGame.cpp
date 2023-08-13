@@ -162,7 +162,6 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
-
 }
 
 void SceneGame::Exit()

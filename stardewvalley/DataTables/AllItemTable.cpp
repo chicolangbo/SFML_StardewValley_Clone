@@ -11,8 +11,8 @@ bool AllItemTable::Load()
 	std::vector<int> itemType = doc.GetColumn<int>(0);
 	std::vector<std::string> name = doc.GetColumn<std::string>(1);
 	std::vector<std::string> nickName = doc.GetColumn<std::string>(2);
-	std::vector<std::string> description = doc.GetColumn<std::string>(3);
-	std::vector<std::string> resourceId = doc.GetColumn<std::string>(4);
+	std::vector<std::string> resourceId = doc.GetColumn<std::string>(3);
+	std::vector<std::string> description = doc.GetColumn<std::string>(4);
 	std::vector<int> price = doc.GetColumn<int>(5);
 	std::vector<int> count = doc.GetColumn<int>(6);
 

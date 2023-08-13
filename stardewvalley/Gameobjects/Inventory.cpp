@@ -13,7 +13,7 @@ GameObject* Inventory::AddUi(UiType t, GameObject* go)
     {
         invenUiObjects.insert(std::make_pair(t, go));
     }
-    return nullptr;
+    return go;
 }
 
 bool Inventory::Exist(GameObject* go)
@@ -53,24 +53,12 @@ Inventory::Inventory(const std::string& n)
     {
         for (int j = 0; j < 12; ++j)
         {
-            SpriteGo tempCell = SpriteGo("graphics/MenuTiles.png", "invenCell", "invenCell");
-            cell.push_back(tempCell);
-            cell[(i * 12) + j].SetOrigin(Origins::MC);
-            cell[(i * 12) + j].colliderOnOff = false;
+            std::string num = std::to_string((i * 12) + j);
+            cell.push_back((SpriteGo*)AddUi(UiType::LINE, new SpriteGo("graphics/MenuTiles.png", "invenCell" + num, "invenCell")));
+            cell[(i * 12) + j]->SetOrigin(Origins::MC);
+            cell[(i * 12) + j]->colliderOnOff = false;
         }
     }
-
-    //tagItemInfo itemEmpty = { ITEM::ITEM_EMPTY ,"","",0,0,0 };
-    //tagItemInfo pick = { ITEM::ITEM_TOOL, "곡괭이", "곡괭이", 0, 0, 1 };
-    //tagItemInfo ax = { ITEM::ITEM_TOOL, "도끼", "도끼", 0, 0, 1 };
-    //tagItemInfo homi = { ITEM::ITEM_TOOL, "곡괭이", "곡괭이", 0, 0, 1 };
-    //tagItemInfo waterCan = { ITEM::ITEM_TOOL, "물뿌리개", "물뿌리개", 0, 0, 1 };
-    //tagItemInfo hook = { ITEM::ITEM_TOOL, "낫", "낫", 0, 0, 1 };
-    //addItem(pick);
-    //addItem(ax);
-    //addItem(homi);
-    //addItem(waterCan);
-    //addItem(hook);
 
     AddUi(UiType::BOX, &invenBox);
     AddUi(UiType::LINE, &invenLine);
@@ -95,6 +83,10 @@ Inventory::Inventory(const std::string& n)
 
 Inventory::~Inventory()
 {
+    for (auto go : invenUiObjects)
+    {
+        delete go.second;
+    }
 }
 
 void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
@@ -106,6 +98,9 @@ void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이
         if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
         {
             playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
+            auto tempPlIcon = playerItemMap.find(name)->second;
+            playerItemIcon.push_back((UiButton*)new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName));
+            invenUiObjects.insert({ UiType::LINE, playerItemIcon.back() });
         }
         else
         {
@@ -136,11 +131,6 @@ void Inventory::Init()
     {
         m.second->Init();
     }
-
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        cell[i].Init();
-    }
 }
 
 void Inventory::Reset()
@@ -150,10 +140,10 @@ void Inventory::Reset()
         m.second->Reset();
     }
 
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        cell[i].Reset();
-    }
+    //for (int i = 0; i < cell.size(); ++i)
+    //{
+    //    cell[i]->Reset();
+    //}
 
     // 오브젝트 초기 세팅
     {
@@ -166,13 +156,13 @@ void Inventory::Reset()
         {
             for (int j = 0; j < 12; ++j)
             {
-                cell[(i * 12) + j].SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
+                cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
             }
         }
 
         invenLine.SetSize(1040.f);
         invenLine.SetOrigin(Origins::MC);
-        invenLine.SetPosition(position.x, cell[35].GetPosition().y + 80.f);
+        invenLine.SetPosition(position.x, cell[35]->GetPosition().y + 80.f);
 
         bagPos = { invenBox.vertexArray[0].position + sf::Vector2f{10.f, 0.f} };
         bag.SetScale(4.f, 4.f);
@@ -205,13 +195,13 @@ void Inventory::Reset()
         mapImage.SetPosition(position);
         mapImage.colliderOnOff = false;
         ring.SetOrigin(Origins::MC);
-        ring.SetPosition(cell[0].GetPosition().x, invenLine.GetPosition().y + 80.f);
+        ring.SetPosition(cell[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
         ring.colliderOnOff = false;
         shoes.SetOrigin(Origins::MC);
-        shoes.SetPosition(cell[0].GetPosition().x, ring.GetPosition().y + 80.f);
+        shoes.SetPosition(cell[0]->GetPosition().x, ring.GetPosition().y + 80.f);
         shoes.colliderOnOff = false;
         hat.SetOrigin(Origins::MC);
-        hat.SetPosition(cell[0].GetPosition().x, shoes.GetPosition().y + 80.f);
+        hat.SetPosition(cell[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
         hat.colliderOnOff = false;
         charBg.SetOrigin(Origins::MC);
         charBg.SetScale(1.25f, 1.25f);
@@ -271,22 +261,23 @@ void Inventory::Reset()
         AddPlayerItem("homi");
         AddPlayerItem("waterCan");
         AddPlayerItem("hook");
+
+        for (auto i : playerItemIcon)
+        {
+            i->SetPosition(position);
+        }
     }
 
     SetWindowClear();
     ButtonSetUp();
 }
 
+void Inventory::Release()
+{
+}
+
 void Inventory::Update(float dt)
 {
-    //for (auto go : uiObjects)
-    //{
-    //    if (go->GetActive())
-    //    {
-    //        go->Update(dt);
-    //    }
-    //}
-
     for (auto m : invenUiObjects)
     {
         m.second->Update(dt);
@@ -309,27 +300,11 @@ void Inventory::Update(float dt)
 
 void Inventory::Draw(sf::RenderWindow& window)
 {
-    //for (auto go : uiObjects)
-    //{
-    //    if (go->GetActive())
-    //    {
-    //        go->Draw(window);
-    //    }
-    //}
-
     for (auto m : invenUiObjects)
     {
         if (m.second->GetActive())
         {
             m.second->Draw(window);
-        }
-    }
-
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (cell[i].GetActive())
-        {
-            cell[i].Draw(window);
         }
     }
 }
@@ -348,23 +323,14 @@ void Inventory::SetItemWindow()
         }
     }
 
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (!cell[i].GetActive())
-        {
-            cell[i].SetActive(true);
-        }
-    }
-
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 12; ++j)
         {
-            cell[(i * 12) + j].SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
+            cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
         }
     }
     // 아이템도 보이도록 추가
-    // 제작, 체인지씬 펄스
 
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);
     map.SetPosition(mapPos);
@@ -386,19 +352,7 @@ void Inventory::SetMapWindow()
         }
     }
 
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (cell[i].GetActive())
-        {
-            cell[i].SetActive(false);
-        }
-    }
-
     xButton.SetPosition(mapImage.GetPosition() + sf::Vector2f{mapImage.sprite.getGlobalBounds().width / 2.f, - mapImage.sprite.getGlobalBounds().height / 2.f});
-    //map.SetPosition(mapPos.x, mapPos.y + 10.f);
-    //bag.SetPosition(bagPos);
-    //make.SetPosition(makePos);
-    //changeScene.SetPosition(changeScenePos);
 }
 
 void Inventory::SetMakeWindow()
@@ -415,15 +369,11 @@ void Inventory::SetMakeWindow()
         }
     }
 
-    sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - cell[0].GetPosition().y + 80.f };
+    sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - cell[0]->GetPosition().y + 80.f };
 
     for (int i = 0; i < cell.size(); ++i)
     {
-        if (!cell[i].GetActive())
-        {
-            cell[i].SetActive(true);
-        }
-        cell[i].SetPosition(cell[i].GetPosition() + diff);
+        cell[i]->SetPosition(cell[i]->GetPosition() + diff);
     }
 
     make.SetPosition(makePos.x, makePos.y + 10.f);
@@ -446,14 +396,6 @@ void Inventory::SetChangeSceneWindow()
         }
     }
 
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (cell[i].GetActive())
-        {
-            cell[i].SetActive(false);
-        }
-    }
-
     xButton.SetPosition(invenBox.vertexArray[9].position);
     changeScene.SetPosition(changeScenePos.x, changeScenePos.y + 10.f);
     bag.SetPosition(bagPos);
@@ -467,14 +409,6 @@ void Inventory::SetWindowClear()
     for (auto& m : invenUiObjects)
     {
         m.second->SetActive(false);
-    }
-
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (cell[i].GetActive())
-        {
-            cell[i].SetActive(false);
-        }
     }
 }
 

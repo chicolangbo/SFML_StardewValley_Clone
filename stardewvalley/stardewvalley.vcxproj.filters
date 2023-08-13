@@ -132,7 +132,7 @@
     <ClCompile Include="Gameobjects\SliceImageGo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Inventory.cpp">
+    <ClCompile Include="Gameobjects\Inventory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DataTables\AllItemTable.cpp">
@@ -248,7 +248,7 @@
     <ClInclude Include="Gameobjects\SliceImageGo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Inventory.h">
+    <ClInclude Include="Gameobjects\Inventory.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Gameobjects\Item.h">
