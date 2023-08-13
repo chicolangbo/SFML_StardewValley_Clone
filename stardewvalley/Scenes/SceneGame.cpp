@@ -120,6 +120,7 @@ void SceneGame::Init()
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
 	//
+	player2 = (Player2*)AddGo(new Player2());
 
 	// 김민지, 230811, 인벤토리 추가
 	inven = (Inventory*)AddGo(new Inventory("inven"));
@@ -128,7 +129,6 @@ void SceneGame::Init()
 	inven->SetPlayer(player2);
 	//
 
-	player2 = (Player2*)AddGo(new Player2());
 	//임형준 테스트 코드...
 	//AddGo(new SpriteGo("graphics/tools.png", "SideAxe", "SideAxe"));
 	//SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");

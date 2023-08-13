@@ -31,16 +31,17 @@ private:
 	int curFundsInt = 0;
 	int totalEarningsInt = 0;
 
-	GameObject* AddUi(GameObject* go);
+	//GameObject* AddUi(GameObject* go);
 	GameObject* AddUi2(UiType t, GameObject* go);
-	bool Exist(GameObject* go);
+	//bool Exist(GameObject* go);
 	bool Exist2(GameObject* go);
 
 
-	std::list<GameObject*> uiObjects;
+	//std::list<GameObject*> uiObjects;
 	std::multimap<UiType, GameObject*> multiMap; // 멀티맵으로 ui오브젝트 탐색
 
 	Player2* player;
+	SpriteGo pl;
 	UiButton bag;
 	UiButton map;
 	UiButton make;

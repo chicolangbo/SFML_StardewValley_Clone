@@ -6,14 +6,14 @@
 #include "ResourceMgr.h"
 #include "Player2.h"
 
-GameObject* Inventory::AddUi(GameObject* go)
-{
-    if (!Exist(go))
-    {
-        uiObjects.push_back(go);
-    }
-    return go;
-}
+//GameObject* Inventory::AddUi(GameObject* go)
+//{
+//    if (!Exist(go))
+//    {
+//        uiObjects.push_back(go);
+//    }
+//    return go;
+//}
 
 GameObject* Inventory::AddUi2(UiType t, GameObject* go)
 {
@@ -24,10 +24,10 @@ GameObject* Inventory::AddUi2(UiType t, GameObject* go)
     return nullptr;
 }
 
-bool Inventory::Exist(GameObject* go)
-{
-    return std::find(uiObjects.begin(), uiObjects.end(), go) != uiObjects.end();
-}
+//bool Inventory::Exist(GameObject* go)
+//{
+//    return std::find(uiObjects.begin(), uiObjects.end(), go) != uiObjects.end();
+//}
 
 bool Inventory::Exist2(GameObject* go)
 {
@@ -101,6 +101,7 @@ Inventory::Inventory(const std::string& n)
     AddUi2(UiType::ITEM, &totalEarnings);
     AddUi2(UiType::ITEM, &curFundsValue);
     AddUi2(UiType::ITEM, &totalEarningsValue);
+    AddUi2(UiType::ITEM, &pl);
     AddUi2(UiType::CHANEGE, &title);
     AddUi2(UiType::CHANEGE, &end);
 }
@@ -134,14 +135,6 @@ void Inventory::Init()
 
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
-
-    //for (auto go : uiObjects)
-    //{
-    //    if (go->GetActive())
-    //    {
-    //        go->Init();
-    //    }
-    //}
 
     for (auto m : multiMap)
     {
@@ -272,7 +265,10 @@ void Inventory::Reset()
         end.SetScale(1.5f, 1.5f);
         end.SetOrigin(Origins::MC);
 
-        sf::Sprite pl = player->sprite;
+        player->GetAnimation().Play("Idle");
+        pl.sprite = player->sprite;
+        pl.SetOrigin(Origins::MC);
+        pl.SetPosition(charBg.GetPosition());
     }
 
     SetWindowClear();
