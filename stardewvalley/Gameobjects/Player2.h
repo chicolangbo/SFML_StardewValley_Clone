@@ -56,9 +56,10 @@ protected:
 	int money = 500;
 	sf::RectangleShape energyBar;
 
-	sf::FloatRect wallBounds;
-	sf::Vector2f wallBoundsLT;
-	sf::Vector2f wallBoundsRB;
+	std::vector<sf::FloatRect> wallBounds;
+	std::vector<sf::Vector2f> wallBoundsLT;
+	std::vector<sf::Vector2f> wallBoundsRB; 
+
 	sf::FloatRect playerBound;
 
 	bool playerDie = false;

@@ -40,10 +40,12 @@ protected:
 	SpriteGo* info;
 	sf::RectangleShape energyBar;
 	int energys;
-	sf::FloatRect houseBound; 
+	//sf::FloatRect houseBound; 
+	std::vector<sf::FloatRect> walls;
 	sf::FloatRect playerBound; 
 	sf::FloatRect mapBound;
 	//
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

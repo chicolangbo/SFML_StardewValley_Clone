@@ -121,28 +121,30 @@ void Player2::Update(float dt)
 		}
 		position += direction * speed * dt;
 
-		if (wallBounds.intersects(playerBound))
+		for (int i = 0; i < wallBounds.size(); ++i)
 		{
-			sf::Vector2f position2 = Utils::Clamp(position, wallBoundsLT, wallBoundsRB);
-			//position = poss;
-			if (position.x < position2.x)
+			if (wallBounds[i].intersects(playerBound))  
 			{
-				position.x = position2.x - 35.f;
-			}
-			else if (position.x > position2.x)
-			{
-				position.x = position2.x + 40.f;
-			}
-			else if (position.y < position2.y)
-			{
-				position.y = position2.y - 70.f;
-			}
-			else if (position.y > position2.y)
-			{
-				position.y = position2.y + 70.f;
+				sf::Vector2f position2 = Utils::Clamp(position, wallBoundsLT[i], wallBoundsRB[i]); 
+				//position = poss;
+				if (position.x < position2.x)
+				{
+					position.x = position2.x - 35.f;
+				}
+				else if (position.x > position2.x)
+				{
+					position.x = position2.x + 40.f;
+				}
+				else if (position.y < position2.y)
+				{
+					position.y = position2.y - 70.f;
+				}
+				else if (position.y > position2.y)
+				{
+					position.y = position2.y + 70.f;
+				}
 			}
 		}
-	
 		
 		SetPosition(position); 
 	
@@ -438,10 +440,10 @@ void Player2::SetFlipX(bool filp)
 
 void Player2::SetWallBounds(const sf::FloatRect& bounds)
 {
-	wallBounds = bounds; 
+	wallBounds.push_back(bounds); 
 
-	wallBoundsLT = { wallBounds.left, wallBounds.top }; 
-	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height }; 
+	wallBoundsLT.push_back({ bounds.left, bounds.top });
+	wallBoundsRB.push_back({ bounds.left + bounds.width, bounds.top + bounds.height });
 
 }
 

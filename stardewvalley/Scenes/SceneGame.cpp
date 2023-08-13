@@ -91,36 +91,43 @@ void SceneGame::Init()
 	shopCounter2->SetOrigin(Origins::TL);
 	shopCounter2->SetPosition(128.f*4, 254.f*4);
 	shopCounter2->SetActive(false);
+
 	shopMid1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid1", "shopMid1"));
 	shopMid1->sprite.setScale(4.f, 4.f);
 	shopMid1->SetOrigin(Origins::TL);
 	shopMid1->SetPosition(48.f*4, 332.f*4);
 	shopMid1->SetActive(false);
+
 	shopMid2_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_1", "shopMid2"));
 	shopMid2_1->sprite.setScale(4.f, 4.f);
 	shopMid2_1->SetOrigin(Origins::TL);
 	shopMid2_1->SetPosition(160.f*4, 277.f*4);
 	shopMid2_1->SetActive(false);
+
 	shopMid2_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_2", "shopMid2"));
 	shopMid2_2->sprite.setScale(4.f, 4.f);
 	shopMid2_2->SetOrigin(Origins::TL);
 	shopMid2_2->SetPosition(160.f*4, 325.f*4);
 	shopMid2_2->SetActive(false);
+
 	shopMid3_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_1", "shopMid3"));
 	shopMid3_1->sprite.setScale(4.f, 4.8f);
 	shopMid3_1->SetOrigin(Origins::TL);
 	shopMid3_1->SetPosition(160.f*4, 375.f*4);
 	shopMid3_1->SetActive(false);
+
 	shopMid3_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_2", "shopMid3"));
 	shopMid3_2->sprite.setScale(4.f, 4.8f);
 	shopMid3_2->SetOrigin(Origins::TL);
 	shopMid3_2->SetPosition(224.f*4, 375.f*4);
 	shopMid3_2->SetActive(false);
+
 	shopBox = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopBox", "shopBox"));
 	shopBox->sprite.setScale(4.f, 4.f);
 	shopBox->SetOrigin(Origins::TL);
 	shopBox->SetPosition(288.f*4, 434.f*4);
 	shopBox->SetActive(false);
+
 	shopWalls = (Wall*)AddGo(new Wall("shopWall"));
 	shopWalls->SetType(Wall::Location::Shop);
 	shopWalls->SetPos();
@@ -128,10 +135,6 @@ void SceneGame::Init()
 
 	player2 = (Player2*)AddGo(new Player2());
 	player2->sortLayer=10;
-	//player2->collider.setScale(1.f, 0.3f); 
-
-	
-
 
 	//에너지 바 UI 일단 구현만/임형준
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
@@ -145,7 +148,6 @@ void SceneGame::Init()
 	info->SetScale(4.5f, 4.5f);
 	info->SetPosition(size.x, 0);
 	info->sortLayer = 100;
-
 
 	for (auto go : gameObjects)
 	{
@@ -196,11 +198,31 @@ void SceneGame::Update(float dt)
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
+
 	//임형준 테스트 코드
-	houseBound = house->GetCollider(); 
+	walls.push_back(house->GetCollider()); 
+	walls.push_back(shop->GetCollider()); 
+	walls.push_back(shopCounter1->GetCollider());
+	walls.push_back(shopMid1->GetCollider());
+	walls.push_back(shopMid2_1->GetCollider());
+	walls.push_back(shopMid2_2->GetCollider());
+	walls.push_back(shopMid3_1->GetCollider());
+	walls.push_back(shopMid3_2->GetCollider());
+	walls.push_back(shopBox->GetCollider());
+
 	playerBound = player2->GetCollider(); 
 	mapBound = testFarmMap->GetCollider();
-	player2->SetWallBounds(houseBound);
+	
+	player2->SetWallBounds(walls[0]);
+	player2->SetWallBounds(walls[1]); 
+	player2->SetWallBounds(walls[2]); 
+	player2->SetWallBounds(walls[3]); 
+	player2->SetWallBounds(walls[4]); 
+	player2->SetWallBounds(walls[5]); 
+	player2->SetWallBounds(walls[6]); 
+	player2->SetWallBounds(walls[7]); 
+	player2->SetWallBounds(walls[8]); 
+	
 	player2->SetCollider(playerBound);
 	//
 
@@ -243,9 +265,6 @@ void SceneGame::Update(float dt)
 			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
 		}
 	}
-	
-	//UI위치 수정 완료 (김주현)
-	
 	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
