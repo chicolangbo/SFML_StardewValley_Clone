@@ -136,7 +136,7 @@ void SceneGame::Init()
 	player2 = (Player2*)AddGo(new Player2());
 	player2->SetOrigin(Origins::BC);
 	player2->sortLayer=10;
-	player2->collider.setScale(0.7f, 0.3f);
+	player2->collider.setScale(0.5f, 0.2f);
 
 	//에너지 바 UI 일단 구현만/임형준
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));

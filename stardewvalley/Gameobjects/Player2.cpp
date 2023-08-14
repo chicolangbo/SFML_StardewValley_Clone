@@ -135,13 +135,14 @@ void Player2::Update(float dt)
 				{
 					position.x = position2.x + 40.f;
 				}
-				else if (position.y < position2.y)
+				else if (position.y <= position2.y) 
 				{
-					position.y = position2.y - 70.f;
+					position.y = position2.y - 1.f;
+					std::cout << "Bound!" << std::endl;
 				}
 				else if (position.y > position2.y)
 				{
-					position.y = position2.y + 70.f;
+					position.y = position2.y + 45.f;
 				}
 			}
 		}

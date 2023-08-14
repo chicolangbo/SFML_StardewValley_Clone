@@ -1,5 +1,5 @@
 ﻿ID,FPS,LOOPTYPE,,
-AttackSide,20,0,,
+AttackSide,15,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/farmer_base.png,0,219,20,31
