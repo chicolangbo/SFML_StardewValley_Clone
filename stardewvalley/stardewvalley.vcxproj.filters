@@ -135,6 +135,9 @@
     <ClCompile Include="Wateringcan.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
+    <ClCompile Include="Gameobjects\TextGo.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -246,6 +249,9 @@
       <Filter>Gameobjects</Filter>
     </ClInclude>
     <ClInclude Include="Wateringcan.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\TextGo.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
   </ItemGroup>

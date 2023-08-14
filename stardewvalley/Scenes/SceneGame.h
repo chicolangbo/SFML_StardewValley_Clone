@@ -46,8 +46,15 @@ protected:
 	sf::FloatRect playerBound; 
 	sf::FloatRect mapBound;
 
+	float time = 0.f;
+	int min = 0;
+	int hour = 6;
+	int day = 1;
 
-	sf::Text text;
+	sf::Text textMoney;
+	sf::Text textMin;
+	sf::Text textHour;
+	sf::Text textDay;
 	sf::Font font;
 	//
 

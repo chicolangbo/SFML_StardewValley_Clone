@@ -200,7 +200,10 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]); 
 	}
 	font.loadFromFile("fonts/SDMiSaeng.ttf");
-	text.setFont(font);
+	textMoney.setFont(font);
+	textMin.setFont(font);
+	textHour.setFont(font);
+	textDay.setFont(font);
 
 	// 김주현, 230811, uiview를 Init에서 주는 것이 더 좋아 보임. 주석처리
 	//uiView.setSize(size);
@@ -220,7 +223,55 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-	
+	//230814, 임형준 테스트코드, 시간 구현
+	time +=dt;
+	if (time >= 7.f)
+	{
+		min += 10;
+		time = 0.f;
+	}
+	if (min == 60)
+	{
+		min = 0;
+		hour += 1;
+	}
+	if (hour == 24)
+	{
+		hour = 6;
+		day += 1;
+	}
+	if (hour < 12)
+	{
+		std::cout << day << "일 " << "오전 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
+	}
+	else if (hour >= 12)
+	{
+		std::cout << day << "일 " << "오후 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
+	}
+
+	std::stringstream ss;
+	ss << player2->GetMoney();
+	textMoney.setString(ss.str());
+	textMoney.setCharacterSize(50);
+	textMoney.setPosition(1675.f, 195.f);
+	textMoney.setFillColor(sf::Color::Black);
+
+	std::stringstream sss;
+	sss << hour << ":" << min;
+	textHour.setString(sss.str());
+	textHour.setCharacterSize(50);
+	textHour.setPosition(1710.f, 115.f);
+	textHour.setFillColor(sf::Color::Black);
+	std::stringstream ssss;
+	ssss << day << "Day";
+	textDay.setString(ssss.str());
+	textDay.setCharacterSize(50);
+	textDay.setPosition(1775.f, 12.f);
+	textDay.setFillColor(sf::Color::Black);
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad5))
+	{
+		hour += 1;
+	}
 	// 김민지, 230807, 테스트용 주석처리
 	// 김민지, 230808, 테스트용 주석해제, 플레이어 포지션 로그
 	//worldView.setCenter(player2->GetPosition());
@@ -288,12 +339,7 @@ void SceneGame::Update(float dt)
 		}
 	}
 	
-	std::stringstream ss;
-	ss << player2->GetMoney();
-	text.setString(ss.str());
-	text.setCharacterSize(50);
-	text.setPosition(1675.f, 195.f);
-	text.setFillColor(sf::Color::Black);
+	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
@@ -305,8 +351,11 @@ void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
 	window.draw(energyBar);
-	window.draw(text);
+	window.draw(textMoney);
+	window.draw(textHour);
+	window.draw(textDay);
 }
+
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
 {

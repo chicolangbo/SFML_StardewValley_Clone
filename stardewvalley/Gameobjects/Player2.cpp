@@ -411,11 +411,11 @@ void Player2::Update(float dt)
 
 	if (INPUT_MGR.GetKey(sf::Keyboard::Add))
 	{
-		money += 5;
+		money += 100;
 	}
 	if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
 	{
-		money -= 5;
+		money -= 100;
 	}
 	animation.Update(dt);
 }
