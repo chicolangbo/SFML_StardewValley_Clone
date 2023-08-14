@@ -15,6 +15,8 @@ void Scythe::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Scythe_Side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Scythe_Back.csv"));
 
+	
+
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
 

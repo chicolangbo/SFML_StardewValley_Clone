@@ -13,6 +13,7 @@
 #include "UiButton.h"
 #include "Wall.h"
 #include "Axe.h"
+#include <sstream>
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -136,25 +137,28 @@ void SceneGame::Init()
 	player2 = (Player2*)AddGo(new Player2());
 	player2->SetOrigin(Origins::BC);
 	player2->sortLayer=10;
-	player2->collider.setScale(0.5f, 0.2f);
+	player2->collider.setScale(0.5f, 0.1f);
 
 	//에너지 바 UI 일단 구현만/임형준
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
 	energy->SetOrigin(Origins::BR);
 	energy->SetPosition(size);
 	energy->SetScale(4.5f, 4.5f);
-	energy->sortLayer = 100;
+	energy->sortLayer = 110;
 
 	info = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Info", "Info"));
 	info->SetOrigin(Origins::TR);
 	info->SetScale(4.5f, 4.5f);
 	info->SetPosition(size.x, 0);
-	info->sortLayer = 100;
+	info->sortLayer = 110;
 
 	energyBar.setSize(sf::Vector2f(26.f, 1.f));
 	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
 	energyBar.setPosition(energy->GetPosition());
 	energyBar.setFillColor(sf::Color::Green);
+
+	
+
 
 	for (auto go : gameObjects)
 	{
@@ -177,6 +181,26 @@ void SceneGame::Enter()
 	Scene::Enter();
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
+	walls.push_back(house->GetCollider()); 
+	walls.push_back(shop->GetCollider()); 
+	walls.push_back(shopCounter1->GetCollider()); 
+	walls.push_back(shopMid1->GetCollider()); 
+	walls.push_back(shopMid2_1->GetCollider()); 
+	walls.push_back(shopMid2_2->GetCollider()); 
+	walls.push_back(shopMid3_1->GetCollider()); 
+	walls.push_back(shopMid3_2->GetCollider()); 
+	walls.push_back(shopBox->GetCollider()); 
+
+	for (int i = 0; i < shopWalls->Walls.size(); ++i)
+	{
+		walls.push_back(shopWalls->Walls[i].getGlobalBounds());
+	}
+	for (int i = 0; i < walls.size(); ++i)
+	{
+		player2->SetWallBounds(walls[i]); 
+	}
+	font.loadFromFile("fonts/SDMiSaeng.ttf");
+	text.setFont(font);
 
 	// 김주현, 230811, uiview를 Init에서 주는 것이 더 좋아 보임. 주석처리
 	//uiView.setSize(size);
@@ -205,30 +229,12 @@ void SceneGame::Update(float dt)
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
-
+	//std::cout << player2->GetPosition().x << " " << player2->GetPosition().y << std::endl;
 	//임형준 테스트 코드
-	walls.push_back(house->GetCollider()); 
-	walls.push_back(shop->GetCollider()); 
-	walls.push_back(shopCounter1->GetCollider());
-	walls.push_back(shopMid1->GetCollider());
-	walls.push_back(shopMid2_1->GetCollider());
-	walls.push_back(shopMid2_2->GetCollider());
-	walls.push_back(shopMid3_1->GetCollider());
-	walls.push_back(shopMid3_2->GetCollider());
-	walls.push_back(shopBox->GetCollider());
+	
 
 	playerBound = player2->GetCollider(); 
 	mapBound = testFarmMap->GetCollider();
-	
-	player2->SetWallBounds(walls[0]);
-	player2->SetWallBounds(walls[1]); 
-	player2->SetWallBounds(walls[2]); 
-	player2->SetWallBounds(walls[3]); 
-	player2->SetWallBounds(walls[4]); 
-	player2->SetWallBounds(walls[5]); 
-	player2->SetWallBounds(walls[6]); 
-	player2->SetWallBounds(walls[7]); 
-	player2->SetWallBounds(walls[8]); 
 	
 	player2->SetCollider(playerBound);
 
@@ -255,7 +261,9 @@ void SceneGame::Update(float dt)
 				}
 			}
 			player2->SetActive(true);
-			player2->SetPosition(-463.f, -845.f);
+			player2->SetPosition(-463.f, -770.f); //230814, 임형준 수정
+			energy->SetActive(true);
+			info->SetActive(true);
 		}
 		else
 		{
@@ -265,6 +273,7 @@ void SceneGame::Update(float dt)
 				if (go->GetActive())
 				{
 					go->SetActive(false);
+					
 				}
 				else
 				{
@@ -273,10 +282,18 @@ void SceneGame::Update(float dt)
 			}
 
 			player2->SetActive(true);	
-			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
+			player2->SetPosition(419.f, 1866.f); // 포지션 임시 세팅 //230814, 임형준 수정
+			energy->SetActive(true);
+			info->SetActive(true);
 		}
 	}
 	
+	std::stringstream ss;
+	ss << player2->GetMoney();
+	text.setString(ss.str());
+	text.setCharacterSize(50);
+	text.setPosition(1675.f, 195.f);
+	text.setFillColor(sf::Color::Black);
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
@@ -288,6 +305,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
 	window.draw(energyBar);
+	window.draw(text);
 }
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)

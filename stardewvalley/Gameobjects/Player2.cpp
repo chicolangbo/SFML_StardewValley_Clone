@@ -106,42 +106,47 @@ void Player2::Update(float dt)
 
 	if (!playerDie)
 	{
+		
 		direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 		direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+
 		float magnitude = Utils::Magnitude(direction);
 		if (magnitude > 1.f)
 		{
 			direction /= magnitude;
 		}
-		position += direction * speed * dt;
 
+		//플레이어 출동처리
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
-			if (wallBounds[i].intersects(playerBound))  
+			
+			if (wallBounds[i].intersects(playerBound))
 			{
-				sf::Vector2f position2 = Utils::Clamp(position, wallBoundsLT[i], wallBoundsRB[i]); 
-				//position = poss;
-				if (position.x < position2.x)
+				if(position.x < wallBounds[i].left && direction.x >=1.f)
 				{
-					position.x = position2.x - 35.f;
+					direction.x = 0;
 				}
-				else if (position.x > position2.x)
+				else if (position.x > wallBoundsLT[i].x && direction.x <= 0.f)
 				{
-					position.x = position2.x + 40.f;
+					direction.x = 0;
 				}
-				else if (position.y <= position2.y) 
+				if (position.y < wallBoundsRB[i].y && direction.y >= 1.f)
 				{
-					position.y = position2.y - 1.f;
+					direction.y = 0;
 				}
-				else if (position.y > position2.y)
+				else if (position.y > wallBoundsRB[i].y && direction.y <= 0.f)
 				{
-					position.y = position2.y + 45.f;
+					direction.y = 0;
 				}
+
+				/*if (direction.x != 0.f && direction.y != 0.f)
+				{
+					direction = sf::Vector2f(0.f, 0.f);
+				}*/
 			}
 		}
-		
-		SetPosition(position); 
-	
+		position += direction * speed * dt;
+		SetPosition(position);
 
 		axe.Update(dt);
 		axe.SetPosition(position);
@@ -184,7 +189,7 @@ void Player2::Update(float dt)
 				animation.Play(clipId);
 			}
 		}
-
+		
 		//test
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 		{
@@ -402,6 +407,15 @@ void Player2::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
 	{
 		Reset(); 
+	}
+
+	if (INPUT_MGR.GetKey(sf::Keyboard::Add))
+	{
+		money += 5;
+	}
+	if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
+	{
+		money -= 5;
 	}
 	animation.Update(dt);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+
 class VertexArrayGo;
 class Player2;
 class SpriteGo;
@@ -44,6 +45,10 @@ protected:
 	std::vector<sf::FloatRect> walls;
 	sf::FloatRect playerBound; 
 	sf::FloatRect mapBound;
+
+
+	sf::Text text;
+	sf::Font font;
 	//
 
 public:
