@@ -126,7 +126,6 @@ void SceneGame::Init()
 	player2 = (Player2*)AddGo(new Player2());
 
 	// 김민지, 230811~15, 인벤토리랑 아이템 관련추가
-	rootingItems.push_back(nullptr); // list null로 초기화
 	player2->SetRootingItems(&rootingItems);
 	inven = (Inventory*)AddGo(new Inventory("inven"));
 	inven->sortLayer = 100;

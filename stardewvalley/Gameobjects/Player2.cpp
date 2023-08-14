@@ -264,12 +264,12 @@ void Player2::AddPlayerItem()
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
 	int capacity = inven->GetItemCapacity();
 
-	if (playerItemList.size() >= capacity)
+	if (playerItemList.size() >= capacity || rootingItemList->empty())
 	{
 		return;
 	}
 
-	for (auto item : rootingItemList)
+	for (auto item : *rootingItemList)
 	{
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds())) // 나중에 자석 형태로 바꾸기. 일단은 충돌 시 먹히는 걸로
 		{

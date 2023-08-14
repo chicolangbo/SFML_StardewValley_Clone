@@ -193,7 +193,7 @@ void Inventory::Reset()
 
         invenLine.SetSize(1040.f);
         invenLine.SetOrigin(Origins::MC);
-        invenLine.SetPosition(position.x, cell[35]->GetPosition().y + 80.f);
+        //invenLine.SetPosition(position.x, cell[35]->GetPosition().y + 80.f);
 
         bagPos = { invenBox.vertexArray[0].position + sf::Vector2f{10.f, 0.f} };
         bag.SetScale(4.f, 4.f);
@@ -226,13 +226,13 @@ void Inventory::Reset()
         mapImage.SetPosition(position);
         mapImage.colliderOnOff = false;
         ring.SetOrigin(Origins::MC);
-        ring.SetPosition(cell[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
+        //ring.SetPosition(cell[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
         ring.colliderOnOff = false;
         shoes.SetOrigin(Origins::MC);
-        shoes.SetPosition(cell[0]->GetPosition().x, ring.GetPosition().y + 80.f);
+        //shoes.SetPosition(cell[0]->GetPosition().x, ring.GetPosition().y + 80.f);
         shoes.colliderOnOff = false;
         hat.SetOrigin(Origins::MC);
-        hat.SetPosition(cell[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
+        //hat.SetPosition(cell[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
         hat.colliderOnOff = false;
         charBg.SetOrigin(Origins::MC);
         charBg.SetScale(1.25f, 1.25f);
@@ -350,13 +350,13 @@ void Inventory::SetItemWindow()
         }
     }
 
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 12; ++j)
-        {
-            cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
-        }
-    }
+    //for (int i = 0; i < 3; ++i)
+    //{
+    //    for (int j = 0; j < 12; ++j)
+    //    {
+    //        cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
+    //    }
+    //}
     // 아이템도 보이도록 추가
 
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);

@@ -6,6 +6,8 @@
 #include "Pickax.h"
 #include "Item.h"
 
+class RootingItem;
+
 class Player2 :  public SpriteGo
 {
 public:
@@ -40,7 +42,7 @@ protected:
 
 	// 김민지, 230814~15, 아이템리스트 추가
 	std::list<tagItemInfo> playerItemList;
-	std::list<RootingItem*> &rootingItemList;
+	std::list<RootingItem*>*rootingItemList;
 	int curFundsInt; // 현재 소지금
 	int totalEarningsInt; // 총합 자금
 	//
@@ -69,8 +71,8 @@ public:
 	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
 	int* GetCurFundsInt() { return &curFundsInt; }
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
-	void AddPlayerItem(ItemId id);
-	void SetRootingItems(std::list<RootingItem*> &r) { rootingItemList = r; }
+	void AddPlayerItem();
+	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 	//
 };
 
