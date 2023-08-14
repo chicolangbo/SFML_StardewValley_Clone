@@ -274,18 +274,20 @@ void Player2::AddPlayerItem()
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds())) // 나중에 자석 형태로 바꾸기. 일단은 충돌 시 먹히는 걸로
 		{
 			item->SetActive(false);
+			bool found = false;
 			for (auto playerItem : playerItemList)
 			{
 				if (playerItem.itemId == item->GetRootingItemId())
 				{
 					playerItem.count++;
+					found = true;
 					break;
 				}
-				else
-				{
-					int index = playerItemList.size();
-					playerItemList.push_back({ item->GetRootingItemId(),1,index + 1 });
-				}
+			}
+			if(!found)
+			{
+				int index = playerItemList.size();
+				playerItemList.push_back({ item->GetRootingItemId(),1,index });
 			}
 		}
 	}
