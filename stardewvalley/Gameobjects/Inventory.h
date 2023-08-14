@@ -26,17 +26,19 @@ class Inventory : public GameObject
 {
 private:
 	//std::unordered_map<std::string, tagItemInfo> playerItemMap; // 이걸 플레이어로 옮기고, 벡터로 변경
-	// 아이템리스트 벡터 포인터
-	std::vector<tagItemInfo>* playerItemList;
+	// 아이템리스트 벡터 포인터(플레이어에 있음)
+	std::list<tagItemInfo>* playerItemList;
 	
-	// 슬롯클래스 벡터 포인터
+	// 슬롯클래스 벡터
 	std::vector<Slot*> slot;
 
 	int itemCapacity = 36;
-	int curFundsInt = 0; // 현재 소지금
-	int totalEarningsInt = 0; // 총합 자금
+	int* curFundsInt; // 현재 소지금
+	int* totalEarningsInt; // 총합 자금
 
-	std::multimap<UiType, GameObject*> invenUiObjects; // 멀티맵으로 ui오브젝트 탐색(키 중복 가능) // 얘도 순서 있는 벡터로 바꿔주기... 
+	std::vector<std::pair<UiType,GameObject*>> invenUiObjects;
+
+	bool once = false;
 
 	Player2* player;
 
@@ -59,7 +61,7 @@ private:
 	sf::Vector2f cellPos;
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
-	std::vector<SpriteGo*> cell;
+	//std::vector<SpriteGo*> cell;
 	SpriteGo mapImage;
 	SpriteGo ring;
 	SpriteGo shoes;
@@ -76,7 +78,7 @@ public:
 	Inventory(const std::string& n = "");
 	~Inventory();
 
-	void AddPlayerItem(std::string name);
+	//void AddPlayerItem(std::string name);
 	GameObject* AddUi(UiType t, GameObject* go);
 	bool Exist(GameObject* go);
 
@@ -94,5 +96,5 @@ public:
 
 	void ButtonSetUp();
 	void SetPlayer(Player2* p);
-	void SetPlayerItemList(std::vector<tagItemInfo>* itemList) { playerItemList = itemList; }
+	void SetPlayerItemList(std::list<tagItemInfo>* itemList) { playerItemList = itemList; }
 };

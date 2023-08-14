@@ -6,12 +6,13 @@
 #include "ResourceMgr.h"
 #include "Player2.h"
 #include "AllItemTable.h"
+#include "Slot.h"
 
 GameObject* Inventory::AddUi(UiType t, GameObject* go)
 {
     if (!Exist(go))
     {
-        invenUiObjects.insert(std::make_pair(t, go));
+        invenUiObjects.push_back(std::make_pair(t, go));
     }
     return go;
 }
@@ -49,14 +50,34 @@ Inventory::Inventory(const std::string& n)
     totalEarningsValue("totalEarnings", "fonts/SDMiSaeng.ttf")
 {
 
+    //for (int i = 0; i < 3; ++i)
+    //{
+    //    for (int j = 0; j < 12; ++j)
+    //    {
+    //        std::string num = std::to_string((i * 12) + j);
+    //        cell.push_back((SpriteGo*)AddUi(UiType::LINE, new SpriteGo("graphics/MenuTiles.png", "invenCell" + num, "invenCell")));
+    //        cell[(i * 12) + j]->SetOrigin(Origins::MC);
+    //        cell[(i * 12) + j]->colliderOnOff = false;
+    //    }
+    //}
+
+    //for (int i = 0; i < itemCapacity; ++i)
+    //{
+    //    std::string num = to_string(i);
+    //    slot.push_back(Slot("graphics/MenuTiles.png", "invenCell" + num, "invenCell"));
+    //    slot[i].slotIndex = i;
+    //    slot[]
+    //}
+
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 12; ++j)
         {
             std::string num = std::to_string((i * 12) + j);
-            cell.push_back((SpriteGo*)AddUi(UiType::LINE, new SpriteGo("graphics/MenuTiles.png", "invenCell" + num, "invenCell")));
-            cell[(i * 12) + j]->SetOrigin(Origins::MC);
-            cell[(i * 12) + j]->colliderOnOff = false;
+            slot.push_back(new Slot("graphics/MenuTiles.png", "invenCell" + num, "invenCell"));
+            slot[(i * 12) + j]->SetOrigin(Origins::MC);
+            slot[(i * 12) + j]->colliderOnOff = false;
+            invenUiObjects.push_back({ UiType::LINE, dynamic_cast<GameObject*>(slot[(i * 12) + j])});
         }
     }
 
@@ -90,35 +111,35 @@ Inventory::~Inventory()
     invenUiObjects.clear();
 }
 
-void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
-{
-    auto Allitem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->table;
-
-    if (Allitem.find(name) != Allitem.end()) // 전체 아이템에 포함되어 있을 때
-    {
-        if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
-        {
-            playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
-            auto& tempPlIcon = playerItemMap.find(name)->second;
-            playerItemIcon.push_back((UiButton*)AddUi(UiType::TOOL, new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName)));
-
-            GameObject* lastObject = nullptr;
-            auto range = invenUiObjects.equal_range(UiType::TOOL);
-            for (auto it = range.first; it != range.second; ++it)
-            {
-                lastObject = it->second;
-            }
-            if (lastObject) {
-                // 마지막 객체의 reset 함수 호출
-                lastObject->Reset();
-            }
-        }
-        else
-        {
-            playerItemMap.find(name)->second.count++;
-        }
-    }
-}
+//void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
+//{
+//    auto Allitem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->table;
+//
+//    if (Allitem.find(name) != Allitem.end()) // 전체 아이템에 포함되어 있을 때
+//    {
+//        if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
+//        {
+//            playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
+//            auto& tempPlIcon = playerItemMap.find(name)->second;
+//            playerItemIcon.push_back((UiButton*)AddUi(UiType::TOOL, new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName)));
+//
+//            GameObject* lastObject = nullptr;
+//            auto range = invenUiObjects.equal_range(UiType::TOOL);
+//            for (auto it = range.first; it != range.second; ++it)
+//            {
+//                lastObject = it->second;
+//            }
+//            if (lastObject) {
+//                // 마지막 객체의 reset 함수 호출
+//                lastObject->Reset();
+//            }
+//        }
+//        else
+//        {
+//            playerItemMap.find(name)->second.count++;
+//        }
+//    }
+//}
 
 void Inventory::Init()
 {
@@ -138,9 +159,13 @@ void Inventory::Init()
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
 
-    for (auto m : invenUiObjects)
+    playerItemList = player->GetPlayerItemList();
+    curFundsInt = player->GetCurFundsInt(); // 현재 소지금
+    totalEarningsInt = player->GetTotalEarningsInt(); // 총합 자금
+
+    for (auto i : invenUiObjects)
     {
-        m.second->Init();
+        i.second->Init();
     }
 }
 
@@ -158,13 +183,13 @@ void Inventory::Reset()
         invenBox.SetPosition(position);
 
         cellPos = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
-        for (int i = 0; i < 3; ++i)
-        {
-            for (int j = 0; j < 12; ++j)
-            {
-                cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
-            }
-        }
+        //for (int i = 0; i < 3; ++i)
+        //{
+        //    for (int j = 0; j < 12; ++j)
+        //    {
+        //        cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
+        //    }
+        //}
 
         invenLine.SetSize(1040.f);
         invenLine.SetOrigin(Origins::MC);
@@ -262,16 +287,12 @@ void Inventory::Reset()
         pl.SetOrigin(Origins::MC);
         pl.SetPosition(charBg.GetPosition());
 
-        AddPlayerItem("pick");
-        AddPlayerItem("ax");
-        AddPlayerItem("homi");
-        AddPlayerItem("waterCan");
-        AddPlayerItem("hook");
+        //AddPlayerItem("pick");
+        //AddPlayerItem("ax");
+        //AddPlayerItem("homi");
+        //AddPlayerItem("waterCan");
+        //AddPlayerItem("hook");
 
-        for (auto i : playerItemIcon)
-        {
-            i->SetPosition(position);
-        }
     }
 
     SetWindowClear();
@@ -375,12 +396,12 @@ void Inventory::SetMakeWindow()
         }
     }
 
-    sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - cell[0]->GetPosition().y + 80.f };
+    //sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - cell[0]->GetPosition().y + 80.f };
 
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        cell[i]->SetPosition(cell[i]->GetPosition() + diff);
-    }
+    //for (int i = 0; i < cell.size(); ++i)
+    //{
+    //    cell[i]->SetPosition(cell[i]->GetPosition() + diff);
+    //}
 
     make.SetPosition(makePos.x, makePos.y + 10.f);
     bag.SetPosition(bagPos);

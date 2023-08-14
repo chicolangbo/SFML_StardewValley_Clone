@@ -8,8 +8,6 @@
 Player::~Player()
 {
 	Release();
-
-	delete playerItemList;
 }
 
 void Player::SetWallBounds(const sf::FloatRect& bounds)

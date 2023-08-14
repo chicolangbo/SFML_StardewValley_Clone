@@ -14,18 +14,16 @@ bool AllItemTable::Load()
 	std::vector<std::string> resourceId = doc.GetColumn<std::string>(3);
 	std::vector<std::string> description = doc.GetColumn<std::string>(4);
 	std::vector<int> price = doc.GetColumn<int>(5);
-	std::vector<int> count = doc.GetColumn<int>(6);
 
 	for (int i = 0; i < itemType.size(); ++i)
 	{
-		tagItemInfo values;
+		AllItemInfo values;
 		values.itemkind = (ITEM)itemType[i];
 		values.name = name[i];
 		values.nickName = nickName[i];
 		values.description = description[i];
 		values.resource = resourceId[i];
 		values.price = price[i];
-		values.count = count[i];
 		table.insert({ name[i], values});
 	}
 	size = itemType.size();
@@ -37,7 +35,7 @@ void AllItemTable::Release()
 	table.clear();
 }
 
-const tagItemInfo* AllItemTable::Get(std::string name)
+const AllItemInfo* AllItemTable::Get(std::string name)
 {
 	auto find = table.find(name);
 	if (find != table.end())

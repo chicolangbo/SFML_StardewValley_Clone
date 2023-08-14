@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Axe.h"
 #include "Pickax.h"
+#include "Item.h"
 
 enum class Equipment
 {
@@ -43,6 +44,12 @@ protected:
 
 	bool playingAnimation = false;
 
+	// 김민지, 230814, 아이템리스트 추가
+	std::list<tagItemInfo> playerItemList;
+	int curFundsInt; // 현재 소지금
+	int totalEarningsInt; // 총합 자금
+	//
+
 public:
 
 	Player2(const std::string& textureId = "", const std::string& n = "")
@@ -63,5 +70,16 @@ public:
 	AnimationController GetAnimation() { return animation; }
 	//
 
+	// 김민지, 230814, 추가
+	std::list<tagItemInfo>* GetPlayerItemList() {
+		return &playerItemList;
+	};
+	int* GetCurFundsInt() {
+		return &curFundsInt;
+	}
+	int* GetTotalEarningsInt() { return &totalEarningsInt; }
+
+	//void AddPlayerItem(std::string)
+	//
 };
 

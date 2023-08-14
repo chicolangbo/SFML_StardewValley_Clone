@@ -6,14 +6,15 @@ class Slot :
     public UiButton
 {
 protected:
-    sf::Sprite slotBg;
-    SpriteGo itemIcon;
-    std::vector<tagItemInfo>* playerItemList = nullptr;
+    //sf::Sprite slotBg;
+    SpriteGo* itemIcon = nullptr;
+    //std::vector<tagItemInfo>* playerItemList = nullptr;
 
     bool isEmpty;
-    int slotIndex;
+    bool onMouse;
 
 public:
+    int slotIndex = 0;
     Slot(const std::string& textureId, const std::string& n, const std::string& nickName = "");
     ~Slot();
 
@@ -22,6 +23,6 @@ public:
     virtual void Reset() override;
     virtual void Update(float dt) override;
     virtual void Draw(sf::RenderWindow& window) override;
-    void SetPlayerItemList(std::vector<tagItemInfo>* itemList) { playerItemList = itemList; }
+    void UpdateIndex();
 };
 

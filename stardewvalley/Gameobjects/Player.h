@@ -6,9 +6,6 @@
 class Player : public SpriteGo
 {
 protected:
-	// 김민지, 230814, 아이템리스트 추가
-	std::vector<tagItemInfo> playerItemList;
-	//
 
 	AnimationController animation;
 
@@ -42,9 +39,5 @@ public:
 	virtual void Reset() override;
 
 	virtual void Update(float dt) override;
-
-	std::vector<tagItemInfo>* GetPlayerItemList() {
-		return &playerItemList;
-	};
 };
 
