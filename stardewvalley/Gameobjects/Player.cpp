@@ -5,6 +5,13 @@
 #include "ClipTable.h"
 #include "ResourceMgr.h"
 
+Player::~Player()
+{
+	Release();
+
+	delete playerItemList;
+}
+
 void Player::SetWallBounds(const sf::FloatRect& bounds)
 {
 	wallBounds = bounds;

@@ -186,6 +186,7 @@
     <ClCompile Include="GameObjects\Player.cpp" />
     <ClCompile Include="Gameobjects\SliceImageGo.cpp" />
     <ClCompile Include="Pickax.cpp" />
+    <ClCompile Include="RootingItem.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -195,6 +196,7 @@
     <ClCompile Include="GameObjects\UiButton.cpp" />
     <ClCompile Include="Gameobjects\Wall.cpp" />
     <ClCompile Include="DataTables\WallTable.cpp" />
+    <ClCompile Include="Slot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -225,6 +227,7 @@
     <ClInclude Include="Gameobjects\Inventory.h" />
     <ClInclude Include="Gameobjects\Item.h" />
     <ClInclude Include="Pickax.h" />
+    <ClInclude Include="RootingItem.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -233,6 +236,7 @@
     <ClInclude Include="GameObjects\SpriteGo.h" />
     <ClInclude Include="Gameobjects\Wall.h" />
     <ClInclude Include="DataTables\WallTable.h" />
+    <ClInclude Include="Slot.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />

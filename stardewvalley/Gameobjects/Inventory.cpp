@@ -83,10 +83,11 @@ Inventory::Inventory(const std::string& n)
 
 Inventory::~Inventory()
 {
-    for (auto go : invenUiObjects)
+    for (auto it = invenUiObjects.begin(); it != invenUiObjects.end(); ++it)
     {
-        delete go.second;
+        delete it->second;
     }
+    invenUiObjects.clear();
 }
 
 void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
@@ -98,9 +99,19 @@ void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이
         if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
         {
             playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
-            auto tempPlIcon = playerItemMap.find(name)->second;
-            playerItemIcon.push_back((UiButton*)new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName));
-            invenUiObjects.insert({ UiType::LINE, playerItemIcon.back() });
+            auto& tempPlIcon = playerItemMap.find(name)->second;
+            playerItemIcon.push_back((UiButton*)AddUi(UiType::TOOL, new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName)));
+
+            GameObject* lastObject = nullptr;
+            auto range = invenUiObjects.equal_range(UiType::TOOL);
+            for (auto it = range.first; it != range.second; ++it)
+            {
+                lastObject = it->second;
+            }
+            if (lastObject) {
+                // 마지막 객체의 reset 함수 호출
+                lastObject->Reset();
+            }
         }
         else
         {
@@ -139,11 +150,6 @@ void Inventory::Reset()
     {
         m.second->Reset();
     }
-
-    //for (int i = 0; i < cell.size(); ++i)
-    //{
-    //    cell[i]->Reset();
-    //}
 
     // 오브젝트 초기 세팅
     {
@@ -313,7 +319,7 @@ void Inventory::SetItemWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::ITEM || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE)
+        if (m.first == UiType::COMMON || m.first == UiType::ITEM || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE || m.first == UiType::TOOL)
         {
             m.second->SetActive(true);
         }
@@ -359,7 +365,7 @@ void Inventory::SetMakeWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::MAKE || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE)
+        if (m.first == UiType::COMMON || m.first == UiType::MAKE || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE || m.first == UiType::TOOL)
         {
             m.second->SetActive(true);
         }

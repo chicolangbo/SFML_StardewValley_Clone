@@ -7,6 +7,7 @@
 #include "TextGo.h"
 
 class Player2;
+class Slot;
 
 enum class UiType
 {
@@ -15,6 +16,7 @@ enum class UiType
 	LINE,
 	BUTTON,
 	ITEM,
+	TOOL,
 	MAP,
 	MAKE,
 	CHANEGE
@@ -23,14 +25,18 @@ enum class UiType
 class Inventory : public GameObject
 {
 private:
-	std::unordered_map<std::string, tagItemInfo> playerItemMap;
-	std::vector<UiButton*> playerItemIcon;
+	//std::unordered_map<std::string, tagItemInfo> playerItemMap; // 이걸 플레이어로 옮기고, 벡터로 변경
+	// 아이템리스트 벡터 포인터
+	std::vector<tagItemInfo>* playerItemList;
+	
+	// 슬롯클래스 벡터 포인터
+	std::vector<Slot*> slot;
 
 	int itemCapacity = 36;
 	int curFundsInt = 0; // 현재 소지금
 	int totalEarningsInt = 0; // 총합 자금
 
-	std::multimap<UiType, GameObject*> invenUiObjects; // 멀티맵으로 ui오브젝트 탐색(키 중복 가능)
+	std::multimap<UiType, GameObject*> invenUiObjects; // 멀티맵으로 ui오브젝트 탐색(키 중복 가능) // 얘도 순서 있는 벡터로 바꿔주기... 
 
 	Player2* player;
 
@@ -88,4 +94,5 @@ public:
 
 	void ButtonSetUp();
 	void SetPlayer(Player2* p);
+	void SetPlayerItemList(std::vector<tagItemInfo>* itemList) { playerItemList = itemList; }
 };

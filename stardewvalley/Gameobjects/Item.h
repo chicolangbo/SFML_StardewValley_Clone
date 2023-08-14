@@ -16,23 +16,24 @@ enum class ITEM
 
 struct tagItemInfo
 {
-	ITEM itemkind;
+	//ITEM itemkind;
 	std::string name;
-	std::string nickName = "";
-	std::string description;
-	std::string resource;
-	int price;
+	//std::string nickName = "";
+	//std::string description;
+	//std::string resource;
+	//int price;
 	int count;
+	int index;
 
 	tagItemInfo& operator=(const tagItemInfo& other)
 	{
 		count = other.count;
-		description = other.description;
-		itemkind = other.itemkind;
+		//description = other.description;
+		//itemkind = other.itemkind;
 		name = other.name;
-		nickName = other.nickName;
-		price = other.price;
-		resource = other.resource;
+		//nickName = other.nickName;
+		//price = other.price;
+		//resource = other.resource;
 		return *this;
 	}
 };
