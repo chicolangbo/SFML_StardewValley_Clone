@@ -54,7 +54,6 @@ protected:
 	int maxEnergy = 270;
 	int energy = 270;
 	int money = 500;
-	sf::RectangleShape energyBar;
 
 	std::vector<sf::FloatRect> wallBounds;
 	std::vector<sf::Vector2f> wallBoundsLT;
@@ -88,6 +87,7 @@ public:
 
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);
+
 
 
 };

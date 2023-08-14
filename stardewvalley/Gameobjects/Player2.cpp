@@ -57,12 +57,6 @@ void Player2::Init()
 	hoe.Init();
 	scythe.Init();
 	watering.Init(); 
-
-	energyBar.setSize(sf::Vector2f(26.f, (float)energy * 0.15f));  
-	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y); 
-	energyBar.setPosition(GetPosition().x+900.f, GetPosition().y+450.f);
-	energyBar.setFillColor(sf::Color::Green);
-	
 }
 
 void Player2::Reset()
@@ -138,7 +132,6 @@ void Player2::Update(float dt)
 				else if (position.y <= position2.y) 
 				{
 					position.y = position2.y - 1.f;
-					std::cout << "Bound!" << std::endl;
 				}
 				else if (position.y > position2.y)
 				{
@@ -396,9 +389,7 @@ void Player2::Update(float dt)
 		animation.Play("Die");
 		one = false;
 	}
-	energyBar.setSize(sf::Vector2f(26.f, (float)energy*0.67f));
-	energyBar.setPosition(GetPosition().x + 900.f, GetPosition().y + 440.f); 
-	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y); 
+	
 	if (energy == 0)
 	{
 		playerDie = true;
@@ -423,7 +414,6 @@ void Player2::Draw(sf::RenderWindow& window)
 	window.draw(hoe.sprite);
 	window.draw(scythe.sprite);
 	window.draw(watering.sprite);
-	window.draw(energyBar); 
 }
 
 bool Player2::GetFlipX() const

@@ -151,6 +151,11 @@ void SceneGame::Init()
 	info->SetPosition(size.x, 0);
 	info->sortLayer = 100;
 
+	energyBar.setSize(sf::Vector2f(26.f, 1.f));
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
+	energyBar.setPosition(energy->GetPosition());
+	energyBar.setFillColor(sf::Color::Green);
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -226,6 +231,10 @@ void SceneGame::Update(float dt)
 	player2->SetWallBounds(walls[8]); 
 	
 	player2->SetCollider(playerBound);
+
+	energyBar.setSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
+	energyBar.setPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
 	//
 
 	// ±è¹ÎÁö, 230809, ¼¥³»ºÎ
@@ -278,6 +287,7 @@ void SceneGame::Update(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+	window.draw(energyBar);
 }
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
