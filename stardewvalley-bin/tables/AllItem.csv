@@ -1,22 +1,22 @@
-KIND,NAME,NICKNAME,RESOURCEID,DESCRIPTION,PRICE,
-1,pick,invenPick,graphics/tools.png,돌을 부술 때 사용합니다.,0
-1,ax,invenAx,graphics/tools.png,나무를 베는데 사용합니다.,0
-1,homi,invenHomi,graphics/tools.png,땅을 파고 밭을 갈 때 사용됩니다.,0
-1,waterCan,invenWaterCan,graphics/tools.png,작물에 물을 줄 때 사용합니다.,0
-1,hook,invenHook,graphics/weapons.png,잔디를 자릅니다.,0
-2,craftBox,craftBox,graphics/Craftables.png,아이템을 저장할 수 있는 공간.,0
-2,craftScareCrow,craftScareCrow,graphics/Craftables.png,까마귀가 작물을 해치지 못하게 막아줍니다. 효과 범위가 8칸 정도로 제한되어있습니다.,0
-2,craftContainer,craftContainer,graphics/Craftables.png,"채소를 넣어두면 피클을 만들고, 과일을 넣어두면 잼을 만듭니다.",0
-3,stone,invenStone,graphics/springobjects.png,제작과 건설에 많이 사용되는 흔한 재료,4
-3,coal,invenCoal,graphics/springobjects.png,제작과 제련 활동에 사용되는 불이 잘 붙는 돌.,30
-3,branch,invenTree,graphics/springobjects.png,사용 용도가 다양한 유연하면서 견고한 식물 재료,4
-3,fiver,invenFiver,graphics/springobjects.png,식물에서 나온 원자재,2
-4,mapleSeed,invenMapleSeed,graphics/springobjects.png,심으면 단풍나무가 자랍니다.,10
-4,acorn,invenAcorn,graphics/springobjects.png,심으면 참나무가 자랍니다.,40
-4,pineCone,invenPineCone,graphics/springobjects.png,심으면 소나무가 자랍니다.,10
-4,parsnipSeed,invenParsnipSeed,graphics/springobjects.png,봄 작물. 성장하려면 4일 소요됩니다.,20
-4,potatoSeed,invenPotatoSeed,graphics/springobjects.png,"봄 작물. 성장하려면 6일 소요되며, 한번 수확할 때 여러 개 수확할 확률이 있습니다.",50
-4,coliSeed,invenColiSeed,graphics/springobjects.png,봄 작물. 심으면 12일 후 큰 콜리플라워를 생산합니다.,80
-5,parsnip,invenParsnip,graphics/springobjects.png,"당근과 비슷한, 봄철 덩이줄기 식물. 대지의 맛이 나고 영양분이 듬뿍 들어있습니다.",70
-5,potato,invenPotato,graphics/springobjects.png,널리 재배되는 덩이줄기 식물.,160
-5,coli,invenColi,graphics/springobjects.png,"값이 비싸지만, 천천히 자랍니다. 창백한 색과는 다르게, 꽃 부분에 영양소가 풍부합니다.",350
+ID,KIND,NAME,NICKNAME,RESOURCEID,DESCRIPTION,PRICE,
+1,1,pick,invenPick,graphics/tools.png,돌을 부술 때 사용합니다.,0
+2,1,ax,invenAx,graphics/tools.png,나무를 베는데 사용합니다.,0
+3,1,homi,invenHomi,graphics/tools.png,땅을 파고 밭을 갈 때 사용됩니다.,0
+4,1,waterCan,invenWaterCan,graphics/tools.png,작물에 물을 줄 때 사용합니다.,0
+5,1,hook,invenHook,graphics/weapons.png,잔디를 자릅니다.,0
+6,2,craftBox,craftBox,graphics/Craftables.png,아이템을 저장할 수 있는 공간.,0
+7,2,craftScareCrow,craftScareCrow,graphics/Craftables.png,까마귀가 작물을 해치지 못하게 막아줍니다. 효과 범위가 8칸 정도로 제한되어있습니다.,0
+8,2,craftContainer,craftContainer,graphics/Craftables.png,"채소를 넣어두면 피클을 만들고, 과일을 넣어두면 잼을 만듭니다.",0
+9,3,stone,invenStone,graphics/springobjects.png,제작과 건설에 많이 사용되는 흔한 재료,4
+10,3,coal,invenCoal,graphics/springobjects.png,제작과 제련 활동에 사용되는 불이 잘 붙는 돌.,30
+11,3,branch,invenTree,graphics/springobjects.png,사용 용도가 다양한 유연하면서 견고한 식물 재료,4
+12,3,fiver,invenFiver,graphics/springobjects.png,식물에서 나온 원자재,2
+13,4,mapleSeed,invenMapleSeed,graphics/springobjects.png,심으면 단풍나무가 자랍니다.,10
+14,4,acorn,invenAcorn,graphics/springobjects.png,심으면 참나무가 자랍니다.,40
+15,4,pineCone,invenPineCone,graphics/springobjects.png,심으면 소나무가 자랍니다.,10
+16,4,parsnipSeed,invenParsnipSeed,graphics/springobjects.png,봄 작물. 성장하려면 4일 소요됩니다.,20
+17,4,potatoSeed,invenPotatoSeed,graphics/springobjects.png,"봄 작물. 성장하려면 6일 소요되며, 한번 수확할 때 여러 개 수확할 확률이 있습니다.",50
+18,4,coliSeed,invenColiSeed,graphics/springobjects.png,봄 작물. 심으면 12일 후 큰 콜리플라워를 생산합니다.,80
+19,5,parsnip,invenParsnip,graphics/springobjects.png,"당근과 비슷한, 봄철 덩이줄기 식물. 대지의 맛이 나고 영양분이 듬뿍 들어있습니다.",70
+20,5,potato,invenPotato,graphics/springobjects.png,널리 재배되는 덩이줄기 식물.,160
+21,5,coli,invenColi,graphics/springobjects.png,"값이 비싸지만, 천천히 자랍니다. 창백한 색과는 다르게, 꽃 부분에 영양소가 풍부합니다.",350

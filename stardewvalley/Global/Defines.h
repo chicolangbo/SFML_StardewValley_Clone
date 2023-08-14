@@ -63,5 +63,31 @@ enum class ObjType
 	Timber
 };
 
+enum class  ItemId
+{
+	none,
+	pick,
+	ax,
+	homi,
+	waterCan,
+	hook,
+	craftBox,
+	craftScareCrow,
+	craftContainer,
+	stone,
+	coal,
+	branch,
+	fiver,
+	mapleSeed,
+	acorn,
+	pineCone,
+	parsnipSeed,
+	potatoSeed,
+	coliSeed,
+	parsnip,
+	potato,
+	coli
+};
+
 //
 #include "AnimationClip.h"

@@ -25,7 +25,6 @@ enum class UiType
 class Inventory : public GameObject
 {
 private:
-	//std::unordered_map<std::string, tagItemInfo> playerItemMap; // 이걸 플레이어로 옮기고, 벡터로 변경
 	// 아이템리스트 벡터 포인터(플레이어에 있음)
 	std::list<tagItemInfo>* playerItemList;
 	
@@ -97,4 +96,5 @@ public:
 	void ButtonSetUp();
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList(std::list<tagItemInfo>* itemList) { playerItemList = itemList; }
+	int GetItemCapacity() { return itemCapacity; }
 };

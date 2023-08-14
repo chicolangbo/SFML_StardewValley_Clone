@@ -2,8 +2,9 @@
 #include "DataTable.h"
 #include "Item.h"
 
-struct AllItemInfo
+struct ItemInfo
 {
+    ItemId itemId;
     ITEM itemkind;
     std::string name;
     std::string nickName = "";
@@ -18,7 +19,7 @@ class AllItemTable :
 protected:
 
 public:
-    std::unordered_map<std::string, AllItemInfo> table;
+    std::unordered_map<ItemId, ItemInfo> table;
     int size;
 
     AllItemTable() : DataTable(DataTable::Ids::Wall) {};
@@ -27,6 +28,6 @@ public:
     virtual bool Load() override;
     virtual void Release() override;
 
-    const AllItemInfo* Get(std::string);
+    const ItemInfo* Get(ItemId);
 };
 

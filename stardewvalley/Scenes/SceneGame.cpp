@@ -15,6 +15,9 @@
 #include "Axe.h"
 #include "SliceImageGo.h"
 #include "Inventory.h"
+#include "RootingItem.h"
+#include "DataTableMgr.h"
+#include "AllItemTable.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -122,11 +125,14 @@ void SceneGame::Init()
 	//
 	player2 = (Player2*)AddGo(new Player2());
 
-	// 김민지, 230811, 인벤토리 추가
+	// 김민지, 230811~15, 인벤토리랑 아이템 관련추가
+	rootingItems.push_back(nullptr); // list null로 초기화
+	player2->SetRootingItems(&rootingItems);
 	inven = (Inventory*)AddGo(new Inventory("inven"));
 	inven->sortLayer = 100;
 	inven->SetPosition(windowSize / 2.f);
 	inven->SetPlayer(player2);
+	
 	//
 
 	//임형준 테스트 코드...
@@ -268,6 +274,12 @@ void SceneGame::Update(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+}
+
+void SceneGame::SpawnRootingItem(ItemId id)
+{
+	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
+	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name, info->nickName)));
 }
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)

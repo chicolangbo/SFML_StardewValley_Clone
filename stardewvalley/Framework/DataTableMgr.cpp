@@ -10,7 +10,7 @@ void DataTableMgr::LoadAll()
 	tables.insert({ DataTable::Ids::String, new StringTable() });
 	tables.insert({ DataTable::Ids::Clip, new ClipTable() });
 	tables.insert({ DataTable::Ids::Wall, new WallTable() });
-	tables.insert({ DataTable::Ids::AllItem, new AllItemTable() });
+	tables.insert({ DataTable::Ids::ItemId, new AllItemTable() });
 
 	for (auto pair : tables)
 	{

@@ -8,6 +8,11 @@
 #include "SceneGame.h"
 #include "Scene.h"
 #include "Axe.h"
+// 김민지, 230815, 아이템 관련 추가
+#include "RootingItem.h"
+#include "AllItemTable.h"
+#include "DataTableMgr.h"
+#include "Inventory.h"
 
 void Player2::Init()
 {
@@ -247,5 +252,37 @@ void Player2::SetFlipX(bool filp)
 	sf::Vector2f scale = sprite.getScale();
 	scale.x = !filpX ? -abs(scale.x) : abs(scale.x);
 	sprite.setScale(scale);
+}
+
+void Player2::AddPlayerItem(ItemId id)
+{
+	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
+	Inventory* inven = (Inventory*)scene->FindGo("inven");
+	int capacity = inven->GetItemCapacity();
+
+	if (playerItemList.size() >= capacity)
+	{
+		return;
+	}
+
+	for (auto item : rootingItemList)
+	{
+		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds())) // 나중에 자석 형태로 바꾸기. 일단은 충돌 시 먹히는 걸로
+		{
+			item->SetActive(false);
+			for (auto playerItem : playerItemList)
+			{
+				if (playerItem.itemId == id)
+				{
+					playerItem.count++;
+				}
+				else
+				{
+					int index = playerItemList.size();
+					playerItemList.push_back({ id,1,index + 1 });
+				}
+			}
+		}
+	}
 }
 

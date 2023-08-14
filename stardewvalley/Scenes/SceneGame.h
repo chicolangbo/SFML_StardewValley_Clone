@@ -7,6 +7,7 @@ class SpriteGo;
 class Wall;
 class SliceImageGo;
 class Inventory;
+class RootingItem;
 
 class SceneGame : public Scene
 {
@@ -43,6 +44,7 @@ protected:
 
 	// 김민지, 230811, 인벤토리 추가
 	Inventory* inven;
+	std::list<RootingItem*>rootingItems; // 플레이어-오브젝트 상호작용 시 필드에 생기는 아이템
 	//
 public:
 	SceneGame();
@@ -58,5 +60,8 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
+
+	// 김민지, 230815, 플레이어-오브젝트 상호작용시 아이템 스폰하는 함수 추가
+	void SpawnRootingItem(ItemId id);
 };
 
