@@ -231,6 +231,10 @@ void Player2::Update(float dt)
 	}
 
 	animation.Update(dt);
+
+	// 김민지,230815, 스폰되는 아이템 먹는지 체크하는 함수
+	AddPlayerItem();
+	//
 }
 
 void Player2::Draw(sf::RenderWindow& window)
@@ -254,7 +258,7 @@ void Player2::SetFlipX(bool filp)
 	sprite.setScale(scale);
 }
 
-void Player2::AddPlayerItem(ItemId id)
+void Player2::AddPlayerItem()
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -272,14 +276,15 @@ void Player2::AddPlayerItem(ItemId id)
 			item->SetActive(false);
 			for (auto playerItem : playerItemList)
 			{
-				if (playerItem.itemId == id)
+				if (playerItem.itemId == item->GetRootingItemId())
 				{
 					playerItem.count++;
+					break;
 				}
 				else
 				{
 					int index = playerItemList.size();
-					playerItemList.push_back({ id,1,index + 1 });
+					playerItemList.push_back({ item->GetRootingItemId(),1,index + 1 });
 				}
 			}
 		}
