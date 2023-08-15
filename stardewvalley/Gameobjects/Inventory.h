@@ -35,7 +35,7 @@ private:
 	int* curFundsInt; // 현재 소지금
 	int* totalEarningsInt; // 총합 자금
 
-	std::vector<std::pair<UiType,GameObject*>> invenUiObjects;
+	std::list<std::pair<UiType,GameObject*>> invenUiObjects;
 
 	bool once = false;
 
@@ -57,10 +57,9 @@ private:
 	sf::Vector2f makePos;
 	sf::Vector2f changeScenePos;
 	sf::Vector2f xButtonPos;
-	sf::Vector2f cellPos;
+	sf::Vector2f slotPos;
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
-	//std::vector<SpriteGo*> cell;
 	SpriteGo mapImage;
 	SpriteGo ring;
 	SpriteGo shoes;
@@ -70,8 +69,6 @@ private:
 	TextGo curFundsValue;
 	TextGo totalEarnings;
 	TextGo totalEarningsValue;
-
-	tagItemInfo currentEquip;
 
 public:
 	Inventory(const std::string& n = "");

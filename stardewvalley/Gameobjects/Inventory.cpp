@@ -49,38 +49,6 @@ Inventory::Inventory(const std::string& n)
     totalEarnings("totalEarnings", "fonts/SDMiSaeng.ttf"),
     totalEarningsValue("totalEarnings", "fonts/SDMiSaeng.ttf")
 {
-
-    //for (int i = 0; i < 3; ++i)
-    //{
-    //    for (int j = 0; j < 12; ++j)
-    //    {
-    //        std::string num = std::to_string((i * 12) + j);
-    //        cell.push_back((SpriteGo*)AddUi(UiType::LINE, new SpriteGo("graphics/MenuTiles.png", "invenCell" + num, "invenCell")));
-    //        cell[(i * 12) + j]->SetOrigin(Origins::MC);
-    //        cell[(i * 12) + j]->colliderOnOff = false;
-    //    }
-    //}
-
-    //for (int i = 0; i < itemCapacity; ++i)
-    //{
-    //    std::string num = to_string(i);
-    //    slot.push_back(Slot("graphics/MenuTiles.png", "invenCell" + num, "invenCell"));
-    //    slot[i].slotIndex = i;
-    //    slot[]
-    //}
-
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 12; ++j)
-        {
-            std::string num = std::to_string((i * 12) + j);
-            slot.push_back(new Slot("graphics/MenuTiles.png", "invenCell" + num, "invenCell"));
-            slot[(i * 12) + j]->SetOrigin(Origins::MC);
-            slot[(i * 12) + j]->colliderOnOff = false;
-            invenUiObjects.push_back({ UiType::LINE, dynamic_cast<GameObject*>(slot[(i * 12) + j])});
-        }
-    }
-
     AddUi(UiType::BOX, &invenBox);
     AddUi(UiType::LINE, &invenLine);
     AddUi(UiType::BUTTON, &bag);
@@ -100,6 +68,19 @@ Inventory::Inventory(const std::string& n)
     AddUi(UiType::ITEM, &pl);
     AddUi(UiType::CHANEGE, &title);
     AddUi(UiType::CHANEGE, &end);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 12; ++j)
+        {
+            std::string num = to_string((i * 12) + j);
+            slot.push_back(new Slot("graphics/MenuTiles.png", "invenCell" + num, "invenCell"));
+            slot[(i * 12) + j]->slotIndex = (i * 12) + j;
+            slot[(i * 12) + j]->SetOrigin(Origins::MC);
+            slot[(i * 12) + j]->colliderOnOff = false;
+            AddUi(UiType::LINE, slot[i * 12 + j]);
+        }
+    }
 }
 
 Inventory::~Inventory()
@@ -110,36 +91,6 @@ Inventory::~Inventory()
     }
     invenUiObjects.clear();
 }
-
-//void Inventory::AddPlayerItem(std::string name) // name = GameObject에 넘기는 이름이자 키
-//{
-//    auto Allitem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->table;
-//
-//    if (Allitem.find(name) != Allitem.end()) // 전체 아이템에 포함되어 있을 때
-//    {
-//        if (playerItemMap.find(name) == playerItemMap.end() && playerItemMap.size() < itemCapacity) // 플레이어 아이템에 없을 때
-//        {
-//            playerItemMap.insert(std::make_pair(name, Allitem.find(name)->second));
-//            auto& tempPlIcon = playerItemMap.find(name)->second;
-//            playerItemIcon.push_back((UiButton*)AddUi(UiType::TOOL, new UiButton(tempPlIcon.resource, tempPlIcon.name, tempPlIcon.nickName)));
-//
-//            GameObject* lastObject = nullptr;
-//            auto range = invenUiObjects.equal_range(UiType::TOOL);
-//            for (auto it = range.first; it != range.second; ++it)
-//            {
-//                lastObject = it->second;
-//            }
-//            if (lastObject) {
-//                // 마지막 객체의 reset 함수 호출
-//                lastObject->Reset();
-//            }
-//        }
-//        else
-//        {
-//            playerItemMap.find(name)->second.count++;
-//        }
-//    }
-//}
 
 void Inventory::Init()
 {
@@ -182,18 +133,18 @@ void Inventory::Reset()
         invenBox.SetOrigin(Origins::MC);
         invenBox.SetPosition(position);
 
-        cellPos = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
-        //for (int i = 0; i < 3; ++i)
-        //{
-        //    for (int j = 0; j < 12; ++j)
-        //    {
-        //        cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
-        //    }
-        //}
+        slotPos = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 12; ++j)
+            {
+                slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
+            }
+        }
 
         invenLine.SetSize(1040.f);
         invenLine.SetOrigin(Origins::MC);
-        //invenLine.SetPosition(position.x, cell[35]->GetPosition().y + 80.f);
+        invenLine.SetPosition(position.x, slot[35]->GetPosition().y + 80.f);
 
         bagPos = { invenBox.vertexArray[0].position + sf::Vector2f{10.f, 0.f} };
         bag.SetScale(4.f, 4.f);
@@ -226,13 +177,13 @@ void Inventory::Reset()
         mapImage.SetPosition(position);
         mapImage.colliderOnOff = false;
         ring.SetOrigin(Origins::MC);
-        //ring.SetPosition(cell[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
+        ring.SetPosition(slot[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
         ring.colliderOnOff = false;
         shoes.SetOrigin(Origins::MC);
-        //shoes.SetPosition(cell[0]->GetPosition().x, ring.GetPosition().y + 80.f);
+        shoes.SetPosition(slot[0]->GetPosition().x, ring.GetPosition().y + 80.f);
         shoes.colliderOnOff = false;
         hat.SetOrigin(Origins::MC);
-        //hat.SetPosition(cell[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
+        hat.SetPosition(slot[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
         hat.colliderOnOff = false;
         charBg.SetOrigin(Origins::MC);
         charBg.SetScale(1.25f, 1.25f);
@@ -245,7 +196,7 @@ void Inventory::Reset()
         curFunds.SetPosition(charBg.GetPosition().x + 500.f, charBg.GetPosition().y - 40.f);
         curFunds.SetOrigin(Origins::MR);
         std::stringstream ss;
-        ss << curFundsInt;
+        ss << *curFundsInt;
         curFundsValue.SetString(ss.str());
         curFundsValue.text.setCharacterSize(60);
         curFundsValue.text.setFillColor(sf::Color::Black);
@@ -257,7 +208,7 @@ void Inventory::Reset()
         totalEarnings.SetPosition(charBg.GetPosition().x + 500.f, charBg.GetPosition().y + 30.f);
         totalEarnings.SetOrigin(Origins::MR);
         ss.str("");
-        ss << totalEarningsInt;
+        ss << *totalEarningsInt;
         totalEarningsValue.SetString(ss.str());
         totalEarningsValue.text.setCharacterSize(60);
         totalEarningsValue.text.setFillColor(sf::Color::Black);
@@ -286,13 +237,6 @@ void Inventory::Reset()
         pl.sprite = player->sprite;
         pl.SetOrigin(Origins::MC);
         pl.SetPosition(charBg.GetPosition());
-
-        //AddPlayerItem("pick");
-        //AddPlayerItem("ax");
-        //AddPlayerItem("homi");
-        //AddPlayerItem("waterCan");
-        //AddPlayerItem("hook");
-
     }
 
     SetWindowClear();
@@ -350,13 +294,13 @@ void Inventory::SetItemWindow()
         }
     }
 
-    //for (int i = 0; i < 3; ++i)
-    //{
-    //    for (int j = 0; j < 12; ++j)
-    //    {
-    //        cell[(i * 12) + j]->SetPosition(cellPos.x + (j * 80.f), cellPos.y + (i * 80.f));
-    //    }
-    //}
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 12; ++j)
+        {
+            slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
+        }
+    }
     // 아이템도 보이도록 추가
 
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);
@@ -396,12 +340,12 @@ void Inventory::SetMakeWindow()
         }
     }
 
-    //sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - cell[0]->GetPosition().y + 80.f };
+    sf::Vector2f diff = { 0.f, invenLine.GetPosition().y - slot[0]->GetPosition().y + 80.f };
 
-    //for (int i = 0; i < cell.size(); ++i)
-    //{
-    //    cell[i]->SetPosition(cell[i]->GetPosition() + diff);
-    //}
+    for (int i = 0; i < slot.size(); ++i)
+    {
+        slot[i]->SetPosition(slot[i]->GetPosition() + diff);
+    }
 
     make.SetPosition(makePos.x, makePos.y + 10.f);
     bag.SetPosition(bagPos);

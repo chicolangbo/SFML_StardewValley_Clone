@@ -268,6 +268,12 @@ void SceneGame::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
+
+	// 아이템 스폰 테스트코드
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	{
+		SpawnRootingItem(ItemId::branch);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

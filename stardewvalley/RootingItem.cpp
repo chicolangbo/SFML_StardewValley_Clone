@@ -23,6 +23,7 @@ void RootingItem::Release()
 void RootingItem::Reset()
 {
 	SpriteGo::Reset();
+	sprite.setScale(5.f, 5.f);
 }
 
 void RootingItem::Update(float dt)
