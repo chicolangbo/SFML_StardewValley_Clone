@@ -14,6 +14,7 @@
 #include "Wall.h"
 #include "Axe.h"
 #include <sstream>
+#include "TextGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -152,14 +153,20 @@ void SceneGame::Init()
 	info->SetPosition(size.x, 0);
 	info->sortLayer = 110;
 
+	timeArrow = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "TimeArrow", "TimeArrow"));
+	timeArrow->SetScale(4.5f, -4.5f);
+	timeArrow->SetOrigin(Origins::TC);
+	timeArrow->collider.setScale(1.f, -1.f);
+	timeArrow->SetPosition(info->GetPosition().x - 225.f, info->GetPosition().y + 93.f);
+	timeArrow->sortLayer = 111;
+	
+
 	energyBar.setSize(sf::Vector2f(26.f, 1.f));
 	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
 	energyBar.setPosition(energy->GetPosition());
 	energyBar.setFillColor(sf::Color::Green);
 
 	
-
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -239,6 +246,7 @@ void SceneGame::Update(float dt)
 	{
 		hour = 6;
 		day += 1;
+		arrowSpin = 0;
 	}
 	if (hour < 12)
 	{
@@ -248,8 +256,11 @@ void SceneGame::Update(float dt)
 	{
 		std::cout << day << "일 " << "오후 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
 	}
+	arrowSpin += dt * 0.2381f;
+	timeArrow->SetOrigin(Origins::BC);
+	timeArrow->sprite.setRotation(arrowSpin);
 
-	std::stringstream ss;
+	std::stringstream ss; 
 	ss << player2->GetMoney();
 	textMoney.setString(ss.str());
 	textMoney.setCharacterSize(50);
@@ -257,17 +268,18 @@ void SceneGame::Update(float dt)
 	textMoney.setFillColor(sf::Color::Black);
 
 	std::stringstream sss;
-	sss << hour << ":" << min;
-	textHour.setString(sss.str());
-	textHour.setCharacterSize(50);
-	textHour.setPosition(1710.f, 115.f);
-	textHour.setFillColor(sf::Color::Black);
-	std::stringstream ssss;
-	ssss << day << "Day";
+	sss << hour << ":" << min; 
+	textHour.setString(sss.str()); 
+	textHour.setCharacterSize(50); 
+	textHour.setPosition(1710.f, 115.f); 
+	textHour.setFillColor(sf::Color::Black); 
+	std::stringstream ssss; 
+	ssss << day << "Day"; 
 	textDay.setString(ssss.str());
 	textDay.setCharacterSize(50);
 	textDay.setPosition(1775.f, 12.f);
 	textDay.setFillColor(sf::Color::Black);
+
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad5))
 	{
 		hour += 1;
@@ -315,6 +327,7 @@ void SceneGame::Update(float dt)
 			player2->SetPosition(-463.f, -770.f); //230814, 임형준 수정
 			energy->SetActive(true);
 			info->SetActive(true);
+			timeArrow->SetActive(true);
 		}
 		else
 		{
@@ -336,6 +349,7 @@ void SceneGame::Update(float dt)
 			player2->SetPosition(419.f, 1866.f); // 포지션 임시 세팅 //230814, 임형준 수정
 			energy->SetActive(true);
 			info->SetActive(true);
+			timeArrow->SetActive(true); 
 		}
 	}
 	

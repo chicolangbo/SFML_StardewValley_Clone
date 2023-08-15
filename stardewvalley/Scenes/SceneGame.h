@@ -1,7 +1,6 @@
 #pragma once
 #include "Scene.h"
 
-
 class VertexArrayGo;
 class Player2;
 class SpriteGo;
@@ -39,6 +38,8 @@ protected:
 	//임형준 테스트
 	SpriteGo* energy;
 	SpriteGo* info;
+	SpriteGo* timeArrow;
+	float arrowSpin = 0.f;
 	sf::RectangleShape energyBar;
 	int energys;
 	//sf::FloatRect houseBound; 
