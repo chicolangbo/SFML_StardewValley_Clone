@@ -4,7 +4,6 @@
 #include "DataTableMgr.h"
 #include "StringTable.h"
 #include "ResourceMgr.h"
-#include "Player2.h"
 #include "AllItemTable.h"
 #include "Slot.h"
 #include "SceneMgr.h"
@@ -113,6 +112,7 @@ void Inventory::Init()
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
 
+    SetPlayerItemList();
     PlayerInfoUpdate();
     ItemIconSetUp();
     ButtonSetUp();
@@ -144,6 +144,7 @@ void Inventory::Reset()
             {
                 slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
                 slot[(i * 12) + j]->sortLayer = (int)UiType::LINE;
+                slot[(i * 12) + j]->SetMouseIcon(mouseSlot);
             }
         }
 
@@ -273,6 +274,9 @@ void Inventory::Reset()
         pl.SetOrigin(Origins::MC);
         pl.SetPosition(charBg.GetPosition());
         pl.sortLayer = (int)UiType::ITEM;
+
+        mouseSlot->sortLayer = (int)UiType::ITEM;
+        mouseSlot->sortOrder = 2;
     }
 
     SetWindowClear();
@@ -288,8 +292,6 @@ void Inventory::Update(float dt)
     {
         m->Update(dt);
     }
-    PlayerInfoUpdate();
-    IconUpdate();
 
     // 인벤창 여닫기
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
@@ -297,19 +299,24 @@ void Inventory::Update(float dt)
         if (!invenOnOff)
         {
             SetItemWindow();
+            IconUpdate();
+            PlayerInfoUpdate();
             invenOnOff = true;
         }
         else
         {
-            invenOnOff = false;
             SetWindowClear();
+            IconUpdate();
+            invenOnOff = false;
         }
     }
 
     // 마우스에 보이지 않는 슬롯 포지셔닝
     sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
     sf::Vector2f mPos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
-    //mouseSlot->SetPosition()
+    mouseSlot->SetPosition(mPos);
+
+    // 슬롯, 아이템 인덱스 동일화
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
@@ -454,7 +461,6 @@ void Inventory::SetPlayer(Player2* p)
 
 void Inventory::PlayerInfoUpdate()
 {
-    playerItemList = player->GetPlayerItemList();
     curFundsInt = player->GetCurFundsInt(); // 현재 소지금
     totalEarningsInt = player->GetTotalEarningsInt(); // 총합 자금
 }
@@ -490,7 +496,7 @@ void Inventory::IconUpdate()
 {
     int num = 0;
 
-    for (const tagItemInfo& pl : *playerItemList)
+    for (tagItemInfo& pl : *playerItemList)
     {
         for (Slot* sl : slot)
         {

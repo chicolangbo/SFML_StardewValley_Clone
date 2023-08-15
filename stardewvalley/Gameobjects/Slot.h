@@ -7,9 +7,9 @@ class Slot :
 {
 protected:
     SpriteGo* itemIcon = nullptr;
+    Slot* mouseIcon = nullptr;
 
-    bool isEmpty;
-    bool onMouse;
+    bool isEmpty = true;
 
 public:
     int slotIndex = 0;
@@ -22,6 +22,12 @@ public:
     virtual void Update(float dt) override;
     virtual void Draw(sf::RenderWindow& window) override;
 
+    bool IsItemIconEmpty() { return itemIcon == nullptr; }
+
     void SetItemIcon(SpriteGo* i) { itemIcon = i; }
+    SpriteGo* GetItemIcon() { return itemIcon; }
+    void SetMouseIcon(Slot* m) { mouseIcon = m; }
+    void UpdateItemIndex(tagItemInfo& item);
+    void UpdateIsEmpty();
 };
 

@@ -5,8 +5,8 @@
 #include "SliceImageGo.h"
 #include "UiButton.h"
 #include "TextGo.h"
+#include "Player2.h"
 
-class Player2;
 class Slot;
 
 enum class UiType
@@ -96,7 +96,7 @@ public:
 	void IconUpdate();
 
 	void SetPlayer(Player2* p);
-	void SetPlayerItemList(std::list<tagItemInfo>* itemList) { playerItemList = itemList; }
+	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
 };
