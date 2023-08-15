@@ -35,7 +35,7 @@ private:
 	int* curFundsInt; // 현재 소지금
 	int* totalEarningsInt; // 총합 자금
 
-	std::list<std::pair<UiType,GameObject*>> invenUiObjects;
+	std::list<GameObject*> invenUiObjects;
 
 	bool once = false;
 
@@ -75,7 +75,7 @@ public:
 	~Inventory();
 
 	//void AddPlayerItem(std::string name);
-	GameObject* AddUi(UiType t, GameObject* go);
+	GameObject* AddUi(GameObject* go);
 	bool Exist(GameObject* go);
 
 	virtual void Init();
@@ -94,4 +94,5 @@ public:
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList(std::list<tagItemInfo>* itemList) { playerItemList = itemList; }
 	int GetItemCapacity() { return itemCapacity; }
+	void SortGos();
 };

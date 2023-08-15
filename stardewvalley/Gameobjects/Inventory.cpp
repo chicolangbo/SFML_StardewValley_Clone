@@ -8,11 +8,11 @@
 #include "AllItemTable.h"
 #include "Slot.h"
 
-GameObject* Inventory::AddUi(UiType t, GameObject* go)
+GameObject* Inventory::AddUi(GameObject* go)
 {
     if (!Exist(go))
     {
-        invenUiObjects.push_back(std::make_pair(t, go));
+        invenUiObjects.push_back(go);
     }
     return go;
 }
@@ -21,7 +21,7 @@ bool Inventory::Exist(GameObject* go)
 {
     for (auto& m : invenUiObjects)
     {
-        if (m.second == go)
+        if (m == go)
         {
             return true;
         }
@@ -49,25 +49,25 @@ Inventory::Inventory(const std::string& n)
     totalEarnings("totalEarnings", "fonts/SDMiSaeng.ttf"),
     totalEarningsValue("totalEarnings", "fonts/SDMiSaeng.ttf")
 {
-    AddUi(UiType::BOX, &invenBox);
-    AddUi(UiType::LINE, &invenLine);
-    AddUi(UiType::BUTTON, &bag);
-    AddUi(UiType::BUTTON, &map);
-    AddUi(UiType::BUTTON, &make);
-    AddUi(UiType::BUTTON, &changeScene);
-    AddUi(UiType::COMMON, &xButton);
-    AddUi(UiType::MAP, &mapImage);
-    AddUi(UiType::ITEM, &ring);
-    AddUi(UiType::ITEM, &shoes);
-    AddUi(UiType::ITEM, &hat);
-    AddUi(UiType::ITEM, &charBg);
-    AddUi(UiType::ITEM, &curFunds);
-    AddUi(UiType::ITEM, &totalEarnings);
-    AddUi(UiType::ITEM, &curFundsValue);
-    AddUi(UiType::ITEM, &totalEarningsValue);
-    AddUi(UiType::ITEM, &pl);
-    AddUi(UiType::CHANEGE, &title);
-    AddUi(UiType::CHANEGE, &end);
+    AddUi(&invenBox);
+    AddUi(&invenLine);
+    AddUi(&bag);
+    AddUi(&map);
+    AddUi(&make);
+    AddUi(&changeScene);
+    AddUi(&xButton);
+    AddUi(&mapImage);
+    AddUi(&ring);
+    AddUi(&shoes);
+    AddUi(&hat);
+    AddUi(&charBg);
+    AddUi(&curFunds);
+    AddUi(&totalEarnings);
+    AddUi(&curFundsValue);
+    AddUi(&totalEarningsValue);
+    AddUi(&pl);
+    AddUi(&title);
+    AddUi(&end);
 
     for (int i = 0; i < 3; ++i)
     {
@@ -78,7 +78,7 @@ Inventory::Inventory(const std::string& n)
             slot[(i * 12) + j]->slotIndex = (i * 12) + j;
             slot[(i * 12) + j]->SetOrigin(Origins::MC);
             slot[(i * 12) + j]->colliderOnOff = false;
-            AddUi(UiType::LINE, slot[i * 12 + j]);
+            AddUi(slot[i * 12 + j]);
         }
     }
 }
@@ -87,7 +87,7 @@ Inventory::~Inventory()
 {
     for (auto it = invenUiObjects.begin(); it != invenUiObjects.end(); ++it)
     {
-        delete it->second;
+        delete *it;
     }
     invenUiObjects.clear();
 }
@@ -116,7 +116,7 @@ void Inventory::Init()
 
     for (auto i : invenUiObjects)
     {
-        i.second->Init();
+        i->Init();
     }
 }
 
@@ -124,7 +124,7 @@ void Inventory::Reset()
 {
     for (auto m : invenUiObjects)
     {
-        m.second->Reset();
+        m->Reset();
     }
 
     // 오브젝트 초기 세팅
@@ -132,6 +132,7 @@ void Inventory::Reset()
         invenBox.SetSize({ 1040.f, 670.f });
         invenBox.SetOrigin(Origins::MC);
         invenBox.SetPosition(position);
+        invenBox.sortLayer = (int)UiType::BOX;
 
         slotPos = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
         for (int i = 0; i < 3; ++i)
@@ -139,62 +140,86 @@ void Inventory::Reset()
             for (int j = 0; j < 12; ++j)
             {
                 slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
+                slot[(i * 12) + j]->sortLayer = (int)UiType::LINE;
             }
         }
 
         invenLine.SetSize(1040.f);
         invenLine.SetOrigin(Origins::MC);
         invenLine.SetPosition(position.x, slot[35]->GetPosition().y + 80.f);
+        invenLine.sortLayer = (int)UiType::LINE;
 
         bagPos = { invenBox.vertexArray[0].position + sf::Vector2f{10.f, 0.f} };
         bag.SetScale(4.f, 4.f);
         bag.SetOrigin(Origins::BL);
         bag.SetPosition(bagPos);
         bag.colliderOnOff = false;
+        bag.sortLayer = (int)UiType::BUTTON;
+
         float buttonW = bag.sprite.getGlobalBounds().width;
         mapPos = { bagPos.x + buttonW, bagPos.y };
         map.SetScale(4.f, 4.f);
         map.SetOrigin(Origins::BL);
         map.SetPosition(mapPos);
         map.colliderOnOff = false;
+        map.sortLayer = (int)UiType::BUTTON;
+
         makePos = { mapPos.x + buttonW, mapPos.y };
         make.SetScale(4.f, 4.f);
         make.SetOrigin(Origins::BL);
         make.SetPosition(makePos);
         make.colliderOnOff = false;
+        make.sortLayer = (int)UiType::BUTTON;
+
         changeScenePos = { makePos.x + buttonW, makePos.y };
         changeScene.SetScale(4.f, 4.f);
         changeScene.SetOrigin(Origins::BL);
         changeScene.SetPosition(changeScenePos);
         changeScene.colliderOnOff = false;
+        changeScene.sortLayer = (int)UiType::BUTTON;
+
         xButtonPos = { invenBox.vertexArray[9].position };
         xButton.SetScale(4.f, 4.f);
         xButton.SetOrigin(Origins::BL);
         xButton.SetPosition(xButtonPos);
         xButton.colliderOnOff = false;
+        xButton.sortLayer = (int)UiType::COMMON;
+
         mapImage.SetScale(4.5f, 4.5f);
         mapImage.SetOrigin(Origins::MC);
         mapImage.SetPosition(position);
         mapImage.colliderOnOff = false;
+        mapImage.sortLayer = (int)UiType::MAP;
+
         ring.SetOrigin(Origins::MC);
         ring.SetPosition(slot[0]->GetPosition().x, invenLine.GetPosition().y + 80.f);
         ring.colliderOnOff = false;
+        ring.sortLayer = (int)UiType::ITEM;
+
         shoes.SetOrigin(Origins::MC);
         shoes.SetPosition(slot[0]->GetPosition().x, ring.GetPosition().y + 80.f);
         shoes.colliderOnOff = false;
+        shoes.sortLayer = (int)UiType::ITEM;
+
         hat.SetOrigin(Origins::MC);
         hat.SetPosition(slot[0]->GetPosition().x, shoes.GetPosition().y + 80.f);
         hat.colliderOnOff = false;
+        hat.sortLayer = (int)UiType::ITEM;
+
         charBg.SetOrigin(Origins::MC);
         charBg.SetScale(1.25f, 1.25f);
         charBg.SetPosition(shoes.GetPosition().x + 140.f, shoes.GetPosition().y);
         charBg.colliderOnOff = false;
+        charBg.sortLayer = (int)UiType::ITEM;
+
         StringTable* stringTable1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
         curFunds.SetString(stringTable1->Get("CUR_MONEY"));
         curFunds.text.setCharacterSize(60);
         curFunds.text.setFillColor(sf::Color::Black);
         curFunds.SetPosition(charBg.GetPosition().x + 500.f, charBg.GetPosition().y - 40.f);
         curFunds.SetOrigin(Origins::MR);
+        curFunds.sortLayer = (int)UiType::ITEM;
+
         std::stringstream ss;
         ss << *curFundsInt;
         curFundsValue.SetString(ss.str());
@@ -202,11 +227,15 @@ void Inventory::Reset()
         curFundsValue.text.setFillColor(sf::Color::Black);
         curFundsValue.SetPosition(curFunds.GetPosition().x + 50.f, curFunds.GetPosition().y);
         curFundsValue.SetOrigin(Origins::ML);
+        curFundsValue.sortLayer = (int)UiType::ITEM;
+
         totalEarnings.SetString(stringTable1->Get("TOTAL_MONEY"));
         totalEarnings.text.setCharacterSize(60);
         totalEarnings.text.setFillColor(sf::Color::Black);
         totalEarnings.SetPosition(charBg.GetPosition().x + 500.f, charBg.GetPosition().y + 30.f);
         totalEarnings.SetOrigin(Origins::MR);
+        totalEarnings.sortLayer = (int)UiType::ITEM;
+
         ss.str("");
         ss << *totalEarningsInt;
         totalEarningsValue.SetString(ss.str());
@@ -214,6 +243,8 @@ void Inventory::Reset()
         totalEarningsValue.text.setFillColor(sf::Color::Black);
         totalEarningsValue.SetPosition(totalEarnings.GetPosition().x + 50.f, totalEarnings.GetPosition().y);
         totalEarningsValue.SetOrigin(Origins::ML);
+        totalEarningsValue.sortLayer = (int)UiType::ITEM;
+
         title.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
         title.text.setString(stringTable1->Get("TOTITLE"));
         title.text.setCharacterSize(100);
@@ -222,8 +253,8 @@ void Inventory::Reset()
         title.text.setPosition(title.GetPosition().x, title.GetPosition().y - 40.f);
         title.SetScale(1.5f, 1.5f);
         title.SetOrigin(Origins::MC);
-        std::cout << title.text.getPosition().x << "," << title.text.getPosition().y << std::endl;
-        std::cout << title.sprite.getPosition().x << "," << title.sprite.getPosition().y << std::endl;
+        title.sortLayer = (int)UiType::CHANEGE;
+
         end.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
         end.text.setString(stringTable1->Get("END"));
         end.text.setCharacterSize(100);
@@ -232,11 +263,13 @@ void Inventory::Reset()
         end.text.setPosition(end.GetPosition().x, end.GetPosition().y - 40.f);
         end.SetScale(1.5f, 1.5f);
         end.SetOrigin(Origins::MC);
+        end.sortLayer = (int)UiType::CHANEGE;
 
         player->GetAnimation().Play("Idle");
         pl.sprite = player->sprite;
         pl.SetOrigin(Origins::MC);
         pl.SetPosition(charBg.GetPosition());
+        pl.sortLayer = (int)UiType::ITEM;
     }
 
     SetWindowClear();
@@ -251,7 +284,7 @@ void Inventory::Update(float dt)
 {
     for (auto m : invenUiObjects)
     {
-        m.second->Update(dt);
+        m->Update(dt);
     }
 
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
@@ -271,11 +304,13 @@ void Inventory::Update(float dt)
 
 void Inventory::Draw(sf::RenderWindow& window)
 {
+    SortGos();
+
     for (auto m : invenUiObjects)
     {
-        if (m.second->GetActive())
+        if (m->GetActive())
         {
-            m.second->Draw(window);
+            m->Draw(window);
         }
     }
 }
@@ -284,13 +319,13 @@ void Inventory::SetItemWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::ITEM || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE || m.first == UiType::TOOL)
+        if (m->sortLayer == (int)UiType::COMMON || m->sortLayer == (int)UiType::ITEM || m->sortLayer == (int)UiType::BUTTON || m->sortLayer == (int)UiType::BOX || m->sortLayer == (int)UiType::LINE || m->sortLayer == (int)UiType::TOOL)
         {
-            m.second->SetActive(true);
+            m->SetActive(true);
         }
         else
         {
-            m.second->SetActive(false);
+            m->SetActive(false);
         }
     }
 
@@ -313,13 +348,13 @@ void Inventory::SetMapWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::MAP)
+        if (m->sortLayer == (int)UiType::COMMON || m->sortLayer == (int)UiType::MAP)
         {
-            m.second->SetActive(true);
+            m->SetActive(true);
         }
         else
         {
-            m.second->SetActive(false);
+            m->SetActive(false);
         }
     }
 
@@ -330,13 +365,13 @@ void Inventory::SetMakeWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::MAKE || m.first == UiType::BUTTON || m.first == UiType::BOX || m.first == UiType::LINE || m.first == UiType::TOOL)
+        if (m->sortLayer == (int)UiType::COMMON || m->sortLayer == (int)UiType::MAKE || m->sortLayer == (int)UiType::BUTTON || m->sortLayer == (int)UiType::BOX || m->sortLayer == (int)UiType::LINE || m->sortLayer == (int)UiType::TOOL)
         {
-            m.second->SetActive(true);
+            m->SetActive(true);
         }
         else
         {
-            m.second->SetActive(false);
+            m->SetActive(false);
         }
     }
 
@@ -357,13 +392,13 @@ void Inventory::SetChangeSceneWindow()
 {
     for (auto m : invenUiObjects)
     {
-        if (m.first == UiType::COMMON || m.first == UiType::CHANEGE || m.first == UiType::BUTTON || m.first == UiType::BOX)
+        if (m->sortLayer == (int)UiType::COMMON || m->sortLayer == (int)UiType::CHANEGE || m->sortLayer == (int)UiType::BUTTON || m->sortLayer == (int)UiType::BOX)
         {
-            m.second->SetActive(true);
+            m->SetActive(true);
         }
         else
         {
-            m.second->SetActive(false);
+            m->SetActive(false);
         }
     }
 
@@ -379,7 +414,7 @@ void Inventory::SetWindowClear()
 {
     for (auto& m : invenUiObjects)
     {
-        m.second->SetActive(false);
+        m->SetActive(false);
     }
 }
 
@@ -405,4 +440,13 @@ void Inventory::ButtonSetUp()
 void Inventory::SetPlayer(Player2* p)
 {
     player = p;
+}
+
+void Inventory::SortGos()
+{
+    invenUiObjects.sort([](GameObject* lhs, GameObject* rhs) {
+        if (lhs->sortLayer != rhs->sortLayer)
+            return lhs->sortLayer < rhs->sortLayer;
+        return lhs->sortOrder < rhs->sortOrder;
+        });
 }

@@ -64,28 +64,31 @@ void UiButton::Update(float dt)
 	bool prevHover = isHover;
 	isHover = sprite.getGlobalBounds().contains(uiMousePos);
 
-	if (!prevHover && isHover)
+	// ±è¹ÎÁö, 230815, setActive false¸é ¾È ÇÏµµ·Ï ¼öÁ¤
+	if (this->GetActive())
 	{
-		if(OnEnter != nullptr)
+		if (!prevHover && isHover)
 		{
-			OnEnter();
+			if(OnEnter != nullptr)
+			{
+				OnEnter();
+			}
+		}
+		if (prevHover && !isHover)
+		{
+			if (OnExit != nullptr)
+			{
+				OnExit();
+			}
+		}
+		if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+		{
+			if (OnClick != nullptr)
+			{
+				OnClick();
+			}
 		}
 	}
-	if (prevHover && !isHover)
-	{
-		if (OnExit != nullptr)
-		{
-			OnExit();
-		}
-	}
-	if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
-	{
-		if (OnClick != nullptr)
-		{
-			OnClick();
-		}
-	}
-
 }
 
 void UiButton::Draw(sf::RenderWindow& window)
