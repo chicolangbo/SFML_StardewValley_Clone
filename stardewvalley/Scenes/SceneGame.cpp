@@ -131,7 +131,6 @@ void SceneGame::Init()
 	inven->sortLayer = 100;
 	inven->SetPosition(windowSize / 2.f);
 	inven->SetPlayer(player2);
-	
 	//
 
 	//임형준 테스트 코드...

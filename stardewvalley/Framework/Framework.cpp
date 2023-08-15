@@ -41,6 +41,15 @@ void Framework::Run()
     Init(screenWidth, screenHeight, title);
     clock.restart();
 
+    sf::Image cursorImg;
+    cursorImg.loadFromFile("graphics/cursorImage.png");
+
+    sf::Cursor cursor;
+    if (cursor.loadFromPixels(cursorImg.getPixelsPtr(), cursorImg.getSize(), { 0, 0 }))
+    {
+        window.setMouseCursor(cursor);
+    }
+
     while (window.isOpen())
     {
         sf::Time deltaTime = clock.restart();
@@ -58,6 +67,7 @@ void Framework::Run()
                 window.close();
                 break;
             case sf::Event::GainedFocus:
+                window.setMouseCursor(cursor);
                 break;
             }
             INPUT_MGR.UpdateEvent(event);

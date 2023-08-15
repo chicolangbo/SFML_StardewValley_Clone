@@ -31,6 +31,7 @@ private:
 	
 	// 슬롯클래스 벡터
 	std::vector<Slot*> slot;
+	Slot* mouseSlot;
 
 	int itemCapacity = 36;
 	int* curFundsInt; // 현재 소지금

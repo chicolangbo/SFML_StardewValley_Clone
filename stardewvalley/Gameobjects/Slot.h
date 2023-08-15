@@ -13,7 +13,7 @@ protected:
 
 public:
     int slotIndex = 0;
-    Slot(const std::string& textureId, const std::string& n, const std::string& nickName = "");
+    Slot(const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
     ~Slot();
 
     virtual void Init() override;

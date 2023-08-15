@@ -7,6 +7,7 @@
 #include "Player2.h"
 #include "AllItemTable.h"
 #include "Slot.h"
+#include "SceneMgr.h"
 
 GameObject* Inventory::AddUi(GameObject* go)
 {
@@ -81,6 +82,8 @@ Inventory::Inventory(const std::string& n)
             AddUi(slot[i * 12 + j]);
         }
     }
+
+    mouseSlot = (Slot*)AddUi(new Slot());
 }
 
 Inventory::~Inventory()
@@ -302,6 +305,11 @@ void Inventory::Update(float dt)
             SetWindowClear();
         }
     }
+
+    // ¸¶¿ì½º¿¡ º¸ÀÌÁö ¾Ê´Â ½½·Ô Æ÷Áö¼Å´×
+    sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+    sf::Vector2f mPos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
+    //mouseSlot->SetPosition()
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
