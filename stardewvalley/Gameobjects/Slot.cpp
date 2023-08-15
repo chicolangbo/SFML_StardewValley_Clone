@@ -61,8 +61,9 @@ void Slot::Update(float dt)
 void Slot::Draw(sf::RenderWindow& window)
 {
 	UiButton::Draw(window);
-}
-
-void Slot::UpdateIndex()
-{
+	if (itemIcon != nullptr)
+	{
+		itemIcon->SetPosition(position);
+		itemIcon->Draw(window);
+	}
 }

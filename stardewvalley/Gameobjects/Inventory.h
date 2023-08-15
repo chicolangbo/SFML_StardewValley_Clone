@@ -27,6 +27,7 @@ class Inventory : public GameObject
 private:
 	// 아이템리스트 벡터 포인터(플레이어에 있음)
 	std::list<tagItemInfo>* playerItemList;
+	std::unordered_map<ItemId,SpriteGo> itemIconList; // 여기서 만들어두고 slot에는 포인터만 전달
 	
 	// 슬롯클래스 벡터
 	std::vector<Slot*> slot;
@@ -36,8 +37,6 @@ private:
 	int* totalEarningsInt; // 총합 자금
 
 	std::list<GameObject*> invenUiObjects;
-
-	bool once = false;
 
 	Player2* player;
 
@@ -90,7 +89,11 @@ public:
 	void SetChangeSceneWindow();
 	void SetWindowClear();
 
+	void ItemIconSetUp();
 	void ButtonSetUp();
+	void PlayerInfoUpdate();
+	void IconUpdate();
+
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList(std::list<tagItemInfo>* itemList) { playerItemList = itemList; }
 	int GetItemCapacity() { return itemCapacity; }

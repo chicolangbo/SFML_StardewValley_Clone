@@ -274,6 +274,10 @@ void SceneGame::Update(float dt)
 	{
 		SpawnRootingItem(ItemId::branch);
 	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
+	{
+		SpawnRootingItem(ItemId::coal);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

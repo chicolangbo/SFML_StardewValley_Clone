@@ -6,9 +6,7 @@ class Slot :
     public UiButton
 {
 protected:
-    //sf::Sprite slotBg;
     SpriteGo* itemIcon = nullptr;
-    //std::vector<tagItemInfo>* playerItemList = nullptr;
 
     bool isEmpty;
     bool onMouse;
@@ -23,6 +21,7 @@ public:
     virtual void Reset() override;
     virtual void Update(float dt) override;
     virtual void Draw(sf::RenderWindow& window) override;
-    void UpdateIndex();
+
+    void SetItemIcon(SpriteGo* i) { itemIcon = i; }
 };
 

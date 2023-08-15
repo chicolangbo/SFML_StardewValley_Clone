@@ -110,9 +110,9 @@ void Inventory::Init()
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
 
-    playerItemList = player->GetPlayerItemList();
-    curFundsInt = player->GetCurFundsInt(); // 현재 소지금
-    totalEarningsInt = player->GetTotalEarningsInt(); // 총합 자금
+    PlayerInfoUpdate();
+    ItemIconSetUp();
+    ButtonSetUp();
 
     for (auto i : invenUiObjects)
     {
@@ -206,8 +206,8 @@ void Inventory::Reset()
         hat.colliderOnOff = false;
         hat.sortLayer = (int)UiType::ITEM;
 
-        charBg.SetOrigin(Origins::MC);
         charBg.SetScale(1.25f, 1.25f);
+        charBg.SetOrigin(Origins::MC);
         charBg.SetPosition(shoes.GetPosition().x + 140.f, shoes.GetPosition().y);
         charBg.colliderOnOff = false;
         charBg.sortLayer = (int)UiType::ITEM;
@@ -273,7 +273,6 @@ void Inventory::Reset()
     }
 
     SetWindowClear();
-    ButtonSetUp();
 }
 
 void Inventory::Release()
@@ -286,7 +285,10 @@ void Inventory::Update(float dt)
     {
         m->Update(dt);
     }
+    PlayerInfoUpdate();
+    IconUpdate();
 
+    // 인벤창 여닫기
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
@@ -442,6 +444,13 @@ void Inventory::SetPlayer(Player2* p)
     player = p;
 }
 
+void Inventory::PlayerInfoUpdate()
+{
+    playerItemList = player->GetPlayerItemList();
+    curFundsInt = player->GetCurFundsInt(); // 현재 소지금
+    totalEarningsInt = player->GetTotalEarningsInt(); // 총합 자금
+}
+
 void Inventory::SortGos()
 {
     invenUiObjects.sort([](GameObject* lhs, GameObject* rhs) {
@@ -449,4 +458,43 @@ void Inventory::SortGos()
             return lhs->sortLayer < rhs->sortLayer;
         return lhs->sortOrder < rhs->sortOrder;
         });
+}
+
+void Inventory::ItemIconSetUp()
+{
+    AllItemTable* allItem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem);
+    std::unordered_map<ItemId, ItemInfo>& item = allItem->table;
+    for (auto& i : item)
+    {
+        itemIconList.insert({ i.first, SpriteGo(i.second.resource, i.second.name, i.second.nickName) });
+    }
+
+    for (auto& it : itemIconList)
+    {
+        it.second.Reset();
+        it.second.colliderOnOff = false;
+        it.second.SetOrigin(Origins::MC);
+        it.second.SetScale(5.f, 5.f);
+    }
+}
+
+void Inventory::IconUpdate()
+{
+    int num = 0;
+
+    for (const tagItemInfo& pl : *playerItemList)
+    {
+        for (Slot* sl : slot)
+        {
+            if (pl.index == sl->slotIndex)
+            {
+                auto foundItem = itemIconList.find(pl.itemId);
+                if (foundItem != itemIconList.end())
+                {
+                    sl->SetItemIcon(&(foundItem->second));
+                    break;
+                }
+            }
+        }
+    }
 }
