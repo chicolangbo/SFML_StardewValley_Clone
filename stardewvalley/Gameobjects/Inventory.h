@@ -94,6 +94,7 @@ public:
 	void ButtonSetUp();
 	void PlayerInfoUpdate();
 	void IconUpdate();
+	void ItemIndexUpdate();
 
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }

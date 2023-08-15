@@ -234,6 +234,18 @@ void Player2::Update(float dt)
 
 	// 김민지,230815, 스폰되는 아이템 먹는지 체크하는 함수
 	AddPlayerItem();
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	{
+		int a = 0;
+		for (auto i : playerItemList)
+		{
+			std::cout << "============" << a << "============" << std::endl;
+			std::cout << "카운트: "<< i.count << std::endl;
+			std::cout << "인덱스: "<< i.index << std::endl;
+			a++;
+		}
+	}
 	//
 }
 
@@ -258,7 +270,7 @@ void Player2::SetFlipX(bool filp)
 	sprite.setScale(scale);
 }
 
-void Player2::AddPlayerItem()
+void Player2::AddPlayerItem() // 나중에 자석 형태로 바꾸기. 일단은 충돌 시 먹히는 걸로
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -271,11 +283,11 @@ void Player2::AddPlayerItem()
 
 	for (auto item : *rootingItemList)
 	{
-		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds())) // 나중에 자석 형태로 바꾸기. 일단은 충돌 시 먹히는 걸로
+		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
 		{
 			item->SetActive(false);
 			bool found = false;
-			for (auto playerItem : playerItemList)
+			for (auto& playerItem : playerItemList) // 아이템이 1개라도 있을 때
 			{
 				if (playerItem.itemId == item->GetRootingItemId())
 				{
@@ -284,10 +296,16 @@ void Player2::AddPlayerItem()
 					break;
 				}
 			}
-			if(!found)
+			if (!found)
 			{
-				int index = playerItemList.size();
-				playerItemList.push_back({ item->GetRootingItemId(),1,index });
+				bool zero = true;
+				int index = 0;
+				for (auto& pl : playerItemList)
+				{
+					index = pl.index;
+					zero = false;
+				}
+				playerItemList.push_back({ item->GetRootingItemId(),1,(zero? index : index+1) });
 			}
 		}
 	}

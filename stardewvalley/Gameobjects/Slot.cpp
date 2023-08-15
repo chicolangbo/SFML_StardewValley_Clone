@@ -19,6 +19,8 @@ void Slot::Init()
 		{
 			// 마우스에 아이콘이 따라다니도록 한다.
 			mouseIcon->SetItemIcon(itemIcon);
+			mouseIcon->SetItemId(id);
+			id = ItemId::none;
 			itemIcon = nullptr;
 			isEmpty = true;
 			return;
@@ -28,8 +30,10 @@ void Slot::Init()
 		if (isEmpty && !mouseIcon->IsItemIconEmpty())
 		{
 			// 마우스에 달린 아이콘이 해당 셀에 정착된다.
+			id = mouseIcon->GetItemId();
 			itemIcon = mouseIcon->GetItemIcon();
 			mouseIcon->SetItemIcon(nullptr);
+			mouseIcon->SetItemId(ItemId::none);
 			isEmpty = false;
 			return;
 		}
@@ -39,8 +43,11 @@ void Slot::Init()
 		{
 			// 마우스에 달린 아이콘은 해당 셀에 정착, 셀에 있던 아이콘이 마우스에 정착
 			SpriteGo* tempIcon = mouseIcon->GetItemIcon();
+			ItemId tempId = mouseIcon->GetItemId();
 			mouseIcon->SetItemIcon(itemIcon);
+			mouseIcon->SetItemId(id);
 			SetItemIcon(tempIcon);
+			id = tempId;
 			isEmpty = false;
 			return;
 		}
@@ -79,16 +86,12 @@ void Slot::Draw(sf::RenderWindow& window)
 	}
 }
 
-void Slot::UpdateItemIndex(tagItemInfo& item)
-{
-	item.index = slotIndex;
-}
-
 void Slot::UpdateIsEmpty()
 {
 	if (IsItemIconEmpty())
 	{
 		isEmpty = true;
+		id = ItemId::none;
 	}
 	else
 	{

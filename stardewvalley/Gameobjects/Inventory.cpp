@@ -305,6 +305,8 @@ void Inventory::Update(float dt)
         }
         else
         {
+            // 창 닫을 때마다 플레이어아이템인덱스 업데이트
+            ItemIndexUpdate();
             SetWindowClear();
             IconUpdate();
             invenOnOff = false;
@@ -317,6 +319,7 @@ void Inventory::Update(float dt)
     mouseSlot->SetPosition(mPos);
 
     // 슬롯, 아이템 인덱스 동일화
+
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
@@ -474,6 +477,22 @@ void Inventory::SortGos()
         });
 }
 
+void Inventory::ItemIndexUpdate()
+{
+    for (tagItemInfo& pl : *playerItemList)
+    {
+        for (Slot* sl : slot)
+        {
+            if (pl.itemId == sl->GetItemId())
+            {
+                pl.index = sl->slotIndex;
+                std::cout << pl.index << std::endl;
+                continue;
+            }
+        }
+    }
+}
+
 void Inventory::ItemIconSetUp()
 {
     AllItemTable* allItem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem);
@@ -506,6 +525,7 @@ void Inventory::IconUpdate()
                 if (foundItem != itemIconList.end())
                 {
                     sl->SetItemIcon(&(foundItem->second));
+                    sl->SetItemId(pl.itemId);
                     break;
                 }
             }
