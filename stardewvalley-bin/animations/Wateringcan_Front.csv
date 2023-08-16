@@ -1,0 +1,12 @@
+﻿ID,FPS,LOOPTYPE,,
+WateringFront,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Pickax.png,0,433,16,30
+graphics/Pickax.png,16,433,16,30
+graphics/Pickax.png,32,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,48,433,16,30
+graphics/Pickax.png,79,415,2,4

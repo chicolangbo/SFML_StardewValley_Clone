@@ -33,11 +33,32 @@ protected:
 	SpriteGo* shopBox;
 	Wall* homeWalls;
 	Wall* shopWalls;
-	//
-	//Farmer* player;
+    //
+	
 	//임형준 테스트
-	float totalRotation=0.f;
-	bool axeRotation = false;
+	SpriteGo* energy;
+	SpriteGo* info;
+	SpriteGo* timeArrow;
+	float arrowSpin = 0.f;
+	sf::RectangleShape energyBar;
+	int energys;
+	//sf::FloatRect houseBound; 
+	std::vector<sf::FloatRect> walls;
+	sf::FloatRect playerBound; 
+	sf::FloatRect mapBound;
+
+	float time = 0.f;
+	int min = 0;
+	int hour = 6;
+	int day = 1;
+
+	sf::Text textMoney;
+	sf::Text textMin;
+	sf::Text textHour;
+	sf::Text textDay;
+	sf::Font font;
+	//
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

@@ -28,7 +28,7 @@ public:
 		:SpriteGo(textureId, n) {}
 	virtual ~Player() override { Release(); }
 
-	void SetWallBounds(const sf::FloatRect& bounds);
+	//void SetWallBounds(const sf::FloatRect& bounds);
 	bool GetFlipX() const;
 	void SetFlipX(bool flip);
 

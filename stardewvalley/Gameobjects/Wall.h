@@ -26,7 +26,7 @@ public:
 	};
 
 protected:
-	std::vector<sf::RectangleShape> Walls;
+	
 	Types wallType;
 	Location locationType;
 	float left;
@@ -36,6 +36,9 @@ protected:
 	bool colliderOnOff;
 
 public:
+	//임형준, 230814, 플레이어에 정보를 넘겨줄 용도로 protected->public으로 변경
+	std::vector<sf::RectangleShape> Walls; 
+
 	Wall(const std::string& n = "");
 	virtual ~Wall() override;
 

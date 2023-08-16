@@ -128,6 +128,17 @@
     </ClCompile>
     <ClCompile Include="Gameobjects\TextGo.cpp">
       <Filter>소스 파일</Filter>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Scythe.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Wateringcan.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobjects\TextGo.cpp">
+      <Filter>Gameobjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +246,17 @@
     </ClInclude>
     <ClInclude Include="Gameobjects\TextGo.h">
       <Filter>헤더 파일</Filter>
+    <ClInclude Include="Hoe.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scythe.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Wateringcan.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\TextGo.h">
+      <Filter>Gameobjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

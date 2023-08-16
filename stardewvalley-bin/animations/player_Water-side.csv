@@ -1,0 +1,12 @@
+﻿ID,FPS,LOOPTYPE,,
+WaterSide,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,0,281,20,31
+graphics/farmer_base.png,20,281,20,31
+graphics/farmer_base.png,40,281,20,31
+graphics/farmer_base.png,60,281,20,31
+graphics/farmer_base.png,60,281,20,31
+graphics/farmer_base.png,60,281,20,31
+graphics/farmer_base.png,60,281,20,31
+graphics/farmer_base.png,60,281,20,31

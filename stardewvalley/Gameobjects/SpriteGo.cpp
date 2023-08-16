@@ -28,9 +28,9 @@ void SpriteGo::SetPosition(float x, float y)
 {
 	position.x = x;
 	position.y = y;
-	sprite.setPosition(position);
+	sprite.setPosition(position); 
 	// 김민지, 230809, 콜라이더 연동
-	collider.setPosition(position);
+	collider.setPosition(position); 
 	//
 
 }
@@ -61,7 +61,10 @@ void SpriteGo::SetScale(float x, float y)
 {
 	sprite.setScale(x, y);
 	// 김민지, 230809, 콜라이더 연동
-	collider.setScale(x, y);
+	//collider.setScale(x, y);
+	//
+	// 임형준, 230811, 콜라이더 스케일 오류 수정
+	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	//
 }
 
@@ -69,8 +72,12 @@ void SpriteGo::SetScale(const sf::Vector2f& p)
 {
 	sprite.setScale(p);
 	// 김민지, 230809, 콜라이더 연동
-	collider.setScale(p);
+	//collider.setScale(p);
 	//
+	// 임형준, 230811, 콜라이더 스케일 오류 수정
+	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
+	//
+
 }
 
 void SpriteGo::Init()
@@ -133,4 +140,10 @@ void SpriteGo::Draw(sf::RenderWindow& window)
 	{
 		window.draw(collider);
 	}
+}
+
+sf::FloatRect SpriteGo::GetCollider()
+{
+	sf::FloatRect bound = collider.getGlobalBounds();
+	return bound; 
 }

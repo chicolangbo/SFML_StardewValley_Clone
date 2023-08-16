@@ -15,14 +15,15 @@ void Axe::Init()
 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Axe_Back.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Axe_Front.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Axe_Side.csv"));
 	
-	//AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
 
 	animation.SetTarget(&sprite);
-	sprite.setScale(5.f, 5.f);
+	sprite.setScale(4.5f, 4.5f);
 
 	SetOrigin(Origins::BC);
 
+	
 }
 
 void Axe::Reset()
@@ -31,6 +32,7 @@ void Axe::Reset()
 
 	SetOrigin(origin); 
 	SetPosition({ 0, 0 });
+	SetFlipX(false);
 }
 
 void Axe::Update(float dt)
@@ -57,5 +59,19 @@ void Axe::SetPostion(sf::Vector2f pos)
 
 void Axe::SetOrigins()
 {
-	SetOrigin(Origins::MC);  
+	SetOrigin(Origins::BC);  
+}
+
+bool Axe::GetFlipX() const
+{
+	return flipX;
+}
+
+void Axe::SetFlipX(bool flip)
+{
+	flipX = flip;
+
+	sf::Vector2f scale = sprite.getScale();
+	scale.x = !flipX ? -abs(scale.x) : abs(scale.x);  
+	sprite.setScale(scale);
 }

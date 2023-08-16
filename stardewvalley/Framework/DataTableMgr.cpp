@@ -26,6 +26,7 @@ void DataTableMgr::ReleaseAll()
 	{
 		//pair.second->Release();
 		delete pair.second;
+		//Ä«¹Ô
 	}
 	tables.clear();
 }

@@ -13,6 +13,8 @@
 #include "UiButton.h"
 #include "Wall.h"
 #include "Axe.h"
+#include <sstream>
+#include "TextGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -44,6 +46,9 @@ void SceneGame::Init()
 	worldView.setCenter(0,0);
 	//
 
+	uiView.setSize(size);
+	uiView.setCenter(size * 0.5f);
+
 	// 김민지, 230808, 임시맵 코드 추가
 	testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	testFarmMap->sprite.setScale(3.f, 3.f);
@@ -53,10 +58,15 @@ void SceneGame::Init()
 	house->sprite.setScale(4.f, 4.f);
 	house->SetOrigin(Origins::BC);
 	house->SetPosition(473, -785);
+	house->collider.setScale(1.f, 0.3f);
+	house->sortLayer = 11;
+
 	shop = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 	shop->sprite.setScale(4.f, 4.f);
 	shop->SetOrigin(Origins::BC);
 	shop->SetPosition(-537, -785);
+	shop->collider.setScale(1.f, 0.3f); 
+
 	shopInside = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopInside", "shopInside"));
 	shopInside->sprite.setScale(4.f, 4.f);
 	shopInside->SetOrigin(Origins::TL);
@@ -83,52 +93,80 @@ void SceneGame::Init()
 	shopCounter2->SetOrigin(Origins::TL);
 	shopCounter2->SetPosition(128.f*4, 254.f*4);
 	shopCounter2->SetActive(false);
+
 	shopMid1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid1", "shopMid1"));
 	shopMid1->sprite.setScale(4.f, 4.f);
 	shopMid1->SetOrigin(Origins::TL);
 	shopMid1->SetPosition(48.f*4, 332.f*4);
 	shopMid1->SetActive(false);
+
 	shopMid2_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_1", "shopMid2"));
 	shopMid2_1->sprite.setScale(4.f, 4.f);
 	shopMid2_1->SetOrigin(Origins::TL);
 	shopMid2_1->SetPosition(160.f*4, 277.f*4);
 	shopMid2_1->SetActive(false);
+
 	shopMid2_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid2_2", "shopMid2"));
 	shopMid2_2->sprite.setScale(4.f, 4.f);
 	shopMid2_2->SetOrigin(Origins::TL);
 	shopMid2_2->SetPosition(160.f*4, 325.f*4);
 	shopMid2_2->SetActive(false);
+
 	shopMid3_1 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_1", "shopMid3"));
 	shopMid3_1->sprite.setScale(4.f, 4.8f);
 	shopMid3_1->SetOrigin(Origins::TL);
 	shopMid3_1->SetPosition(160.f*4, 375.f*4);
 	shopMid3_1->SetActive(false);
+
 	shopMid3_2 = (SpriteGo*)AddGo(new SpriteGo("map/townInterior.png", "shopMid3_2", "shopMid3"));
 	shopMid3_2->sprite.setScale(4.f, 4.8f);
 	shopMid3_2->SetOrigin(Origins::TL);
 	shopMid3_2->SetPosition(224.f*4, 375.f*4);
 	shopMid3_2->SetActive(false);
+
 	shopBox = (SpriteGo*)AddGo(new SpriteGo("map/shopInside.png", "shopBox", "shopBox"));
 	shopBox->sprite.setScale(4.f, 4.f);
 	shopBox->SetOrigin(Origins::TL);
 	shopBox->SetPosition(288.f*4, 434.f*4);
 	shopBox->SetActive(false);
+
 	shopWalls = (Wall*)AddGo(new Wall("shopWall"));
 	shopWalls->SetType(Wall::Location::Shop);
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
 
 	player2 = (Player2*)AddGo(new Player2());
-	//임형준 테스트 코드...
-	AddGo(new SpriteGo("graphics/tools.png", "SideAxe"));
-	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	axe->sprite.setScale(5.f, 5.f);
-	axe->SetOrigin(Origins::BC);
-	axe->SetPosition(player2->GetPosition());
-	axe->SetActive(false);
+	player2->SetOrigin(Origins::BC);
+	player2->sortLayer=10;
+	player2->collider.setScale(0.5f, 0.1f);
 
+	//에너지 바 UI 일단 구현만/임형준
+	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
+	energy->SetOrigin(Origins::BR);
+	energy->SetPosition(size);
+	energy->SetScale(4.5f, 4.5f);
+	energy->sortLayer = 110;
 
+	info = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Info", "Info"));
+	info->SetOrigin(Origins::TR);
+	info->SetScale(4.5f, 4.5f);
+	info->SetPosition(size.x, 0);
+	info->sortLayer = 110;
 
+	timeArrow = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "TimeArrow", "TimeArrow"));
+	timeArrow->SetScale(4.5f, -4.5f);
+	timeArrow->SetOrigin(Origins::TC);
+	timeArrow->collider.setScale(1.f, -1.f);
+	timeArrow->SetPosition(info->GetPosition().x - 225.f, info->GetPosition().y + 93.f);
+	timeArrow->sortLayer = 111;
+	
+
+	energyBar.setSize(sf::Vector2f(26.f, 1.f));
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
+	energyBar.setPosition(energy->GetPosition());
+	energyBar.setFillColor(sf::Color::Green);
+
+	
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -150,10 +188,33 @@ void SceneGame::Enter()
 	Scene::Enter();
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
+	walls.push_back(house->GetCollider()); 
+	walls.push_back(shop->GetCollider()); 
+	walls.push_back(shopCounter1->GetCollider()); 
+	walls.push_back(shopMid1->GetCollider()); 
+	walls.push_back(shopMid2_1->GetCollider()); 
+	walls.push_back(shopMid2_2->GetCollider()); 
+	walls.push_back(shopMid3_1->GetCollider()); 
+	walls.push_back(shopMid3_2->GetCollider()); 
+	walls.push_back(shopBox->GetCollider()); 
 
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
+	for (int i = 0; i < shopWalls->Walls.size(); ++i)
+	{
+		walls.push_back(shopWalls->Walls[i].getGlobalBounds());
+	}
+	for (int i = 0; i < walls.size(); ++i)
+	{
+		player2->SetWallBounds(walls[i]); 
+	}
+	font.loadFromFile("fonts/SDMiSaeng.ttf");
+	textMoney.setFont(font);
+	textMin.setFont(font);
+	textHour.setFont(font);
+	textDay.setFont(font);
 
+	// 김주현, 230811, uiview를 Init에서 주는 것이 더 좋아 보임. 주석처리
+	//uiView.setSize(size);
+	//uiView.setCenter(centerPos);
 
 	// 김민지, 230807, 테스트용 주석처리
 	//player2->SetOrigin(Origins::MC);
@@ -169,53 +230,85 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-	
+	//230814, 임형준 테스트코드, 시간 구현
+	time +=dt;
+	if (time >= 7.f)
+	{
+		min += 10;
+		time = 0.f;
+	}
+	if (min == 60)
+	{
+		min = 0;
+		hour += 1;
+	}
+	if (hour == 24)
+	{
+		hour = 6;
+		day += 1;
+		arrowSpin = 0;
+	}
+	/*if (hour < 12)
+	{
+		std::cout << day << "일 " << "오전 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
+	}
+	else if (hour >= 12)
+	{
+		std::cout << day << "일 " << "오후 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
+	}*/
+	arrowSpin += dt * 0.2381f;
+	timeArrow->SetOrigin(Origins::BC);
+	timeArrow->sprite.setRotation(arrowSpin);
+
+	std::stringstream ss; 
+	ss << player2->GetMoney();
+	textMoney.setString(ss.str());
+	textMoney.setCharacterSize(50);
+	textMoney.setPosition(1675.f, 195.f);
+	textMoney.setFillColor(sf::Color::Black);
+
+	std::stringstream sss;
+	sss << hour << ":" << min; 
+	textHour.setString(sss.str()); 
+	textHour.setCharacterSize(50); 
+	textHour.setPosition(1710.f, 115.f); 
+	textHour.setFillColor(sf::Color::Black); 
+
+	std::stringstream ssss; 
+	ssss << day << "Day"; 
+	textDay.setString(ssss.str());
+	textDay.setCharacterSize(50);
+	textDay.setPosition(1775.f, 12.f);
+	textDay.setFillColor(sf::Color::Black);
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad5))
+	{
+		hour += 1;
+	}
 	// 김민지, 230807, 테스트용 주석처리
 	// 김민지, 230808, 테스트용 주석해제, 플레이어 포지션 로그
-	worldView.setCenter(player2->GetPosition());
+	//worldView.setCenter(player2->GetPosition());
 	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
 	
 	//뷰를 플레이어에 고정
 	worldView.setCenter(player2->GetPosition());
-
-	//임형준 테스트코드 옆면에서 곡도끼 휘두르는 모션
-	SpriteGo* axe = (SpriteGo*)FindGo("SideAxe");
-	axe->sprite.setScale(5.f, 5.f);
-	axe->SetOrigin(Origins::BC);
-	axe->SetPosition(player2->GetPosition());
-	
-	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-	//{
-	//	axeRotation = true;
-	//}
-	if (axeRotation)
-	{
-		axe->SetActive(true);
-		float rotationLimit = 90.f; // 회전 각도 제한 
-		float rotation = 500.f * dt; // 회전
-		if (totalRotation + rotation > rotationLimit)
-		{
-			rotation = rotationLimit - totalRotation; // 회전 총 각도 제한 
-		}
-		totalRotation += rotation; // 회전 총 각도 누적 
-		axe->sprite.setRotation(totalRotation); // 회전 적용
-
-		if (totalRotation >= rotationLimit)
-		{
-			axeRotation = false;
-			axe->SetActive(false);
-		}
-	}
-	if (axe->GetActive() == false)
-	{
-		totalRotation = 0.f;
-	}
+	//std::cout << player2->GetPosition().x << " " << player2->GetPosition().y << std::endl;
+	//임형준 테스트 코드
 	
 
+	playerBound = player2->GetCollider(); 
+	mapBound = testFarmMap->GetCollider();
+	
+	player2->SetCollider(playerBound);
+
+	energyBar.setSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
+	energyBar.setPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
+	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
+	//
 
 	// 김민지, 230809, 샵내부
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 	{
 		if (enterShop)
 		{
@@ -232,7 +325,10 @@ void SceneGame::Update(float dt)
 				}
 			}
 			player2->SetActive(true);
-			player2->SetPosition(-463.f, -845.f);
+			player2->SetPosition(-463.f, -770.f); //230814, 임형준 수정
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true);
 		}
 		else
 		{
@@ -242,6 +338,7 @@ void SceneGame::Update(float dt)
 				if (go->GetActive())
 				{
 					go->SetActive(false);
+					
 				}
 				else
 				{
@@ -250,10 +347,14 @@ void SceneGame::Update(float dt)
 			}
 
 			player2->SetActive(true);	
-			player2->SetPosition(419.f, 1823.f); // 포지션 임시 세팅
+			player2->SetPosition(419.f, 1866.f); // 포지션 임시 세팅 //230814, 임형준 수정
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true); 
 		}
 	}
-	//
+	
+	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
@@ -264,7 +365,12 @@ void SceneGame::Update(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+	window.draw(energyBar);
+	window.draw(textMoney);
+	window.draw(textHour);
+	window.draw(textDay);
 }
+
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
 {

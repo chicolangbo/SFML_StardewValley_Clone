@@ -1,0 +1,13 @@
+﻿ID,FPS,LOOPTYPE,,
+PickaxSide,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Pickax.png,0,88,45,38
+graphics/Pickax.png,45,88,45,38
+graphics/Pickax.png,90,88,45,38
+graphics/Pickax.png,135,88,45,38
+graphics/Pickax.png,180,88,45,38
+graphics/Pickax.png,180,88,45,38
+graphics/Pickax.png,180,88,45,38
+graphics/Pickax.png,225,88,45,38
+graphics/Pickax.png,66,28,1,1

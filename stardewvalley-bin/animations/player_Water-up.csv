@@ -1,0 +1,12 @@
+﻿ID,FPS,LOOPTYPE,,
+WaterUp,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,0,342,20,30
+graphics/farmer_base.png,20,342,20,30
+graphics/farmer_base.png,40,342,20,30
+graphics/farmer_base.png,60,342,20,30
+graphics/farmer_base.png,60,342,20,30
+graphics/farmer_base.png,60,342,20,30
+graphics/farmer_base.png,60,342,20,30
+graphics/farmer_base.png,60,342,20,30

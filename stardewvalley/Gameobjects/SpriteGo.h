@@ -42,7 +42,8 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-
+	//임형준, 230811, 콜라이더 리턴해주는 함수 추가
+	sf::FloatRect GetCollider();
 
 };
 

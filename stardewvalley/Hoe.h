@@ -1,7 +1,8 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
-class Pickax : public SpriteGo
+
+class Hoe : public SpriteGo
 {
 protected:
 	AnimationController animation;
@@ -10,9 +11,9 @@ protected:
 
 public:
 
-	Pickax(const std::string& textureId = "", const std::string& n = "")
+	Hoe(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}
-	virtual ~Pickax() override { Release(); }
+	virtual ~Hoe() override { Release(); }
 
 	virtual void Init() override;
 	virtual void Reset() override;

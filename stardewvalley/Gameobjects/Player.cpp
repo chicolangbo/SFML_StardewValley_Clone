@@ -5,13 +5,13 @@
 #include "ClipTable.h"
 #include "ResourceMgr.h"
 
-void Player::SetWallBounds(const sf::FloatRect& bounds)
-{
-	wallBounds = bounds;
-
-	wallBoundsLT = { wallBounds.left, wallBounds.top };
-	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height };
-}
+//void Player::SetWallBounds(const sf::FloatRect& bounds)
+//{
+//	wallBounds = bounds;
+//
+//	wallBoundsLT = { wallBounds.left, wallBounds.top };
+//	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height };
+//}
 
 bool Player::GetFlipX() const
 {
