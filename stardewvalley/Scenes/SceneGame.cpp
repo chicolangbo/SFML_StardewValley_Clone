@@ -151,6 +151,7 @@ void SceneGame::Init()
 	inven->sortLayer = 100;
 	inven->SetPosition(windowSize / 2.f);
 	inven->SetPlayer(player2);
+	player2->SetInventory(inven);
 
 	//������ �� UI �ϴ� ������/������
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));

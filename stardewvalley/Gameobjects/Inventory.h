@@ -72,7 +72,7 @@ private:
 
 public:
 	Inventory(const std::string& n = "");
-	~Inventory();
+	virtual ~Inventory() override;
 
 	//void AddPlayerItem(std::string name);
 	GameObject* AddUi(GameObject* go);
@@ -100,4 +100,5 @@ public:
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
+	std::vector<Slot*>& GetSlot() { return slot; }
 };

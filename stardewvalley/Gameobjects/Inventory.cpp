@@ -87,11 +87,7 @@ Inventory::Inventory(const std::string& n)
 
 Inventory::~Inventory()
 {
-    for (auto it = invenUiObjects.begin(); it != invenUiObjects.end(); ++it)
-    {
-        delete *it;
-    }
-    invenUiObjects.clear();
+    Release();
 }
 
 void Inventory::Init()
@@ -286,6 +282,13 @@ void Inventory::Reset()
 
 void Inventory::Release()
 {
+    for (auto it : slot)
+    {
+        delete it;
+    }
+    delete mouseSlot;
+
+    invenUiObjects.clear();
 }
 
 void Inventory::Update(float dt)

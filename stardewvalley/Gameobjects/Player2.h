@@ -19,6 +19,7 @@ enum class Tool
 };
 
 class RootingItem;
+class Inventory;
 
 class Player2 : public SpriteGo
 {
@@ -71,6 +72,8 @@ protected:
 	std::list<RootingItem*>*rootingItemList;
 	int totalEarningsInt = 500; // ���� �ڱ�
 
+	Inventory* inven;
+
 public:
 
 	Player2(const std::string& textureId = "", const std::string& n = "")
@@ -90,6 +93,7 @@ public:
 
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);
+	void SetInventory(Inventory* i) { inven = i; }
 
 	AnimationController GetAnimation() { return animation; }
 

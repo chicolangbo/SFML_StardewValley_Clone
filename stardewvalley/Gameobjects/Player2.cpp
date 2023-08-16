@@ -12,6 +12,7 @@
 #include "AllItemTable.h"
 #include "DataTableMgr.h"
 #include "Inventory.h"
+#include "Slot.h"
 
 void Player2::Init()
 {
@@ -515,14 +516,38 @@ void Player2::AddPlayerItem() // 자석화 해야 함
 			}
 			if (!found)
 			{
-				bool zero = true;
 				int index = 0;
-				for (auto& pl : playerItemList)
+				for (auto slot : inven->GetSlot())
 				{
-					index = (index < pl.index)? pl.index : index;
-					zero = false;
+					if (slot->IsItemIconEmpty())
+					{
+						index = slot->slotIndex;
+						break;
+					}
 				}
-				playerItemList.push_back({ item->GetRootingItemId(),1,(zero? index : index+1) });
+				playerItemList.push_back({ item->GetRootingItemId(),1,index });
+
+				//int index = 0;
+				//int prevIndex = 0;
+				//tagItemInfo* prevPlayerItem = nullptr;
+				//std::list<tagItemInfo> tempItemList;
+				//for (auto& pl : playerItemList)
+				//{
+				//	// 두개 인덱스 차가 1 초과면, tempItemList에 넣기
+				//	int currentIndex = pl.index;
+				//	if (std::abs(prevIndex - currentIndex) > 1)
+				//	{
+				//		tempItemList.push_back(*prevPlayerItem); // 복사
+				//	}					
+				//	prevIndex = pl.index;
+				//	prevPlayerItem = &pl;
+				//}
+				//// 제일 작은 index값을 가진 아이템을 찾아서 해당 index값 반환
+				//for (auto& temp : tempItemList)
+				//{
+				//	index = (index > temp.index) ? temp.index : index;
+				//}
+				
 			}
 		}
 	}

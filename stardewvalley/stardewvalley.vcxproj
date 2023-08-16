@@ -199,6 +199,8 @@
     <ClCompile Include="Gameobjects\SliceImageGo.cpp" />
     <ClCompile Include="Gameobjects\Wateringcan.cpp" />
     <ClCompile Include="Gameobjects\Slot.cpp" />
+    <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="ShopSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -240,6 +242,8 @@
     <ClInclude Include="DataTables\WallTable.h" />
     <ClInclude Include="Gameobjects\Scythe.h" />
     <ClInclude Include="Gameobjects\Slot.h" />
+    <ClInclude Include="Shop.h" />
+    <ClInclude Include="ShopSlot.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />
