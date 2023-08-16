@@ -74,15 +74,14 @@ public:
 	Inventory(const std::string& n = "");
 	virtual ~Inventory() override;
 
-	//void AddPlayerItem(std::string name);
 	GameObject* AddUi(GameObject* go);
 	bool Exist(GameObject* go);
 
-	virtual void Init();
-	virtual void Reset();
-	virtual void Release();
-	virtual void Update(float dt);
-	virtual void Draw(sf::RenderWindow& window);
+	virtual void Init() override;
+	virtual void Reset() override;
+	virtual void Release() override;
+	virtual void Update(float dt) override;
+	virtual void Draw(sf::RenderWindow& window) override;
 
 	void SetItemWindow();
 	void SetMapWindow();
@@ -100,5 +99,5 @@ public:
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
-	std::vector<Slot*>& GetSlot() { return slot; }
+	std::vector<Slot*>* GetSlot() { return &slot; }
 };

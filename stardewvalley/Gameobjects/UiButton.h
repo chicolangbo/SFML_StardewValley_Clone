@@ -9,7 +9,7 @@ public:
 	sf::Text text;
 	// �����, 230811, SpriteGo�� ���缭 ����
 	//UiButton(const std::string& textureId, const std::string& n);
-	UiButton(const std::string& textureId, const std::string& n, const std::string& nickName = "");
+	UiButton(const std::string& textureId ="", const std::string& n ="", const std::string& nickName = "");
 	//
 	virtual ~UiButton() override;
 

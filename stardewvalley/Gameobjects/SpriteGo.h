@@ -45,5 +45,6 @@ public:
 	//임형준, 230811, 콜라이더 리턴해주는 함수 추가
 	sf::FloatRect GetCollider();
 
+	void Setting(std::string textureId, std::string n, std::string nickName);
 };
 

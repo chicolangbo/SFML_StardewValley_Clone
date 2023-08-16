@@ -517,7 +517,7 @@ void Player2::AddPlayerItem() // 자석화 해야 함
 			if (!found)
 			{
 				int index = 0;
-				for (auto slot : inven->GetSlot())
+				for (auto slot : *inven->GetSlot())
 				{
 					if (slot->IsItemIconEmpty())
 					{
@@ -525,29 +525,7 @@ void Player2::AddPlayerItem() // 자석화 해야 함
 						break;
 					}
 				}
-				playerItemList.push_back({ item->GetRootingItemId(),1,index });
-
-				//int index = 0;
-				//int prevIndex = 0;
-				//tagItemInfo* prevPlayerItem = nullptr;
-				//std::list<tagItemInfo> tempItemList;
-				//for (auto& pl : playerItemList)
-				//{
-				//	// 두개 인덱스 차가 1 초과면, tempItemList에 넣기
-				//	int currentIndex = pl.index;
-				//	if (std::abs(prevIndex - currentIndex) > 1)
-				//	{
-				//		tempItemList.push_back(*prevPlayerItem); // 복사
-				//	}					
-				//	prevIndex = pl.index;
-				//	prevPlayerItem = &pl;
-				//}
-				//// 제일 작은 index값을 가진 아이템을 찾아서 해당 index값 반환
-				//for (auto& temp : tempItemList)
-				//{
-				//	index = (index > temp.index) ? temp.index : index;
-				//}
-				
+				playerItemList.push_back({ item->GetRootingItemId(),1,index });				
 			}
 		}
 	}
