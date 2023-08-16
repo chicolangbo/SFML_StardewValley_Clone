@@ -248,14 +248,14 @@ void SceneGame::Update(float dt)
 		day += 1;
 		arrowSpin = 0;
 	}
-	if (hour < 12)
+	/*if (hour < 12)
 	{
 		std::cout << day << "일 " << "오전 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
 	}
 	else if (hour >= 12)
 	{
 		std::cout << day << "일 " << "오후 " << hour << "시 " << min << "분 " << time << "초" << std::endl;
-	}
+	}*/
 	arrowSpin += dt * 0.2381f;
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
@@ -273,6 +273,7 @@ void SceneGame::Update(float dt)
 	textHour.setCharacterSize(50); 
 	textHour.setPosition(1710.f, 115.f); 
 	textHour.setFillColor(sf::Color::Black); 
+
 	std::stringstream ssss; 
 	ssss << day << "Day"; 
 	textDay.setString(ssss.str());
