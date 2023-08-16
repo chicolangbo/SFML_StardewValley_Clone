@@ -75,12 +75,12 @@ void TextGo::SetString(const string& str)
 
 void TextGo::SetText(const std::string& ss, const int& size, sf::Color color, Origins origin, int soltLayer, float x, float y)
 {
+	this->sortLayer = soltLayer;
 	text.setCharacterSize(size);
 	text.setString(ss);
+	Utils::SetOrigin(text, origin);
 	text.setFillColor(color);
 	text.setPosition(x, y);
-	Utils::SetOrigin(text, origin);
-	this->sortLayer = soltLayer;
 }
 
 void TextGo::SetText(const std::wstring& ss, const int& size, sf::Color color, Origins origin, int soltLayer, float x, float y)
