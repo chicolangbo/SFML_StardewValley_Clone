@@ -90,11 +90,11 @@ public:
 	void SetChangeSceneWindow();
 	void SetWindowClear();
 
-	void ItemIconSetUp();
-	void ButtonSetUp();
-	void PlayerInfoUpdate();
-	void IconUpdate();
-	void ItemIndexUpdate();
+	void ItemIconSetUp();//init할떄 한번만 아이템 아이콘 들을 전부 찍어놓음
+	void ButtonSetUp();//UI버튼
+	void PlayerInfoUpdate();//실시간 플레이어 돈 업데이트
+	void IconUpdate();//슬롯에다 아이템 업데이트 
+	void ItemIndexUpdate();//아이템 위치?
 
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }

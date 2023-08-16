@@ -2,8 +2,7 @@
 #include "UiButton.h"
 #include "Item.h"
 
-class Slot :
-    public UiButton
+class Slot : public UiButton
 {
 protected:
     SpriteGo* itemIcon = nullptr;

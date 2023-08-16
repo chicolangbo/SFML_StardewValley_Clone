@@ -87,11 +87,7 @@ Inventory::Inventory(const std::string& n)
 
 Inventory::~Inventory()
 {
-    for (auto it = invenUiObjects.begin(); it != invenUiObjects.end(); ++it)
-    {
-        delete *it;
-    }
-    invenUiObjects.clear();
+    Release(); 
 }
 
 void Inventory::Init()
@@ -284,6 +280,13 @@ void Inventory::Reset()
 
 void Inventory::Release()
 {
+    for (auto it : slot)
+    {
+        delete it;
+    }
+    delete mouseSlot;
+
+    invenUiObjects.clear(); 
 }
 
 void Inventory::Update(float dt)
@@ -477,7 +480,7 @@ void Inventory::SortGos()
         });
 }
 
-void Inventory::ItemIndexUpdate()
+void Inventory::ItemIndexUpdate()//바뀐 위치 갱신 창을 닫을때 
 {
     for (tagItemInfo& pl : *playerItemList)
     {
@@ -519,7 +522,7 @@ void Inventory::IconUpdate()
     {
         for (Slot* sl : slot)
         {
-            if (pl.index == sl->slotIndex)
+            if (pl.index == sl->slotIndex)//인덱스가 동일한 슬롯에 해당아이템의 아이콘,ID전달
             {
                 auto foundItem = itemIconList.find(pl.itemId);
                 if (foundItem != itemIconList.end())

@@ -23,7 +23,7 @@ void Axe::Init()
 
 	SetOrigin(Origins::BC);
 
-	
+	//9슬라이스
 }
 
 void Axe::Reset()
