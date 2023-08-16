@@ -23,8 +23,21 @@ protected:
 	sf::Vector2f tilesize = { 48.f, 48.f };
 
 	SpriteGo* selectTile;
-	//ÆÈ·¹Æ®
 	
+	//ÆÈ·¹Æ®
+	SpriteGo* tilePallet;
+	RectangleGo* selPalTile;
+	sf::Vector2f texTileSize = { 16.f, 16.f };
+	sf::Vector2f palletTileSize = { 48.f, 48.f };
+	sf::Vector2f palletLT;
+	sf::Vector2f palletSize;
+	sf::Vector2f palletTexSize = { 192.f, 112.f };
+	int palNumX = 0;
+	int palNumY = 0;
+
+	UiButton* buttonPalL;
+	UiButton* buttonPalR;
+	int palNum = 1;
 
 	//UI
 	TileMap* palletBg = nullptr;
@@ -56,5 +69,7 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
+
+	void ChangePallet();
 };
 

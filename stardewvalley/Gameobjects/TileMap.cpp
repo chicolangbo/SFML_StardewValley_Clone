@@ -218,6 +218,32 @@ void TileMap::setScale(float scaleX, float scaleY)
     }
 }
 
+void TileMap::ChangeTexRect(int x, int y, sf::IntRect texRect)
+{
+    sf::Vector2f texOffsets[4] =
+    {
+        {(float)texRect.left, (float)texRect.top},
+        {(float)texRect.left + (float)texRect.width, (float)texRect.top},
+        {(float)texRect.left + (float)texRect.width, (float)texRect.top + (float)texRect.height},
+        {(float)texRect.left, (float)texRect.top + (float)texRect.height}
+    };
+
+    if (x >= 0 && x < size.x && y >= 0 && y < size.y)
+    {
+        int tileIndex = size.x * y + x;
+
+        for (int k = 0; k < 4; ++k)
+        {
+            int vertexIndex = tileIndex * 4 + k;
+            vertexArray[vertexIndex].texCoords = texOffsets[k];
+        }
+    }
+    else
+    {
+        cout << "ERR: Tile position out of bounds" << endl;
+    }
+}
+
 sf::Vector2f TileMap::GetTileSize()
 {
     return tileSize;

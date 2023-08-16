@@ -46,5 +46,7 @@ public:
 	void setTilesize(float x, float y);
 	void setTexSize(float x, float y);
 	void setScale(float scaleX, float scaleY);
+
+	void ChangeTexRect(int x, int y, sf::IntRect texRect);
 	
 };
