@@ -97,7 +97,8 @@ void QuickInventory::Update(float dt)
 {
 	for (int i = 0; i < 12; ++i)
 	{
-		quickslots[i]->itemIcon = (*quickslot)[i]->itemIcon; //GEt함수로 수정해야함  
+		quickslots[i]->SetItemIcon((*quickslot)[i]->GetItemIcon());  
+		quickslots[i]->SetItemId((*quickslot)[i]->GetItemId()); 
 	}
 
 	for (auto m : quickinvenUi)
@@ -108,50 +109,340 @@ void QuickInventory::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 	{
 		mark.SetPosition(quickslots[0]->GetPosition());
+		
+		if (quickslots[0]->GetItemId() == ItemId::pick) 
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[0]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[0]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[0]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[0]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
+		
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
 	{
 		mark.SetPosition(quickslots[1]->GetPosition());
+		if (quickslots[1]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[1]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[1]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[1]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[1]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
 	{
 		mark.SetPosition(quickslots[2]->GetPosition());
+		if (quickslots[2]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[2]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[2]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[2]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[2]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
 	{
 		mark.SetPosition(quickslots[3]->GetPosition());
+		if (quickslots[3]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[3]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[3]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[3]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[3]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
 	{
 		mark.SetPosition(quickslots[4]->GetPosition());
+		if (quickslots[4]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[4]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[4]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[4]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[4]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
 	{
 		mark.SetPosition(quickslots[5]->GetPosition());
+		if (quickslots[5]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[5]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[5]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[5]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[5]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
 	{
 		mark.SetPosition(quickslots[6]->GetPosition());
+		if (quickslots[6]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[6]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[6]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[6]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[6]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
 		mark.SetPosition(quickslots[7]->GetPosition());
+		if (quickslots[7]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[7]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[7]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[7]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[7]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
 	{
 		mark.SetPosition(quickslots[8]->GetPosition());
+		if (quickslots[8]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[8]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[8]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[8]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[8]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
 		mark.SetPosition(quickslots[9]->GetPosition());
+		if (quickslots[9]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[9]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[9]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[9]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[9]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Hyphen))
 	{
 		mark.SetPosition(quickslots[10]->GetPosition());
+		if (quickslots[10]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[10]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[10]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[10]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[10]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Equal))
 	{
 		mark.SetPosition(quickslots[11]->GetPosition());
+		if (quickslots[11]->GetItemId() == ItemId::pick)
+		{
+			itemid = ItemId::pick;
+		}
+		else if (quickslots[11]->GetItemId() == ItemId::ax)
+		{
+			itemid = ItemId::ax;
+		}
+		else if (quickslots[11]->GetItemId() == ItemId::homi)
+		{
+			itemid = ItemId::homi;
+		}
+		else if (quickslots[11]->GetItemId() == ItemId::hook)
+		{
+			itemid = ItemId::hook;
+		}
+		else if (quickslots[11]->GetItemId() == ItemId::waterCan)
+		{
+			itemid = ItemId::waterCan;
+		}
+		else
+		{
+			itemid = ItemId::none;
+		}
 	}
 		
 }

@@ -18,6 +18,7 @@ protected:
 
 	std::vector<Slot*>* quickslot;//포인터로 들고온애
 	std::vector<Slot*> quickslots;
+	ItemId itemid;
 
 	bool off = false;
 
@@ -34,5 +35,7 @@ public:
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window); 
 	void SetQuickSlot(std::vector<Slot*>* s){quickslot = s;}
+	ItemId GetItemId() { return itemid; } 
+	
 };
 

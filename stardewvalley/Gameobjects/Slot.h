@@ -8,11 +8,11 @@ protected:
    
     Slot* mouseIcon = nullptr;
     ItemId id = ItemId::none;
-
+    SpriteGo* itemIcon = nullptr;
     bool isEmpty = true;
 
 public:
-    SpriteGo* itemIcon = nullptr;
+    
     int slotIndex = 0;
     Slot(const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
     ~Slot();

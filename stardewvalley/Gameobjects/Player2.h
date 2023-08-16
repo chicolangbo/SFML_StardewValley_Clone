@@ -9,14 +9,6 @@
 #include "Wateringcan.h"
 #include "Item.h"
 
-enum class Tool
-{
-	Scythe,
-	Axe,
-	Pickax,
-	Hoe,
-	WateringCan,
-};
 
 class RootingItem;
 
@@ -48,7 +40,7 @@ protected:
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
 	//test
-	Tool item;
+	ItemId item;
 
 	//��� ���� ���� -2�� ����
 	int maxEnergy = 270;
@@ -98,5 +90,6 @@ public:
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
 	void AddPlayerItem();
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
+	void SetItemId(ItemId id) { item = id; }
 };
 

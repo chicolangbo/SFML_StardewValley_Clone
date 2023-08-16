@@ -237,6 +237,7 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
+	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
 	if (time >= 7.f)
 	{
@@ -341,9 +342,6 @@ void SceneGame::Update(float dt)
 		}
 	}
 	
-	
-	
-
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
