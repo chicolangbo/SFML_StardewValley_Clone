@@ -1,9 +1,12 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "Item.h"
+
 class Player : public SpriteGo
 {
 protected:
+
 	AnimationController animation;
 
 	float speed = 500.f;
@@ -26,7 +29,7 @@ protected:
 public:
 	Player(const std::string& textureId = "", const std::string& n="")
 		:SpriteGo(textureId, n) {}
-	virtual ~Player() override { Release(); }
+	virtual ~Player() override;
 
 	//void SetWallBounds(const sf::FloatRect& bounds);
 	bool GetFlipX() const;

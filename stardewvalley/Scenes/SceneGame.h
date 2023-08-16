@@ -5,18 +5,21 @@ class VertexArrayGo;
 class Player2;
 class SpriteGo;
 class Wall;
+class SliceImageGo;
+class Inventory;
+class RootingItem;
 
 class SceneGame : public Scene
 {
 protected:
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
-	// ±è¹ÎÁö, 230809, Ãß°¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230809, ï¿½ß°ï¿½
 	bool enterShop = false;
 	//
 
 	Player2* player2;
-	// ±è¹ÎÁö, 230809, Ãß°¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230809, ï¿½ß°ï¿½
 	SpriteGo* testFarmMap;
 	SpriteGo* house;
 	SpriteGo* shop;
@@ -35,7 +38,7 @@ protected:
 	Wall* shopWalls;
     //
 	
-	//ÀÓÇüÁØ Å×½ºÆ®
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®
 	SpriteGo* energy;
 	SpriteGo* info;
 	SpriteGo* timeArrow;
@@ -57,6 +60,9 @@ protected:
 	sf::Text textHour;
 	sf::Text textDay;
 	sf::Font font;
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230811, ï¿½Îºï¿½ï¿½ä¸® ï¿½ß°ï¿½
+	Inventory* inven;
+	std::list<RootingItem*>rootingItems; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ ï¿½Êµå¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//
 
 public:
@@ -73,5 +79,8 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230815, ï¿½Ã·ï¿½ï¿½Ì¾ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ ï¿½ß°ï¿½
+	void SpawnRootingItem(ItemId id);
 };
 

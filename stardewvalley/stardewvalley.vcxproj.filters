@@ -75,9 +75,6 @@
     <ClCompile Include="GameObjects\Ground.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Player.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\Player2.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
@@ -128,6 +125,7 @@
     </ClCompile>
     <ClCompile Include="Gameobjects\TextGo.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Hoe.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
@@ -137,8 +135,23 @@
     <ClCompile Include="Wateringcan.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
+    <ClCompile Include="Gameobjects\Inventory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTables\AllItemTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RootingItem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Gameobjects\TextGo.cpp">
       <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobjects\Slot.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobjects\SliceImageGo.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +198,6 @@
       <Filter>Gameobjects</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Ground.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Player.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Player2.h">
@@ -246,17 +256,39 @@
     </ClInclude>
     <ClInclude Include="Gameobjects\TextGo.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Hoe.h">
       <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\Inventory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\Item.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DataTables\AllItemTable.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scythe.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
+    <ClInclude Include="RootingItem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Wateringcan.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
+    <ClInclude Include="Gameobjects\Slot.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Gameobjects\TextGo.h">
       <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\SliceImageGo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobjects\SliceImageGo.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,13 +5,13 @@
 #include "ClipTable.h"
 #include "ResourceMgr.h"
 
-//void Player::SetWallBounds(const sf::FloatRect& bounds)
-//{
-//	wallBounds = bounds;
-//
-//	wallBoundsLT = { wallBounds.left, wallBounds.top };
-//	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height };
-//}
+void Player::SetWallBounds(const sf::FloatRect& bounds)
+{
+	wallBounds = bounds;
+
+	wallBoundsLT = { wallBounds.left, wallBounds.top };
+	wallBoundsRB = { wallBounds.left + wallBounds.width, wallBounds.top + wallBounds.height };
+}
 
 bool Player::GetFlipX() const
 {
@@ -33,7 +33,7 @@ void Player::SetFlipX(bool flip)
 
 void Player::Init()
 {
-	////ÆÄ½ÌÀ¸·Î º¯°æ ÇÊ¿ä
+	////ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 	//std::string textureId = "graphics/RubySheet.png";
 	//
 	///*----Idle----*/
@@ -44,7 +44,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	//sf::IntRect coord(768, 256, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 256*256 
+	//	//sf::IntRect coord(768, 256, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 256*256 
 	//	clip.frames.push_back({ textureId, sf::IntRect(256, 768, 256, 256) });
 	//	clip.frames.push_back({ textureId, sf::IntRect(256, 1024, 256, 256) });
 	//	animation.AddClip(clip);
@@ -56,7 +56,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	//sf::IntRect coord(768, 256, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 256*256 
+	//	//sf::IntRect coord(768, 256, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 256*256 
 	//	clip.frames.push_back({ textureId, sf::IntRect(0, 768, 256, 256) });
 	//	clip.frames.push_back({ textureId, sf::IntRect(0, 1024, 256, 256) });
 	//	animation.AddClip(clip);
@@ -68,7 +68,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	//sf::IntRect coord(768, 256, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 256*256 
+	//	//sf::IntRect coord(768, 256, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 256*256 
 	//	clip.frames.push_back({ textureId, sf::IntRect(512, 768, 256, 256) });
 	//	clip.frames.push_back({ textureId, sf::IntRect(512, 1024, 256, 256) });
 	//	animation.AddClip(clip);
@@ -81,7 +81,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	sf::IntRect coord(0, 0, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 120x120 
+	//	sf::IntRect coord(0, 0, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 120x120 
 	//	for (int i = 0; i < 4; i++)
 	//	{
 	//		clip.frames.push_back({ textureId, coord });
@@ -97,7 +97,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	sf::IntRect coord(0, 256, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 120x120 
+	//	sf::IntRect coord(0, 256, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 120x120 
 	//	for (int i = 0; i < 4; i++)
 	//	{
 	//		clip.frames.push_back({ textureId, coord });
@@ -113,7 +113,7 @@ void Player::Init()
 	//	clip.fps = 10;
 	//	clip.loopType = AnimationLoopTypes::Loop;
 	//
-	//	sf::IntRect coord(0, 512, 256, 256); //start ÀÌ¹ÌÁö, ÇÏ³ªÀÇ Å©Å°°¡ 120x120 
+	//	sf::IntRect coord(0, 512, 256, 256); //start ï¿½Ì¹ï¿½ï¿½ï¿½, ï¿½Ï³ï¿½ï¿½ï¿½ Å©Å°ï¿½ï¿½ 120x120 
 	//	for (int i = 0; i < 4; i++)
 	//	{
 	//		clip.frames.push_back({ textureId, coord });
@@ -160,7 +160,7 @@ void Player::Update(float dt)
 	//SpriteGo::Update(dt);
 	//animation.Update(dt);
 	//float h = INPUT_MGR.GetAxis(Axis::Horizontal);
-	////ÇÃ¸³
+	////ï¿½Ã¸ï¿½
 	//if (h != 0.f)
 	//{
 	//	bool flip = h < 0.f;
@@ -169,7 +169,7 @@ void Player::Update(float dt)
 	//		SetFlipX(flip);
 	//	}
 	//}
-	////Á¡ÇÁ
+	////ï¿½ï¿½ï¿½ï¿½
 	//if (isGround && INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	//{
 	//	velocity.y += JumpForce;
@@ -177,12 +177,12 @@ void Player::Update(float dt)
 	//	isGround = false;
 	//}
 	//
-	////ÀÌµ¿
+	////ï¿½Ìµï¿½
 	//velocity.x = h * speed;
 	//velocity.y += gravity * dt;
 	//position += velocity * dt;
 	//
-	////¹Ù´Ú Ãæµ¹ Ã³¸®
+	////ï¿½Ù´ï¿½ ï¿½æµ¹ Ã³ï¿½ï¿½
 	//if (position.y > 0.f)
 	//{
 	//	isGround = true;
@@ -216,7 +216,7 @@ void Player::Update(float dt)
 	animation.Update(dt);
 	float h = INPUT_MGR.GetAxis(Axis::Horizontal);
 	float v = INPUT_MGR.GetAxis(Axis::Vertical);
-	//ÇÃ¸³
+	//ï¿½Ã¸ï¿½
 	if (h != 0.f)
 	{
 		bool flip = h > 0.f;
@@ -226,7 +226,7 @@ void Player::Update(float dt)
 		}
 	}
 
-	//ÀÌµ¿
+	//ï¿½Ìµï¿½
 	velocity.x = h * speed;
 	velocity.y = v * speed;
 	position += velocity * dt;
@@ -238,7 +238,7 @@ void Player::Update(float dt)
 
 	SetPosition(position);
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 	if (animation.GetCurrentClipId() == "IdleFront" ||
 		animation.GetCurrentClipId() == "IdleLeft" ||
 		animation.GetCurrentClipId() == "IdleBack")

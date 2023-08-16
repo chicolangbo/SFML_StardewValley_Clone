@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTables\AllItemTable.cpp" />
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="Axe.cpp" />
@@ -175,13 +176,16 @@
     <ClCompile Include="Global\Utils.cpp" />
     <ClCompile Include="GameObjects\Ground.cpp" />
     <ClCompile Include="Hoe.cpp" />
+    <ClCompile Include="Gameobjects\Inventory.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Framework\ResourceMgr.cpp" />
-    <ClCompile Include="GameObjects\Player.cpp" />
     <ClCompile Include="Pickax.cpp" />
+    <ClCompile Include="RootingItem.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -192,10 +196,13 @@
     <ClCompile Include="Gameobjects\Wall.cpp" />
     <ClCompile Include="DataTables\WallTable.cpp" />
     <ClCompile Include="Scythe.cpp" />
+    <ClCompile Include="Gameobjects\SliceImageGo.cpp" />
     <ClCompile Include="Wateringcan.cpp" />
+    <ClCompile Include="Gameobjects\Slot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="DataTables\AllItemTable.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="Axe.h" />
@@ -216,10 +223,13 @@
     <ClInclude Include="Framework\InputMgr.h" />
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Global\Utils.h" />
-    <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="GameObjects\Ground.h" />
     <ClInclude Include="Hoe.h" />
+    <ClInclude Include="Gameobjects\SliceImageGo.h" />
+    <ClInclude Include="Gameobjects\Inventory.h" />
+    <ClInclude Include="Gameobjects\Item.h" />
     <ClInclude Include="Pickax.h" />
+    <ClInclude Include="RootingItem.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -229,6 +239,8 @@
     <ClInclude Include="Gameobjects\Wall.h" />
     <ClInclude Include="DataTables\WallTable.h" />
     <ClInclude Include="Scythe.h" />
+    <ClInclude Include="Gameobjects\Slot.h" />
+    <ClInclude Include="Gameobjects\SliceImageGo.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />

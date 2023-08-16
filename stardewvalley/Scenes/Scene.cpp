@@ -5,7 +5,7 @@
 #include "Framework.h"
 
 Scene::Scene(SceneId id) 
-	: sceneId(id), window(FRAMEWORK.GetWindow())
+	: sceneId(id), window(FRAMEWORK.GetWindow()), windowSize(FRAMEWORK.GetWindowSize()) // 김민지, 230812, 스크린 사이즈 추가
 {
 }
 

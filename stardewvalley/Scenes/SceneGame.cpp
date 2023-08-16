@@ -15,12 +15,17 @@
 #include "Axe.h"
 #include <sstream>
 #include "TextGo.h"
+#include "SliceImageGo.h"
+#include "Inventory.h"
+#include "RootingItem.h"
+#include "DataTableMgr.h"
+#include "AllItemTable.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	//csvÆÄÀÏÀ» ÅëÇØ¼­ ·ÎµùÇÏ´Â °ÍÀ¸·Î º¯°æ
+	//csvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Îµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	
-	// ±è¹ÎÁö, 230807, Æú´õ ¼öÁ¤
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230807, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//resourceListPath = "tables/SceneGameResourceList.csv";
 	resourceListPath = "scripts/defaultResourceList.csv";
 	//
@@ -42,14 +47,14 @@ void SceneGame::Init()
 	sf::Vector2f centerPos = size * 0.5f;
 	
 	worldView.setSize(size);
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ¼¾ÅÍ º¯°æ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230807, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	worldView.setCenter(0,0);
 	//
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	// ±è¹ÎÁö, 230808, ÀÓ½Ã¸Ê ÄÚµå Ãß°¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230808, ï¿½Ó½Ã¸ï¿½ ï¿½Úµï¿½ ï¿½ß°ï¿½
 	testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	testFarmMap->sprite.setScale(3.f, 3.f);
 	testFarmMap->SetOrigin(Origins::MC);
@@ -134,13 +139,20 @@ void SceneGame::Init()
 	shopWalls->SetType(Wall::Location::Shop);
 	shopWalls->SetPos();
 	shopWalls->SetActive(false);
+	//
 
 	player2 = (Player2*)AddGo(new Player2());
 	player2->SetOrigin(Origins::BC);
 	player2->sortLayer=10;
 	player2->collider.setScale(0.5f, 0.1f);
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230811~15, ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½
+	player2->SetRootingItems(&rootingItems);
+	inven = (Inventory*)AddGo(new Inventory("inven"));
+	inven->sortLayer = 100;
+	inven->SetPosition(windowSize / 2.f);
+	inven->SetPlayer(player2);
 
-	//¿¡³ÊÁö ¹Ù UI ÀÏ´Ü ±¸Çö¸¸/ÀÓÇüÁØ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ UI ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
 	energy->SetOrigin(Origins::BR);
 	energy->SetPosition(size);
@@ -171,7 +183,6 @@ void SceneGame::Init()
 	{
 		go->Init();
 	}
-
 }
 
 void SceneGame::Release()
@@ -212,14 +223,16 @@ void SceneGame::Enter()
 	textHour.setFont(font);
 	textDay.setFont(font);
 
-	// ±èÁÖÇö, 230811, uiview¸¦ Init¿¡¼­ ÁÖ´Â °ÍÀÌ ´õ ÁÁ¾Æ º¸ÀÓ. ÁÖ¼®Ã³¸®
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, 230811, uiviewï¿½ï¿½ Initï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½Ö¼ï¿½Ã³ï¿½ï¿½
 	//uiView.setSize(size);
 	//uiView.setCenter(centerPos);
 
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ÁÖ¼®Ã³¸®
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230807, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¼ï¿½Ã³ï¿½ï¿½
 	//player2->SetOrigin(Origins::MC);
 	//player2->SetPosition(centerPos);
 	//
+	uiView.setSize(size);
+	uiView.setCenter(centerPos);
 }
 
 void SceneGame::Exit()
@@ -230,7 +243,7 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-	//230814, ÀÓÇüÁØ Å×½ºÆ®ÄÚµå, ½Ã°£ ±¸Çö
+	//230814, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½Úµï¿½, ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
 	time +=dt;
 	if (time >= 7.f)
 	{
@@ -250,11 +263,11 @@ void SceneGame::Update(float dt)
 	}
 	/*if (hour < 12)
 	{
-		std::cout << day << "ÀÏ " << "¿ÀÀü " << hour << "½Ã " << min << "ºÐ " << time << "ÃÊ" << std::endl;
+		std::cout << day << "ï¿½ï¿½ " << "ï¿½ï¿½ï¿½ï¿½ " << hour << "ï¿½ï¿½ " << min << "ï¿½ï¿½ " << time << "ï¿½ï¿½" << std::endl;
 	}
 	else if (hour >= 12)
 	{
-		std::cout << day << "ÀÏ " << "¿ÀÈÄ " << hour << "½Ã " << min << "ºÐ " << time << "ÃÊ" << std::endl;
+		std::cout << day << "ï¿½ï¿½ " << "ï¿½ï¿½ï¿½ï¿½ " << hour << "ï¿½ï¿½ " << min << "ï¿½ï¿½ " << time << "ï¿½ï¿½" << std::endl;
 	}*/
 	arrowSpin += dt * 0.2381f;
 	timeArrow->SetOrigin(Origins::BC);
@@ -285,16 +298,16 @@ void SceneGame::Update(float dt)
 	{
 		hour += 1;
 	}
-	// ±è¹ÎÁö, 230807, Å×½ºÆ®¿ë ÁÖ¼®Ã³¸®
-	// ±è¹ÎÁö, 230808, Å×½ºÆ®¿ë ÁÖ¼®ÇØÁ¦, ÇÃ·¹ÀÌ¾î Æ÷Áö¼Ç ·Î±×
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230807, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¼ï¿½Ã³ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230808, ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½
 	//worldView.setCenter(player2->GetPosition());
 	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 	//
 	
-	//ºä¸¦ ÇÃ·¹ÀÌ¾î¿¡ °íÁ¤
+	//ï¿½ä¸¦ ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ ï¿½ï¿½ï¿½ï¿½
 	worldView.setCenter(player2->GetPosition());
 	//std::cout << player2->GetPosition().x << " " << player2->GetPosition().y << std::endl;
-	//ÀÓÇüÁØ Å×½ºÆ® ÄÚµå
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½Úµï¿½
 	
 
 	playerBound = player2->GetCollider(); 
@@ -307,8 +320,9 @@ void SceneGame::Update(float dt)
 	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
 	//
 
-	// ±è¹ÎÁö, 230809, ¼¥³»ºÎ
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230809, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)
 		{
@@ -325,10 +339,12 @@ void SceneGame::Update(float dt)
 				}
 			}
 			player2->SetActive(true);
-			player2->SetPosition(-463.f, -770.f); //230814, ÀÓÇüÁØ ¼öÁ¤
+			player2->SetPosition(-463.f, -770.f); //230814, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			energy->SetActive(true);
 			info->SetActive(true);
 			timeArrow->SetActive(true);
+			inven->SetActive(true);
+			//player2->SetPosition(-463.f, -845.f);
 		}
 		else
 		{
@@ -347,10 +363,13 @@ void SceneGame::Update(float dt)
 			}
 
 			player2->SetActive(true);	
-			player2->SetPosition(419.f, 1866.f); // Æ÷Áö¼Ç ÀÓ½Ã ¼¼ÆÃ //230814, ÀÓÇüÁØ ¼öÁ¤
+			player2->SetPosition(419.f, 1866.f); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ //230814, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			energy->SetActive(true);
 			info->SetActive(true);
 			timeArrow->SetActive(true); 
+			//player2->SetActive(true);
+			inven->SetActive(true);
+			//player2->SetPosition(419.f, 1823.f); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 	}
 	
@@ -359,6 +378,16 @@ void SceneGame::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
+	}
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½Úµï¿½
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	{
+		SpawnRootingItem(ItemId::branch);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
+	{
+		SpawnRootingItem(ItemId::coal);
 	}
 }
 
@@ -371,22 +400,31 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	window.draw(textDay);
 }
 
+void SceneGame::SpawnRootingItem(ItemId id)
+{
+	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
+	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name, info->nickName)));
+	for (auto r : rootingItems)
+	{
+		r->Reset();
+	}
+}
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
 {
 	VertexArrayGo* background = new VertexArrayGo(textureId, "Background");
 	background->vertexArray.setPrimitiveType(sf::Quads);
-	background->vertexArray.resize(size.x * size.y * 4); //¸Å°³º¯¼ö: ÇÊ¿äÇÑ Á¤Á¡ÀÇ ¼ö
+	background->vertexArray.resize(size.x * size.y * 4); //ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 
-	sf::Vector2f startPos = { 0, 0 }; //½ÃÀÛ ÁÂÇ¥
+	sf::Vector2f startPos = { 0, 0 }; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 	sf::Vector2f offsets[4] =
 	{
-		//Á¤Á¡ÀÇ ÁÂÇ¥
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 		{0.f, 0.f},
 		{tileSize.x, 0.f},
 		{tileSize.x, tileSize.y},
 		{0.f, tileSize.y}
-	}; //Á¤Á¡ÀÇ ¼ø¼­, ¼ø¼­´Â Á¦°øµÈ ·¹ÆÛ·±½º ÆäÀÌÁö ÂüÁ¶ÇÏ±â
+	}; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 	sf::Vector2f texOffsets[4] =
 	{
 		{0.f, 0.f},
@@ -396,22 +434,22 @@ VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileS
 	};
 
 	sf::Vector2f currPos = startPos;
-	/*¿Ü°ûÀº º®µ¹·Î, ³»ºÎ´Â ³ª¸ÓÁö 3°³Áß 1°³ ·£´ýÀ¸·Î ¼±ÅÃÇÏ±â*/
+	/*ï¿½Ü°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Î´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½*/
 	for (int i = 0; i < size.y; i++)
 	{
 		for (int j = 0; j < size.x; j++)
 		{
 			int texIndex = 3;
 			if (i != 0 && i != size.y - 1 && j != 0 && j != size.x - 1)
-				//¿Ü°ûÀÌ ¾Æ´Ò ¶§, À­ÁÙ, ¾Æ·§ÁÙ, ¿ÞÂÊ, ¿À¸¥ÂÊ ¼ø¼­·Î ¿Ü°û °Ë»ç
+				//ï¿½Ü°ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Æ·ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½Ë»ï¿½
 			{
-				texIndex = Utils::RandomRange(0, 3); //Å¸ÀÏ 3°³ Áß 1°³ ·£´ýÀ¸·Î
+				texIndex = Utils::RandomRange(0, 3); //Å¸ï¿½ï¿½ 3ï¿½ï¿½ ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			}
 
-			int tileIndex = size.x * i + j; //2Â÷¿ø ¹è¿­ÀÇ ÀÎµ¦½º¸¦ 1Â÷¿ø ¹è¿­ ÀÎµ¦½º·Î º¯°æ
-			for (int k = 0; k < 4; k++) //4°¢ÇüÀÇ Á¤Á¡À» ÇÏ³ª¾¿ µµ´Â for¹®
+			int tileIndex = size.x * i + j; //2ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			for (int k = 0; k < 4; k++) //4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ forï¿½ï¿½
 			{
-				int vertexIndex = tileIndex * 4 + k; //Á¤Á¡ÀÇ ÀÎµ¦½º
+				int vertexIndex = tileIndex * 4 + k; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
 				background->vertexArray[vertexIndex].position = currPos + offsets[k];
 				background->vertexArray[vertexIndex].texCoords = texOffsets[k];
 				background->vertexArray[vertexIndex].texCoords.y += texSize.y * texIndex;

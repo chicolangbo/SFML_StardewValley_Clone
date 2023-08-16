@@ -7,6 +7,7 @@
 #include "Hoe.h"
 #include "Scythe.h"
 #include "Wateringcan.h"
+#include "Item.h"
 
 enum class Tool
 {
@@ -17,8 +18,7 @@ enum class Tool
 	WateringCan,
 };
 
-
-
+class RootingItem;
 
 class Player2 : public SpriteGo
 {
@@ -50,7 +50,7 @@ protected:
 	//test
 	Tool item;
 
-	//±â·Â µµ±¸ »ç¿ë½Ã -2¾¿ Â÷°¨
+	//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	int maxEnergy = 270;
 	int energy = 270;
 	int money = 500;
@@ -65,6 +65,11 @@ protected:
 	bool playingAnimation = false;
 	bool one = true;
 	bool boundwall = false;
+	
+	std::list<tagItemInfo> playerItemList;
+	std::list<RootingItem*>*rootingItemList;
+	int curFundsInt; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int totalEarningsInt; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ú±ï¿½
 
 public:
 
@@ -75,9 +80,7 @@ public:
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
-	// ±è¹ÎÁö, 230809, ÄÝ¶óÀÌ´õ ¿¬µ¿¿ë
 	virtual void Draw(sf::RenderWindow& window) override;
-	//
 
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
@@ -88,7 +91,12 @@ public:
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);
 
+	AnimationController GetAnimation() { return animation; }
 
-
+	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
+	int* GetCurFundsInt() { return &curFundsInt; }
+	int* GetTotalEarningsInt() { return &totalEarningsInt; }
+	void AddPlayerItem();
+	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 };
 

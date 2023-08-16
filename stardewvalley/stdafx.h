@@ -13,6 +13,9 @@ using namespace std;
 #include <random>
 #include <tuple>
 #include <functional>
+// ±è¹ÎÁö, 230813, Ãß°¡
+#include <sstream>
+//
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>

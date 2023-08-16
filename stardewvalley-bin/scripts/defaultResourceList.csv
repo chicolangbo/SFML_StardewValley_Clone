@@ -24,8 +24,9 @@
 0,graphics/Cursors.ko-KR.png,ok,128,256,65,64,
 0,graphics/Cursors.ko-KR.png,closeBox,191,256,65,64,
 0,graphics/Cursors.ko-KR.png,close,322,498,12,12,
-0,graphics/Cursors.ko-KR.png,box1,384,373,18,18,
 0,graphics/Cursors.ko-KR.png,box1Inside,384,396,15,15,
+0,graphics/box1.png,N,-1,-1,-1,-1,
+0,graphics/setButton.png,N,-1,-1,-1,-1
 0,graphics/Cursors.ko-KR.png,coin,193,373,9,9,
 0,graphics/Cursors.ko-KR.png,clock,410,501,9,9,
 0,graphics/Cursors.ko-KR.png,scrollPaper,325,318,25,18,
@@ -56,6 +57,7 @@
 0,graphics/Craftables.png,craftBox,32,529,16,25,
 0,graphics/Craftables.png,craftContainer,112,37,16,27,
 0,graphics/Craftables.png,craftScareCrow,0,32,16,32,
+0,graphics/invenBoxLine.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,invenHomi,81,34,15,13,
 0,graphics/tools.png,invenPick,81,96,15,15,
 0,graphics/tools.png,invenAx,80,160,16,15,
@@ -117,7 +119,7 @@
 0,graphics/Pierre.png,pierre,0,3,16,29,
 0,graphics/Robin.png,robin,1,4,14,28,
 0,map/testFarmMap.png,N,-1,-1,-1,-1,
-3,animations/player_Idle.csv,N,-1,-1,-1,-1,ÀÓÇüÁØ
+3,animations/player_Idle.csv,N,-1,-1,-1,-1,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 3,animations/player_Idle-side.csv,N,-1,-1,-1,-1,
 3,animations/player_Idle-up.csv,N,-1,-1,-1,-1,
 3,animations/player_Move.csv,N,-1,-1,-1,-1,
@@ -132,7 +134,8 @@
 3,animations/player_Attack-up.csv,N,-1,-1,-1,-1,
 3,animations/Axe_Side.csv,N,-1,-1,-1,-1,
 3,animations/Pickax_Side.csv,N,-1,-1,-1,-1,
-1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,À±À¯¸²
+1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,
 0,map/walls_and_floors.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,SideAxe,260,158,10,23,
@@ -170,3 +173,4 @@
 0,graphics/Cursors.ko-KR.png,Info,333,431,72,58,
 0,graphics/Pickax.png,N,-1,-1,-1,-1,
 0,graphics/Cursors.ko-KR.png,TimeArrow,324,477,7,19,
+3,animations/Pickax_Back.csv,N,-1,-1,-1,-1,

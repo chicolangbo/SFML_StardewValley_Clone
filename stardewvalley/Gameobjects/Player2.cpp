@@ -8,6 +8,10 @@
 #include "SceneGame.h"
 #include "Scene.h"
 #include "Axe.h"
+#include "RootingItem.h"
+#include "AllItemTable.h"
+#include "DataTableMgr.h"
+#include "Inventory.h"
 
 void Player2::Init()
 {
@@ -61,13 +65,8 @@ void Player2::Init()
 
 void Player2::Reset()
 {
-	// ±è¹ÎÁö, 230809, ÄÝ¶óÀÌ´õ¿ë Ãß°¡
 	SpriteGo::Reset();
-	//
 	animation.Play("Idle");
-	// ±è¹ÎÁö, 230809, À§Ä¡ ÀÌµ¿
-	//SetOrigin(origin);
-	//
 	
 	SetPosition({ 0, 0 });
 	SetFlipX(false);
@@ -84,15 +83,12 @@ void Player2::Reset()
 	one = true;
 	energy = maxEnergy;
 
-	// ±è¹ÎÁö, 230809, ÄÝ¶óÀÌ´õ¿ë Ãß°¡
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	SetOrigin(origin);
-	//
 }
 
 void Player2::Update(float dt)
 {
-	// ±è¹ÎÁö, 230809, ÄÝ¶óÀÌ´õ¿ë Ãß°¡
 	SpriteGo::Update(dt);
 	//
 	sf::Vector2f poss = position;  
@@ -102,7 +98,7 @@ void Player2::Update(float dt)
 	
 	sf::Vector2f playerPos = GetPosition();
 	//std::cout << playerPos.x << " " << playerPos.y << std::endl;
-	//ÀÌµ¿
+	//ï¿½Ìµï¿½
 
 	if (!playerDie)
 	{
@@ -116,7 +112,7 @@ void Player2::Update(float dt)
 			direction /= magnitude;
 		}
 
-		//ÇÃ·¹ÀÌ¾î Ãâµ¿Ã³¸®
+		//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½âµ¿Ã³ï¿½ï¿½
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
 			
@@ -176,7 +172,7 @@ void Player2::Update(float dt)
 				});
 			currentClipInfo = *min;
 		}
-		//ÀÌµ¿ÀÌ ÀÖÀ¸¸é true ¾øÀ¸¸é false
+		//ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ false
 		std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
 		if (GetFlipX() != currentClipInfo.flipX)
 		{
@@ -193,23 +189,23 @@ void Player2::Update(float dt)
 		//test
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 		{
-			item = Tool::Scythe;//³´ 
+			item = Tool::Scythe;//ï¿½ï¿½ 
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
 		{
-			item = Tool::Axe;//µµ³¢
+			item = Tool::Axe;//ï¿½ï¿½ï¿½ï¿½
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
 		{
-			item = Tool::Pickax;//°î±ªÀÌ
+			item = Tool::Pickax;//ï¿½î±ªï¿½ï¿½
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
 		{
-			item = Tool::Hoe;//È£¹Ì
+			item = Tool::Hoe;//È£ï¿½ï¿½
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
 		{
-			item = Tool::WateringCan;//¹°»Ñ¸®°³
+			item = Tool::WateringCan;//ï¿½ï¿½ï¿½Ñ¸ï¿½ï¿½ï¿½
 		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
 		{
@@ -232,13 +228,13 @@ void Player2::Update(float dt)
 					animation.Play("AttackSide");
 					if (filpX)
 					{
-						//¿À¸¥ÂÊ ¹æÇâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						scythe.SetFlipX(true);
 						scythe.PlayAnimation("ScytheSide");
 					}
 					else
 					{
-						//¿ÞÂÊ ¹æÇâÇÏ´Â ¾Ö´Ï¸ÅÀÌ¼Ç ½ÇÇà
+						//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 						scythe.SetFlipX(false);
 						scythe.PlayAnimation("ScytheSide");
 
@@ -258,7 +254,7 @@ void Player2::Update(float dt)
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
-					//¿©±â´Ù°¡ Å¬¸³ID³Ñ±â¸é ½ÇÇàµÊ
+					//ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ Å¬ï¿½ï¿½IDï¿½Ñ±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 					axe.SetFlipX(true);
 					axe.PlayAnimation("AxeFront");
 				}
@@ -267,13 +263,13 @@ void Player2::Update(float dt)
 					animation.Play("ToolSide");
 					if (filpX)
 					{
-						//¿À¸¥ÂÊ ¹æÇâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						axe.SetFlipX(true);
 						axe.PlayAnimation("AxeSide");
 					}
 					else
 					{
-						//¿ÞÂÊ ¹æÇâÇÏ´Â ¾Ö´Ï¸ÅÀÌ¼Ç ½ÇÇà
+						//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 						axe.SetFlipX(false);
 						axe.PlayAnimation("AxeSide");
 
@@ -331,13 +327,13 @@ void Player2::Update(float dt)
 					animation.Play("ToolSide");
 					if (filpX)
 					{
-						//¿ÞÂÊ ¹æÇâÇÏ´Â ¾Ö´Ï¸ÅÀÌ¼Ç ½ÇÇà
+						//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 						hoe.SetFlipX(true);
 						hoe.PlayAnimation("HoeSide");
 					}
 					else
 					{
-						//¿À¸¥ÂÊ ¹æÇâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						hoe.SetFlipX(false);
 						hoe.PlayAnimation("HoeSide");
 					}
@@ -418,6 +414,22 @@ void Player2::Update(float dt)
 		money -= 100;
 	}
 	animation.Update(dt);
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½,230815, ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô´ï¿½ï¿½ï¿½ Ã¼Å©ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+	AddPlayerItem();
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	{
+		int a = 0;
+		for (auto i : playerItemList)
+		{
+			std::cout << "============" << a << "============" << std::endl;
+			std::cout << "Ä«ï¿½ï¿½Æ®: "<< i.count << std::endl;
+			std::cout << "ï¿½Îµï¿½ï¿½ï¿½: "<< i.index << std::endl;
+			a++;
+		}
+	}
+	//
 }
 
 void Player2::Draw(sf::RenderWindow& window)
@@ -456,5 +468,45 @@ void Player2::SetWallBounds(const sf::FloatRect& bounds)
 void Player2::SetCollider(const sf::FloatRect& coll)
 {
 	playerBound = coll;
+}
+void Player2::AddPlayerItem() // ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ú¼ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½Ù²Ù±ï¿½. ï¿½Ï´ï¿½ï¿½ï¿½ ï¿½æµ¹ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É·ï¿½
+{
+	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
+	Inventory* inven = (Inventory*)scene->FindGo("inven");
+	int capacity = inven->GetItemCapacity();
+
+	if (playerItemList.size() >= capacity || rootingItemList->empty())
+	{
+		return;
+	}
+
+	for (auto item : *rootingItemList)
+	{
+		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
+		{
+			item->SetActive(false);
+			bool found = false;
+			for (auto& playerItem : playerItemList) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+			{
+				if (playerItem.itemId == item->GetRootingItemId())
+				{
+					playerItem.count++;
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				bool zero = true;
+				int index = 0;
+				for (auto& pl : playerItemList)
+				{
+					index = pl.index;
+					zero = false;
+				}
+				playerItemList.push_back({ item->GetRootingItemId(),1,(zero? index : index+1) });
+			}
+		}
+	}
 }
 

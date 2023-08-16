@@ -7,21 +7,30 @@ protected:
 
 public:
 	sf::Text text;
-
-	UiButton(const std::string& textureId, const std::string& n, const std::string& nickname);
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230811, SpriteGoï¿½ï¿½ ï¿½ï¿½ï¿½ç¼­ ï¿½ï¿½ï¿½ï¿½
+	//UiButton(const std::string& textureId, const std::string& n);
+	UiButton(const std::string& textureId, const std::string& n, const std::string& nickName = "");
+	//
 	virtual ~UiButton() override;
 
 	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Reset() override;
 
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230813, ï¿½ß°ï¿½
+	virtual void SetPosition(const sf::Vector2f& p);
+	virtual void SetPosition(float x, float y);
+
+	virtual void SetOrigin(Origins origin);
+	virtual void SetOrigin(float x, float y);
+	//
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
-
+	void Click();
 
 	function<void()> OnClick;
-	function<void()> OnEnter; //Ä¿¼­°¡ ¿µ¿ª¿¡ µé¾î¿Ã ¶§
-	function<void()> OnExit; //¿µ¿ª¿¡¼­ ³ª°¥¶§
+	function<void()> OnEnter; //Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+	function<void()> OnExit; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 };
 

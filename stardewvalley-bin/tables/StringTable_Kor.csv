@@ -2,4 +2,8 @@ ID,KOREAN
 HELLO,안녕
 BYE,잘가
 YOU_DIE,너 죽음
-TITLE,좀비 서바이벌
+TITLE,스타듀밸리
+CUR_MONEY,현재 자금 :
+TOTAL_MONEY,총합 소득 :
+TOTITLE,타이틀 메뉴로
+END,게임 종료
