@@ -457,6 +457,7 @@ void Inventory::ButtonSetUp()
     };
     xButton.OnClick = [this]() {
         SetWindowClear();
+        invenOnOff = false;
     };
 }
 

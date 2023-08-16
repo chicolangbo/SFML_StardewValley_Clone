@@ -45,6 +45,7 @@ private:
 
 	// ui
 	SpriteGo pl;
+
 	UiButton bag;
 	UiButton map;
 	UiButton make;
@@ -52,19 +53,23 @@ private:
 	UiButton xButton;
 	UiButton title;
 	UiButton end;
+
 	sf::Vector2f bagPos;
 	sf::Vector2f mapPos;
 	sf::Vector2f makePos;
 	sf::Vector2f changeScenePos;
 	sf::Vector2f xButtonPos;
 	sf::Vector2f slotPos;
+
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
+
 	SpriteGo mapImage;
 	SpriteGo ring;
 	SpriteGo shoes;
 	SpriteGo hat;
 	SpriteGo charBg;
+
 	TextGo curFunds;
 	TextGo curFundsValue;
 	TextGo totalEarnings;
@@ -100,4 +105,6 @@ public:
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
+	std::vector<Slot*>* GetSlot() { return &slot; } 
+	bool GetInvenOff() { return invenOnOff; }
 };

@@ -80,6 +80,7 @@ void InputMgr::UpdateEvent(const sf::Event& ev)
 		upList.push_back(code);
 		break;
 	}
+
 	}
 
 	mousePos = (sf::Vector2f)sf::Mouse::getPosition(FRAMEWORK.GetWindow());

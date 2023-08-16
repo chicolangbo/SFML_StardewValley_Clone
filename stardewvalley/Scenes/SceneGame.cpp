@@ -171,6 +171,7 @@ void SceneGame::Init()
 	energyBar.setPosition(energy->GetPosition());
 	energyBar.setFillColor(sf::Color::Green);
 
+	quickinven->SetQuickSlot(inven->GetSlot()); 
 	
 	for (auto go : gameObjects)
 	{
@@ -341,6 +342,7 @@ void SceneGame::Update(float dt)
 	}
 	
 	
+	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
@@ -355,6 +357,17 @@ void SceneGame::Update(float dt)
 	{
 		SpawnRootingItem(ItemId::coal);
 	}
+
+	
+	if (inven->GetInvenOff())
+	{
+		quickinven->SetActive(false);
+	}
+	else if (!inven->GetInvenOff())
+	{
+		quickinven->SetActive(true);
+	}
+	
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

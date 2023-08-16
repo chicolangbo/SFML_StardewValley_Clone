@@ -64,6 +64,8 @@ protected:
 	std::list<RootingItem*>rootingItems; 
 	QuickInventory* quickinven;
 
+	bool off = false;
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

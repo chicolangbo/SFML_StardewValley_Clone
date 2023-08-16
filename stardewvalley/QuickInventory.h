@@ -12,9 +12,14 @@ class Slot;
 class QuickInventory : public GameObject
 {
 protected:
-	std::list<GameObject*> quickinvenUi;//얘를 통해서 그린다라.....
+	std::list<GameObject*> quickinvenUi;//얘를 통해서 그림
 	SliceImageGo quickInven;
-	std::vector<Slot*> quickslot;
+	SpriteGo mark;
+
+	std::vector<Slot*>* quickslot;//포인터로 들고온애
+	std::vector<Slot*> quickslots;
+
+	bool off = false;
 
 public:
 	QuickInventory(const std::string& n = "");
@@ -28,6 +33,6 @@ public:
 	virtual void Release();
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window); 
-
+	void SetQuickSlot(std::vector<Slot*>* s){quickslot = s;}
 };
 

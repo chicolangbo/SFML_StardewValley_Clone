@@ -86,7 +86,7 @@ public:
 	void SetFlipX(bool filp);
 
 	int GetEnergy() { return energy; }
-	int GetMoney() { return money; }
+	int GetMoney() { return money; } 
 
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);

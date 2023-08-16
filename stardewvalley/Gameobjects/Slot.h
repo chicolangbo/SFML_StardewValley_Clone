@@ -5,13 +5,14 @@
 class Slot : public UiButton
 {
 protected:
-    SpriteGo* itemIcon = nullptr;
+   
     Slot* mouseIcon = nullptr;
     ItemId id = ItemId::none;
 
     bool isEmpty = true;
 
 public:
+    SpriteGo* itemIcon = nullptr;
     int slotIndex = 0;
     Slot(const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
     ~Slot();

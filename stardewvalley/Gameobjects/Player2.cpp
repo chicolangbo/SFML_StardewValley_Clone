@@ -61,6 +61,7 @@ void Player2::Init()
 	hoe.Init();
 	scythe.Init();
 	watering.Init(); 
+
 }
 
 void Player2::Reset()
@@ -85,6 +86,12 @@ void Player2::Reset()
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	SetOrigin(origin);
+
+	playerItemList.push_back({ ItemId::pick,1,0 });
+	playerItemList.push_back({ ItemId::ax,1,1 });
+	playerItemList.push_back({ ItemId::homi,1,2 });
+	playerItemList.push_back({ ItemId::hook,1,3 });
+	playerItemList.push_back({ ItemId::waterCan,1,4 });
 }
 
 void Player2::Update(float dt)
@@ -415,7 +422,6 @@ void Player2::Update(float dt)
 	}
 	animation.Update(dt);
 
-	// �����,230815, �����Ǵ� ������ �Դ��� üũ�ϴ� �Լ�
 	AddPlayerItem();
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
