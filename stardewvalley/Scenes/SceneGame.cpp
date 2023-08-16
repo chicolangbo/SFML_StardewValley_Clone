@@ -274,7 +274,7 @@ void SceneGame::Update(float dt)
 	timeArrow->sprite.setRotation(arrowSpin);
 
 	std::stringstream ss; 
-	ss << player2->GetMoney();
+	ss << *player2->GetMoney();
 	textMoney.setString(ss.str());
 	textMoney.setCharacterSize(50);
 	textMoney.setPosition(1675.f, 195.f);

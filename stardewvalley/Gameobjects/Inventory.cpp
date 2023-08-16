@@ -112,6 +112,8 @@ void Inventory::Init()
     //item[3] = onMouseItem;
     //onMouseItem = tempItem;
 
+    curFundsInt = player->GetMoney();
+    totalEarningsInt = player->GetTotalEarningsInt();
     SetPlayerItemList();
     PlayerInfoUpdate();
     ItemIconSetUp();
@@ -292,6 +294,7 @@ void Inventory::Update(float dt)
     {
         m->Update(dt);
     }
+    PlayerInfoUpdate();
 
     // 인벤창 여닫기
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
@@ -300,10 +303,9 @@ void Inventory::Update(float dt)
         {
             SetItemWindow();
             IconUpdate();
-            PlayerInfoUpdate();
             invenOnOff = true;
         }
-        else
+        else if(mouseSlot->GetItemIcon() == nullptr)
         {
             // 창 닫을 때마다 플레이어아이템인덱스 업데이트
             ItemIndexUpdate();
@@ -441,19 +443,34 @@ void Inventory::SetWindowClear()
 void Inventory::ButtonSetUp()
 {
     bag.OnClick = [this]() {
-        SetItemWindow();
+        if (mouseSlot->GetItemIcon() == nullptr)
+        {
+            SetItemWindow();
+        }
     };
     map.OnClick = [this]() {
-        SetMapWindow();
+        if (mouseSlot->GetItemIcon() == nullptr)
+        {
+            SetMapWindow();
+        }
     };
     make.OnClick = [this]() {
-        SetMakeWindow();
+        if (mouseSlot->GetItemIcon() == nullptr)
+        {
+            SetMakeWindow();
+        }
     };
     changeScene.OnClick = [this]() {
-        SetChangeSceneWindow();
+        if (mouseSlot->GetItemIcon() == nullptr)
+        {
+            SetChangeSceneWindow();
+        }
     };
     xButton.OnClick = [this]() {
-        SetWindowClear();
+        if (mouseSlot->GetItemIcon() == nullptr)
+        {
+            SetWindowClear();
+        }
     };
 }
 
@@ -464,8 +481,13 @@ void Inventory::SetPlayer(Player2* p)
 
 void Inventory::PlayerInfoUpdate()
 {
-    curFundsInt = player->GetCurFundsInt(); // 현재 소지금
-    totalEarningsInt = player->GetTotalEarningsInt(); // 총합 자금
+    std::stringstream ss;
+    ss << *curFundsInt;
+    curFundsValue.SetString(ss.str()); // 현재 소지금
+
+    ss.str("");
+    ss << *totalEarningsInt;
+    totalEarningsValue.SetString(ss.str()); // 총합 자금
 }
 
 void Inventory::SortGos()
@@ -486,7 +508,6 @@ void Inventory::ItemIndexUpdate()
             if (pl.itemId == sl->GetItemId())
             {
                 pl.index = sl->slotIndex;
-                std::cout << pl.index << std::endl;
                 continue;
             }
         }
