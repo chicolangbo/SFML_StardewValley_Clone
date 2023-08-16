@@ -220,6 +220,7 @@ void TileMap::setScale(float scaleX, float scaleY)
 
 void TileMap::ChangeTexRect(int x, int y, sf::IntRect texRect)
 {
+    //x, y, left, top, height, width 파일에 저장
     sf::Vector2f texOffsets[4] =
     {
         {(float)texRect.left, (float)texRect.top},

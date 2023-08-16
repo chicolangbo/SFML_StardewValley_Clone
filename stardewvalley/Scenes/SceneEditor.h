@@ -65,6 +65,9 @@ protected:
 	UiButton* buttonLayerObj;
 	UiButton* buttonLayerColl;
 
+	UiButton* buttonSave;
+	UiButton* buttonLoad;
+
 	SpriteGo* numUI;
 	TextGo* colText;
 	TextGo* rowText;
@@ -74,12 +77,18 @@ protected:
 	TextGo* LayerObj;
 	TextGo* LayerColl;
 
+	TextGo* saveText;
+	TextGo* loadText;
+
 	sf::Vector2f direction;
 	
 	int col = 20;
 	int row = 20;
 
 	StringTable* stringTable = nullptr;
+
+	//�浹ü
+	std::vector<RectangleGo*> colliders;
 
 public:
 	SceneEditor();

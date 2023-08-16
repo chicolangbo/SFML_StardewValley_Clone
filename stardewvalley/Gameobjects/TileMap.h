@@ -1,7 +1,6 @@
 #pragma once
 #include "VertexArrayGo.h"
 
-//230809, 윤유림, 오브젝트 추가, tile type 추가
 struct MapObj
 {
 	int x = 0;
@@ -14,6 +13,10 @@ struct Tile
 {
 	int x = 0;
 	int y = 0;
+	float texWidth;
+	float texHeight;
+	float texLeft;
+	float texTop;
 	int texIndex = 0;
 	TileType type;
 };
