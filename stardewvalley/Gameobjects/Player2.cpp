@@ -172,7 +172,6 @@ void Player2::Update(float dt)
 				});
 			currentClipInfo = *min;
 		}
-		//�̵��� ������ true ������ false
 		std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
 		if (GetFlipX() != currentClipInfo.flipX)
 		{

@@ -26,7 +26,7 @@
 0,graphics/Cursors.ko-KR.png,close,322,498,12,12,
 0,graphics/Cursors.ko-KR.png,box1Inside,384,396,15,15,
 0,graphics/box1.png,N,-1,-1,-1,-1,
-0,graphics/setButton.png,N,-1,-1,-1,-1
+0,graphics/setButton.png,N,-1,-1,-1,-1,
 0,graphics/Cursors.ko-KR.png,coin,193,373,9,9,
 0,graphics/Cursors.ko-KR.png,clock,410,501,9,9,
 0,graphics/Cursors.ko-KR.png,scrollPaper,325,318,25,18,
@@ -135,7 +135,6 @@
 3,animations/Axe_Side.csv,N,-1,-1,-1,-1,
 3,animations/Pickax_Side.csv,N,-1,-1,-1,-1,
 1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,������
-1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,������
 0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,
 0,map/walls_and_floors.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,SideAxe,260,158,10,23,
@@ -174,3 +173,4 @@
 0,graphics/Pickax.png,N,-1,-1,-1,-1,
 0,graphics/Cursors.ko-KR.png,TimeArrow,324,477,7,19,
 3,animations/Pickax_Back.csv,N,-1,-1,-1,-1,
+0,map/object.png,N,-1,-1,-1,-1,

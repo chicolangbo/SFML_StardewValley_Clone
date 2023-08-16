@@ -240,7 +240,7 @@ void TileMap::ChangeTexRect(int x, int y, sf::IntRect texRect)
     }
     else
     {
-        cout << "ERR: Tile position out of bounds" << endl;
+        cout << "ERR: 잘못된 타일 위치" << endl;
     }
 }
 

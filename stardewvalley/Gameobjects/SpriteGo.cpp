@@ -2,9 +2,8 @@
 #include "SpriteGo.h"
 #include "Utils.h"
 #include "ResourceMgr.h"
-// 김민지, 230809, 콜라이더 연동
 #include "InputMgr.h"
-//
+#include "SceneMgr.h"
 
 SpriteGo::SpriteGo(const std::string& textureId, const std::string& n, const std::string& nickName)
 	: GameObject(n), textureId(textureId), nickName(nickName)
@@ -136,7 +135,8 @@ void SpriteGo::Update(float dt)
 void SpriteGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	if (colliderOnOff)
+	//0816, 윤유림, 에디터씬 콜라이더 안보이게
+	if (colliderOnOff && SCENE_MGR.GetCurrScene()->GetSceneId() != SceneId::Editor )
 	{
 		window.draw(collider);
 	}

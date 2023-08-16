@@ -36,6 +36,10 @@ public:
 	void RemoveGo(GameObject* go);
 	void SortGos();
 
+	//0816, 윤유림, 씬아이디 반환 함수
+	SceneId GetSceneId();
+	//
+
 	sf::Vector2f ScreenToWorldPos(sf::Vector2f screenPos);
 	sf::Vector2f ScreenToUiPos(sf::Vector2f screenPos);
 	sf::Vector2f WorldPosToScreen(sf::Vector2f worldPos);
