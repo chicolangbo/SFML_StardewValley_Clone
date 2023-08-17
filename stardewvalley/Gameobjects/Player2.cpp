@@ -119,43 +119,58 @@ void Player2::Update(float dt)
 			direction /= magnitude;
 		}
 
-		position += direction * speed * dt;
-
-	
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
-				/*wallBoundsLT.push_back({ bounds.left, bounds.top });
-				wallBoundsRB.push_back({ bounds.left + bounds.width, bounds.top + bounds.height });*/
+			if (playerBound.intersects(wallBounds[i]))
+			{
+				if (position.x < wallBoundsLT[i].x)
+				{
 
-			pos = 0.55f;
-			if(position.x < wallBoundsLT[i].x /*&& direction.x >=1.f*/)
-			{
-				//direction.x = 0;
-				//std::cout << "BAM Left" << std::endl;
-				position.x = position.x - pos;
-				
+					if (INPUT_MGR.GetKey(sf::Keyboard::A))
+					{
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+					}
+					else
+					{
+						direction.x = 0;
+					}
+				}
+				else if (position.x > wallBoundsRB[i].x)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::D))
+					{
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+					}
+					else
+					{
+						direction.x = 0;
+					}
+				}
+				else if (position.y < wallBoundsRB[i].y)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::W))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
+					}
+					else
+					{
+						direction.y = 0;
+					}
+				}
+				else if (position.y > wallBoundsRB[i].y)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::S))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+					}
+					else
+					{
+						direction.y = 0;
+					}
+				}
 			}
-			else if (position.x > wallBoundsRB[i].x /*&& direction.x <= 0.f*/) 
-			{
-				//direction.x = 0;
-				//std::cout << "BAM Right" << std::endl;
-				position.x = position.x + pos;
-			}
-			else if (position.y < wallBoundsRB[i].y /*&& direction.y >= 1.f*/)
-			{
-				//direction.y = 0;
-				//std::cout << "BAM Top" << std::endl;
-				position.y = position.y - pos;
-			}
-			else if (position.y > wallBoundsRB[i].y /*&& direction.y <= 0.f*/) 
-			{
-				//direction.y = 0;
-				//std::cout << "BAM Down" << std::endl;
-				position.y = position.y + pos;
-			}
-
 		}
-		
+		position += direction * speed * dt;
 		SetPosition(position);
 
 		axe.Update(dt);
