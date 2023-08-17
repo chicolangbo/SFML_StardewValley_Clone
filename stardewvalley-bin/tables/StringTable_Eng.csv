@@ -9,3 +9,8 @@ TOTITLE,TITLE MENUE
 END,END GAME
 LAYER1,Layer 1
 LAYER2,Layer 2
+LAYER_OBJ,Object
+LAYER_COLL,Collider
+SAVE,Save
+LOAD,Load
+PIERRE,Wellcome to/nPierre's Store!/nThere is Everthing/nyou want.

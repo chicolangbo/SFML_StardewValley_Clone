@@ -202,7 +202,9 @@
     <ClCompile Include="Gameobjects\Slot.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="Gameobjects\Shop.cpp" />
+    <ClCompile Include="Gameobjects\ShopTap.cpp" />
     <ClCompile Include="Gameobjects\ShopSlot.cpp" />
+    <ClCompile Include="Gameobjects\ShopInterior.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -247,7 +249,9 @@
     <ClInclude Include="Gameobjects\Slot.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="Gameobjects\Shop.h" />
+    <ClInclude Include="Gameobjects\ShopTap.h" />
     <ClInclude Include="Gameobjects\ShopSlot.h" />
+    <ClInclude Include="Gameobjects\ShopInterior.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />

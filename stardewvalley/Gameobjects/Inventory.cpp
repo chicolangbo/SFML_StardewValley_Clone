@@ -152,43 +152,43 @@ void Inventory::Reset()
         invenLine.sortLayer = (int)UiType::LINE;
 
         bagPos = { invenBox.vertexArray[0].position + sf::Vector2f{10.f, 0.f} };
-        bag.SetScale(4.f, 4.f);
         bag.SetOrigin(Origins::BL);
+        bag.SetScale(4.f, 4.f);
         bag.SetPosition(bagPos);
         bag.colliderOnOff = false;
         bag.sortLayer = (int)UiType::BUTTON;
 
         float buttonW = bag.sprite.getGlobalBounds().width;
         mapPos = { bagPos.x + buttonW, bagPos.y };
-        map.SetScale(4.f, 4.f);
         map.SetOrigin(Origins::BL);
+        map.SetScale(4.f, 4.f);
         map.SetPosition(mapPos);
         map.colliderOnOff = false;
         map.sortLayer = (int)UiType::BUTTON;
 
         makePos = { mapPos.x + buttonW, mapPos.y };
-        make.SetScale(4.f, 4.f);
         make.SetOrigin(Origins::BL);
+        make.SetScale(4.f, 4.f);
         make.SetPosition(makePos);
         make.colliderOnOff = false;
         make.sortLayer = (int)UiType::BUTTON;
 
         changeScenePos = { makePos.x + buttonW, makePos.y };
-        changeScene.SetScale(4.f, 4.f);
         changeScene.SetOrigin(Origins::BL);
+        changeScene.SetScale(4.f, 4.f);
         changeScene.SetPosition(changeScenePos);
         changeScene.colliderOnOff = false;
         changeScene.sortLayer = (int)UiType::BUTTON;
 
         xButtonPos = { invenBox.vertexArray[9].position };
-        xButton.SetScale(4.f, 4.f);
         xButton.SetOrigin(Origins::BL);
+        xButton.SetScale(4.f, 4.f);
         xButton.SetPosition(xButtonPos);
         xButton.colliderOnOff = false;
         xButton.sortLayer = (int)UiType::COMMON;
 
-        mapImage.SetScale(4.5f, 4.5f);
         mapImage.SetOrigin(Origins::MC);
+        mapImage.SetScale(4.5f, 4.5f);
         mapImage.SetPosition(position);
         mapImage.colliderOnOff = false;
         mapImage.sortLayer = (int)UiType::MAP;
@@ -208,8 +208,8 @@ void Inventory::Reset()
         hat.colliderOnOff = false;
         hat.sortLayer = (int)UiType::ITEM;
 
-        charBg.SetScale(1.25f, 1.25f);
         charBg.SetOrigin(Origins::MC);
+        charBg.SetScale(1.25f, 1.25f);
         charBg.SetPosition(shoes.GetPosition().x + 140.f, shoes.GetPosition().y);
         charBg.colliderOnOff = false;
         charBg.sortLayer = (int)UiType::ITEM;
@@ -273,7 +273,7 @@ void Inventory::Reset()
         pl.SetPosition(charBg.GetPosition());
         pl.sortLayer = (int)UiType::ITEM;
 
-        mouseSlot->sortLayer = (int)UiType::ITEM;
+        mouseSlot->sortLayer = (int)UiType::LINE;
         mouseSlot->sortOrder = 2;
     }
 
@@ -310,21 +310,15 @@ void Inventory::Update(float dt)
         }
         else if(mouseSlot->GetItemIcon() == nullptr)
         {
-            // â ���� ������ �÷��̾�������ε��� ������Ʈ
-            ItemIndexUpdate();
             SetWindowClear();
             IconUpdate();
             invenOnOff = false;
         }
     }
 
-    // ���콺�� ������ �ʴ� ���� �����Ŵ�
     sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
     sf::Vector2f mPos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
     mouseSlot->SetPosition(mPos);
-
-    // ����, ������ �ε��� ����ȭ
-
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
@@ -361,12 +355,14 @@ void Inventory::SetItemWindow()
             slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
         }
     }
-    // �����۵� ���̵��� �߰�
 
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);
     map.SetPosition(mapPos);
     make.SetPosition(makePos);
+    xButton.SetPosition(xButtonPos);
     changeScene.SetPosition(changeScenePos);
+
+    ItemIndexUpdate();
 }
 
 void Inventory::SetMapWindow()
@@ -384,6 +380,8 @@ void Inventory::SetMapWindow()
     }
 
     xButton.SetPosition(mapImage.GetPosition() + sf::Vector2f{mapImage.sprite.getGlobalBounds().width / 2.f, - mapImage.sprite.getGlobalBounds().height / 2.f});
+
+    ItemIndexUpdate();
 }
 
 void Inventory::SetMakeWindow()
@@ -411,6 +409,9 @@ void Inventory::SetMakeWindow()
     bag.SetPosition(bagPos);
     map.SetPosition(mapPos);
     changeScene.SetPosition(changeScenePos);
+    xButton.SetPosition(xButtonPos);
+
+    ItemIndexUpdate();
 }
 
 void Inventory::SetChangeSceneWindow()
@@ -433,6 +434,8 @@ void Inventory::SetChangeSceneWindow()
     map.SetPosition(mapPos);
     make.SetPosition(makePos);
     xButton.SetPosition(xButtonPos);
+
+    ItemIndexUpdate();
 }
 
 void Inventory::SetWindowClear()
@@ -441,6 +444,8 @@ void Inventory::SetWindowClear()
     {
         m->SetActive(false);
     }
+
+    ItemIndexUpdate();
 }
 
 void Inventory::ButtonSetUp()
@@ -473,9 +478,9 @@ void Inventory::ButtonSetUp()
         if (mouseSlot->GetItemIcon() == nullptr)
         {
             SetWindowClear();
+            invenOnOff = false;
         }
-        SetWindowClear();
-        invenOnOff = false;
+        //SetWindowClear();
     };
 }
 
