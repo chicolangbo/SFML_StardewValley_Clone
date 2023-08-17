@@ -90,8 +90,8 @@ protected:
 
 	sf::Vector2f direction;
 	
-	int col = 20;
-	int row = 20;
+	int col = 10;
+	int row = 10;
 
 	StringTable* stringTable = nullptr;
 

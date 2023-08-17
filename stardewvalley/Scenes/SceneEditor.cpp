@@ -128,6 +128,8 @@ void SceneEditor::Init()
 	{
 		col++;
 		colText->SetString(to_string(col));
+		colText->SetOrigin(Origins::BC);
+		colText->SetPosition(buttonColUp->GetPosition().x, numUI->GetPosition().y - 13.f);
 	};
 
 	buttonColDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
@@ -135,8 +137,13 @@ void SceneEditor::Init()
 	buttonColDown->sortLayer = 101;
 	buttonColDown->OnClick = [this]()
 	{
-		col--;
-		colText->SetString(to_string(col));
+		if (col > 1)
+		{
+			col--;
+			colText->SetString(to_string(col));
+			colText->SetOrigin(Origins::BC);
+			colText->SetPosition(buttonColUp->GetPosition().x, numUI->GetPosition().y - 13.f);
+		}
 	};
 	
 	buttonRowUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
@@ -146,6 +153,8 @@ void SceneEditor::Init()
 	{
 		row++;
 		rowText->SetString(to_string(row));
+		rowText->SetOrigin(Origins::BC);
+		rowText->SetPosition(buttonRowUp->GetPosition().x, numUI->GetPosition().y - 13.f);
 	};
 
 	buttonRowDown = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown"));
@@ -153,8 +162,13 @@ void SceneEditor::Init()
 	buttonRowDown->sortLayer = 101;
 	buttonRowDown->OnClick = [this]()
 	{
-		row--;
-		rowText->SetString(to_string(row));
+		if (row > 1)
+		{
+			row--;
+			rowText->SetString(to_string(row));
+			rowText->SetOrigin(Origins::BC);
+			rowText->SetPosition(buttonRowUp->GetPosition().x, numUI->GetPosition().y - 13.f);
+		}
 	};
 
 	numUI = (SpriteGo*)AddGo(new SpriteGo("graphics/numUI.png", "numUI"));
@@ -175,12 +189,19 @@ void SceneEditor::Init()
 	selectTile->SetActive(false);
 	selectTile->sortLayer = 3;
 
+	//선택된 오브젝트 타일
 	selectObj = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "selectObj"));
 	selectObj->SetScale({ 3.f, 3.f });
 	selectObj->SetOrigin(Origins::TL);
 	selectObj->sprite.setTextureRect(texRect);
 	selectObj->SetActive(false);
 	selectObj->sortLayer = 3;
+
+	selColl = (RectangleGo*)AddGo(new RectangleGo(tilesize));
+	selColl->SetOrigin(Origins::TL);
+	selColl->rectangle.setFillColor(sf::Color(0, 84, 255, 128));
+	selColl->sortLayer = 3;
+	selColl->SetActive(false);
 
 	/*----타일 팔레트----*/
 	tilePallet = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut.png", "tilePallet"));
@@ -503,8 +524,8 @@ void SceneEditor::Enter()
 	rowText->text.setOutlineThickness(1.5f);
 	rowText->text.setOutlineColor(sf::Color::Black);
 
-	colText->SetText(to_string(col), 70, sf::Color::White, Origins::BC, 103, buttonColDown->GetPosition().x, numUI->GetPosition().y - 18.f);
-	rowText->SetText(to_string(col), 70, sf::Color::White, Origins::BC, 103, buttonRowDown->GetPosition().x, numUI->GetPosition().y - 18.f);
+	colText->SetText(to_string(col), 70, sf::Color::White, Origins::BC, 103, buttonColDown->GetPosition().x, numUI->GetPosition().y - 13.f);
+	rowText->SetText(to_string(row), 70, sf::Color::White, Origins::BC, 103, buttonRowDown->GetPosition().x, numUI->GetPosition().y - 13.f);
 	
 	//팔레트
 	tilePallet->SetPosition(numUI->GetPosition().x, 600.f);
@@ -541,8 +562,6 @@ void SceneEditor::Enter()
 	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
 		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
 		buttonLoad->GetPosition().y + 15);
-
-
 }
 
 void SceneEditor::Exit()
@@ -565,22 +584,31 @@ void SceneEditor::Update(float dt)
 	if (worldMousPos.x >= MapLT.x && worldMousPos.x <= MapLT.x + MapSize.x
 		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y)
 	{
-		curTile->SetActive(true);
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
-		curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
-		sf::IntRect texRect = curTile->sprite.getTextureRect();
+		if (!IsCollActive)
+		{
+			curTile->SetActive(true);
+			curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
+		}
+		else
+		{
+			selColl->SetActive(true);
+			selColl->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
+		}
+		
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
 		{
 			if (!IsCollActive)
 			{
+				sf::IntRect texRect = curTile->sprite.getTextureRect();
 				selectMap->ChangeTexRect(tileX, tileY, texRect);
 			}
 			else
 			{
-				colliders[tileY * row + tileX]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
-				colliders[tileY * row + tileX]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
+				colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
+				colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
 			}
 		}
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right) && IsCollActive)
@@ -591,6 +619,7 @@ void SceneEditor::Update(float dt)
 	}
 	else
 	{
+		selColl->SetActive(true);
 		if (curTile != nullptr)
 		{
 			curTile->SetActive(false);
@@ -612,13 +641,12 @@ void SceneEditor::Update(float dt)
 			sf::IntRect textureRect(tilePalletX * texTileSize.x + palletTexSize.x * palNumX, tilePalletY * texTileSize.y + palletTexSize.y * palNumY, texTileSize.x, texTileSize.y);
 			curTile->sprite.setTextureRect(textureRect);
 		}
-
 	}
 	else
 	{
 		selPalTile->SetActive(false);
 	}
-	//230810, 윤유림, 마우스로 월드 뷰 이동
+	//뱡향키 or wasd로 월드 뷰 이동
 	{
 		direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 		direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
@@ -629,11 +657,9 @@ void SceneEditor::Update(float dt)
 			direction /= magnitude;
 		}
 
-		WVcenterPos += direction * 300.f * dt;
+		WVcenterPos += direction * 500.f * dt;
 		worldView.setCenter(WVcenterPos);
 	}
-	//
-
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)
