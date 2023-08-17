@@ -15,16 +15,26 @@ bool TileMap::Load(const std::string& filePath)
 {
     rapidcsv::Document doc(filePath);
     count = doc.GetRowCount();
-    for (int i = 0; i < count; i++)
+    size.x = doc.GetCell<int>("cols", 0);
+    size.y = doc.GetCell<int>("rows", 0);
+
+    for (int i = 2; i < count; i++)
     {
         Tile tile;
-        tile.x = doc.GetCell<int>("indexX", i);
-        tile.y = doc.GetCell<int>("indexY", i);
+        auto rows = doc.GetRow<string>(i);
+        tile.x = stof(rows[0]);
+        tile.y = stof(rows[1]);
+        tile.texLeft = stof(rows[2]);
+        tile.texTop = stof(rows[3]);
+        tile.texWidth = stof(rows[4]);
+        tile.texHeight = stof(rows[5]);
 
+        /*tile.x = doc.GetCell<int>("indexX", i);
+        tile.y = doc.GetCell<int>("indexY", i);
         tile.texLeft = doc.GetCell<float>("left", i);
         tile.texTop = doc.GetCell<float>("top", i);
         tile.texWidth = doc.GetCell<float>("width", i);
-        tile.texHeight = doc.GetCell<float>("height", i);
+        tile.texHeight = doc.GetCell<float>("height", i);*/
 
         tiles.push_back(tile);
     }
@@ -203,7 +213,10 @@ bool TileMap::Save(const std::string& filePath)
         return false;
     }
 
-    // 파일 헤더를 쓰기
+    // 파일 헤더
+    outputFile << "cols,rows" << endl;
+    outputFile << size.x << "," << size.y << endl;
+
     outputFile << "indexX,indexY,left,top,width,height" << endl;
 
     for (int i = 0; i < tiles.size(); ++i)
