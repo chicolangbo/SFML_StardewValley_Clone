@@ -92,26 +92,7 @@ Inventory::~Inventory()
 
 void Inventory::Init()
 {
-    ////ó�� Ŭ��
-    //tagItemInfo onMouseItem;
-    //onMouseItem = item[0];
-    //item[0] = empty;
-
-    ////����� �ٽ� Ŭ��
-    //item[3] = onMouseItem;
-    //onMouseItem = empty;
-
-    ////�̹� �ִ� ���� Ŭ��
-    //tagItemInfo tempItem;
-    //tempItem = item[3];
-
-    //item[3] = onMouseItem;
-    //onMouseItem = tempItem;
-
-    curFundsInt = player->GetMoney();
-    totalEarningsInt = player->GetTotalEarningsInt();
-    SetPlayerItemList();
-    PlayerInfoUpdate();
+    InitInfo();
     ItemIconSetUp();
     ButtonSetUp();
 
@@ -488,6 +469,13 @@ void Inventory::SetPlayer(Player2* p)
     player = p;
 }
 
+void Inventory::InitInfo()
+{
+    curFundsInt = player->GetMoney();
+    totalEarningsInt = player->GetTotalEarningsInt();
+    playerItemList = player->GetPlayerItemList();
+}
+
 void Inventory::PlayerInfoUpdate()
 {
     std::stringstream ss;
@@ -549,7 +537,7 @@ void Inventory::IconUpdate()
     {
         for (Slot* sl : slot)
         {
-            if (pl.index == sl->slotIndex)//�ε����� ������ ���Կ� �ش�������� ������,ID����
+            if (pl.index == sl->slotIndex)
             {
                 auto foundItem = itemIconList.find(pl.itemId);
                 if (foundItem != itemIconList.end())

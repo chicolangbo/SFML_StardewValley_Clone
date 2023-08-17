@@ -83,6 +83,7 @@ public:
 
 	int GetEnergy() { return energy; }
 	int* GetMoney() { return &money; }
+	int* GetTempMoney() { return &tempMoney; }
 
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);

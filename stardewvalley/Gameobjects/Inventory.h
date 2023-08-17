@@ -100,10 +100,12 @@ public:
 	void IconUpdate();//슬롯에다 아이템 업데이트 
 	void ItemIndexUpdate();//아이템 위치?
 
-	void SetPlayer(Player2* p);
-	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
-	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
+	void SetPlayer(Player2* p);
+	void InitInfo();
+	std::unordered_map<ItemId, SpriteGo>* GetItemIconList() {
+		return &itemIconList; }
+	int GetItemCapacity() { return itemCapacity; }
 	std::vector<Slot*>* GetSlot() { return &slot; } 
 	bool GetInvenOff() { return invenOnOff; }
 };

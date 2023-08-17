@@ -90,5 +90,6 @@ void TextGo::SetText(const std::wstring& ss, const int& size, sf::Color color, O
 	text.setFillColor(color);
 	text.setPosition(x, y);
 	Utils::SetOrigin(text, origin);
+	position = { x,y };
 	this->sortLayer = soltLayer;
 }
