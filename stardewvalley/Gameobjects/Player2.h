@@ -65,6 +65,7 @@ protected:
 	int totalEarningsInt = 500; // ���� �ڱ�
 
 	Inventory* inven;
+	float pos = 0.6f;
 
 public:
 

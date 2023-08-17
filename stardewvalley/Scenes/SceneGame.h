@@ -9,6 +9,7 @@ class SliceImageGo;
 class Inventory;
 class RootingItem;
 class QuickInventory;
+class RectangleGo;
 class ShopTap;
 class ShopInterior;
 
@@ -22,10 +23,10 @@ protected:
 	
 	Player2* player2;
 
-	// ì„ì‹œ ë§µ
-	SpriteGo* testFarmMap; // ë†ì¥ í†µë§µ
-	SpriteGo* houseExterior; // ì§‘ ì™¸ë¶€
-	SpriteGo* shopExterior; // ìƒµ ì™¸ë¶€
+	// ÀÓ½Ã ¸Ê
+	SpriteGo* testFarmMap; // ³óÀå Åë¸Ê
+	SpriteGo* houseExterior; // Áı ¿ÜºÎ
+	SpriteGo* shopExterior; // ¼¥ ¿ÜºÎ
 
 	// TO SHOP CLASS
 		//SpriteGo* shopInside;
@@ -42,7 +43,7 @@ protected:
 		//Wall* homeWalls;
 		//Wall* shopWalls;
 
-	// ê¹€ë¯¼ì§€, 230817, SHOP CLASS
+	// ±è¹ÎÁö, 230817, SHOP CLASS
 	ShopTap* shopTap;
 	ShopInterior* shopInterior;
 
@@ -51,7 +52,7 @@ protected:
 	SpriteGo* info;
 	SpriteGo* timeArrow;
 	float arrowSpin = 0.f;
-	sf::RectangleShape energyBar;
+	RectangleGo* energyBar; 
 	int energys;
 	sf::Text textMoney;
 	sf::Text textMin;
@@ -88,7 +89,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230815, ï¿½Ã·ï¿½ï¿½Ì¾ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ ï¿½ß°ï¿½
 	void SpawnRootingItem(ItemId id);
 };
 

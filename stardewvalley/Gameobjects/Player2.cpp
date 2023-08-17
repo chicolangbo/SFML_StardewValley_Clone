@@ -98,8 +98,7 @@ void Player2::Reset()
 void Player2::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	//
-	sf::Vector2f poss = position;  
+	
 	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
 	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
 	//sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(position);
@@ -120,33 +119,54 @@ void Player2::Update(float dt)
 			direction /= magnitude;
 		}
 
-		//�÷��̾� �⵿ó��
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
-			
-			if (wallBounds[i].intersects(playerBound))
+			if (playerBound.intersects(wallBounds[i]))
 			{
-				if(position.x < wallBounds[i].left && direction.x >=1.f)
+				if (position.x < wallBoundsLT[i].x)
 				{
-					direction.x = 0;
+					if (INPUT_MGR.GetKey(sf::Keyboard::A))
+					{
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+					}
+					else
+					{
+						direction.x = 0;
+					}
 				}
-				else if (position.x > wallBoundsLT[i].x && direction.x <= 0.f)
+				else if (position.x > wallBoundsRB[i].x)
 				{
-					direction.x = 0;
+					if (INPUT_MGR.GetKey(sf::Keyboard::D))
+					{
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+					}
+					else
+					{
+						direction.x = 0;
+					}
 				}
-				if (position.y < wallBoundsRB[i].y && direction.y >= 1.f)
+				else if (position.y < wallBoundsRB[i].y)
 				{
-					direction.y = 0;
+					if (INPUT_MGR.GetKey(sf::Keyboard::W))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
+					}
+					else
+					{
+						direction.y = 0;
+					}
 				}
-				else if (position.y > wallBoundsRB[i].y && direction.y <= 0.f)
+				else if (position.y > wallBoundsRB[i].y)
 				{
-					direction.y = 0;
+					if (INPUT_MGR.GetKey(sf::Keyboard::S))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+					}
+					else
+					{
+						direction.y = 0;
+					}
 				}
-
-				/*if (direction.x != 0.f && direction.y != 0.f)
-				{
-					direction = sf::Vector2f(0.f, 0.f);
-				}*/
 			}
 		}
 		position += direction * speed * dt;

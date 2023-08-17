@@ -11,7 +11,7 @@
 0,graphics/Clouds.png,cloud1,0,471,148,65,
 0,graphics/Clouds.png,cloud2,153,447,123,55,
 0,graphics/Clouds.png,cloud3,410,467,64,36,
-0,graphics/Cursors.ko-KR.png,sky,703,1912,1,264,
+0,graphics/sky.png,sky,117,934,536,264,
 0,graphics/Cursors.ko-KR.png,skyStar,0,1454,640,192,
 0,graphics/Cursors.ko-KR.png,cursor,0,0,8,10,
 0,graphics/Cursors.ko-KR.png,controlKey1,275,0,42,109,

@@ -1,9 +1,17 @@
 #pragma once
 #include "Scene.h"
+
+class SpriteGo;
+class UiButton;
+
 class SceneTitle : public Scene
 {
 protected:
+	SpriteGo* titleBg;
+	SpriteGo* logo;
 
+	UiButton* start;  
+	UiButton* exit;  
 public:
 	SceneTitle();
 	virtual ~SceneTitle() override = default;

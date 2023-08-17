@@ -454,3 +454,9 @@ void QuickInventory::Draw(sf::RenderWindow& window)
 		m->Draw(window);
 	}
 }
+
+void QuickInventory::IconUpdate()
+{
+
+}
+

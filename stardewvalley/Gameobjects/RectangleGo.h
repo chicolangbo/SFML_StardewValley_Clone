@@ -20,5 +20,10 @@ public:
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
+
+	void SetSize(sf::Vector2f size);
+	void SetSize(float x, float y);
+
+	void SetColor(sf::Color co);
 };
 

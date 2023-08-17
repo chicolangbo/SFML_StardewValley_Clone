@@ -21,6 +21,7 @@
 #include "DataTableMgr.h"
 #include "AllItemTable.h"
 #include "QuickInventory.h"
+#include "RectangleGo.h"
 #include "ShopTap.h"
 #include "ShopInterior.h"
 
@@ -166,17 +167,20 @@ void SceneGame::Init()
 		info->SetPosition(size.x, 0);
 		info->sortLayer = 110;
 
-		timeArrow = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "TimeArrow", "TimeArrow"));
-		timeArrow->SetScale(4.5f, -4.5f);
-		timeArrow->SetOrigin(Origins::TC);
-		timeArrow->collider.setScale(1.f, -1.f);
-		timeArrow->SetPosition(info->GetPosition().x - 225.f, info->GetPosition().y + 93.f);
-		timeArrow->sortLayer = 111;
+	timeArrow = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "TimeArrow", "TimeArrow"));
+	timeArrow->SetScale(4.5f, -4.5f);
+	timeArrow->SetOrigin(Origins::TC);
+	timeArrow->collider.setScale(1.f, -1.f);
+	timeArrow->SetPosition(info->GetPosition().x - 225.f, info->GetPosition().y + 93.f);
+	timeArrow->sortLayer = 111;
 
-		energyBar.setSize(sf::Vector2f(26.f, 1.f));
-		energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
-		energyBar.setPosition(energy->GetPosition());
-		energyBar.setFillColor(sf::Color::Green);
+	sf::Vector2f recsize(26.f, 1.f);
+	energyBar = (RectangleGo*)AddGo(new RectangleGo(recsize)); 
+	//energyBar.SetSize(sf::Vector2f(26.f, 1.f));  
+	energyBar->SetOrigin(Origins::BC);;
+	energyBar->SetPosition(energy->GetPosition());
+	energyBar->SetColor(sf::Color::Green);
+	energyBar->sortLayer = 111;
 
 		quickinven->SetQuickSlot(inven->GetSlot());
 	}
@@ -308,9 +312,9 @@ void SceneGame::Update(float dt)
 	
 	player2->SetCollider(playerBound);
 
-	energyBar.setSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
-	energyBar.setPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
-	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
+	energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
+	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
+	energyBar->SetOrigin(Origins::BC);
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
@@ -335,6 +339,7 @@ void SceneGame::Update(float dt)
 			timeArrow->SetActive(true);
 			inven->SetActive(true);
 			quickinven->SetActive(true);
+			energyBar->SetActive(true);
 		}
 		else
 		{
@@ -359,6 +364,7 @@ void SceneGame::Update(float dt)
 			timeArrow->SetActive(true); 
 			inven->SetActive(true);
 			quickinven->SetActive(true);
+			energyBar->SetActive(true); 
 		}
 	}
 	
@@ -393,7 +399,6 @@ void SceneGame::Update(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	window.draw(energyBar);
 	window.draw(textMoney);
 	window.draw(textHour);
 	window.draw(textDay);

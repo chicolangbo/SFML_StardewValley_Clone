@@ -128,7 +128,6 @@ void Inventory::Reset()
         m->Reset();
     }
 
-    // ������Ʈ �ʱ� ����
     {
         invenBox.SetSize({ 1040.f, 670.f });
         invenBox.SetOrigin(Origins::MC);
