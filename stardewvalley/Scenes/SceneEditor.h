@@ -6,6 +6,7 @@ class TileMap;
 class RectangleGo;
 class TextGo;
 class SpriteGo;
+class StringTable;
 
 class SceneEditor : public Scene
 {
@@ -16,17 +17,28 @@ protected:
 	sf::Vector2f WVcenterPos;
 
 	//¸Ê
-	TileMap* farmMap = nullptr;
+	TileMap* farmMapT1 = nullptr;
+	TileMap* farmMapT2 = nullptr;
+	TileMap* farmMapObj = nullptr;
+	TileMap* farmMapColl = nullptr;
+	TileMap* selectMap = nullptr;
 
 	sf::Vector2f MapLT;
 	sf::Vector2f MapSize;
 	sf::Vector2f tilesize = { 48.f, 48.f };
 
 	SpriteGo* selectTile;
+	SpriteGo* selectObj;
+	SpriteGo* curTile;
 	
 	//ÆÈ·¹Æ®
 	SpriteGo* tilePallet;
+	SpriteGo* ObjPallet;
+
+	SpriteGo* selPallet;
+
 	RectangleGo* selPalTile;
+
 	sf::Vector2f texTileSize = { 16.f, 16.f };
 	sf::Vector2f palletTileSize = { 48.f, 48.f };
 	sf::Vector2f palletLT;
@@ -48,14 +60,35 @@ protected:
 	UiButton* buttonColUp;
 	UiButton* buttonColDown;
 
+	UiButton* buttonLayer1;
+	UiButton* buttonLayer2;
+	UiButton* buttonLayerObj;
+	UiButton* buttonLayerColl;
+
+	UiButton* buttonSave;
+	UiButton* buttonLoad;
+
 	SpriteGo* numUI;
 	TextGo* colText;
 	TextGo* rowText;
+
+	TextGo* Layer1;
+	TextGo* Layer2;
+	TextGo* LayerObj;
+	TextGo* LayerColl;
+
+	TextGo* saveText;
+	TextGo* loadText;
 
 	sf::Vector2f direction;
 	
 	int col = 20;
 	int row = 20;
+
+	StringTable* stringTable = nullptr;
+
+	//Ãæµ¹Ã¼
+	std::vector<RectangleGo*> colliders;
 
 public:
 	SceneEditor();

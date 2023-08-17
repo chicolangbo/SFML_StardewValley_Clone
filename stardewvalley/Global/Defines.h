@@ -52,7 +52,8 @@ enum class TileType
 	Dirt,
 	Water,
 	Grass,
-	Cliff
+	Cliff,
+	Road
 };
 
 enum class ObjType
