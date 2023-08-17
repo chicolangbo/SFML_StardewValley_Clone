@@ -71,6 +71,11 @@ void Scene::SortGos()
 		});
 }
 
+SceneId Scene::GetSceneId()
+{
+	return sceneId;
+}
+
 sf::Vector2f Scene::ScreenToWorldPos(sf::Vector2f screenPos)
 {
 	return window.mapPixelToCoords((sf::Vector2i)screenPos, worldView);

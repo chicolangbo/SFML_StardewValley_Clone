@@ -7,3 +7,9 @@ CUR_MONEY,현재 자금 :
 TOTAL_MONEY,총합 소득 :
 TOTITLE,타이틀 메뉴로
 END,게임 종료
+LAYER1,레이어 1
+LAYER2,레이어 2
+LAYER_OBJ,오브젝트
+LAYER_COLL,충돌체
+SAVE,저장하기
+LOAD,불러오기

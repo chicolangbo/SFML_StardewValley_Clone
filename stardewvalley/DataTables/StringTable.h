@@ -18,6 +18,7 @@ public:
 	{
 		return Get(id, Variables::CurrentLang);
 	}
-
+	const std::wstring GetUni(const std::string& id, Languages lang);
+	wstring multibyte_to_uni(const std::string& str);
 };
 

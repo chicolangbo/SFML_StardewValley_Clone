@@ -10,11 +10,13 @@
 #include "InputMgr.h"
 #include "SceneMgr.h"
 #include "TextGo.h"
+#include "StringTable.h"
+#include "DataTableMgr.h"
 
 SceneEditor::SceneEditor()
 	:Scene(SceneId::Editor)
 {
-	resourceListPath = "scripts/defaultResourceList.csv";
+	//resourceListPath = "scripts/defaultResourceList.csv";
 }
 
 void SceneEditor::Init()
@@ -41,23 +43,57 @@ void SceneEditor::Init()
 	buttonCreate->sortLayer = 101;
 	buttonCreate->OnClick = [this]()
 	{
-		cout << "OnClick" << endl;
-		if (farmMap != nullptr)
+		TileMap* tempFarmMapT1 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
+		tempFarmMapT1->Reset();
+		tempFarmMapT1->Load(col, row, 48.f, 0.f);
+
+		TileMap* tempFarmMapT2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
+		tempFarmMapT2->Reset();
+		tempFarmMapT2->Load(col, row, 176.f, 0.f); //투명한 타일 176, 0
+
+		TileMap* tempFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
+		tempFarmMapObj->Reset();
+		tempFarmMapObj->Load(col, row, 96, 16); //투명한 타일 96, 16
+
+		if (farmMapT1 != nullptr)
 		{
-			RemoveGo(farmMap);
-			delete farmMap;
-			farmMap = nullptr;
+			RemoveGo(farmMapT1);
+			delete farmMapT1;
+			farmMapT1 = nullptr;
+		}
+
+		if (farmMapT2 != nullptr)
+		{
+			RemoveGo(farmMapT2);
+			delete farmMapT2;
+			farmMapT2 = nullptr;
+		}
+
+		if (farmMapObj != nullptr)
+		{
+			RemoveGo(farmMapObj);
+			delete farmMapObj;
+			farmMapObj = nullptr;
 		}
 		
-		farmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "dirtTile"));
-		farmMap->Reset();
-		farmMap->Load(col, row, 48.f, 0.f);
-		farmMap->SetOrigin(Origins::MC);
-		farmMap->SetPosition(centerPos.x + 500.f, centerPos.y);
+		farmMapT1 = tempFarmMapT1;
+		farmMapT1->SetOrigin(Origins::MC);
+		farmMapT1->SetPosition(centerPos.x + 500.f, centerPos.y);
 
-		MapLT = { farmMap->vertexArray.getBounds().left, farmMap->vertexArray.getBounds().top };
-		MapSize = farmMap->GetTileMapSize();
-		farmMap->sortLayer = -1;
+		farmMapT2 = tempFarmMapT2;
+		farmMapT2->SetOrigin(Origins::MC);
+		farmMapT2->SetPosition(farmMapT1->GetPosition());
+
+		farmMapObj = tempFarmMapObj;
+		farmMapObj->SetOrigin(Origins::MC);
+		farmMapObj->SetPosition(farmMapT1->GetPosition());
+
+		MapLT = { farmMapT1->vertexArray.getBounds().left, farmMapT1->vertexArray.getBounds().top };
+		MapSize = farmMapT1->GetTileMapSize();
+		farmMapT1->sortLayer = -1;
+
+		selectMap = farmMapT1;
+		curTile = selectTile;
 
 		//worldView.setCenter(farmMap->GetPosition());
 
@@ -96,7 +132,7 @@ void SceneEditor::Init()
 	buttonRowDown->sortLayer = 101;
 	buttonRowDown->OnClick = [this]()
 	{
-		row++;
+		row--;
 		rowText->SetString(to_string(row));
 	};
 
@@ -118,12 +154,25 @@ void SceneEditor::Init()
 	selectTile->SetActive(false);
 	selectTile->sortLayer = 3;
 
+	selectObj = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "selectObj"));
+	selectObj->SetScale({ 3.f, 3.f });
+	selectObj->SetOrigin(Origins::TL);
+	selectObj->sprite.setTextureRect(texRect);
+	selectObj->SetActive(false);
+	selectObj->sortLayer = 3;
+
 	/*----타일 팔레트----*/
 	tilePallet = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut.png", "tilePallet"));
 	tilePallet->SetOrigin(Origins::TL);
 	tilePallet->sortLayer = 101;
 	tilePallet->SetScale({ 3.f, 3.f });
 	tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet1"));
+
+	ObjPallet = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "objPallet"));
+	ObjPallet->SetOrigin(Origins::TL);
+	ObjPallet->sortLayer = 101;
+	ObjPallet->SetScale({ 3.f, 3.f });
+	ObjPallet->SetActive(false);
 
 	selPalTile = (RectangleGo*)AddGo(new RectangleGo(palletTileSize));
 	selPalTile->rectangle.setFillColor(sf::Color::Transparent);
@@ -156,6 +205,175 @@ void SceneEditor::Init()
 			ChangePallet();
 		}
 	};
+
+	/*----맵 레이어 변경----*/
+	//버튼
+	buttonLayer1 = (UiButton*)AddGo(new UiButton("graphics/uiBox.png", "layerUI1"));
+	buttonLayer1->sortLayer = 101;
+	buttonLayer1->SetScale({ 3.f, 3.f });
+	buttonLayer1->OnClick = [this]()
+	{
+		curTile = selectTile;
+		selectMap = farmMapT1;
+		if (ObjPallet->GetActive())
+		{
+			ObjPallet->SetActive(false);
+			tilePallet->SetActive(true);
+		}
+	};
+
+	buttonLayer2 = (UiButton*)AddGo(new UiButton("graphics/uiBox.png", "layerUI2"));
+	buttonLayer2->sortLayer = 101;
+	buttonLayer2->SetScale({ 3.f, 3.f });
+	buttonLayer2->OnClick = [this]()
+	{
+		curTile = selectTile;
+		selectMap = farmMapT2;
+		if (ObjPallet->GetActive())
+		{
+			ObjPallet->SetActive(false);
+			tilePallet->SetActive(true);
+		}
+	};
+
+	buttonLayerObj = (UiButton*)AddGo(new UiButton("graphics/uiBox.png", "layerUIObj"));
+	buttonLayerObj->sortLayer = 101;
+	buttonLayerObj->SetScale({ 3.f, 3.f });
+	buttonLayerObj->OnClick = [this]()
+	{
+		selectMap = farmMapObj;
+		selPallet = ObjPallet;
+		curTile = selectObj;
+		if (tilePallet->GetActive())
+		{
+			tilePallet->SetActive(false);
+			ObjPallet->SetActive(true);
+		}
+	};
+
+	buttonLayerColl = (UiButton*)AddGo(new UiButton("graphics/uiBox.png", "layerUIColl"));
+	buttonLayerColl->sortLayer = 101;
+	buttonLayerColl->SetScale({ 3.f, 3.f });
+	buttonLayerColl->OnClick = [this]()
+	{
+		selectMap = farmMapColl;
+	};
+
+	//텍스트
+	Layer1 = (TextGo*)AddGo(new TextGo("Layer1Text", "fonts/SDMiSaeng.ttf"));
+	Layer1->text.setOutlineThickness(1.f);
+	Layer1->text.setOutlineColor(sf::Color::Black);
+
+	Layer2 = (TextGo*)AddGo(new TextGo("Layer2Text", "fonts/SDMiSaeng.ttf"));
+	Layer2->text.setOutlineThickness(1.f);
+	Layer2->text.setOutlineColor(sf::Color::Black);
+
+	LayerObj = (TextGo*)AddGo(new TextGo("LayerObjText", "fonts/SDMiSaeng.ttf"));
+	LayerObj->text.setOutlineThickness(1.f);
+	LayerObj->text.setOutlineColor(sf::Color::Black);
+
+	LayerColl = (TextGo*)AddGo(new TextGo("LayerCollText", "fonts/SDMiSaeng.ttf"));
+	LayerColl->text.setOutlineThickness(1.f);
+	LayerColl->text.setOutlineColor(sf::Color::Black);
+
+	/*----세이브로드----*/
+	buttonSave = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
+	buttonSave->sortLayer = 101;
+	buttonSave->SetScale({ 0.5f, 0.5f });
+	buttonSave->OnClick = [this]()
+	{
+		if (farmMapT1->Save("tables/newMapLayer1.csv"))
+		{
+			cout << "레이어1 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "레이어1 세이브 실패" << endl;
+		}
+		if (farmMapT2->Save("tables/newMapLayer2.csv"))
+		{
+			cout << "레이어2 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "레이어2 세이브 실패" << endl;
+		}
+		if (farmMapObj->Save("tables/newMapLayerObj.csv"))
+		{
+			cout << "오브젝트 레이어 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "오브젝트 레이어 세이브 실패" << endl;
+		}
+	};
+
+	buttonLoad = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
+	buttonLoad->sortLayer = 101;
+	buttonLoad->SetScale({ 0.5f, 0.5f });
+	buttonLoad->OnClick = [this]()
+	{
+		TileMap* tempFarmMapT1 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
+		tempFarmMapT1->Reset();
+		tempFarmMapT1->Load("tables/newMapLayer1.csv");
+
+		TileMap* tempFarmMapT2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
+		tempFarmMapT2->Reset();
+		tempFarmMapT2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
+
+		TileMap* tempFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
+		tempFarmMapObj->Reset();
+		tempFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
+
+		if (farmMapT1 != nullptr)
+		{
+			RemoveGo(farmMapT1);
+			delete farmMapT1;
+			farmMapT1 = nullptr;
+		}
+
+		if (farmMapT2 != nullptr)
+		{
+			RemoveGo(farmMapT2);
+			delete farmMapT2;
+			farmMapT2 = nullptr;
+		}
+
+		if (farmMapObj != nullptr)
+		{
+			RemoveGo(farmMapObj);
+			delete farmMapObj;
+			farmMapObj = nullptr;
+		}
+
+		farmMapT1 = tempFarmMapT1;
+		farmMapT1->SetOrigin(Origins::MC);
+		farmMapT1->SetPosition(centerPos.x + 500.f, centerPos.y);
+
+		farmMapT2 = tempFarmMapT2;
+		farmMapT2->SetOrigin(Origins::MC);
+		farmMapT2->SetPosition(farmMapT1->GetPosition());
+
+		farmMapObj = tempFarmMapObj;
+		farmMapObj->SetOrigin(Origins::MC);
+		farmMapObj->SetPosition(farmMapT1->GetPosition());
+
+		MapLT = { farmMapT1->vertexArray.getBounds().left, farmMapT1->vertexArray.getBounds().top };
+		MapSize = farmMapT1->GetTileMapSize();
+		farmMapT1->sortLayer = -1;
+
+		selectMap = farmMapT1;
+		curTile = selectTile;
+		
+	};
+
+	saveText = (TextGo*)AddGo(new TextGo("saveText", "fonts/SDMiSaeng.ttf"));
+	saveText->text.setOutlineThickness(1.f);
+	saveText->text.setOutlineColor(sf::Color::Black);
+
+	loadText = (TextGo*)AddGo(new TextGo("saveText", "fonts/SDMiSaeng.ttf"));
+	loadText->text.setOutlineThickness(1.f);
+	loadText->text.setOutlineColor(sf::Color::Black);
 
 	for (auto go : gameObjects)
 	{
@@ -192,6 +410,8 @@ void SceneEditor::Enter()
 	palNumX = 0;
 	palNumY = 0;
 
+	selPallet = tilePallet;
+
 	/*---행열 조절---*/
 	//버튼ui
 	numUI->SetPosition(48.f, 72.f + numUI->sprite.getGlobalBounds().height / 2);
@@ -220,6 +440,35 @@ void SceneEditor::Enter()
 	buttonPalL->SetPosition(tilePallet->GetPosition().x, tilePallet->GetPosition().y - 50.f);
 	buttonPalR->SetPosition(buttonPalL->GetPosition().x + 80.f, tilePallet->GetPosition().y - 50.f);
 
+	ObjPallet->SetPosition(tilePallet->GetPosition());
+
+	//레이어
+	buttonLayer1->SetPosition(numUI->GetPosition().x, 300.f);
+	buttonLayer2->SetPosition(buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width + 10.f, 300.f);
+	buttonLayerObj->SetPosition(buttonLayer1->GetPosition().x, buttonLayer1->GetPosition().y + buttonLayer1->sprite.getGlobalBounds().height + 10.f);
+	buttonLayerColl->SetPosition(buttonLayer2->GetPosition().x, buttonLayerObj->GetPosition().y);
+
+	stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
+	Layer1->SetText(stringTable->GetUni("LAYER1", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width/2, buttonLayer1->GetPosition().y +18.f);
+	Layer2->SetText(stringTable->GetUni("LAYER2", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width / 2, buttonLayer2->GetPosition().y + 18.f);
+	LayerObj->SetText(stringTable->GetUni("LAYER_OBJ", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerObj->GetPosition().x + buttonLayerObj->sprite.getGlobalBounds().width / 2, buttonLayerObj->GetPosition().y + 20.f);
+	LayerColl->SetText(stringTable->GetUni("LAYER_COLL", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerColl->GetPosition().x + buttonLayerColl->sprite.getGlobalBounds().width / 2, buttonLayerColl->GetPosition().y + 23.f);
+
+	//세이브로드
+	buttonSave->SetPosition(buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width + 30.f
+		, buttonLayer2->GetPosition().y + 10.f);
+	buttonLoad->SetPosition(buttonSave->GetPosition().x,
+		buttonSave->GetPosition().y + buttonSave->sprite.getGlobalBounds().height + 10.f);
+
+	saveText->SetText(stringTable->GetUni("SAVE", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+		buttonSave->GetPosition().x + buttonSave->sprite.getGlobalBounds().width / 2,
+		buttonSave->GetPosition().y + 15);
+
+	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
+		buttonLoad->GetPosition().y + 15);
+
+
 }
 
 void SceneEditor::Exit()
@@ -242,20 +491,23 @@ void SceneEditor::Update(float dt)
 	if (worldMousPos.x >= MapLT.x && worldMousPos.x <= MapLT.x + MapSize.x
 		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y)
 	{
-		selectTile->SetActive(true);
+		curTile->SetActive(true);
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
-		selectTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
-		sf::IntRect texRect = selectTile->sprite.getTextureRect();
+		curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
+		sf::IntRect texRect = curTile->sprite.getTextureRect();
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
 		{
-			farmMap->ChangeTexRect(tileX, tileY, texRect);
+			selectMap->ChangeTexRect(tileX, tileY, texRect);
 		}
 	}
 	else
 	{
-		selectTile->SetActive(false);
+		if (curTile != nullptr)
+		{
+			curTile->SetActive(false);
+		}
 	}
 
 	//팔레트 
@@ -271,7 +523,7 @@ void SceneEditor::Update(float dt)
 		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 		{
 			sf::IntRect textureRect(tilePalletX * texTileSize.x + palletTexSize.x * palNumX, tilePalletY * texTileSize.y + palletTexSize.y * palNumY, texTileSize.x, texTileSize.y);
-			selectTile->sprite.setTextureRect(textureRect);
+			curTile->sprite.setTextureRect(textureRect);
 		}
 
 	}
