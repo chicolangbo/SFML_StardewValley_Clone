@@ -42,6 +42,10 @@ public:
 	virtual void Draw(sf::RenderWindow& window); 
 
 	void SetQuickSlot(std::vector<Slot*>* s){quickslot = s;}
+	void SetPlayer(Player2* p) { player = p; }
+	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
+
+	void IconUpdate();
 
 	ItemId GetItemId() { return itemid; } 
 	
