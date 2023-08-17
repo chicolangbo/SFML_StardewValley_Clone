@@ -87,21 +87,21 @@ Inventory::Inventory(const std::string& n)
 
 Inventory::~Inventory()
 {
-    Release();
+    Release(); 
 }
 
 void Inventory::Init()
 {
-    ////Ã³À½ Å¬¸¯
+    ////Ã³ï¿½ï¿½ Å¬ï¿½ï¿½
     //tagItemInfo onMouseItem;
     //onMouseItem = item[0];
     //item[0] = empty;
 
-    ////ºó°ø°£ ´Ù½Ã Å¬¸¯
+    ////ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ Å¬ï¿½ï¿½
     //item[3] = onMouseItem;
     //onMouseItem = empty;
 
-    ////ÀÌ¹Ì ÀÖ´Â °ø°£ Å¬¸¯
+    ////ï¿½Ì¹ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½
     //tagItemInfo tempItem;
     //tempItem = item[3];
 
@@ -128,7 +128,7 @@ void Inventory::Reset()
         m->Reset();
     }
 
-    // ¿ÀºêÁ§Æ® ÃÊ±â ¼¼ÆÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         invenBox.SetSize({ 1040.f, 670.f });
         invenBox.SetOrigin(Origins::MC);
@@ -288,7 +288,7 @@ void Inventory::Release()
     }
     delete mouseSlot;
 
-    invenUiObjects.clear();
+    invenUiObjects.clear(); 
 }
 
 void Inventory::Update(float dt)
@@ -299,7 +299,7 @@ void Inventory::Update(float dt)
     }
     PlayerInfoUpdate();
 
-    // ÀÎº¥Ã¢ ¿©´Ý±â
+    // ï¿½Îºï¿½Ã¢ ï¿½ï¿½ï¿½Ý±ï¿½
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
@@ -310,7 +310,7 @@ void Inventory::Update(float dt)
         }
         else if(mouseSlot->GetItemIcon() == nullptr)
         {
-            // Ã¢ ´ÝÀ» ¶§¸¶´Ù ÇÃ·¹ÀÌ¾î¾ÆÀÌÅÛÀÎµ¦½º ¾÷µ¥ÀÌÆ®
+            // Ã¢ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
             ItemIndexUpdate();
             SetWindowClear();
             IconUpdate();
@@ -318,12 +318,12 @@ void Inventory::Update(float dt)
         }
     }
 
-    // ¸¶¿ì½º¿¡ º¸ÀÌÁö ¾Ê´Â ½½·Ô Æ÷Áö¼Å´×
+    // ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å´ï¿½
     sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
     sf::Vector2f mPos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
     mouseSlot->SetPosition(mPos);
 
-    // ½½·Ô, ¾ÆÀÌÅÛ ÀÎµ¦½º µ¿ÀÏÈ­
+    // ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
 
 }
 
@@ -361,7 +361,7 @@ void Inventory::SetItemWindow()
             slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
         }
     }
-    // ¾ÆÀÌÅÛµµ º¸ÀÌµµ·Ï Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);
     map.SetPosition(mapPos);
@@ -474,6 +474,8 @@ void Inventory::ButtonSetUp()
         {
             SetWindowClear();
         }
+        SetWindowClear();
+        invenOnOff = false;
     };
 }
 
@@ -486,11 +488,11 @@ void Inventory::PlayerInfoUpdate()
 {
     std::stringstream ss;
     ss << *curFundsInt;
-    curFundsValue.SetString(ss.str()); // ÇöÀç ¼ÒÁö±Ý
+    curFundsValue.SetString(ss.str()); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     ss.str("");
     ss << *totalEarningsInt;
-    totalEarningsValue.SetString(ss.str()); // ÃÑÇÕ ÀÚ±Ý
+    totalEarningsValue.SetString(ss.str()); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ú±ï¿½
 }
 
 void Inventory::SortGos()
@@ -502,7 +504,7 @@ void Inventory::SortGos()
         });
 }
 
-void Inventory::ItemIndexUpdate()
+void Inventory::ItemIndexUpdate()//ï¿½Ù²ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 {
     for (tagItemInfo& pl : *playerItemList)
     {
@@ -543,7 +545,7 @@ void Inventory::IconUpdate()
     {
         for (Slot* sl : slot)
         {
-            if (pl.index == sl->slotIndex)
+            if (pl.index == sl->slotIndex)//ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,IDï¿½ï¿½ï¿½ï¿½
             {
                 auto foundItem = itemIconList.find(pl.itemId);
                 if (foundItem != itemIconList.end())

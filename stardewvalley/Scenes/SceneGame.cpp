@@ -20,21 +20,11 @@
 #include "RootingItem.h"
 #include "DataTableMgr.h"
 #include "AllItemTable.h"
+#include "QuickInventory.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	//csv������ ���ؼ� �ε��ϴ� ������ ����
-	
-	// �����, 230807, ���� ����
-	//resourceListPath = "tables/SceneGameResourceList.csv";
 	resourceListPath = "scripts/defaultResourceList.csv";
-	//
-
-	/*resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/RubySheet.png"));
-	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/sprite_sheet.png"));
-	resources.push_back(make_tuple(ResourceTypes::Texture, "graphics/background_sheet.png"));
-	resources.push_back(make_tuple(ResourceTypes::Texture, "graphics/TitleButtons1.png"));
-	resources.push_back(make_tuple(ResourceTypes::Texture, "graphics/TitleButtons2.png"));*/
 }
 
 
@@ -47,14 +37,12 @@ void SceneGame::Init()
 	sf::Vector2f centerPos = size * 0.5f;
 	
 	worldView.setSize(size);
-	// �����, 230807, �׽�Ʈ�� ���� ����
 	worldView.setCenter(0,0);
-	//
+	
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	// �����, 230808, �ӽø� �ڵ� �߰�
 	testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 	testFarmMap->sprite.setScale(3.f, 3.f);
 	testFarmMap->SetOrigin(Origins::MC);
@@ -153,6 +141,11 @@ void SceneGame::Init()
 	inven->SetPlayer(player2);
 	player2->SetInventory(inven);
 
+	quickinven = (QuickInventory*)AddGo(new QuickInventory("quickinven"));
+	quickinven->sortLayer = 100;
+	quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
+
+
 	//������ �� UI �ϴ� ������/������
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
 	energy->SetOrigin(Origins::BR);
@@ -179,6 +172,7 @@ void SceneGame::Init()
 	energyBar.setPosition(energy->GetPosition());
 	energyBar.setFillColor(sf::Color::Green);
 
+	quickinven->SetQuickSlot(inven->GetSlot()); 
 	
 	for (auto go : gameObjects)
 	{
@@ -244,7 +238,7 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-	//230814, ������ �׽�Ʈ�ڵ�, �ð� ����
+	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
 	if (time >= 7.f)
 	{
@@ -262,14 +256,7 @@ void SceneGame::Update(float dt)
 		day += 1;
 		arrowSpin = 0;
 	}
-	/*if (hour < 12)
-	{
-		std::cout << day << "�� " << "���� " << hour << "�� " << min << "�� " << time << "��" << std::endl;
-	}
-	else if (hour >= 12)
-	{
-		std::cout << day << "�� " << "���� " << hour << "�� " << min << "�� " << time << "��" << std::endl;
-	}*/
+	
 	arrowSpin += dt * 0.2381f;
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
@@ -295,22 +282,8 @@ void SceneGame::Update(float dt)
 	textDay.setPosition(1775.f, 12.f);
 	textDay.setFillColor(sf::Color::Black);
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad5))
-	{
-		hour += 1;
-	}
-	// �����, 230807, �׽�Ʈ�� �ּ�ó��
-	// �����, 230808, �׽�Ʈ�� �ּ�����, �÷��̾� ������ �α�
-	//worldView.setCenter(player2->GetPosition());
-	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
-	//
-	
-	//�並 �÷��̾ ����
 	worldView.setCenter(player2->GetPosition());
-	//std::cout << player2->GetPosition().x << " " << player2->GetPosition().y << std::endl;
-	//������ �׽�Ʈ �ڵ�
 	
-
 	playerBound = player2->GetCollider(); 
 	mapBound = testFarmMap->GetCollider();
 	
@@ -319,10 +292,7 @@ void SceneGame::Update(float dt)
 	energyBar.setSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
 	energyBar.setPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar.setOrigin(energyBar.getSize().x / 2, energyBar.getSize().y);
-	//
 
-	// �����, 230809, ������
-	//if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)
@@ -340,12 +310,12 @@ void SceneGame::Update(float dt)
 				}
 			}
 			player2->SetActive(true);
-			player2->SetPosition(-463.f, -770.f); //230814, ������ ����
+			player2->SetPosition(-463.f, -770.f); 
 			energy->SetActive(true);
 			info->SetActive(true);
 			timeArrow->SetActive(true);
 			inven->SetActive(true);
-			//player2->SetPosition(-463.f, -845.f);
+			quickinven->SetActive(true);
 		}
 		else
 		{
@@ -364,24 +334,20 @@ void SceneGame::Update(float dt)
 			}
 
 			player2->SetActive(true);	
-			player2->SetPosition(419.f, 1866.f); // ������ �ӽ� ���� //230814, ������ ����
+			player2->SetPosition(419.f, 1866.f); 
 			energy->SetActive(true);
 			info->SetActive(true);
 			timeArrow->SetActive(true); 
-			//player2->SetActive(true);
 			inven->SetActive(true);
-			//player2->SetPosition(419.f, 1823.f); // ������ �ӽ� ����
+			quickinven->SetActive(true);
 		}
 	}
 	
-	
-
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
 
-	// ������ ���� �׽�Ʈ�ڵ�
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
 		SpawnRootingItem(ItemId::branch);
@@ -390,6 +356,17 @@ void SceneGame::Update(float dt)
 	{
 		SpawnRootingItem(ItemId::coal);
 	}
+
+	
+	if (inven->GetInvenOff())
+	{
+		quickinven->SetActive(false);
+	}
+	else if (!inven->GetInvenOff())
+	{
+		quickinven->SetActive(true);
+	}
+	
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -415,17 +392,17 @@ VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileS
 {
 	VertexArrayGo* background = new VertexArrayGo(textureId, "Background");
 	background->vertexArray.setPrimitiveType(sf::Quads);
-	background->vertexArray.resize(size.x * size.y * 4); //�Ű�����: �ʿ��� ������ ��
+	background->vertexArray.resize(size.x * size.y * 4); 
 
-	sf::Vector2f startPos = { 0, 0 }; //���� ��ǥ
+	sf::Vector2f startPos = { 0, 0 }; 
 	sf::Vector2f offsets[4] =
 	{
-		//������ ��ǥ
+		
 		{0.f, 0.f},
 		{tileSize.x, 0.f},
 		{tileSize.x, tileSize.y},
 		{0.f, tileSize.y}
-	}; //������ ����, ������ ������ ���۷��� ������ �����ϱ�
+	}; 
 	sf::Vector2f texOffsets[4] =
 	{
 		{0.f, 0.f},
@@ -435,22 +412,21 @@ VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileS
 	};
 
 	sf::Vector2f currPos = startPos;
-	/*�ܰ��� ������, ���δ� ������ 3���� 1�� �������� �����ϱ�*/
 	for (int i = 0; i < size.y; i++)
 	{
 		for (int j = 0; j < size.x; j++)
 		{
 			int texIndex = 3;
 			if (i != 0 && i != size.y - 1 && j != 0 && j != size.x - 1)
-				//�ܰ��� �ƴ� ��, ����, �Ʒ���, ����, ������ ������ �ܰ� �˻�
+				
 			{
-				texIndex = Utils::RandomRange(0, 3); //Ÿ�� 3�� �� 1�� ��������
+				texIndex = Utils::RandomRange(0, 3); 
 			}
 
-			int tileIndex = size.x * i + j; //2���� �迭�� �ε����� 1���� �迭 �ε����� ����
-			for (int k = 0; k < 4; k++) //4������ ������ �ϳ��� ���� for��
+			int tileIndex = size.x * i + j; 
+			for (int k = 0; k < 4; k++) 
 			{
-				int vertexIndex = tileIndex * 4 + k; //������ �ε���
+				int vertexIndex = tileIndex * 4 + k;
 				background->vertexArray[vertexIndex].position = currPos + offsets[k];
 				background->vertexArray[vertexIndex].texCoords = texOffsets[k];
 				background->vertexArray[vertexIndex].texCoords.y += texSize.y * texIndex;

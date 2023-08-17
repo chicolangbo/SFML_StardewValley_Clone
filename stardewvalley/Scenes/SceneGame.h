@@ -8,18 +8,19 @@ class Wall;
 class SliceImageGo;
 class Inventory;
 class RootingItem;
+class QuickInventory;
 
 class SceneGame : public Scene
 {
 protected:
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
-	// �����, 230809, �߰�
+
 	bool enterShop = false;
-	//
+	
 
 	Player2* player2;
-	// �����, 230809, �߰�
+
 	SpriteGo* testFarmMap;
 	SpriteGo* house;
 	SpriteGo* shop;
@@ -36,16 +37,14 @@ protected:
 	SpriteGo* shopBox;
 	Wall* homeWalls;
 	Wall* shopWalls;
-    //
-	
-	//������ �׽�Ʈ
+
 	SpriteGo* energy;
 	SpriteGo* info;
 	SpriteGo* timeArrow;
 	float arrowSpin = 0.f;
 	sf::RectangleShape energyBar;
 	int energys;
-	//sf::FloatRect houseBound; 
+
 	std::vector<sf::FloatRect> walls;
 	sf::FloatRect playerBound; 
 	sf::FloatRect mapBound;
@@ -60,10 +59,12 @@ protected:
 	sf::Text textHour;
 	sf::Text textDay;
 	sf::Font font;
-	// �����, 230811, �κ��丮 �߰�
+
 	Inventory* inven;
-	std::list<RootingItem*>rootingItems; // �÷��̾�-������Ʈ ��ȣ�ۿ� �� �ʵ忡 ����� ������
-	//
+	std::list<RootingItem*>rootingItems; 
+	QuickInventory* quickinven;
+
+	bool off = false;
 
 public:
 	SceneGame();

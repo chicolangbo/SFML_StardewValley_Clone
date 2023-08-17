@@ -45,6 +45,7 @@ private:
 
 	// ui
 	SpriteGo pl;
+
 	UiButton bag;
 	UiButton map;
 	UiButton make;
@@ -52,19 +53,23 @@ private:
 	UiButton xButton;
 	UiButton title;
 	UiButton end;
+
 	sf::Vector2f bagPos;
 	sf::Vector2f mapPos;
 	sf::Vector2f makePos;
 	sf::Vector2f changeScenePos;
 	sf::Vector2f xButtonPos;
 	sf::Vector2f slotPos;
+
 	SliceImageGo invenBox;
 	SliceImageGo invenLine;
+
 	SpriteGo mapImage;
 	SpriteGo ring;
 	SpriteGo shoes;
 	SpriteGo hat;
 	SpriteGo charBg;
+
 	TextGo curFunds;
 	TextGo curFundsValue;
 	TextGo totalEarnings;
@@ -89,15 +94,16 @@ public:
 	void SetChangeSceneWindow();
 	void SetWindowClear();
 
-	void ItemIconSetUp();
-	void ButtonSetUp();
-	void PlayerInfoUpdate();
-	void IconUpdate();
-	void ItemIndexUpdate();
+	void ItemIconSetUp();//init할떄 한번만 아이템 아이콘 들을 전부 찍어놓음
+	void ButtonSetUp();//UI버튼
+	void PlayerInfoUpdate();//실시간 플레이어 돈 업데이트
+	void IconUpdate();//슬롯에다 아이템 업데이트 
+	void ItemIndexUpdate();//아이템 위치?
 
 	void SetPlayer(Player2* p);
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 	int GetItemCapacity() { return itemCapacity; }
 	void SortGos();
-	std::vector<Slot*>* GetSlot() { return &slot; }
+	std::vector<Slot*>* GetSlot() { return &slot; } 
+	bool GetInvenOff() { return invenOnOff; }
 };

@@ -2,17 +2,17 @@
 #include "UiButton.h"
 #include "Item.h"
 
-class Slot :
-    public UiButton
+class Slot : public UiButton
 {
 protected:
-    SpriteGo* itemIcon = nullptr;
+   
     Slot* mouseIcon = nullptr;
     ItemId id = ItemId::none;
-
+    SpriteGo* itemIcon = nullptr;
     bool isEmpty = true;
 
 public:
+    
     int slotIndex = 0;
     Slot(const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
     virtual ~Slot() override;

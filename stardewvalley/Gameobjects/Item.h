@@ -17,8 +17,8 @@ enum class ITEM
 struct tagItemInfo
 {
 	ItemId itemId = ItemId::none;
-	int count = 0;
-	int index = 0;
+	int count = 0;//°¹¼ö
+	int index = 0;//À§Ä¡
 
 	tagItemInfo& operator=(const tagItemInfo& other)
 	{

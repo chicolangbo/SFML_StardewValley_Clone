@@ -62,6 +62,7 @@ void Player2::Init()
 	hoe.Init();
 	scythe.Init();
 	watering.Init(); 
+
 }
 
 void Player2::Reset()
@@ -193,28 +194,9 @@ void Player2::Update(float dt)
 			}
 		}
 		
-		//test
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		{
-			item = Tool::Scythe;//�� 
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		{
-			item = Tool::Axe;//����
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		{
-			item = Tool::Pickax;//���
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		{
-			item = Tool::Hoe;//ȣ��
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		{
-			item = Tool::WateringCan;//���Ѹ���
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
+		
+	
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
 		{
 			energy = 0;
 		}
@@ -223,7 +205,7 @@ void Player2::Update(float dt)
 		{
 			switch (item)
 			{
-			case Tool::Scythe:
+			case ItemId::hook:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Attack");
@@ -257,7 +239,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case Tool::Axe:
+			case ItemId::ax:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -291,7 +273,7 @@ void Player2::Update(float dt)
 				energy -= 2;
 				playingAnimation = true;
 				break;
-			case Tool::Pickax:
+			case ItemId::pick:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -322,7 +304,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case Tool::Hoe:
+			case ItemId::homi:
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
@@ -355,7 +337,7 @@ void Player2::Update(float dt)
 				playingAnimation = true;
 				break;
 
-			case Tool::WateringCan: 
+			case ItemId::waterCan:
 				SetOrigin(Origins::BC);
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
@@ -387,8 +369,11 @@ void Player2::Update(float dt)
 				energy -= 2;
 				playingAnimation = true;
 				break;
+			
+			case ItemId::none:
+				SetOrigin(Origins::BC);
+				break;
 			}
-
 
 		}
 	}
