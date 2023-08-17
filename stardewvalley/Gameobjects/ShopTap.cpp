@@ -6,7 +6,7 @@
 #include "SceneMgr.h"
 #include "Framework.h"
 #include "StringTable.h"
-//#include ""
+#include "DataTableMgr.h"
 
 ShopTap::ShopTap(const std::string& n)
 	: GameObject(n),
@@ -97,9 +97,11 @@ void ShopTap::Reset()
         pierreTextBox.SetOrigin(Origins::TR);
         pierreTextBox.SetPosition(size.x / 4.f, pierrePortrait.GetPosition().y + pierrePortrait.sprite.getGlobalBounds().height + 10.f);
 
-        //StringTable* stringTable1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
+        StringTable* stringTable1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
 
-       // pierreText
+        pierreText.SetString(stringTable1->Get("PIERRE"));
+        pierreText.SetOrigin(Origins::TR);
+        //pierreText.
     }
 }
 

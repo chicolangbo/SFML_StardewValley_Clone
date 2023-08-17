@@ -418,7 +418,6 @@ VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileS
 	sf::Vector2f startPos = { 0, 0 }; 
 	sf::Vector2f offsets[4] =
 	{
-		
 		{0.f, 0.f},
 		{tileSize.x, 0.f},
 		{tileSize.x, tileSize.y},
