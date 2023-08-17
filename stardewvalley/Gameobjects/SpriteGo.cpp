@@ -147,3 +147,10 @@ sf::FloatRect SpriteGo::GetCollider()
 	sf::FloatRect bound = collider.getGlobalBounds();
 	return bound; 
 }
+
+void SpriteGo::Setting(std::string textureId, std::string n, std::string nickName)
+{
+	this->textureId = textureId;
+	this->name = n;
+	this->nickName = nickName;
+}

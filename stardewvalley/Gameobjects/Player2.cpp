@@ -12,6 +12,7 @@
 #include "AllItemTable.h"
 #include "DataTableMgr.h"
 #include "Inventory.h"
+#include "Slot.h"
 
 void Player2::Init()
 {
@@ -85,6 +86,12 @@ void Player2::Reset()
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	SetOrigin(origin);
+
+	playerItemList.push_back({ ItemId::ax, 1, 0 });
+	playerItemList.push_back({ ItemId::homi, 1, 1 });
+	playerItemList.push_back({ ItemId::hook, 1, 2 });
+	playerItemList.push_back({ ItemId::pick, 1, 3 });
+	playerItemList.push_back({ ItemId::waterCan, 1, 4 });
 }
 
 void Player2::Update(float dt)
@@ -415,20 +422,31 @@ void Player2::Update(float dt)
 	}
 	animation.Update(dt);
 
-	// �����,230815, �����Ǵ� ������ �Դ��� üũ�ϴ� �Լ�
+	// 아이템 관련
 	AddPlayerItem();
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
 		int a = 0;
-		for (auto i : playerItemList)
+		for (auto& i : playerItemList)
 		{
-			std::cout << "============" << a << "============" << std::endl;
-			std::cout << "ī��Ʈ: "<< i.count << std::endl;
-			std::cout << "�ε���: "<< i.index << std::endl;
+			std::cout << "============ pushnum: " << a << "============" << std::endl;
+			std::cout << "count: "<< i.count << std::endl;
+			std::cout << "index: "<< i.index << std::endl;
 			a++;
 		}
 	}
+
+	// MONEY TEST CODE
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
+	{
+		tempMoney = 300;
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
+	{
+		tempMoney = -300;
+	}
+	MoneyUpdate();
 	//
 }
 
@@ -469,7 +487,8 @@ void Player2::SetCollider(const sf::FloatRect& coll)
 {
 	playerBound = coll;
 }
-void Player2::AddPlayerItem() // ���߿� �ڼ� ���·� �ٲٱ�. �ϴ��� �浹 �� ������ �ɷ�
+
+void Player2::AddPlayerItem() // 자석화 해야 함
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -486,7 +505,7 @@ void Player2::AddPlayerItem() // ���߿� �ڼ� ���·� �ٲٱ�
 		{
 			item->SetActive(false);
 			bool found = false;
-			for (auto& playerItem : playerItemList) // �������� 1���� ���� ��
+			for (auto& playerItem : playerItemList)
 			{
 				if (playerItem.itemId == item->GetRootingItemId())
 				{
@@ -497,16 +516,31 @@ void Player2::AddPlayerItem() // ���߿� �ڼ� ���·� �ٲٱ�
 			}
 			if (!found)
 			{
-				bool zero = true;
 				int index = 0;
-				for (auto& pl : playerItemList)
+				for (auto slot : *inven->GetSlot())
 				{
-					index = pl.index;
-					zero = false;
+					if (slot->IsItemIconEmpty())
+					{
+						index = slot->slotIndex;
+						break;
+					}
 				}
-				playerItemList.push_back({ item->GetRootingItemId(),1,(zero? index : index+1) });
+				playerItemList.push_back({ item->GetRootingItemId(),1,index });				
 			}
 		}
 	}
+}
+
+void Player2::MoneyUpdate()
+{
+	if (tempMoney != 0)
+	{
+		money += tempMoney;
+		if (tempMoney >= 0)
+		{
+			totalEarningsInt += tempMoney;
+		}
+	}
+	tempMoney = 0;
 }
 

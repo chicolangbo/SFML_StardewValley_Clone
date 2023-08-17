@@ -19,6 +19,7 @@ enum class Tool
 };
 
 class RootingItem;
+class Inventory;
 
 class Player2 : public SpriteGo
 {
@@ -50,10 +51,11 @@ protected:
 	//test
 	Tool item;
 
-	//��� ���� ���� -2�� ����
 	int maxEnergy = 270;
 	int energy = 270;
 	int money = 500;
+	// 김민지, 230816, 추가
+	int tempMoney = 0;
 
 	std::vector<sf::FloatRect> wallBounds;
 	std::vector<sf::Vector2f> wallBoundsLT;
@@ -68,8 +70,9 @@ protected:
 	
 	std::list<tagItemInfo> playerItemList;
 	std::list<RootingItem*>*rootingItemList;
-	int curFundsInt; // ���� ������
-	int totalEarningsInt; // ���� �ڱ�
+	int totalEarningsInt = 500; // ���� �ڱ�
+
+	Inventory* inven;
 
 public:
 
@@ -86,17 +89,18 @@ public:
 	void SetFlipX(bool filp);
 
 	int GetEnergy() { return energy; }
-	int GetMoney() { return money; }
+	int* GetMoney() { return &money; }
 
 	void SetWallBounds(const sf::FloatRect& bounds);
 	void SetCollider(const sf::FloatRect& coll);
+	void SetInventory(Inventory* i) { inven = i; }
 
 	AnimationController GetAnimation() { return animation; }
 
 	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
-	int* GetCurFundsInt() { return &curFundsInt; }
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
 	void AddPlayerItem();
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
+	void MoneyUpdate();
 };
 

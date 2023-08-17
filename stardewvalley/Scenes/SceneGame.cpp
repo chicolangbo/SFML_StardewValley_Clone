@@ -151,6 +151,7 @@ void SceneGame::Init()
 	inven->sortLayer = 100;
 	inven->SetPosition(windowSize / 2.f);
 	inven->SetPlayer(player2);
+	player2->SetInventory(inven);
 
 	//������ �� UI �ϴ� ������/������
 	energy = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "Energy", "Energy"));
@@ -274,7 +275,7 @@ void SceneGame::Update(float dt)
 	timeArrow->sprite.setRotation(arrowSpin);
 
 	std::stringstream ss; 
-	ss << player2->GetMoney();
+	ss << *player2->GetMoney();
 	textMoney.setString(ss.str());
 	textMoney.setCharacterSize(50);
 	textMoney.setPosition(1675.f, 195.f);

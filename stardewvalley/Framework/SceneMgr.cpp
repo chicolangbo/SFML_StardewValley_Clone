@@ -37,7 +37,7 @@ void SceneMgr::Release()
 
 	for (auto scene : scenes)
 	{
-		//scene->Release();
+		scene->Release();
 		delete scene;
 	}
 	scenes.clear();
