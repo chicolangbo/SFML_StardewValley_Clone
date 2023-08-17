@@ -280,10 +280,92 @@ void SceneEditor::Init()
 	buttonSave = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
 	buttonSave->sortLayer = 101;
 	buttonSave->SetScale({ 0.5f, 0.5f });
+	buttonSave->OnClick = [this]()
+	{
+		if (farmMapT1->Save("tables/newMapLayer1.csv"))
+		{
+			cout << "레이어1 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "레이어1 세이브 실패" << endl;
+		}
+		if (farmMapT2->Save("tables/newMapLayer2.csv"))
+		{
+			cout << "레이어2 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "레이어2 세이브 실패" << endl;
+		}
+		if (farmMapObj->Save("tables/newMapLayerObj.csv"))
+		{
+			cout << "오브젝트 레이어 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "오브젝트 레이어 세이브 실패" << endl;
+		}
+	};
 
 	buttonLoad = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
 	buttonLoad->sortLayer = 101;
 	buttonLoad->SetScale({ 0.5f, 0.5f });
+	buttonLoad->OnClick = [this]()
+	{
+		TileMap* tempFarmMapT1 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
+		tempFarmMapT1->Reset();
+		tempFarmMapT1->Load("tables/newMapLayer1.csv");
+
+		TileMap* tempFarmMapT2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
+		tempFarmMapT2->Reset();
+		tempFarmMapT2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
+
+		TileMap* tempFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
+		tempFarmMapObj->Reset();
+		tempFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
+
+		if (farmMapT1 != nullptr)
+		{
+			RemoveGo(farmMapT1);
+			delete farmMapT1;
+			farmMapT1 = nullptr;
+		}
+
+		if (farmMapT2 != nullptr)
+		{
+			RemoveGo(farmMapT2);
+			delete farmMapT2;
+			farmMapT2 = nullptr;
+		}
+
+		if (farmMapObj != nullptr)
+		{
+			RemoveGo(farmMapObj);
+			delete farmMapObj;
+			farmMapObj = nullptr;
+		}
+
+		farmMapT1 = tempFarmMapT1;
+		farmMapT1->SetOrigin(Origins::MC);
+		farmMapT1->SetPosition(centerPos.x + 500.f, centerPos.y);
+
+		farmMapT2 = tempFarmMapT2;
+		farmMapT2->SetOrigin(Origins::MC);
+		farmMapT2->SetPosition(farmMapT1->GetPosition());
+
+		farmMapObj = tempFarmMapObj;
+		farmMapObj->SetOrigin(Origins::MC);
+		farmMapObj->SetPosition(farmMapT1->GetPosition());
+
+		MapLT = { farmMapT1->vertexArray.getBounds().left, farmMapT1->vertexArray.getBounds().top };
+		MapSize = farmMapT1->GetTileMapSize();
+		farmMapT1->sortLayer = -1;
+
+		selectMap = farmMapT1;
+		curTile = selectTile;
+		
+	};
 
 	saveText = (TextGo*)AddGo(new TextGo("saveText", "fonts/SDMiSaeng.ttf"));
 	saveText->text.setOutlineThickness(1.f);

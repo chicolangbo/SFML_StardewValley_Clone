@@ -13,12 +13,12 @@ struct Tile
 {
 	int x = 0;
 	int y = 0;
-	float texWidth;
-	float texHeight;
 	float texLeft;
 	float texTop;
-	int texIndex = 0;
-	TileType type;
+	float texWidth;
+	float texHeight;
+	//int texIndex = 0;
+	//TileType type;
 };
 
 //
@@ -28,7 +28,9 @@ protected:
 	//sf::Vector2f tileSize = { 80.f, 45.f };//{ 32.f, 32.f }; //80.f, 80.f, 2.5น่(1280/512)
 	sf::Vector2f tileSize = { 48.f, 48.f };
 	sf::Vector2f texSize = { 16.f, 16.f };
-	sf::Vector2i size;
+	sf::Vector2i size = { 20, 20 };
+
+	int count = 0;
 	
 public:
 	std::vector<Tile> tiles;
@@ -42,13 +44,15 @@ public:
 	bool Load(const std::string& filePath);
 	bool Load(int col, int row, float texX, float texY);
 
+	bool Save(const std::string& filePath);
+
 	sf::Vector2f GetTileSize();
 	sf::Vector2f GetTileMapSize();
 	int GetTileIndex(int x, int y);
 	Tile& GetTile(const int x, const int y);
 	void setTilesize(float x, float y);
 	void setTexSize(float x, float y);
-	void setScale(float scaleX, float scaleY);
+	//void setScale(float scaleX, float scaleY);
 
 	void ChangeTexRect(int x, int y, sf::IntRect texRect);
 	
