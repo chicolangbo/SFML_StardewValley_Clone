@@ -95,6 +95,7 @@ void SceneEditor::Init()
 
 		selectMap = farmMapT1;
 		curTile = selectTile;
+		IsCollActive = false;
 		SetColliders();
 		/*if (!colliders.empty())
 		{
@@ -307,6 +308,7 @@ void SceneEditor::Init()
 	buttonSave->SetScale({ 0.5f, 0.5f });
 	buttonSave->OnClick = [this]()
 	{
+		
 		if (farmMapT1->Save("tables/newMapLayer1.csv"))
 		{
 			cout << "레이어1 세이브 성공" << endl;
@@ -347,6 +349,7 @@ void SceneEditor::Init()
 	buttonLoad->SetScale({ 0.5f, 0.5f });
 	buttonLoad->OnClick = [this]()
 	{
+		IsCollActive = false;
 		TileMap* tempFarmMapT1 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
 		tempFarmMapT1->Reset();
 		tempFarmMapT1->Load("tables/newMapLayer1.csv");
