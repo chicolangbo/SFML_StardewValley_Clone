@@ -1,10 +1,16 @@
 #include "stdafx.h"
-#include "Shop.h"
+#include "ShopTap.h"
 #include "ShopSlot.h"
+#include "Wall.h"
+#include "Framework.h"
+#include "SceneMgr.h"
+#include "Framework.h"
+#include "StringTable.h"
+//#include ""
 
-Shop::Shop(const std::string& n)
+ShopTap::ShopTap(const std::string& n)
 	: GameObject(n),
-    pierre("graphics/pierrePortrait.png", "pierrePortrait"),
+    pierrePortrait("graphics/pierrePortrait.png", "pierrePortrait"),
     pierreText("pierreText", "fonts/SDMiSaeng.ttf"),
     pierreTextBox("graphics/box1.png", "pierreTextBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE),
     shopBox("graphics/box1.png", "pierreTextBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE),
@@ -13,7 +19,8 @@ Shop::Shop(const std::string& n)
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
     invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE)
 {
-    AddUi(&pierre);
+    // SHOP TAP
+    AddUi(&pierrePortrait);
     AddUi(&pierreText);
     AddUi(&pierreTextBox);
     AddUi(&shopBox);
@@ -21,7 +28,7 @@ Shop::Shop(const std::string& n)
     AddUi(&moneyText);
     AddUi(&xButton);
     AddUi(&invenBox);
-
+    
     int itemNum = 9;
     for (int i = 0; i < shopSlotCount; ++i)
     {
@@ -36,12 +43,12 @@ Shop::Shop(const std::string& n)
     }
 }
 
-Shop::~Shop()
+ShopTap::~ShopTap()
 {
     Release();
 }
 
-GameObject* Shop::AddUi(GameObject* go)
+GameObject* ShopTap::AddUi(GameObject* go)
 {
     if (!Exist(go))
     {
@@ -50,7 +57,7 @@ GameObject* Shop::AddUi(GameObject* go)
     return go;
 }
 
-bool Shop::Exist(GameObject* go)
+bool ShopTap::Exist(GameObject* go)
 {
     for (auto& m : shopUiObjects)
     {
@@ -62,25 +69,41 @@ bool Shop::Exist(GameObject* go)
     return false;
 }
 
-void Shop::Init()
+void ShopTap::Init()
 {
     for (auto i : shopUiObjects)
     {
         i->Init();
     }
 
-    moneyInt = player->GetMoney();
+    SetPlayerInfo();
 }
 
-void Shop::Reset()
+void ShopTap::Reset()
 {
     for (auto i : shopUiObjects)
     {
         i->Reset();
     }
+
+    // SHOP TAP
+    {
+        sf::Vector2f size = FRAMEWORK.GetWindowSize();
+
+        pierrePortrait.SetOrigin(Origins::TR);
+        pierrePortrait.SetScale(4.f, 4.f);
+        pierrePortrait.SetPosition(size.x/4.f, 100.f);
+        pierreTextBox.SetSize({ pierrePortrait.sprite.getGlobalBounds().width, pierrePortrait.sprite.getGlobalBounds(). height});
+        pierreTextBox.SetOrigin(Origins::TR);
+        pierreTextBox.SetPosition(size.x / 4.f, pierrePortrait.GetPosition().y + pierrePortrait.sprite.getGlobalBounds().height + 10.f);
+
+        //StringTable* stringTable1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
+
+       // pierreText
+    }
 }
 
-void Shop::Release()
+void ShopTap::Release()
 {
     for (auto it : shopSlot)
     {
@@ -90,15 +113,17 @@ void Shop::Release()
     shopUiObjects.clear();
 }
 
-void Shop::Update(float dt)
+void ShopTap::Update(float dt)
 {
     for (auto i : shopUiObjects)
     {
         i->Update(dt);
     }
+
+    PlayerInfoUpdate();
 }
 
-void Shop::Draw(sf::RenderWindow& window)
+void ShopTap::Draw(sf::RenderWindow& window)
 {
     SortGos();
 
@@ -109,9 +134,18 @@ void Shop::Draw(sf::RenderWindow& window)
             m->Draw(window);
         }
     }
+
+    //window.setView(shopTapView);
+    for (auto m : shopUiObjects)
+    {
+        if (m->GetActive())
+        {
+            m->Draw(window);
+        }
+    }
 }
 
-void Shop::SortGos()
+void ShopTap::SortGos()
 {
     shopUiObjects.sort([](GameObject* lhs, GameObject* rhs) {
         if (lhs->sortLayer != rhs->sortLayer)
@@ -120,7 +154,13 @@ void Shop::SortGos()
         });
 }
 
-void Shop::PlayerInfoUpdate()
+void ShopTap::SetPlayerInfo()
+{
+    playerItemList = player->GetPlayerItemList();
+    moneyInt = player->GetMoney();
+}
+
+void ShopTap::PlayerInfoUpdate()
 {
     std::stringstream ss;
     ss << *moneyInt;

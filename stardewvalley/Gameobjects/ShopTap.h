@@ -9,21 +9,21 @@
 
 class ShopSlot;
 
-class Shop :
+class ShopTap :
     public GameObject
 {
 protected:
     Player2* player;
     Inventory* inven;
-    std::list<tagItemInfo>* playerItemList;
+    std::list<tagItemInfo>* playerItemList = nullptr;
 
     // SHOP SLOT VECTOR
     std::vector<ShopSlot*> shopSlot;
     int shopSlotCount = 13;
 
-    // UI
+    // SHOPTAP UI
     std::list<GameObject*> shopUiObjects;
-    SpriteGo pierre;
+    SpriteGo pierrePortrait;
     TextGo pierreText;
     SliceImageGo pierreTextBox;
     SliceImageGo shopBox;
@@ -34,8 +34,8 @@ protected:
     SliceImageGo invenBox;
 
 public:
-    Shop(const std::string& n = "");
-    virtual ~Shop() override;
+    ShopTap(const std::string& n = "");
+    virtual ~ShopTap() override;
 
     GameObject* AddUi(GameObject* go);
     bool Exist(GameObject* go);
@@ -47,8 +47,9 @@ public:
     virtual void Draw(sf::RenderWindow& window) override;
 
     void SortGos();
-    void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
+    void SetPlayer(Player2* p) { player = p; }
     void SetInventory(Inventory* i) { this->inven = i; }
+    void SetPlayerInfo();
     void PlayerInfoUpdate();
 };
 

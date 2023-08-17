@@ -143,7 +143,7 @@ void Scene::Draw(sf::RenderWindow& window)
 
 	window.setView(worldView);
 	for (auto go : gameObjects)
-	{
+	{ 
 		if (go->sortLayer >= 100)
 			continue;
 

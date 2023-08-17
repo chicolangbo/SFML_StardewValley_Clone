@@ -13,13 +13,13 @@ enum class UiType
 {
 	COMMON,
 	BOX,
-	LINE,
 	BUTTON,
 	ITEM,
 	TOOL,
 	MAP,
 	MAKE,
-	CHANEGE
+	CHANEGE,
+	LINE
 };
 
 class Inventory : public GameObject

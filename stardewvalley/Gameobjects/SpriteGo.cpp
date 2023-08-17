@@ -64,7 +64,8 @@ void SpriteGo::SetScale(float x, float y)
 	//
 	// 임형준, 230811, 콜라이더 스케일 오류 수정
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
-	//
+	// 김민지, 230817, 추가
+	SetOrigin(origin);
 }
 
 void SpriteGo::SetScale(const sf::Vector2f& p)
