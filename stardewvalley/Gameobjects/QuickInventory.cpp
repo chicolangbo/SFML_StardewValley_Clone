@@ -2,6 +2,8 @@
 #include "QuickInventory.h"
 #include "Slot.h"  
 #include "InputMgr.h"
+#include "AllItemTable.h"
+#include "DataTableMgr.h"
 
 GameObject* QuickInventory::AddUi(GameObject* go)
 {
@@ -53,6 +55,9 @@ QuickInventory::~QuickInventory()
 
 void QuickInventory::Init()
 {
+	SetPlayerItemList();
+	ItemIconSetUp();
+
 	for (auto i : quickinvenUi)
 	{
 		i->Init();
@@ -97,9 +102,11 @@ void QuickInventory::Update(float dt)
 {
 	for (int i = 0; i < 12; ++i)
 	{
-		quickslots[i]->SetItemIcon((*quickslot)[i]->GetItemIcon());  
-		quickslots[i]->SetItemId((*quickslot)[i]->GetItemId()); 
+		quickslots[i]->SetItemIcon((*quickslot)[i]->GetItemIcon());   
+		quickslots[i]->SetItemId((*quickslot)[i]->GetItemId());  
 	}
+
+	IconUpdate();   
 
 	for (auto m : quickinvenUi)
 	{
@@ -457,6 +464,39 @@ void QuickInventory::Draw(sf::RenderWindow& window)
 
 void QuickInventory::IconUpdate()
 {
+	for (tagItemInfo& pl : *playerItemList)
+	{
+		for (Slot* sl : quickslots)
+		{
+			if (pl.index == sl->slotIndex)
+			{
+				auto foundItem = itemIconList.find(pl.itemId);
+				if (foundItem != itemIconList.end())
+				{
+					sl->SetItemIcon(&(foundItem->second));
+					sl->SetItemId(pl.itemId);
+					break;
+				}
+			}
+		}
+	}
+}
 
+void QuickInventory::ItemIconSetUp()
+{
+	AllItemTable* allItem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem);
+	std::unordered_map<ItemId, ItemInfo>& item = allItem->table;
+	for (auto& i : item)
+	{
+		itemIconList.insert({ i.first, SpriteGo(i.second.resource, i.second.name, i.second.nickName) });
+	}
+
+	for (auto& it : itemIconList)
+	{
+		it.second.Reset();
+		it.second.colliderOnOff = false;
+		it.second.SetOrigin(Origins::MC);
+		it.second.SetScale(5.f, 5.f);
+	}
 }
 

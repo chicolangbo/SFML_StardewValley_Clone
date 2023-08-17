@@ -46,6 +46,7 @@ public:
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 
 	void IconUpdate();
+	void ItemIconSetUp();
 
 	ItemId GetItemId() { return itemid; } 
 	
