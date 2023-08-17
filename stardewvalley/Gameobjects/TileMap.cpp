@@ -21,20 +21,14 @@ bool TileMap::Load(const std::string& filePath)
     for (int i = 2; i < count; i++)
     {
         Tile tile;
-        auto rows = doc.GetRow<string>(i);
-        tile.x = stof(rows[0]);
-        tile.y = stof(rows[1]);
-        tile.texLeft = stof(rows[2]);
-        tile.texTop = stof(rows[3]);
-        tile.texWidth = stof(rows[4]);
-        tile.texHeight = stof(rows[5]);
 
-        /*tile.x = doc.GetCell<int>("indexX", i);
-        tile.y = doc.GetCell<int>("indexY", i);
-        tile.texLeft = doc.GetCell<float>("left", i);
-        tile.texTop = doc.GetCell<float>("top", i);
-        tile.texWidth = doc.GetCell<float>("width", i);
-        tile.texHeight = doc.GetCell<float>("height", i);*/
+        auto rows = doc.GetRow<float>(i);
+        tile.x = (rows[0]);
+        tile.y = (rows[1]);
+        tile.texLeft = (rows[2]);
+        tile.texTop = (rows[3]);
+        tile.texWidth = (rows[4]);
+        tile.texHeight = (rows[5]);
 
         tiles.push_back(tile);
     }
@@ -346,6 +340,11 @@ void TileMap::ChangeTexRect(int x, int y, sf::IntRect texRect)
     {
         cout << "ERR: 잘못된 타일 위치" << endl;
     }
+}
+
+sf::Vector2i TileMap::GetSize()
+{
+    return size;
 }
 
 sf::Vector2f TileMap::GetTileSize()

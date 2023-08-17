@@ -186,7 +186,7 @@
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Gameobjects\Pickax.cpp" />
     <ClCompile Include="Gameobjects\RootingItem.cpp" />
-    <ClCompile Include="QuickInventory.cpp" />
+    <ClCompile Include="Gameobjects\QuickInventory.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -200,9 +200,9 @@
     <ClCompile Include="Gameobjects\SliceImageGo.cpp" />
     <ClCompile Include="Gameobjects\Wateringcan.cpp" />
     <ClCompile Include="Gameobjects\Slot.cpp" />
-    <ClCompile Include="SceneTitle.cpp" />
-    <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="ShopSlot.cpp" />
+    <ClCompile Include="Scenes\SceneTitle.cpp" />
+    <ClCompile Include="Gameobjects\Shop.cpp" />
+    <ClCompile Include="Gameobjects\ShopSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -234,7 +234,7 @@
     <ClInclude Include="Gameobjects\Item.h" />
     <ClInclude Include="Gameobjects\Pickax.h" />
     <ClInclude Include="Gameobjects\RootingItem.h" />
-    <ClInclude Include="QuickInventory.h" />
+    <ClInclude Include="Gameobjects\QuickInventory.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -245,9 +245,9 @@
     <ClInclude Include="DataTables\WallTable.h" />
     <ClInclude Include="Gameobjects\Scythe.h" />
     <ClInclude Include="Gameobjects\Slot.h" />
-    <ClInclude Include="SceneTitle.h" />
-    <ClInclude Include="Shop.h" />
-    <ClInclude Include="ShopSlot.h" />
+    <ClInclude Include="Scenes\SceneTitle.h" />
+    <ClInclude Include="Gameobjects\Shop.h" />
+    <ClInclude Include="Gameobjects\ShopSlot.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />

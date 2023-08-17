@@ -8,6 +8,12 @@ class TextGo;
 class SpriteGo;
 class StringTable;
 
+struct Collider
+{
+	int indexX;
+	int indexY;
+};
+
 class SceneEditor : public Scene
 {
 protected:
@@ -27,9 +33,11 @@ protected:
 	sf::Vector2f MapSize;
 	sf::Vector2f tilesize = { 48.f, 48.f };
 
-	SpriteGo* selectTile;
-	SpriteGo* selectObj;
+	SpriteGo* selectTile; //레이어 1,2
+	SpriteGo* selectObj; //오브젝트 레이어
 	SpriteGo* curTile;
+
+	RectangleGo* selColl; //충돌체
 	
 	//팔레트
 	SpriteGo* tilePallet;
@@ -89,6 +97,8 @@ protected:
 
 	//충돌체
 	std::vector<RectangleGo*> colliders;
+	std::vector<Collider> tempcolliders;
+	bool IsCollActive = false;
 
 public:
 	SceneEditor();
@@ -104,5 +114,8 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void ChangePallet();
+	bool SaveCollider(const string& filePath);
+	bool LoadCollider(const string& filePath);
+	void SetColliders();
 };
 

@@ -12,6 +12,7 @@
 #include "TextGo.h"
 #include "StringTable.h"
 #include "DataTableMgr.h"
+#include "rapidcsv.h"
 
 SceneEditor::SceneEditor()
 	:Scene(SceneId::Editor)
@@ -94,10 +95,29 @@ void SceneEditor::Init()
 
 		selectMap = farmMapT1;
 		curTile = selectTile;
-
-		//worldView.setCenter(farmMap->GetPosition());
-
-		//cout << MapLT.x << ", " << MapLT.y << endl;
+		SetColliders();
+		/*if (!colliders.empty())
+		{
+			for (auto rect : colliders)
+			{
+				RemoveGo(rect);
+			}
+			colliders.clear();
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				RectangleGo* newRect = new RectangleGo(tilesize);
+				newRect->rectangle.setFillColor(sf::Color::Transparent);
+				newRect->rectangle.setOutlineThickness(1.f);
+				newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+				newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
+				AddGo(newRect);
+				newRect->SetActive(false);
+				colliders.push_back(newRect);
+			}
+		}*/
 	};
 
 	buttonColUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
@@ -256,8 +276,13 @@ void SceneEditor::Init()
 	buttonLayerColl->SetScale({ 3.f, 3.f });
 	buttonLayerColl->OnClick = [this]()
 	{
+		IsCollActive = !IsCollActive;
+		for (auto rect : colliders)
+		{
+			rect->SetActive(IsCollActive);
+		}
 		selectMap = farmMapColl;
-	};
+	}; 
 
 	//텍스트
 	Layer1 = (TextGo*)AddGo(new TextGo("Layer1Text", "fonts/SDMiSaeng.ttf"));
@@ -306,6 +331,15 @@ void SceneEditor::Init()
 		{
 			cout << "오브젝트 레이어 세이브 실패" << endl;
 		}
+		if (SaveCollider("tables/newMapCollider.csv"))
+		{
+			cout << "충돌체 레이어 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "충돌체 레이어 세이브 실패" << endl;
+		}
+		
 	};
 
 	buttonLoad = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
@@ -364,6 +398,43 @@ void SceneEditor::Init()
 
 		selectMap = farmMapT1;
 		curTile = selectTile;
+
+		col = farmMapT1->GetSize().x;
+		row = farmMapT1->GetSize().y;
+
+		colText->SetString(to_string(col));
+		rowText->SetString(to_string(row));
+
+		SetColliders();
+		/*if (!colliders.empty())
+		{
+			for (auto rect : colliders)
+			{
+				RemoveGo(rect);
+			}
+			colliders.clear();
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				RectangleGo* newRect = new RectangleGo(tilesize);
+				newRect->rectangle.setFillColor(sf::Color::Transparent);
+				newRect->rectangle.setOutlineThickness(1.f);
+				newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+				newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
+				AddGo(newRect);
+				newRect->SetActive(false);
+				colliders.push_back(newRect);
+			}
+		}*/
+		LoadCollider("tables/newMapCollider.csv");
+		for (int i = 0; i < tempcolliders.size(); i++)
+		{
+			int index = tempcolliders[i].indexY * row + tempcolliders[i].indexX;
+			colliders[index]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
+			colliders[index]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
+		}
 		
 	};
 
@@ -499,7 +570,20 @@ void SceneEditor::Update(float dt)
 		sf::IntRect texRect = curTile->sprite.getTextureRect();
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
 		{
-			selectMap->ChangeTexRect(tileX, tileY, texRect);
+			if (!IsCollActive)
+			{
+				selectMap->ChangeTexRect(tileX, tileY, texRect);
+			}
+			else
+			{
+				colliders[tileY * row + tileX]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
+				colliders[tileY * row + tileX]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
+			}
+		}
+		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right) && IsCollActive)
+		{
+			colliders[tileY * row + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+			colliders[tileY * row + tileX]->rectangle.setFillColor(sf::Color::Transparent);
 		}
 	}
 	else
@@ -558,26 +642,99 @@ void SceneEditor::ChangePallet()
 {
 	switch (palNum)
 	{
-		case 1:
-			tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet1"));
-			palNumX = 0;
-			palNumY = 0;
-			break;
-		case 2:
-			tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet2"));
-			palNumX = 1;
-			palNumY = 0;
-			break;
-		case 3:
-			tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet3"));
-			palNumX = 0;
-			palNumY = 1;
-			break;
-		case 4:
-			tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet4"));
-			palNumX = 1;
-			palNumY = 1;
-			break;
+	case 1:
+		tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet1"));
+		palNumX = 0;
+		palNumY = 0;
+		break;
+	case 2:
+		tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet2"));
+		palNumX = 1;
+		palNumY = 0;
+		break;
+	case 3:
+		tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet3"));
+		palNumX = 0;
+		palNumY = 1;
+		break;
+	case 4:
+		tilePallet->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("pallet4"));
+		palNumX = 1;
+		palNumY = 1;
+		break;
+	}
+}
+
+bool SceneEditor::SaveCollider(const std::string& filePath)
+{
+	std::ofstream outputFile(filePath);
+
+	if (!outputFile.is_open())
+	{
+		cout << "ERR: 파일을 열 수 없습니다." << endl;
+		return false;
+	}
+
+	// 파일 헤더
+	outputFile << "cols,rows" << endl;
+	outputFile << col << "," << row << endl;
+
+	outputFile << "indexX,indexY" << endl;
+
+	for (int i = 0; i < colliders.size(); ++i)
+	{
+		auto rect = colliders[i];
+		if (rect->rectangle.getFillColor() == sf::Color(255, 0, 0, 70))
+		{
+			int tileX = static_cast<int>((rect->GetPosition().x - MapLT.x) / tilesize.x);
+			int tileY = static_cast<int>((rect->GetPosition().y - MapLT.y) / tilesize.y);
+			outputFile << tileX << "," << tileY << endl;
+		}
+	}
+
+	outputFile.close();
+	return true;
+}
+
+bool SceneEditor::LoadCollider(const string& filePath)
+{
+	rapidcsv::Document doc(filePath);
+
+	if (!tempcolliders.empty())
+	{
+		tempcolliders.clear();
+	}
+	for (int i = 2; i < doc.GetRowCount(); i++)
+	{
+		auto rows = doc.GetRow<int>(i);
+		tempcolliders.push_back({ rows[0], rows[1] });
+	}
+	return false;
+}
+
+void SceneEditor::SetColliders()
+{
+	if (!colliders.empty())
+	{
+		for (auto rect : colliders)
+		{
+			RemoveGo(rect);
+		}
+		colliders.clear();
+	}
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			RectangleGo* newRect = new RectangleGo(tilesize);
+			newRect->rectangle.setFillColor(sf::Color::Transparent);
+			newRect->rectangle.setOutlineThickness(1.f);
+			newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+			newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
+			AddGo(newRect);
+			newRect->SetActive(false);
+			colliders.push_back(newRect);
+		}
 	}
 }
 	

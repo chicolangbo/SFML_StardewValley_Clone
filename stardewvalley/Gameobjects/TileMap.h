@@ -46,6 +46,7 @@ public:
 
 	bool Save(const std::string& filePath);
 
+	sf::Vector2i GetSize();
 	sf::Vector2f GetTileSize();
 	sf::Vector2f GetTileMapSize();
 	int GetTileIndex(int x, int y);
