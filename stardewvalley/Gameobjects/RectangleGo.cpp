@@ -54,3 +54,18 @@ void RectangleGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(rectangle);
 }
+
+void RectangleGo::SetSize(sf::Vector2f size)
+{
+	rectangle.setSize(size); 
+}
+
+void RectangleGo::SetSize(float x, float y)
+{
+	rectangle.setSize({ x,y });
+}
+
+void RectangleGo::SetColor(sf::Color co)
+{
+	rectangle.setFillColor(co);
+}

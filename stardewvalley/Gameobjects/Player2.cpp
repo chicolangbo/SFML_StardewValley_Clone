@@ -125,7 +125,6 @@ void Player2::Update(float dt)
 			{
 				if (position.x < wallBoundsLT[i].x)
 				{
-
 					if (INPUT_MGR.GetKey(sf::Keyboard::A))
 					{
 						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 

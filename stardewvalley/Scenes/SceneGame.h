@@ -9,6 +9,7 @@ class SliceImageGo;
 class Inventory;
 class RootingItem;
 class QuickInventory;
+class RectangleGo;
 
 class SceneGame : public Scene
 {
@@ -42,7 +43,7 @@ protected:
 	SpriteGo* info;
 	SpriteGo* timeArrow;
 	float arrowSpin = 0.f;
-	sf::RectangleShape energyBar;
+	RectangleGo* energyBar; 
 	int energys;
 
 	std::vector<sf::FloatRect> walls;
@@ -81,7 +82,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	// �����, 230815, �÷��̾�-������Ʈ ��ȣ�ۿ�� ������ �����ϴ� �Լ� �߰�
 	void SpawnRootingItem(ItemId id);
 };
 

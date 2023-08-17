@@ -8,7 +8,7 @@
 
 class Inventory;
 class Slot;
-
+//얘도 플레이어에서 다이렉트로 받아오는걸로 수정
 class QuickInventory : public GameObject
 {
 protected:
@@ -16,9 +16,15 @@ protected:
 	SliceImageGo quickInven;
 	SpriteGo mark;
 
+	std::list<tagItemInfo>* playerItemList;
+	std::unordered_map<ItemId, SpriteGo> itemIconList;
+
 	std::vector<Slot*>* quickslot;//포인터로 들고온애
+	Slot* mouse;
 	std::vector<Slot*> quickslots;
 	ItemId itemid;
+
+	Player2* player;
 
 	bool off = false;
 
@@ -34,7 +40,9 @@ public:
 	virtual void Release();
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window); 
+
 	void SetQuickSlot(std::vector<Slot*>* s){quickslot = s;}
+
 	ItemId GetItemId() { return itemid; } 
 	
 };

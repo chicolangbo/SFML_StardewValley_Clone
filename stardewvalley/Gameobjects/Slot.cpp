@@ -14,6 +14,11 @@ void Slot::Init()
 {
 	UiButton::Init();
 	OnClick = [this]() {
+		//0. 마우스변수가 널값이면
+		if (mouseIcon == nullptr)
+		{
+			return;
+		}
 		//1. 현재 마우스에 붙어있는 게 없고, 아이템이 들어있는 경우
 		if (!isEmpty && mouseIcon->IsItemIconEmpty())
 		{
@@ -51,6 +56,7 @@ void Slot::Init()
 			isEmpty = false;
 			return;
 		}
+		
 	};
 	OnEnter = [this]() {
 
