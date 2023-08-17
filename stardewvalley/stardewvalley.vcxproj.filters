@@ -153,16 +153,16 @@
     <ClCompile Include="Gameobjects\Slot.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="QuickInventory.cpp">
+    <ClCompile Include="Gameobjects\QuickInventory.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="Shop.cpp">
+    <ClCompile Include="Gameobjects\Shop.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ShopSlot.cpp">
+    <ClCompile Include="Gameobjects\ShopSlot.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTitle.cpp">
+    <ClCompile Include="Scenes\SceneTitle.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,16 +299,16 @@
     <ClInclude Include="Gameobjects\Slot.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="QuickInventory.h">
+    <ClInclude Include="Gameobjects\QuickInventory.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="Shop.h">
+    <ClInclude Include="Gameobjects\Shop.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ShopSlot.h">
+    <ClInclude Include="Gameobjects\ShopSlot.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTitle.h">
+    <ClInclude Include="Scenes\SceneTitle.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
