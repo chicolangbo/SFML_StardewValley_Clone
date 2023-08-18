@@ -1,14 +1,6 @@
 #pragma once
 #include "VertexArrayGo.h"
 
-struct MapObj
-{
-	int x = 0;
-	int y = 0;
-	int texIndex = 0;
-	ObjType type;
-};
-
 struct Tile
 {
 	int x = 0;
@@ -34,7 +26,6 @@ protected:
 	
 public:
 	std::vector<Tile> tiles;
-	std::vector<MapObj> objs;
 
 	bool isLood = false;
 

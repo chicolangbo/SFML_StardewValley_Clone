@@ -14,6 +14,17 @@ struct Collider
 	int indexY;
 };
 
+struct Object
+{
+	int indexX;
+	int indexY;
+	float left;
+	float top;
+	float width;
+	float height;
+	ObjType type;
+};
+
 class SceneEditor : public Scene
 {
 protected:
@@ -102,6 +113,9 @@ protected:
 	std::vector<Collider> tempcolliders;
 	bool IsCollActive = false;
 
+	//오브젝트
+	std::vector<Object> objects;
+
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;
@@ -120,5 +134,12 @@ public:
 	bool LoadCollider(const string& filePath);
 	void SetColliders();
 	string GetCurrentLayer();
+	ObjType GetObjType(sf::IntRect rect);
+	void AddObject(int indexX, int indexY, sf::IntRect rect, ObjType type);
+	bool SaveObject(const std::string& filePath);
+	bool LoadObject(const std::string& filePath);
+
+	bool IsObjectAdded(int indexX, int indexY, ObjType type);
+	
 };
 
