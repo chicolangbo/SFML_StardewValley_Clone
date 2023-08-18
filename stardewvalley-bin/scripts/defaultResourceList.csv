@@ -21,6 +21,7 @@
 0,graphics/Cursors.ko-KR.png,arrowLeft,8,268,44,40,
 0,graphics/Cursors.ko-KR.png,arrowRight,12,204,44,40,
 0,graphics/Cursors.ko-KR.png,scrollBar,435,463,6,10,
+0,graphics/scrollBg.png,N,-1,-1,-1,-1,
 0,graphics/Cursors.ko-KR.png,ok,128,256,65,64,
 0,graphics/Cursors.ko-KR.png,closeBox,191,256,65,64,
 0,graphics/Cursors.ko-KR.png,close,322,498,12,12,

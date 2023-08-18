@@ -21,8 +21,14 @@ ShopTap::ShopTap(const std::string& n)
     moneyBar("graphics/Cursors.ko-KR.png", "moneyBar", "money"),
     moneyText("moneyText", "fonts/SDMiSaeng.ttf"),
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
-    invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE)
+    invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE),
+    scrollBg("graphics/scrollBg.png", "scrollBg", {2, 2, 2, 2}, {0,0,6,6}, NINE_SLICE),
+    scrollBar("graphics/Cursors.ko-KR.png", "scrollBar", "scrollBar"),
+    scrollUp("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"),
+    scrollDown("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown")
 {
+
+
     // SHOP TAP
     AddUi(&pierrePortrait);
     AddUi(&pierreText1);
@@ -35,6 +41,10 @@ ShopTap::ShopTap(const std::string& n)
     AddUi(&moneyText);
     AddUi(&xButton);
     AddUi(&invenBox);
+    AddUi(&scrollBg);
+    AddUi(&scrollBar);
+    AddUi(&scrollUp);
+    AddUi(&scrollDown);
     
     int itemNum = 9;
     for (int i = 0; i < shopSlotCount; ++i)
@@ -114,7 +124,7 @@ void ShopTap::Reset()
         // PIERRE PORTRAIT
         pierrePortrait.SetOrigin(Origins::TR);
         pierrePortrait.SetScale(4.f, 4.f);
-        pierrePortrait.SetPosition(size.x/6.f + 100.f, 100.f);
+        pierrePortrait.SetPosition(size.x/7.f + 100.f, 100.f);
         pierrePortrait.colliderOnOff = false;
 
         // PIERRE TEXTBOX
@@ -135,7 +145,7 @@ void ShopTap::Reset()
         // SHOP BOX
         shopBox.SetSize({ size.x / 1.5f, 120.f*4.f });
         shopBox.SetOrigin(Origins::TL);
-        shopBox.SetPosition(pierrePortrait.GetPosition().x + 30.f, pierrePortrait.GetPosition().y);
+        shopBox.SetPosition(pierrePortrait.GetPosition().x + 10.f, pierrePortrait.GetPosition().y);
 
         // MONEY BAR
         moneyBar.SetOrigin(Origins::TL);
@@ -177,11 +187,28 @@ void ShopTap::Reset()
         sf::Vector2f shopSlotPos = { shopBox.vertexArray[0].position };
         for (int i = 0; i < shopSlotCount; ++i)
         {
-            shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x, shopBox.GetSize().y / 4.f });
+            shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
-            shopSlot[i]->SetPosition(shopSlotPos.x, shopSlotPos.y + i*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
             shopSlot[i]->sortLayer = 110;
         }
+    }
+
+    // SCROLL
+    {
+        scrollUp.SetOrigin(Origins::TC);
+        scrollUp.SetPosition(shopBox.GetPosition().x + shopBox.GetSize().x + 50.f, shopBox.GetPosition().y);
+
+        scrollBar.SetScale(4.f, 4.f);
+        scrollBar.SetOrigin(Origins::TC);
+        scrollBar.SetPosition(scrollUp.GetPosition().x, scrollUp.GetPosition().y + scrollUp.sprite.getGlobalBounds().height + 10.f);
+
+        scrollDown.SetOrigin(Origins::BC);
+        scrollDown.SetPosition(scrollUp.GetPosition().x, invenBox.vertexArray[35].position.y);
+
+        scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
+        scrollBg.SetOrigin(Origins::TC);
+        scrollBg.SetPosition(scrollBar.GetPosition());
     }
 }
 

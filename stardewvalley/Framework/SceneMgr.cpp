@@ -16,8 +16,8 @@ void SceneMgr::Init()
 	//230808, À±À¯¸², ¿¡µðÅÍ ¾À Ãß°¡
 
 	//
-	scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneGame());
+	scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneEditor());
 
 	for (auto scene : scenes)

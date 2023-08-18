@@ -6,6 +6,7 @@
 #include "TextGo.h"
 #include "Player2.h"
 #include "Inventory.h"
+#include "RectangleGo.h"
 
 class ShopSlot;
 class ShopInvenSlot;
@@ -38,6 +39,11 @@ protected:
     int* moneyInt = nullptr;
     UiButton xButton;
     SliceImageGo invenBox;
+    SliceImageGo scrollBg;
+    sf::Vector2f scrollBarSize = {0.f,0.f};
+    UiButton scrollBar;
+    UiButton scrollUp;
+    UiButton scrollDown;
 
 public:
     ShopTap(const std::string& n = "");
