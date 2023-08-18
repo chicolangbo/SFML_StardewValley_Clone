@@ -9,7 +9,8 @@ public:
 		String,
 		Clip,
 		Wall,
-		AllItem
+		AllItem,
+		Object,
 	};
 
 	DataTable(const DataTable& other) = delete;

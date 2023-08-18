@@ -1,321 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="3rd">
-      <UniqueIdentifier>{5fae849d-1ec1-4411-8f90-363832864a3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Animation">
-      <UniqueIdentifier>{2ccecd7a-5326-4fc5-a605-d9efe5b7c52e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DataTables">
-      <UniqueIdentifier>{ebe64389-a122-4232-9d10-577c78a660ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework">
-      <UniqueIdentifier>{e7fab75e-4a82-424f-b03e-3b273f19439e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Gameobjects">
-      <UniqueIdentifier>{34321ef7-4093-4d81-b62e-2c10f3d0225e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Global">
-      <UniqueIdentifier>{71b03652-93c1-4ff1-b5e4-b9c8ebaa9444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{ab5fea63-4057-463c-b3b3-c92f1dbd5816}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="DataTables\AllItemTable.cpp" />
+    <ClCompile Include="Animation\AnimationClip.cpp" />
+    <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="Gameobjects\Axe.cpp" />
+    <ClCompile Include="DataTables\ClipTable.cpp" />
+    <ClCompile Include="DataTables\DataTable.cpp" />
+    <ClCompile Include="DataTables\StringTable.cpp" />
+    <ClCompile Include="Framework\DataTableMgr.cpp" />
+    <ClCompile Include="Framework\Framework.cpp" />
+    <ClCompile Include="Framework\InputMgr.cpp" />
+    <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="GameObjects\Player2.cpp" />
+    <ClCompile Include="GameObjects\RectangleGo.cpp" />
+    <ClCompile Include="GameObjects\SpriteEffect.cpp" />
+    <ClCompile Include="Gameobjects\TextGo.cpp" />
+    <ClCompile Include="Gameobjects\TileMap.cpp" />
+    <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
+    <ClCompile Include="Global\Utils.cpp" />
+    <ClCompile Include="GameObjects\Ground.cpp" />
+    <ClCompile Include="Gameobjects\Hoe.cpp" />
+    <ClCompile Include="Gameobjects\Inventory.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Framework\ResourceMgr.cpp" />
+    <ClCompile Include="Gameobjects\Pickax.cpp" />
+    <ClCompile Include="Gameobjects\RootingItem.cpp" />
+    <ClCompile Include="Gameobjects\QuickInventory.cpp" />
+    <ClCompile Include="Scenes\SceneEditor.cpp" />
+    <ClCompile Include="Scenes\Scene.cpp" />
+    <ClCompile Include="Scenes\SceneGame.cpp" />
+    <ClCompile Include="Framework\SceneMgr.cpp" />
+    <ClCompile Include="GameObjects\SpriteGo.cpp" />
+    <ClCompile Include="Global\Variables.cpp" />
+    <ClCompile Include="GameObjects\UiButton.cpp" />
+    <ClCompile Include="Gameobjects\Wall.cpp" />
+    <ClCompile Include="DataTables\WallTable.cpp" />
+    <ClCompile Include="Gameobjects\Scythe.cpp" />
+    <ClCompile Include="Gameobjects\SliceImageGo.cpp" />
+    <ClCompile Include="Gameobjects\Wateringcan.cpp" />
+    <ClCompile Include="Gameobjects\Slot.cpp" />
+    <ClCompile Include="Scenes\SceneTitle.cpp" />
+    <ClCompile Include="Gameobjects\Shop.cpp" />
+    <ClCompile Include="Gameobjects\ShopTap.cpp" />
+    <ClCompile Include="Gameobjects\ShopSlot.cpp" />
+    <ClCompile Include="Gameobjects\ShopInterior.cpp" />
+    <ClCompile Include="DataTables\ObjectTable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\AnimationClip.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\AnimationController.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTables\ClipTable.cpp">
-      <Filter>DataTables</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTables\DataTable.cpp">
-      <Filter>DataTables</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTables\StringTable.cpp">
-      <Filter>DataTables</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\DataTableMgr.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Framework.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\InputMgr.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\ResourceMgr.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\SceneMgr.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\GameObject.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Ground.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\Player2.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\RectangleGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\SpriteEffect.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\SpriteGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\UiButton.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\VertexArrayGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Global\Utils.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="Global\Variables.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\Scene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\SceneGame.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\TileMap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Axe.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Pickax.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Wall.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTables\WallTable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Hoe.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Scythe.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Wateringcan.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\TextGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\RootingItem.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTables\AllItemTable.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Inventory.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\SceneEditor.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\SliceImageGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\TextGo.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Slot.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\QuickInventory.cpp">
-      <Filter>Gameobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\Shop.cpp">
-    <ClCompile Include="Gameobjects\ShopTap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Gameobjects\ShopSlot.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\SceneTitle.cpp">
-      <Filter>Scenes</Filter>
-    <ClCompile Include="Gameobjects\ShopInterior.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="3rd\rapidcsv.h">
-      <Filter>3rd</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation\AnimationClip.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation\AnimationController.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\ClipTable.h">
-      <Filter>DataTables</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\DataTable.h">
-      <Filter>DataTables</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\StringTable.h">
-      <Filter>DataTables</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\DataTableMgr.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Framework.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\InputMgr.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\ObjectPool.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\ResourceMgr.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\SceneMgr.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\GameObject.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Ground.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Player2.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\RectangleGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\SpriteEffect.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\VertexArrayGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\UiButton.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\SpriteGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Global\Utils.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Global\Variables.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Global\Singleton.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Global\Defines.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\SceneGame.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\Scene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\TileMap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Wall.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\WallTable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Axe.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Pickax.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Hoe.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Item.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Scythe.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Wateringcan.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\TextGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\RootingItem.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\AllItemTable.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Inventory.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\SceneEditor.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\SliceImageGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\TextGo.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Slot.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\QuickInventory.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\Shop.h">
-    <ClInclude Include="Gameobjects\ShopTap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Gameobjects\ShopSlot.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\SceneTitle.h">
-      <Filter>Scenes</Filter>
-    <ClInclude Include="Gameobjects\ShopInterior.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="DataTables\AllItemTable.h" />
+    <ClInclude Include="Animation\AnimationController.h" />
+    <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="Gameobjects\Axe.h" />
+    <ClInclude Include="DataTables\ClipTable.h" />
+    <ClInclude Include="DataTables\DataTable.h" />
+    <ClInclude Include="DataTables\StringTable.h" />
+    <ClInclude Include="Framework\DataTableMgr.h" />
+    <ClInclude Include="Framework\ObjectPool.h" />
+    <ClInclude Include="GameObjects\GameObject.h" />
+    <ClInclude Include="GameObjects\Player2.h" />
+    <ClInclude Include="GameObjects\RectangleGo.h" />
+    <ClInclude Include="GameObjects\SpriteEffect.h" />
+    <ClInclude Include="Gameobjects\TextGo.h" />
+    <ClInclude Include="Gameobjects\TileMap.h" />
+    <ClInclude Include="GameObjects\VertexArrayGo.h" />
+    <ClInclude Include="Global\Defines.h" />
+    <ClInclude Include="Framework\Framework.h" />
+    <ClInclude Include="Framework\InputMgr.h" />
+    <ClInclude Include="Framework\ResourceMgr.h" />
+    <ClInclude Include="Global\Utils.h" />
+    <ClInclude Include="GameObjects\Ground.h" />
+    <ClInclude Include="Gameobjects\Hoe.h" />
+    <ClInclude Include="Gameobjects\SliceImageGo.h" />
+    <ClInclude Include="Gameobjects\Inventory.h" />
+    <ClInclude Include="Gameobjects\Item.h" />
+    <ClInclude Include="Gameobjects\Pickax.h" />
+    <ClInclude Include="Gameobjects\RootingItem.h" />
+    <ClInclude Include="Gameobjects\QuickInventory.h" />
+    <ClInclude Include="Scenes\SceneEditor.h" />
+    <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\SceneGame.h" />
+    <ClInclude Include="Framework\SceneMgr.h" />
+    <ClInclude Include="Global\Singleton.h" />
+    <ClInclude Include="GameObjects\SpriteGo.h" />
+    <ClInclude Include="Gameobjects\Wall.h" />
+    <ClInclude Include="DataTables\WallTable.h" />
+    <ClInclude Include="Gameobjects\Scythe.h" />
+    <ClInclude Include="Gameobjects\Slot.h" />
+    <ClInclude Include="Scenes\SceneTitle.h" />
+    <ClInclude Include="Gameobjects\Shop.h" />
+    <ClInclude Include="Gameobjects\ShopTap.h" />
+    <ClInclude Include="Gameobjects\ShopSlot.h" />
+    <ClInclude Include="Gameobjects\ShopInterior.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Global\Variables.h" />
+    <ClInclude Include="GameObjects\UiButton.h" />
+    <ClInclude Include="Gameobjects\Wateringcan.h" />
+    <ClInclude Include="DataTables\ObjectTable.h" />
   </ItemGroup>
 </Project>

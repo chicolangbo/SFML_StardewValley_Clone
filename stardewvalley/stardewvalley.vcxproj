@@ -187,6 +187,7 @@
     <ClCompile Include="Gameobjects\Pickax.cpp" />
     <ClCompile Include="Gameobjects\RootingItem.cpp" />
     <ClCompile Include="Gameobjects\QuickInventory.cpp" />
+    <ClCompile Include="DataTables\ObjectTable.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Gameobjects\Pickax.h" />
     <ClInclude Include="Gameobjects\RootingItem.h" />
     <ClInclude Include="Gameobjects\QuickInventory.h" />
+    <ClInclude Include="DataTables\ObjectTable.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
