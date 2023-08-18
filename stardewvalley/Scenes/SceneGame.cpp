@@ -128,6 +128,14 @@ void SceneGame::Init()
 		shopTap->sortLayer = 101;
 	}
 
+	//TEXT
+	texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf")); 
+	texMin = (TextGo*)AddGo(new TextGo("TexMin", "fonts/SDMiSaeng.ttf"));
+	texHour = (TextGo*)AddGo(new TextGo("TexHour", "fonts/SDMiSaeng.ttf"));
+	collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf")); 
+	texDay = (TextGo*)AddGo(new TextGo("TexDay", "fonts/SDMiSaeng.ttf"));
+	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf")); 
+ 
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -166,11 +174,6 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]); 
 	}
-	font.loadFromFile("fonts/SDMiSaeng.ttf");
-	textMoney.setFont(font);
-	textMin.setFont(font);
-	textHour.setFont(font);
-	textDay.setFont(font);
 
 	// ������, 230811, uiview�� Init���� �ִ� ���� �� ���� ����. �ּ�ó��
 	//uiView.setSize(size);
@@ -215,26 +218,15 @@ void SceneGame::Update(float dt)
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
 
-	std::stringstream ss; 
-	ss << *player2->GetMoney();
-	textMoney.setString(ss.str());
-	textMoney.setCharacterSize(50);
-	textMoney.setPosition(1675.f, 195.f);
-	textMoney.setFillColor(sf::Color::Black);
+	texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
+	
+	texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
+	collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1740, 115.f);
+	texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1760.f, 115.f);
 
-	std::stringstream sss;
-	sss << hour << ":" << min; 
-	textHour.setString(sss.str()); 
-	textHour.setCharacterSize(50); 
-	textHour.setPosition(1710.f, 115.f); 
-	textHour.setFillColor(sf::Color::Black); 
+	texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
+	dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
 
-	std::stringstream ssss; 
-	ssss << day << "Day"; 
-	textDay.setString(ssss.str());
-	textDay.setCharacterSize(50);
-	textDay.setPosition(1775.f, 12.f);
-	textDay.setFillColor(sf::Color::Black);
 
 	
 	playerBound = player2->GetCollider(); 
@@ -329,9 +321,6 @@ void SceneGame::Update(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	window.draw(textMoney);
-	window.draw(textHour);
-	window.draw(textDay);
 }
 
 void SceneGame::SpawnRootingItem(ItemId id)

@@ -3,6 +3,7 @@
 
 class SpriteGo;
 class UiButton;
+class Bird;
 
 class SceneTitle : public Scene
 {
@@ -12,11 +13,17 @@ protected:
 	SpriteGo* mountFront;
 	SpriteGo* mountBack;
 	SpriteGo* bush;
+	SpriteGo* star;
 
 	UiButton* start;  
 	UiButton* exit;  
 
+	Bird* bird1;
+	Bird* bird2;
+
 	float time;
+	float timer;
+	float viewPos = 0.f;
 public:
 	SceneTitle();
 	virtual ~SceneTitle() override = default;
