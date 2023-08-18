@@ -108,6 +108,15 @@ void SceneTitle::Release()
 void SceneTitle::Enter()
 {
 	Scene::Enter();
+	titleBg->SetPosition(0.f, -350.f);
+	star->SetPosition(0.f, -600.f);
+	mountBack->SetPosition(0.f, 90.f);
+	mountFront->SetPosition(0.f, 160.f);
+	bird1->SetPosition(0.f, 0.f);
+	bird2->SetPosition(50.f, 50.f);
+	viewPos = 0;
+	start->SetActive(false);
+	exit->SetActive(false);
 }
 
 void SceneTitle::Exit()

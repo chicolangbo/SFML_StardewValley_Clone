@@ -77,10 +77,12 @@ void SceneGame::Init()
 		inven->SetPosition(windowSize / 2.f);
 		inven->SetPlayer(player2);
 		player2->SetInventory(inven);
+
 		quickinven = (QuickInventory*)AddGo(new QuickInventory("quickinven"));
 		quickinven->sortLayer = 101;
 		quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
 		quickinven->SetPlayer(player2);
+
 	}
 
 	// INGAME UI
@@ -153,38 +155,35 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	Scene::Enter();
+	// VIEW
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
+	worldView.setSize(size);
+	worldView.setCenter(0, 0);
+	uiView.setSize(size);
+	uiView.setCenter(size * 0.5f);
+	//ui뷰 변경내용 인벤 포지션 변경부분찾기
+
+	Scene::Enter();
+
+
+	//quickinven->SetPosition(0.f, 0.f);
+	/*auto size = FRAMEWORK.GetWindowSize();
+	sf::Vector2f centerPos = size * 0.5f;*/
+
 	walls.push_back(houseExterior->GetCollider()); 
 	walls.push_back(shopExterior->GetCollider()); 
-	//walls.push_back(shopCounter1->GetCollider()); 
-	//walls.push_back(shopMid1->GetCollider()); 
-	//walls.push_back(shopMid2_1->GetCollider()); 
-	//walls.push_back(shopMid2_2->GetCollider()); 
-	//walls.push_back(shopMid3_1->GetCollider()); 
-	//walls.push_back(shopMid3_2->GetCollider()); 
-	//walls.push_back(shopBox->GetCollider()); 
 
-	//for (int i = 0; i < shopWalls->Walls.size(); ++i)
-	//{
-	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
-	//}
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]); 
 	}
 
-	// ������, 230811, uiview�� Init���� �ִ� ���� �� ���� ����. �ּ�ó��
 	//uiView.setSize(size);
 	//uiView.setCenter(centerPos);
 
-	// �����, 230807, �׽�Ʈ�� �ּ�ó��
-	//player2->SetOrigin(Origins::MC);
-	//player2->SetPosition(centerPos);
-	//
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
+	//여기서의 포지션은 동일함
+	//inven->SetOrigin(Origins::TL);
 }
 
 void SceneGame::Exit()
@@ -194,6 +193,7 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
+	
 	Scene::Update(dt);
 	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
@@ -209,11 +209,20 @@ void SceneGame::Update(float dt)
 	}
 	if (hour == 24)
 	{
-		hour = 6;
+		hour = 0;
 		day += 1;
 		arrowSpin = 0;
 	}
-	
+	if (hour == 2)
+	{
+		player2->ZeroEnergy();
+		hour = 6;
+	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5))
+	{
+		hour += 1;
+	}
 	arrowSpin += dt * 0.2381f;
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
@@ -221,8 +230,8 @@ void SceneGame::Update(float dt)
 	texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
 	
 	texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
-	collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1740, 115.f);
-	texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1760.f, 115.f);
+	collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
+	texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
 
 	texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
 	dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
@@ -315,6 +324,14 @@ void SceneGame::Update(float dt)
 	{
 		quickinven->SetActive(true);
 	}
+
+	if (inven->GetEndGame())
+	{
+		window.close();
+	}
+
+	
+	std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
 	
 }
 

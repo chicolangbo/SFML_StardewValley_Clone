@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "Framework.h"
+#include "Scene.h"
 #include "Inventory.h"
 #include "InputMgr.h"
 #include "DataTableMgr.h"
@@ -7,6 +9,7 @@
 #include "AllItemTable.h"
 #include "Slot.h"
 #include "SceneMgr.h"
+
 
 GameObject* Inventory::AddUi(GameObject* go)
 {
@@ -104,6 +107,8 @@ void Inventory::Init()
 
 void Inventory::Reset()
 {
+   
+
     for (auto m : invenUiObjects)
     {
         m->Reset();
@@ -299,6 +304,7 @@ void Inventory::Update(float dt)
     sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
     sf::Vector2f mPos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
     mouseSlot->SetPosition(mPos);
+
 }
 
 void Inventory::Draw(sf::RenderWindow& window)
@@ -462,6 +468,13 @@ void Inventory::ButtonSetUp()
         }
         //SetWindowClear();
     };
+    title.OnClick = [this]() {
+        SCENE_MGR.ChangeScene(SceneId::Title);
+    };
+    end.OnClick = [this]() {
+        EndGame = true;    
+    };
+    
 }
 
 void Inventory::SetPlayer(Player2* p)

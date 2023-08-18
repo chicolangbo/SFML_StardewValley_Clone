@@ -116,6 +116,7 @@ protected:
 	//오브젝트
 	std::vector<Object> objects;
 
+	
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;

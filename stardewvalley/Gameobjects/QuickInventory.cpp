@@ -74,6 +74,7 @@ void QuickInventory::Reset()
 	quickInven.SetSize({ 895.f,125.f });
 	quickInven.SetOrigin(Origins::MC);
 	quickInven.SetPosition(position.x,position.y+140.f);
+	//quickInven.SetPosition(960.f,1020.f);
 	quickInven.sortLayer = 120;
 
 	for (int i = 0; i < 12; ++i)

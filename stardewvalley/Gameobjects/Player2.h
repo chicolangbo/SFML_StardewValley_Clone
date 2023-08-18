@@ -97,5 +97,7 @@ public:
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }
+	//this code is kill player lol
+	void ZeroEnergy() { energy = 0; }
 };
 
