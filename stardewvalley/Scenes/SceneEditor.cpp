@@ -257,6 +257,8 @@ void SceneEditor::Init()
 	{
 		curTile = selectTile;
 		selectMap = farmMapT1;
+		currentLayer = 0;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (ObjPallet->GetActive())
 		{
 			ObjPallet->SetActive(false);
@@ -271,6 +273,8 @@ void SceneEditor::Init()
 	{
 		curTile = selectTile;
 		selectMap = farmMapT2;
+		currentLayer = 1;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (ObjPallet->GetActive())
 		{
 			ObjPallet->SetActive(false);
@@ -286,6 +290,8 @@ void SceneEditor::Init()
 		selectMap = farmMapObj;
 		selPallet = ObjPallet;
 		curTile = selectObj;
+		currentLayer = 2;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (tilePallet->GetActive())
 		{
 			tilePallet->SetActive(false);
@@ -298,6 +304,8 @@ void SceneEditor::Init()
 	buttonLayerColl->SetScale({ 3.f, 3.f });
 	buttonLayerColl->OnClick = [this]()
 	{
+		currentLayer = 3;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		IsCollActive = !IsCollActive;
 		for (auto rect : colliders)
 		{
@@ -470,6 +478,10 @@ void SceneEditor::Init()
 	loadText->text.setOutlineThickness(1.f);
 	loadText->text.setOutlineColor(sf::Color::Black);
 
+	nowLayer = (TextGo*)AddGo(new TextGo("nowLayer", "fonts/SDMiSaeng.ttf"));
+	nowLayer->text.setOutlineThickness(1.f);
+	nowLayer->text.setOutlineColor(sf::Color::Black);
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -504,6 +516,7 @@ void SceneEditor::Enter()
 	palNum = 1;
 	palNumX = 0;
 	palNumY = 0;
+	currentLayer = 0;
 
 	selPallet = tilePallet;
 
@@ -562,6 +575,9 @@ void SceneEditor::Enter()
 	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
 		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
 		buttonLoad->GetPosition().y + 15);
+	
+	nowLayer->SetText("current layer: " + GetCurrentLayer(), 34, sf::Color::White, Origins::TL, 102,
+		palletBg->GetPosition().x + palletBg->vertexArray.getBounds().width + 10, palletBg->GetPosition().y + 10.f);
 }
 
 void SceneEditor::Exit()
@@ -619,7 +635,7 @@ void SceneEditor::Update(float dt)
 	}
 	else
 	{
-		selColl->SetActive(true);
+		selColl->SetActive(false);
 		if (curTile != nullptr)
 		{
 			curTile->SetActive(false);
@@ -764,6 +780,24 @@ void SceneEditor::SetColliders()
 			newRect->SetActive(false);
 			colliders.push_back(newRect);
 		}
+	}
+}
+
+string SceneEditor::GetCurrentLayer()
+{
+	switch (currentLayer)
+	{
+	case 0:
+		return "Layer 1";
+		break;
+	case 1:
+		return "Layer 2";
+	case 2:
+		return "Layer Object";
+	case 3:
+		return "Layer Collider";
+	default:
+		break;
 	}
 }
 	

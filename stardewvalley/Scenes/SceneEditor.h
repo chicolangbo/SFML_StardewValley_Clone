@@ -88,7 +88,9 @@ protected:
 	TextGo* saveText;
 	TextGo* loadText;
 
+	TextGo* nowLayer;
 	sf::Vector2f direction;
+	int currentLayer;
 	
 	int col = 10;
 	int row = 10;
@@ -117,5 +119,6 @@ public:
 	bool SaveCollider(const string& filePath);
 	bool LoadCollider(const string& filePath);
 	void SetColliders();
+	string GetCurrentLayer();
 };
 
