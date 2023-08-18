@@ -517,7 +517,7 @@ void Inventory::ItemIconSetUp()
     std::unordered_map<ItemId, ItemInfo>& item = allItem->table;
     for (auto& i : item)
     {
-        itemIconList.insert({ i.first, SpriteGo(i.second.resource, i.second.name, i.second.nickName) });
+        itemIconList.insert({ i.first, SpriteGo(i.second.resource, i.second.name_e, i.second.nickName) });
     }
 
     for (auto& it : itemIconList)

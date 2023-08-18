@@ -163,18 +163,25 @@ void ShopTap::Reset()
     // SLOT
     {
         // SHOP INVEN SLOT
-        sf::Vector2f slotPos = { invenBox.vertexArray[0].position.x + 80.f / 1.1f, invenBox.vertexArray[0].position.y + 80.f / 1.1f };
+        sf::Vector2f invenSlotPos = { invenBox.vertexArray[0].position + sf::Vector2f{ 80.f, 80.f } / 1.1f };
         for (int i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 12; ++j)
             {
                 shopInvenSlot[(i * 12) + j]->SetScale(0.9f, 0.9f);
-                shopInvenSlot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f / 1.1f), slotPos.y + (i * 80.f / 1.1f));
+                shopInvenSlot[(i * 12) + j]->SetPosition(invenSlotPos.x + (j * 80.f / 1.1f), invenSlotPos.y + (i * 80.f / 1.1f));
             }
         }
 
         // SHOP SLOT
-
+        sf::Vector2f shopSlotPos = { shopBox.vertexArray[0].position };
+        for (int i = 0; i < shopSlotCount; ++i)
+        {
+            shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x, shopBox.GetSize().y / 4.f });
+            shopSlot[i]->SetOrigin(Origins::TL);
+            shopSlot[i]->SetPosition(shopSlotPos.x, shopSlotPos.y + i*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->sortLayer = 110;
+        }
     }
 }
 

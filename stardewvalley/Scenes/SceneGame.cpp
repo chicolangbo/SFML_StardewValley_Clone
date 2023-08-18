@@ -336,7 +336,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 void SceneGame::SpawnRootingItem(ItemId id)
 {
 	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
-	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name, info->nickName)));
+	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName)));
 	for (auto r : rootingItems)
 	{
 		r->Reset();

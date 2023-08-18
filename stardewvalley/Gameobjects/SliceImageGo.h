@@ -23,6 +23,8 @@ public:
 	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
+
+	sf::Vector2f GetSize();
 };
 
 #define NINE_SLICE	36
