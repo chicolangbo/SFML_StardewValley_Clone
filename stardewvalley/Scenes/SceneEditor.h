@@ -42,7 +42,7 @@ protected:
 
 	sf::Vector2f MapLT;
 	sf::Vector2f MapSize;
-	sf::Vector2f tilesize = { 48.f, 48.f };
+	sf::Vector2f tilesize = { 72.f, 72.f };
 
 	SpriteGo* selectTile; //레이어 1,2
 	SpriteGo* selectObj; //오브젝트 레이어
@@ -115,6 +115,8 @@ protected:
 
 	//오브젝트
 	std::vector<Object> objects;
+
+	sf::Vector2f tileScale = { 4.5f, 4.5f };
 
 public:
 	SceneEditor();

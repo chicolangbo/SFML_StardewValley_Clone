@@ -182,7 +182,7 @@ void SceneEditor::Init()
 
 	//커서가 올라간 타일
 	selectTile = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut.png", "selectTile"));
-	selectTile->SetScale({ 3.f, 3.f });
+	selectTile->SetScale(tileScale);
 	selectTile->SetOrigin(Origins::TL);
 	sf::IntRect texRect(0, 0, 16, 16);
  	selectTile->sprite.setTextureRect(texRect);
@@ -191,7 +191,7 @@ void SceneEditor::Init()
 
 	//선택된 오브젝트 타일
 	selectObj = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "selectObj"));
-	selectObj->SetScale({ 3.f, 3.f });
+	selectObj->SetScale(tileScale);
 	selectObj->SetOrigin(Origins::TL);
 	selectObj->sprite.setTextureRect(texRect);
 	selectObj->SetActive(false);
@@ -213,7 +213,7 @@ void SceneEditor::Init()
 	ObjPallet = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "objPallet"));
 	ObjPallet->SetOrigin(Origins::TL);
 	ObjPallet->sortLayer = 101;
-	ObjPallet->SetScale({ 3.f, 3.f });
+	ObjPallet->SetScale(tileScale);
 	ObjPallet->SetActive(false);
 
 	selPalTile = (RectangleGo*)AddGo(new RectangleGo(palletTileSize));
@@ -648,8 +648,8 @@ void SceneEditor::Update(float dt)
 		}
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right) && IsCollActive)
 		{
-			colliders[tileY * row + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
-			colliders[tileY * row + tileX]->rectangle.setFillColor(sf::Color::Transparent);
+			colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+			colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color::Transparent);
 		}
 	}
 	else

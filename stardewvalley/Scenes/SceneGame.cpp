@@ -24,6 +24,8 @@
 #include "RectangleGo.h"
 #include "ShopTap.h"
 #include "ShopInterior.h"
+#include "TileMap.h"
+#include "rapidcsv.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -43,21 +45,38 @@ void SceneGame::Init()
 	uiView.setCenter(size * 0.5f);
 
 	// TEST MAP
-	{
-		testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
+	{	//0818 맵툴 맵 적용
+		/*testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
 		testFarmMap->sprite.setScale(3.f, 3.f);
 		testFarmMap->SetOrigin(Origins::MC);
-		testFarmMap->SetPosition(0, 0);
+		testFarmMap->SetPosition(0, 0);*/
+
+		testFarmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
+		testFarmMap->Reset();
+		testFarmMap->Load("tables/newMapLayer1.csv");
+		testFarmMap->SetOrigin(Origins::MC);
+
+		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
+		testFarmMap2->Reset();
+		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
+		testFarmMap2->SetOrigin(Origins::MC);
+
+		testFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
+		testFarmMapObj->Reset();
+		testFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
+		testFarmMapObj->SetOrigin(Origins::MC);
+
 		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
 		houseExterior->sprite.setScale(4.f, 4.f);
 		houseExterior->SetOrigin(Origins::BC);
-		houseExterior->SetPosition(473, -785);
+		//houseExterior->SetPosition(473, -785);
 		houseExterior->collider.setScale(1.f, 0.3f);
 		houseExterior->sortLayer = 1;
+
 		shopExterior = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 		shopExterior->sprite.setScale(4.f, 4.f);
 		shopExterior->SetOrigin(Origins::BC);
-		shopExterior->SetPosition(-537, -785);
+		//shopExterior->SetPosition(-537, -785);
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
 	
@@ -148,8 +167,6 @@ void SceneGame::Enter()
 	Scene::Enter();
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
-	walls.push_back(houseExterior->GetCollider()); 
-	walls.push_back(shopExterior->GetCollider()); 
 	//walls.push_back(shopCounter1->GetCollider()); 
 	//walls.push_back(shopMid1->GetCollider()); 
 	//walls.push_back(shopMid2_1->GetCollider()); 
@@ -162,10 +179,7 @@ void SceneGame::Enter()
 	//{
 	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
 	//}
-	for (int i = 0; i < walls.size(); ++i)
-	{
-		player2->SetWallBounds(walls[i]); 
-	}
+	
 	font.loadFromFile("fonts/SDMiSaeng.ttf");
 	textMoney.setFont(font);
 	textMin.setFont(font);
@@ -182,6 +196,33 @@ void SceneGame::Enter()
 	//
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
+
+	testFarmMap->SetPosition(0, 0);
+	testFarmMap2->SetPosition(testFarmMap->GetPosition());
+	testFarmMapObj->SetPosition(testFarmMap->GetPosition());
+
+	tileSize = testFarmMap->GetTileSize();
+	
+	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
+	walls.push_back(houseExterior->GetCollider());
+
+	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
+	walls.push_back(shopExterior->GetCollider());
+
+	rapidcsv::Document doc("tables/newMapCollider.csv");
+
+	for (int i = 2; i < doc.GetRowCount(); i++)
+	{
+		auto rows = doc.GetRow<int>(i);
+		sf::FloatRect rect = { mapLT.x + rows[0] * tileSize.x, mapLT.y + rows[1] * tileSize.y, tileSize.x, tileSize.y };
+		walls.push_back(rect);
+	}
+
+	for (int i = 0; i < walls.size(); ++i)
+	{
+		player2->SetWallBounds(walls[i]);
+	}
 }
 
 void SceneGame::Exit()
@@ -238,7 +279,7 @@ void SceneGame::Update(float dt)
 
 	
 	playerBound = player2->GetCollider(); 
-	mapBound = testFarmMap->GetCollider();
+	mapBound = testFarmMap->vertexArray.getBounds();
 	
 	player2->SetCollider(playerBound);
 
