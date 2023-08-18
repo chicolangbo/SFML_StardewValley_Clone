@@ -16,6 +16,7 @@ class ShopTap :
 {
 protected:
     Player2* player;
+    UiButton* pierre;
     Inventory* inven;
     std::list<tagItemInfo>* playerItemList = nullptr;
     std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
@@ -44,6 +45,7 @@ protected:
     UiButton scrollBar;
     UiButton scrollUp;
     UiButton scrollDown;
+    sf::View scrollView;
 
 public:
     ShopTap(const std::string& n = "");
@@ -61,11 +63,13 @@ public:
     void SortGos();
     void SetPlayer(Player2* p) { player = p; }
     void SetInventory(Inventory* i) { this->inven = i; }
+    void SetPierre(UiButton* p) { pierre = p; }
 
     void InitInfo();
 
     void ButtonSetUp();
     void PlayerInfoUpdate();
-    void IconUpdate(); 
+    void IconUpdate();
+    void ScrollViewSetUp();
 };
 

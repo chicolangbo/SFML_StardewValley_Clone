@@ -145,23 +145,13 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
+	shopTap->SetPierre(shopInterior->GetPierre());
 	Scene::Enter();
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 	walls.push_back(houseExterior->GetCollider()); 
 	walls.push_back(shopExterior->GetCollider()); 
-	//walls.push_back(shopCounter1->GetCollider()); 
-	//walls.push_back(shopMid1->GetCollider()); 
-	//walls.push_back(shopMid2_1->GetCollider()); 
-	//walls.push_back(shopMid2_2->GetCollider()); 
-	//walls.push_back(shopMid3_1->GetCollider()); 
-	//walls.push_back(shopMid3_2->GetCollider()); 
-	//walls.push_back(shopBox->GetCollider()); 
 
-	//for (int i = 0; i < shopWalls->Walls.size(); ++i)
-	//{
-	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
-	//}
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]); 
@@ -172,16 +162,10 @@ void SceneGame::Enter()
 	textHour.setFont(font);
 	textDay.setFont(font);
 
-	// ������, 230811, uiview�� Init���� �ִ� ���� �� ���� ����. �ּ�ó��
-	//uiView.setSize(size);
-	//uiView.setCenter(centerPos);
-
-	// �����, 230807, �׽�Ʈ�� �ּ�ó��
-	//player2->SetOrigin(Origins::MC);
-	//player2->SetPosition(centerPos);
-	//
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
+
+	// MJ, 230818, ADD INITIAL SETTING
 }
 
 void SceneGame::Exit()

@@ -427,7 +427,7 @@ void Player2::Update(float dt)
 	animation.Update(dt);
 
 	// 아이템 관련
-	AddPlayerItem();
+	AddRootingItem();
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
@@ -492,7 +492,7 @@ void Player2::SetCollider(const sf::FloatRect& coll)
 	playerBound = coll;
 }
 
-void Player2::AddPlayerItem() // 자석화 해야 함
+void Player2::AddRootingItem() // 자석화 해야 함
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -520,19 +520,24 @@ void Player2::AddPlayerItem() // 자석화 해야 함
 			}
 			if (!found)
 			{
-				int index = 0;
-				for (auto slot : *inven->GetSlot())
-				{
-					if (slot->IsItemIconEmpty())
-					{
-						index = slot->slotIndex;
-						break;
-					}
-				}
-				playerItemList.push_back({ item->GetRootingItemId(),1,index });				
+				AddPlayerItem(item->GetRootingItemId());
 			}
 		}
 	}
+}
+
+void Player2::AddPlayerItem(ItemId id)
+{
+	int index = 0;
+	for (auto slot : *inven->GetSlot())
+	{
+		if (slot->IsItemIconEmpty())
+		{
+			index = slot->slotIndex;
+			break;
+		}
+	}
+	playerItemList.push_back({ id,1,index });
 }
 
 void Player2::MoneyUpdate()

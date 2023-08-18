@@ -53,5 +53,8 @@ public:
 
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window);
+
+	sf::View* GetUiViewPort() { return &uiView; }
+	sf::View* GetWorldViewPort() { return &worldView; }
 };
 

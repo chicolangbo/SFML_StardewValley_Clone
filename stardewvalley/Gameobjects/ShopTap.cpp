@@ -6,8 +6,11 @@
 #include "SceneMgr.h"
 #include "Framework.h"
 #include "StringTable.h"
+#include "AllItemTable.h"
 #include "DataTableMgr.h"
 #include "ShopInvenSlot.h"
+#include "Utils.h"
+#include "InputMgr.h"
 
 ShopTap::ShopTap(const std::string& n)
 	: GameObject(n),
@@ -108,6 +111,7 @@ void ShopTap::Init()
     }
 
     InitInfo();
+    //ButtonSetUp();
 }
 
 void ShopTap::Reset()
@@ -116,7 +120,11 @@ void ShopTap::Reset()
     {
         i->Reset();
     }
-
+    for (auto i : shopUiObjects)
+    {
+        i->SetActive(false);
+    }
+    ButtonSetUp();
     // BASE
     {
         sf::Vector2f size = FRAMEWORK.GetWindowSize();
@@ -190,7 +198,6 @@ void ShopTap::Reset()
             shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
             shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
-            shopSlot[i]->sortLayer = 110;
         }
     }
 
@@ -209,6 +216,8 @@ void ShopTap::Reset()
         scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
         scrollBg.SetOrigin(Origins::TC);
         scrollBg.SetPosition(scrollBar.GetPosition());
+
+        ScrollViewSetUp();
     }
 }
 
@@ -236,12 +245,14 @@ void ShopTap::Update(float dt)
 
     PlayerInfoUpdate();
     IconUpdate();
+    ButtonSetUp();
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
 {
     SortGos();
 
+    Scene* scene = SCENE_MGR.GetCurrScene();
     for (auto m : shopUiObjects)
     {
         if (m->GetActive())
@@ -297,7 +308,73 @@ void ShopTap::IconUpdate()
     }
 }
 
+void ShopTap::ScrollViewSetUp()
+{
+    scrollView.setSize(shopBox.GetSize() - sf::Vector2f(10.f, 10.f));
+    scrollView.setCenter(shopBox.GetPosition().x + shopBox.GetSize().x / 2.f, shopBox.GetPosition().y - shopBox.GetSize().y / 2.f);
+}
+
 void ShopTap::ButtonSetUp()
 {
+    for (int i = 0; i< shopSlot.size(); ++i)
+    {
+        shopSlot[i]->OnClick = [this, i]() {
+            // 이 아이템을 산다
+            // 이 아이템에 해당하는 데이터테이블 정보 불러오고
+            std::cout << "클릭" << std::endl;
+            shopSlot[i]->sprite.setColor(sf::Color::Black);
 
+            const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopSlot[i]->GetItemId());
+            // 플레이어 머니 차감
+            if (*moneyInt >= item->price)
+            {
+                *moneyInt -= item->price;
+            }
+            // 플레이어 아이템에 푸시백하는 함수를 쓰자
+            player->AddPlayerItem(shopSlot[i]->GetItemId());
+            // 그러면 자동으로 샵인벤에 그려지니까??
+        };
+    }
+
+    for (auto i : shopInvenSlot)
+    {
+        i->OnClick = [this]() {
+            // 이 아이템에 해당하는 데이터테이블 정보 불러오고
+            // 이 아이템을 판다
+            // 플레이어 머니 증가
+            // 플레이어 아이템에서 count--, count = 0 이면 제거
+        };
+    }
+
+    xButton.OnClick = [this]() {
+        for (auto i : shopUiObjects)
+        {
+            i->SetActive(false);
+        }
+    };
+
+    pierre->OnClick = [this]() {
+        if (Utils::Distance(player->GetPosition(), pierre->GetPosition()) < 200.f)
+        {
+            for (auto i : shopUiObjects)
+            {
+                i->SetActive(true);
+            }
+        }
+    };
+
+    // SCROLL : 여기는 드래그라서 수정해야 함 ㅠㅠ
+    {
+        scrollBar.OnClick = [this]() {
+
+        };
+
+        scrollUp.OnClick = [this]() {
+
+        };
+
+        scrollDown.OnClick = [this]() {
+
+        };
+    }
 }
