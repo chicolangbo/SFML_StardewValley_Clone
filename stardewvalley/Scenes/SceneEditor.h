@@ -14,6 +14,17 @@ struct Collider
 	int indexY;
 };
 
+struct Object
+{
+	int indexX;
+	int indexY;
+	float left;
+	float top;
+	float width;
+	float height;
+	ObjType type;
+};
+
 class SceneEditor : public Scene
 {
 protected:
@@ -88,7 +99,9 @@ protected:
 	TextGo* saveText;
 	TextGo* loadText;
 
+	TextGo* nowLayer;
 	sf::Vector2f direction;
+	int currentLayer;
 	
 	int col = 10;
 	int row = 10;
@@ -99,6 +112,9 @@ protected:
 	std::vector<RectangleGo*> colliders;
 	std::vector<Collider> tempcolliders;
 	bool IsCollActive = false;
+
+	//오브젝트
+	std::vector<Object> objects;
 
 public:
 	SceneEditor();
@@ -117,5 +133,13 @@ public:
 	bool SaveCollider(const string& filePath);
 	bool LoadCollider(const string& filePath);
 	void SetColliders();
+	string GetCurrentLayer();
+	ObjType GetObjType(sf::IntRect rect);
+	void AddObject(int indexX, int indexY, sf::IntRect rect, ObjType type);
+	bool SaveObject(const std::string& filePath);
+	bool LoadObject(const std::string& filePath);
+
+	bool IsObjectAdded(int indexX, int indexY, ObjType type);
+	
 };
 

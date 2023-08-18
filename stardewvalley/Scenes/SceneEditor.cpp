@@ -257,6 +257,8 @@ void SceneEditor::Init()
 	{
 		curTile = selectTile;
 		selectMap = farmMapT1;
+		currentLayer = 0;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (ObjPallet->GetActive())
 		{
 			ObjPallet->SetActive(false);
@@ -271,6 +273,8 @@ void SceneEditor::Init()
 	{
 		curTile = selectTile;
 		selectMap = farmMapT2;
+		currentLayer = 1;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (ObjPallet->GetActive())
 		{
 			ObjPallet->SetActive(false);
@@ -286,6 +290,8 @@ void SceneEditor::Init()
 		selectMap = farmMapObj;
 		selPallet = ObjPallet;
 		curTile = selectObj;
+		currentLayer = 2;
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 		if (tilePallet->GetActive())
 		{
 			tilePallet->SetActive(false);
@@ -303,7 +309,22 @@ void SceneEditor::Init()
 		{
 			rect->SetActive(IsCollActive);
 		}
-		selectMap = farmMapColl;
+		if (IsCollActive)
+		{
+			selectMap = farmMapColl;
+			currentLayer = 3;
+		}
+		else
+		{
+			selectMap = farmMapT1;
+			currentLayer = 0;
+			if (ObjPallet->GetActive())
+			{
+				ObjPallet->SetActive(false);
+				tilePallet->SetActive(true);
+			}
+		}
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
 	}; 
 
 	//텍스트
@@ -348,6 +369,7 @@ void SceneEditor::Init()
 		}
 		if (farmMapObj->Save("tables/newMapLayerObj.csv"))
 		{
+			SaveObject("tables/newMapObj.csv");
 			cout << "오브젝트 레이어 세이브 성공" << endl;
 		}
 		else
@@ -453,6 +475,7 @@ void SceneEditor::Init()
 			}
 		}*/
 		LoadCollider("tables/newMapCollider.csv");
+		LoadObject("tables/newMapObj.csv");
 		for (int i = 0; i < tempcolliders.size(); i++)
 		{
 			int index = tempcolliders[i].indexY * row + tempcolliders[i].indexX;
@@ -469,6 +492,10 @@ void SceneEditor::Init()
 	loadText = (TextGo*)AddGo(new TextGo("saveText", "fonts/SDMiSaeng.ttf"));
 	loadText->text.setOutlineThickness(1.f);
 	loadText->text.setOutlineColor(sf::Color::Black);
+
+	nowLayer = (TextGo*)AddGo(new TextGo("nowLayer", "fonts/SDMiSaeng.ttf"));
+	nowLayer->text.setOutlineThickness(1.f);
+	nowLayer->text.setOutlineColor(sf::Color::Black);
 
 	for (auto go : gameObjects)
 	{
@@ -504,6 +531,7 @@ void SceneEditor::Enter()
 	palNum = 1;
 	palNumX = 0;
 	palNumY = 0;
+	currentLayer = 0;
 
 	selPallet = tilePallet;
 
@@ -562,6 +590,9 @@ void SceneEditor::Enter()
 	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
 		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
 		buttonLoad->GetPosition().y + 15);
+	
+	nowLayer->SetText("current layer: " + GetCurrentLayer(), 34, sf::Color::White, Origins::TL, 102,
+		palletBg->GetPosition().x + palletBg->vertexArray.getBounds().width + 10, palletBg->GetPosition().y + 10.f);
 }
 
 void SceneEditor::Exit()
@@ -604,6 +635,10 @@ void SceneEditor::Update(float dt)
 			{
 				sf::IntRect texRect = curTile->sprite.getTextureRect();
 				selectMap->ChangeTexRect(tileX, tileY, texRect);
+				if (currentLayer == 2 && !IsObjectAdded(tileX, tileY, GetObjType(texRect)))
+				{
+					AddObject(tileX, tileY, texRect, GetObjType(texRect));
+				}
 			}
 			else
 			{
@@ -619,7 +654,7 @@ void SceneEditor::Update(float dt)
 	}
 	else
 	{
-		selColl->SetActive(true);
+		selColl->SetActive(false);
 		if (curTile != nullptr)
 		{
 			curTile->SetActive(false);
@@ -738,7 +773,7 @@ bool SceneEditor::LoadCollider(const string& filePath)
 		auto rows = doc.GetRow<int>(i);
 		tempcolliders.push_back({ rows[0], rows[1] });
 	}
-	return false;
+	return true;
 }
 
 void SceneEditor::SetColliders()
@@ -764,6 +799,128 @@ void SceneEditor::SetColliders()
 			newRect->SetActive(false);
 			colliders.push_back(newRect);
 		}
+	}
+}
+
+string SceneEditor::GetCurrentLayer()
+{
+	switch (currentLayer)
+	{
+	case 0:
+		return "Layer 1";
+	case 1:
+		return "Layer 2";
+	case 2:
+		return "Layer Object";
+	case 3:
+		return "Layer Collider";
+	default:
+		break;
+	}
+}
+
+ObjType SceneEditor::GetObjType(sf::IntRect rect)
+{
+	if (rect.top == 0)
+	{
+		if (rect.left < 64)
+		{
+			return ObjType::Stone;
+		}
+		else if (rect.left >= 64 && rect.left < 112)
+		{
+			return ObjType::Weed;
+		}
+		else if (rect.left >= 112 && rect.left < 144)
+		{
+			return ObjType::Timber;
+		}
+		else if (rect.left >= 144/* && rect.left < 144*/)
+		{
+			return ObjType::Tree;
+		}
+	}
+	else if(rect.top == 16)
+	{
+
+	}
+}
+
+void SceneEditor::AddObject(int indexX, int indexY, sf::IntRect rect, ObjType type)
+{
+	if ((int)type < 0 || (int)type > 3)
+	{
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if (objects[i].indexX == indexX && objects[i].indexY == indexY)
+			{
+				objects.erase(objects.begin() + i);
+				break;
+			}
+		}
+		return;
+	}
+	Object obj
+	{
+		indexX, indexY, (float)rect.left, (float)rect.top, (float)rect.width, (float)rect.height, type
+	};
+	objects.push_back(obj);
+}
+
+bool SceneEditor::SaveObject(const std::string& filePath)
+{
+	std::ofstream outputFile(filePath);
+
+	if (!outputFile.is_open())
+	{
+		cout << "ERR: 파일을 열 수 없습니다." << endl;
+		return false;
+	}
+
+	// 파일 헤더
+	outputFile << "cols,rows" << endl;
+	outputFile << col << "," << row << endl;
+
+	outputFile << "indexX,indexY,left,top,width,height,type" << endl;
+
+	for (int i = 0; i < objects.size(); ++i)
+	{
+		auto objs = objects[i];
+		outputFile << objs.indexX << "," << objs.indexY << "," << objs.left << "," << objs.top << "," <<
+			objs.width << "," << objs.height << "," << (int)objs.type << endl;
+	}
+
+	outputFile.close();
+	return true;
+}
+
+bool SceneEditor::LoadObject(const std::string& filePath)
+{
+	rapidcsv::Document doc(filePath);
+
+	if (!objects.empty())
+	{
+		objects.clear();
+	}
+	for (int i = 2; i < doc.GetRowCount(); i++)
+	{
+		auto rows = doc.GetRow<int>(i);
+		objects.push_back({ rows[0], rows[1], (float)rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (ObjType)rows[6] });
+	}
+	return true;
+}
+
+bool SceneEditor::IsObjectAdded(int indexX, int indexY, ObjType type)
+{
+	{
+		for (const Object& obj : objects)
+		{
+			if (obj.indexX == indexX && obj.indexY == indexY && obj.type == type)
+			{
+				return true; // 이미 같은 타일에 같은 종류의 오브젝트가 추가된 경우
+			}
+		}
+		return false;
 	}
 }
 	
