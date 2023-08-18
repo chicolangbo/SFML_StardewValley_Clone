@@ -103,8 +103,8 @@ protected:
 	sf::Vector2f direction;
 	int currentLayer;
 	
-	int col = 10;
-	int row = 10;
+	int col = 38;
+	int row = 41;
 
 	StringTable* stringTable = nullptr;
 

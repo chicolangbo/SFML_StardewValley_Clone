@@ -618,7 +618,7 @@ void SceneEditor::Update(float dt)
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
-		if (!IsCollActive)
+		if (!IsCollActive && curTile!=nullptr)
 		{
 			curTile->SetActive(true);
 			curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
