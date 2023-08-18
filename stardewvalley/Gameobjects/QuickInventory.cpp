@@ -105,8 +105,9 @@ void QuickInventory::Update(float dt)
 		quickslots[i]->SetItemIcon((*quickslot)[i]->GetItemIcon());   
 		quickslots[i]->SetItemId((*quickslot)[i]->GetItemId());  
 	}
+	ItemIndexUpdate();
+	IconUpdate();    
 
-	IconUpdate();   
 
 	for (auto m : quickinvenUi)
 	{
@@ -497,6 +498,21 @@ void QuickInventory::ItemIconSetUp()
 		it.second.colliderOnOff = false;
 		it.second.SetOrigin(Origins::MC);
 		it.second.SetScale(5.f, 5.f);
+	}
+}
+
+void QuickInventory::ItemIndexUpdate()
+{
+	for (tagItemInfo& pl : *playerItemList)
+	{
+		for (Slot* sl : quickslots)
+		{
+			if (pl.itemId == sl->GetItemId())
+			{
+				pl.index = sl->slotIndex;
+				continue;
+			}
+		}
 	}
 }
 
