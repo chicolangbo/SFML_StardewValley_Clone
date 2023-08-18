@@ -9,9 +9,14 @@ class SceneTitle : public Scene
 protected:
 	SpriteGo* titleBg;
 	SpriteGo* logo;
+	SpriteGo* mountFront;
+	SpriteGo* mountBack;
+	SpriteGo* bush;
 
 	UiButton* start;  
 	UiButton* exit;  
+
+	float time;
 public:
 	SceneTitle();
 	virtual ~SceneTitle() override = default;
@@ -24,5 +29,7 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
+	void ShowStartButton();
+	void ShowExitButton();
 };
 

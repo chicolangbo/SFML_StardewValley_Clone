@@ -80,6 +80,7 @@ void SceneGame::Init()
 		quickinven = (QuickInventory*)AddGo(new QuickInventory("quickinven"));
 		quickinven->sortLayer = 101;
 		quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
+		quickinven->SetPlayer(player2);
 	}
 
 	// INGAME UI

@@ -46,8 +46,11 @@ public:
 	void SetPlayerItemList() { playerItemList = player->GetPlayerItemList(); }
 
 	void IconUpdate();
+	void ItemIconSetUp();
+	void ItemIndexUpdate();
 
 	ItemId GetItemId() { return itemid; } 
 	
+	//bool InvenOnOff(bool open);
 };
 
