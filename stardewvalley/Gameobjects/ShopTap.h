@@ -8,6 +8,7 @@
 #include "Inventory.h"
 
 class ShopSlot;
+class ShopInvenSlot;
 
 class ShopTap :
     public GameObject
@@ -16,15 +17,20 @@ protected:
     Player2* player;
     Inventory* inven;
     std::list<tagItemInfo>* playerItemList = nullptr;
+    std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
 
-    // SHOP SLOT VECTOR
+    // SHOP, INVEN SLOT VECTOR
     std::vector<ShopSlot*> shopSlot;
+    std::vector<ShopInvenSlot*> shopInvenSlot;
     int shopSlotCount = 13;
 
     // SHOPTAP UI
     std::list<GameObject*> shopUiObjects;
     SpriteGo pierrePortrait;
-    TextGo pierreText;
+    TextGo pierreText1;
+    TextGo pierreText2;
+    TextGo pierreText3;
+    TextGo pierreText4;
     SliceImageGo pierreTextBox;
     SliceImageGo shopBox;
     SpriteGo moneyBar;
@@ -49,7 +55,11 @@ public:
     void SortGos();
     void SetPlayer(Player2* p) { player = p; }
     void SetInventory(Inventory* i) { this->inven = i; }
-    void SetPlayerInfo();
+
+    void InitInfo();
+
+    void ButtonSetUp();
     void PlayerInfoUpdate();
+    void IconUpdate(); 
 };
 

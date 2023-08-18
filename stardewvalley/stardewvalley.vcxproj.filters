@@ -41,11 +41,11 @@
     <ClCompile Include="Gameobjects\Wateringcan.cpp" />
     <ClCompile Include="Gameobjects\Slot.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
-    <ClCompile Include="Gameobjects\Shop.cpp" />
     <ClCompile Include="Gameobjects\ShopTap.cpp" />
     <ClCompile Include="Gameobjects\ShopSlot.cpp" />
     <ClCompile Include="Gameobjects\ShopInterior.cpp" />
     <ClCompile Include="DataTables\ObjectTable.cpp" />
+    <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -89,7 +89,6 @@
     <ClInclude Include="Gameobjects\Scythe.h" />
     <ClInclude Include="Gameobjects\Slot.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
-    <ClInclude Include="Gameobjects\Shop.h" />
     <ClInclude Include="Gameobjects\ShopTap.h" />
     <ClInclude Include="Gameobjects\ShopSlot.h" />
     <ClInclude Include="Gameobjects\ShopInterior.h" />
@@ -98,5 +97,6 @@
     <ClInclude Include="GameObjects\UiButton.h" />
     <ClInclude Include="Gameobjects\Wateringcan.h" />
     <ClInclude Include="DataTables\ObjectTable.h" />
+    <ClInclude Include="Gameobjects\ShopInvenSlot.h" />
   </ItemGroup>
 </Project>

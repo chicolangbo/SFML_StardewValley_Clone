@@ -13,4 +13,7 @@ LAYER_OBJ,Object
 LAYER_COLL,Collider
 SAVE,Save
 LOAD,Load
-PIERRE,Wellcome to/nPierre's Store!/nThere is Everthing/nyou want.
+PIERRE1,Wellcome to
+PIERRE2,Pierre's Store!
+PIERRE3,There is Everthing
+PIERRE4,you want.

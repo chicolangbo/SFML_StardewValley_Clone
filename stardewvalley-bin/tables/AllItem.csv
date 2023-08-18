@@ -1,22 +1,22 @@
-ID,KIND,NAME,NICKNAME,RESOURCEID,DESCRIPTION,PRICE,
-1,1,pick,invenPick,graphics/tools.png,ëŒì„ ë¶€ìˆ  ë•Œ ì‚¬ìš©í•©ë‹ˆë‹¤.,0
-2,1,ax,invenAx,graphics/tools.png,ë‚˜ë¬´ë¥¼ ë² ëŠ”ë° ì‚¬ìš©í•©ë‹ˆë‹¤.,0
-3,1,homi,invenHomi,graphics/tools.png,ë•…ì„ íŒŒê³  ë°­ì„ ê°ˆ ë•Œ ì‚¬ìš©ë©ë‹ˆë‹¤.,0
-4,1,waterCan,invenWaterCan,graphics/tools.png,ì‘ë¬¼ì— ë¬¼ì„ ì¤„ ë•Œ ì‚¬ìš©í•©ë‹ˆë‹¤.,0
-5,1,hook,invenHook,graphics/weapons.png,ì”ë””ë¥¼ ìë¦…ë‹ˆë‹¤.,0
-6,2,craftBox,craftBox,graphics/Craftables.png,ì•„ì´í…œì„ ì €ì¥í•  ìˆ˜ ìˆëŠ” ê³µê°„.,0
-7,2,craftScareCrow,craftScareCrow,graphics/Craftables.png,ê¹Œë§ˆê·€ê°€ ì‘ë¬¼ì„ í•´ì¹˜ì§€ ëª»í•˜ê²Œ ë§‰ì•„ì¤ë‹ˆë‹¤. íš¨ê³¼ ë²”ìœ„ê°€ 8ì¹¸ ì •ë„ë¡œ ì œí•œë˜ì–´ìˆìŠµë‹ˆë‹¤.,0
-8,2,craftContainer,craftContainer,graphics/Craftables.png,"ì±„ì†Œë¥¼ ë„£ì–´ë‘ë©´ í”¼í´ì„ ë§Œë“¤ê³ , ê³¼ì¼ì„ ë„£ì–´ë‘ë©´ ì¼ì„ ë§Œë“­ë‹ˆë‹¤.",0
-9,3,stone,invenStone,graphics/springobjects.png,ì œì‘ê³¼ ê±´ì„¤ì— ë§ì´ ì‚¬ìš©ë˜ëŠ” í”í•œ ì¬ë£Œ,4
-10,3,coal,invenCoal,graphics/springobjects.png,ì œì‘ê³¼ ì œë ¨ í™œë™ì— ì‚¬ìš©ë˜ëŠ” ë¶ˆì´ ì˜ ë¶™ëŠ” ëŒ.,30
-11,3,branch,invenTree,graphics/springobjects.png,ì‚¬ìš© ìš©ë„ê°€ ë‹¤ì–‘í•œ ìœ ì—°í•˜ë©´ì„œ ê²¬ê³ í•œ ì‹ë¬¼ ì¬ë£Œ,4
-12,3,fiver,invenFiver,graphics/springobjects.png,ì‹ë¬¼ì—ì„œ ë‚˜ì˜¨ ì›ìì¬,2
-13,4,mapleSeed,invenMapleSeed,graphics/springobjects.png,ì‹¬ìœ¼ë©´ ë‹¨í’ë‚˜ë¬´ê°€ ìëë‹ˆë‹¤.,10
-14,4,acorn,invenAcorn,graphics/springobjects.png,ì‹¬ìœ¼ë©´ ì°¸ë‚˜ë¬´ê°€ ìëë‹ˆë‹¤.,40
-15,4,pineCone,invenPineCone,graphics/springobjects.png,ì‹¬ìœ¼ë©´ ì†Œë‚˜ë¬´ê°€ ìëë‹ˆë‹¤.,10
-16,4,parsnipSeed,invenParsnipSeed,graphics/springobjects.png,ë´„ ì‘ë¬¼. ì„±ì¥í•˜ë ¤ë©´ 4ì¼ ì†Œìš”ë©ë‹ˆë‹¤.,20
-17,4,potatoSeed,invenPotatoSeed,graphics/springobjects.png,"ë´„ ì‘ë¬¼. ì„±ì¥í•˜ë ¤ë©´ 6ì¼ ì†Œìš”ë˜ë©°, í•œë²ˆ ìˆ˜í™•í•  ë•Œ ì—¬ëŸ¬ ê°œ ìˆ˜í™•í•  í™•ë¥ ì´ ìˆìŠµë‹ˆë‹¤.",50
-18,4,coliSeed,invenColiSeed,graphics/springobjects.png,ë´„ ì‘ë¬¼. ì‹¬ìœ¼ë©´ 12ì¼ í›„ í° ì½œë¦¬í”Œë¼ì›Œë¥¼ ìƒì‚°í•©ë‹ˆë‹¤.,80
-19,5,parsnip,invenParsnip,graphics/springobjects.png,"ë‹¹ê·¼ê³¼ ë¹„ìŠ·í•œ, ë´„ì²  ë©ì´ì¤„ê¸° ì‹ë¬¼. ëŒ€ì§€ì˜ ë§›ì´ ë‚˜ê³  ì˜ì–‘ë¶„ì´ ë“¬ë¿ ë“¤ì–´ìˆìŠµë‹ˆë‹¤.",70
-20,5,potato,invenPotato,graphics/springobjects.png,ë„ë¦¬ ì¬ë°°ë˜ëŠ” ë©ì´ì¤„ê¸° ì‹ë¬¼.,160
-21,5,coli,invenColi,graphics/springobjects.png,"ê°’ì´ ë¹„ì‹¸ì§€ë§Œ, ì²œì²œíˆ ìëë‹ˆë‹¤. ì°½ë°±í•œ ìƒ‰ê³¼ëŠ” ë‹¤ë¥´ê²Œ, ê½ƒ ë¶€ë¶„ì— ì˜ì–‘ì†Œê°€ í’ë¶€í•©ë‹ˆë‹¤.",350
+ID,KIND,NAME_E,NAME_K,NICKNAME,RESOURCEID,DESCRIPTION_E,DESCRIPTION_K,PRICE
+1,1,pick,°î±ªÀÌ,invenPick,graphics/tools.png,Used to break stones.,µ¹À» ºÎ¼ú ¶§ »ç¿ëÇÕ´Ï´Ù.,0
+2,1,ax,µµ³¢,invenAx,graphics/tools.png,Used to cut down trees.,³ª¹«¸¦ º£´Âµ¥ »ç¿ëÇÕ´Ï´Ù.,0
+3,1,homi,È£¹Ì,invenHomi,graphics/tools.png,Used to dig and plow fields.,¶¥À» ÆÄ°í ¹çÀ» °¥ ¶§ »ç¿ëµË´Ï´Ù.,0
+4,1,waterCan,¹°»Ñ¸®°³,invenWaterCan,graphics/tools.png,Used to water crops.,ÀÛ¹°¿¡ ¹°À» ÁÙ ¶§ »ç¿ëÇÕ´Ï´Ù.,0
+5,1,hook,³´,invenHook,graphics/weapons.png,Used to cut the grass.,ÀÜµğ¸¦ ÀÚ¸¨´Ï´Ù.,0
+6,2,craftBox,»óÀÚ,craftBox,graphics/Craftables.png,Space to store items.,¾ÆÀÌÅÛÀ» ÀúÀåÇÒ ¼ö ÀÖ´Â °ø°£.,0
+7,2,craftScareCrow,Çã¼ö¾Æºñ,craftScareCrow,graphics/Craftables.png,It prevents crows from harming crops. The effect range is limited to about 8 spaces.,±î¸¶±Í°¡ ÀÛ¹°À» ÇØÄ¡Áö ¸øÇÏ°Ô ¸·¾ÆÁİ´Ï´Ù. È¿°ú ¹üÀ§°¡ 8Ä­ Á¤µµ·Î Á¦ÇÑµÇ¾îÀÖ½À´Ï´Ù.,0
+8,2,craftContainer,ÀıÀÓÅë,craftContainer,graphics/Craftables.png,If you put vegetables in it you make pickles and if you put fruits in it you make jam.,Ã¤¼Ò¸¦ ³Ö¾îµÎ¸é ÇÇÅ¬À» ¸¸µé°í °úÀÏÀ» ³Ö¾îµÎ¸é ÀëÀ» ¸¸µì´Ï´Ù.,0
+9,3,stone,µ¹,invenStone,graphics/springobjects.png,a common material used in manufacturing and construction.,Á¦ÀÛ°ú °Ç¼³¿¡ ¸¹ÀÌ »ç¿ëµÇ´Â ÈçÇÑ Àç·á,4
+10,3,coal,¼®Åº,invenCoal,graphics/springobjects.png,a well-lit stone used in making and smelting activities.,Á¦ÀÛ°ú Á¦·Ã È°µ¿¿¡ »ç¿ëµÇ´Â ºÒÀÌ Àß ºÙ´Â µ¹.,30
+11,3,branch,³ª¹µ°¡Áö,invenTree,graphics/springobjects.png,Flexible rigid plant materials for many uses.,»ç¿ë ¿ëµµ°¡ ´Ù¾çÇÑ À¯¿¬ÇÏ¸é¼­ °ß°íÇÑ ½Ä¹° Àç·á,4
+12,3,fiver,¼¶À¯,invenFiver,graphics/springobjects.png,raw materials from plants.,½Ä¹°¿¡¼­ ³ª¿Â ¿øÀÚÀç,2
+13,4,mapleSeed,¸ŞÀÌÇÃ ¾¾¾Ñ,invenMapleSeed,graphics/springobjects.png,Maple trees grow when planted.,½ÉÀ¸¸é ´ÜÇ³³ª¹«°¡ ÀÚ¶ø´Ï´Ù.,10
+14,4,acorn,µµÅä¸®,invenAcorn,graphics/springobjects.png,Oak trees grow.,½ÉÀ¸¸é Âü³ª¹«°¡ ÀÚ¶ø´Ï´Ù.,40
+15,4,pineCone,¼Ò³ª¹« ¾¾¾Ñ,invenPineCone,graphics/springobjects.png,Pine trees grow.,½ÉÀ¸¸é ¼Ò³ª¹«°¡ ÀÚ¶ø´Ï´Ù.,10
+16,4,parsnipSeed,ÆÄ½º´Õ ¾¾¾Ñ,invenParsnipSeed,graphics/springobjects.png,Spring crop. It takes 4 days to grow.,º½ ÀÛ¹°. ¼ºÀåÇÏ·Á¸é 4ÀÏ ¼Ò¿äµË´Ï´Ù.,20
+17,4,potatoSeed,°¨ÀÚ ¾¾¾Ñ,invenPotatoSeed,graphics/springobjects.png,Spring crop. It takes 6 days to grow and there is a probability of harvesting several once harvested.,º½ ÀÛ¹°. ¼ºÀåÇÏ·Á¸é 6ÀÏ ¼Ò¿äµÇ¸ç ÇÑ¹ø ¼öÈ®ÇÒ ¶§ ¿©·¯ °³ ¼öÈ®ÇÒ È®·üÀÌ ÀÖ½À´Ï´Ù.,50
+18,4,coliSeed,Äİ¸®ÇÃ¶ó¿ö ¾¾¾Ñ,invenColiSeed,graphics/springobjects.png,Spring crop. Planting and producing a large cauliflower after 12 days.,º½ ÀÛ¹°. ½ÉÀ¸¸é 12ÀÏ ÈÄ Å« Äİ¸®ÇÃ¶ó¿ö¸¦ »ı»êÇÕ´Ï´Ù.,80
+19,5,parsnip,ÆÄ½º´Õ,invenParsnip,graphics/springobjects.png,spring tuberous plant resembling a carrot. It tastes like the earth and is full of nutrients.,´ç±Ù°ú ºñ½ÁÇÑ º½Ã¶ µ¢ÀÌÁÙ±â ½Ä¹°. ´ëÁöÀÇ ¸ÀÀÌ ³ª°í ¿µ¾çºĞÀÌ µë»Ò µé¾îÀÖ½À´Ï´Ù.,70
+20,5,potato,°¨ÀÚ,invenPotato,graphics/springobjects.png,widely cultivated tuberous plant widely cultivated tuberous plant.,³Î¸® Àç¹èµÇ´Â µ¢ÀÌÁÙ±â ½Ä¹°,160
+21,5,coli,Äİ¸®ÇÃ¶ó¿ö,invenColi,graphics/springobjects.png,Unlike the pale color the flower part is rich in nutrients.,°ªÀÌ ºñ½ÎÁö¸¸ ÃµÃµÈ÷ ÀÚ¶ø´Ï´Ù. Ã¢¹éÇÑ »ö°ú´Â ´Ù¸£°Ô ²É ºÎºĞ¿¡ ¿µ¾ç¼Ò°¡ Ç³ºÎÇÕ´Ï´Ù.,350
