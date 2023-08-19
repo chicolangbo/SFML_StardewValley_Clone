@@ -9,14 +9,14 @@ class ShopSlot :
 {
 protected:
     ItemId id = ItemId::none;
+    bool isHover = false;
+
+public:
     SpriteGo iconCell;
     SpriteGo itemIcon;
     TextGo itemText;
     SpriteGo coin;
     TextGo coinText;
-    bool isHover = false;
-
-public:
     SliceImageGo cellBox;
     int shopSlotIndex = 0;
 

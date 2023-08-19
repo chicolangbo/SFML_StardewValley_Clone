@@ -57,7 +57,7 @@ ShopTap::ShopTap(const std::string& n)
         shopSlot.push_back(new ShopSlot((ItemId)itemNum, "graphics/shopCellBox.png", "shopCellBox" + num, { 27,27,26,26 }, {0,0,80,80}, NINE_SLICE));
         shopSlot[i]->shopSlotIndex = i;
         shopSlot[i]->SetOrigin(Origins::MC);
-        AddUi(shopSlot[i]);
+        //AddUi(shopSlot[i]);
         itemNum++;
     }
 
@@ -193,6 +193,8 @@ void ShopTap::Reset()
         sf::Vector2f shopSlotPos = { shopBox.vertexArray[0].position };
         for (int i = 0; i < shopSlotCount; ++i)
         {
+            shopSlot[i]->Init();
+            shopSlot[i]->Reset();
             shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
             shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
@@ -214,6 +216,22 @@ void ShopTap::Reset()
         scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
         scrollBg.SetOrigin(Origins::TC);
         scrollBg.SetPosition(scrollBar.GetPosition());
+
+        // MASK
+        shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
+        shopBoxMask.clear(sf::Color::Transparent);
+        sf::Texture texture;
+        texture.loadFromFile("graphics/shopCellBox.png");
+        for (int i = 0; i < shopSlot.size(); ++i)
+        {
+            shopBoxMask.draw(shopSlot[i]->cellBox.vertexArray, &texture);
+            shopBoxMask.draw(shopSlot[i]->iconCell.sprite);
+            shopBoxMask.draw(shopSlot[i]->itemIcon.sprite);
+            shopBoxMask.draw(shopSlot[i]->itemText.text);
+            shopBoxMask.draw(shopSlot[i]->coin.sprite);
+            shopBoxMask.draw(shopSlot[i]->coinText.text);
+        }
+        shopBoxMask.display();
     }
 }
 
@@ -242,6 +260,11 @@ void ShopTap::Update(float dt)
     PlayerInfoUpdate();
     IconUpdate();
     ItemIndexUpdate();
+
+    for (int i = 0; i < shopSlot.size(); ++i)
+    {
+        shopSlot[i]->Update(dt);
+    }
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
@@ -256,6 +279,8 @@ void ShopTap::Draw(sf::RenderWindow& window)
             m->Draw(window);
         }
     }
+    sf::Sprite m(shopBoxMask.getTexture());
+    window.draw(m);
 }
 
 void ShopTap::SortGos()
@@ -386,12 +411,12 @@ void ShopTap::ButtonSetUp()
             shopTapOn = true;
             TapOnOff();
             // TEST CODE
-            shopSlot[4]->SetActive(false);
+           /* shopSlot[4]->SetActive(false);
             shopSlot[5]->SetActive(false);
             shopSlot[6]->SetActive(false);
             shopSlot[7]->SetActive(false);
             shopSlot[8]->SetActive(false);
-            shopSlot[9]->SetActive(false);
+            shopSlot[9]->SetActive(false);*/
         }
     };
 
