@@ -285,9 +285,9 @@ void ShopTap::IconUpdate()
 {
     int num = 0;
 
-    for (tagItemInfo& pl : *playerItemList)
+    for (ShopInvenSlot* sl : shopInvenSlot)
     {
-        for (ShopInvenSlot* sl : shopInvenSlot)
+        for (tagItemInfo& pl : *playerItemList)
         {
             if (pl.index == sl->slotIndex)
             {
@@ -299,6 +299,11 @@ void ShopTap::IconUpdate()
                     sl->GetItemIcon()->SetScale(4.f, 4.f);
                     break;
                 }
+            }
+            else
+            {
+                sl->SetItemIcon(nullptr);
+                sl->SetItemId(ItemId::none);
             }
         }
     }
@@ -319,6 +324,25 @@ void ShopTap::ItemIndexUpdate()
     }
 }
 
+void ShopTap::TapOnOff()
+{
+    if (shopTapOn)
+    {
+        for (auto i : shopUiObjects)
+        {
+            i->SetActive(true);
+        }
+    }
+
+    else
+    {
+        for (auto i : shopUiObjects)
+        {
+            i->SetActive(false);
+        }
+    }
+}
+
 void ShopTap::ButtonSetUp()
 {
     for (int i = 0; i< shopSlot.size(); ++i)
@@ -330,33 +354,42 @@ void ShopTap::ButtonSetUp()
                 *moneyInt = -item->price;
                 player->AddPlayerItem(shopSlot[i]->GetItemId());
             }
+            // 피에르 클릭하면서 왜 동시에 클릭이 되냐고 순차적으로 돼야 하는데
         };
     }
 
-    for (auto i : shopInvenSlot)
+    for (int i = 0; i < shopInvenSlot.size(); ++i)
     {
-        i->OnClick = [this]() {
-            // 이 아이템에 해당하는 데이터테이블 정보 불러오고
-            // 이 아이템을 판다
-            // 플레이어 머니 증가
-            // 플레이어 아이템에서 count--, count = 0 이면 제거
+        shopInvenSlot[i]->OnClick = [this, i]() {
+            const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopInvenSlot[i]->GetItemId());
+            if (item == nullptr || item->price == 0)
+            {
+                return;
+            }
+            if (player->RemovePlayerItem(shopInvenSlot[i]->GetItemId()))
+            {
+                *moneyInt = item->price / 2.f;
+            }
         };
     }
 
     xButton.OnClick = [this]() {
-        for (auto i : shopUiObjects)
-        {
-            i->SetActive(false);
-        }
+        shopTapOn = false;
+        TapOnOff();
     };
 
     pierre->OnClickWorld = [this]() {
         if (Utils::Distance(player->GetPosition(), pierre->GetPosition()) < 200.f)
         {
-            for (auto i : shopUiObjects)
-            {
-                i->SetActive(true);
-            }
+            shopTapOn = true;
+            TapOnOff();
+            // TEST CODE
+            shopSlot[4]->SetActive(false);
+            shopSlot[5]->SetActive(false);
+            shopSlot[6]->SetActive(false);
+            shopSlot[7]->SetActive(false);
+            shopSlot[8]->SetActive(false);
+            shopSlot[9]->SetActive(false);
         }
     };
 

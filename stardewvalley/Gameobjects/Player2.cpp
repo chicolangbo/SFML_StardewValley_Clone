@@ -542,6 +542,32 @@ void Player2::AddPlayerItem(ItemId id)
 	}
 }
 
+bool Player2::RemovePlayerItem(ItemId id)
+{
+	bool found = false;
+	auto it = playerItemList.begin();
+	while (it != playerItemList.end())
+	{
+		if (it->itemId == id)
+		{
+			if (it->count > 1)
+			{
+				it->count--;
+				return found = true;
+				break;
+			}
+			else if (it->count <= 1)
+			{
+				it = playerItemList.erase(it); // erase() 함수를 사용하여 현재 요소를 삭제하고 다음 요소로 이동
+				return found = true;
+				break;
+			}
+		}
+		++it; // 다음 요소로 이동
+	}
+	return found;
+}
+
 void Player2::MoneyUpdate()
 {
 	if (tempMoney != 0)

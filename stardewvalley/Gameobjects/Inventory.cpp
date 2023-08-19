@@ -279,19 +279,18 @@ void Inventory::Update(float dt)
     }
     PlayerInfoUpdate();
     ItemIndexUpdate();
+    IconUpdate();
 
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
         {
             SetItemWindow();
-            IconUpdate();
             invenOnOff = true;
         }
         else if(mouseSlot->GetItemIcon() == nullptr)
         {
             SetWindowClear();
-            IconUpdate();
             invenOnOff = false;
         }
     }
@@ -522,9 +521,9 @@ void Inventory::IconUpdate()
 {
     int num = 0;
 
-    for (tagItemInfo& pl : *playerItemList)
+    for (Slot* sl : slot)
     {
-        for (Slot* sl : slot)
+        for (tagItemInfo& pl : *playerItemList)
         {
             if (pl.index == sl->slotIndex)
             {
@@ -535,6 +534,11 @@ void Inventory::IconUpdate()
                     sl->SetItemId(pl.itemId);
                     break;
                 }
+            }
+            else
+            {
+                sl->SetItemIcon(nullptr);
+                sl->SetItemId(ItemId::none);
             }
         }
     }

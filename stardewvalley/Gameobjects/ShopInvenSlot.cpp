@@ -15,13 +15,6 @@ ShopInvenSlot::~ShopInvenSlot()
 void ShopInvenSlot::Init()
 {
 	UiButton::Init();
-	OnClick = [this]() {
-		if (!isEmpty && itemIcon != nullptr)
-		{
-			itemIcon = nullptr;
-			isEmpty = true;
-		}
-	};
 }
 
 void ShopInvenSlot::Release()

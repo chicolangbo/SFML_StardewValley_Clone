@@ -20,6 +20,7 @@ protected:
     Inventory* inven = nullptr;
     std::list<tagItemInfo>* playerItemList = nullptr;
     std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
+    bool shopTapOn = false;
 
     // SHOP, INVEN SLOT VECTOR
     std::vector<ShopSlot*> shopSlot;
@@ -71,5 +72,7 @@ public:
     void PlayerInfoUpdate();
     void IconUpdate();
     void ItemIndexUpdate();
+
+    void TapOnOff();
 };
 

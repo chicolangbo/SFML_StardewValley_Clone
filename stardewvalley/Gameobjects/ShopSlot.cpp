@@ -86,7 +86,6 @@ void ShopSlot::Update(float dt)
 	bool prevHover = isHover;
 	isHover = cellBox.vertexArray[0].position.x <= uiMousePos.x && cellBox.vertexArray[9].position.x >= uiMousePos.x && cellBox.vertexArray[0].position.y <= uiMousePos.y && cellBox.vertexArray[35].position.y >= uiMousePos.y;
 
-	// ±è¹ÎÁö, 230815, setActive false¸é ¾È ÇÏµµ·Ï ¼öÁ¤
 	if (this->GetActive())
 	{
 		if (!prevHover && isHover)
@@ -103,7 +102,7 @@ void ShopSlot::Update(float dt)
 				OnExit();
 			}
 		}
-		if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+		if (isHover && INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 		{
 			if (OnClick != nullptr)
 			{

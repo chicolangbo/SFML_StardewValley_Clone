@@ -94,6 +94,7 @@ public:
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
 	void AddRootingItem();
 	void AddPlayerItem(ItemId id);
+	bool RemovePlayerItem(ItemId id);
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }
