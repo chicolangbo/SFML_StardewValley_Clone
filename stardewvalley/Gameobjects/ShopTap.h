@@ -15,9 +15,9 @@ class ShopTap :
     public GameObject
 {
 protected:
-    Player2* player;
-    UiButton* pierre;
-    Inventory* inven;
+    Player2* player = nullptr;
+    UiButton* pierre = nullptr;
+    Inventory* inven = nullptr;
     std::list<tagItemInfo>* playerItemList = nullptr;
     std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
 
@@ -70,6 +70,5 @@ public:
     void ButtonSetUp();
     void PlayerInfoUpdate();
     void IconUpdate();
-    void ScrollViewSetUp();
 };
 

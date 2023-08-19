@@ -4,10 +4,10 @@ class UiButton : public SpriteGo
 {
 protected:
 	bool isHover = false;
+	bool isHoverWorld = false;
 
 public:
 	sf::Text text;
-	// �����, 230811, SpriteGo�� ���缭 ����
 	//UiButton(const std::string& textureId, const std::string& n);
 	UiButton(const std::string& textureId ="", const std::string& n ="", const std::string& nickName = "");
 	//
@@ -29,8 +29,12 @@ public:
 	void Click();
 
 	function<void()> OnClick;
-	function<void()> OnEnter; //Ŀ���� ������ ���� ��
-	function<void()> OnExit; //�������� ������
+	function<void()> OnEnter;
+	function<void()> OnExit;
+
+	function<void()> OnClickWorld;
+	function<void()> OnEnterWorld;
+	function<void()> OnExitWorld;
 
 };
 

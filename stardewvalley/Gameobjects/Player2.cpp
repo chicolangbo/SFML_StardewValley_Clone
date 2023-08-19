@@ -528,6 +528,7 @@ void Player2::AddRootingItem() // 자석화 해야 함
 
 void Player2::AddPlayerItem(ItemId id)
 {
+	inven->IconUpdate();
 	int index = 0;
 	for (auto slot : *inven->GetSlot())
 	{

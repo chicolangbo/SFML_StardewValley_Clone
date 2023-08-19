@@ -122,10 +122,11 @@ void SceneGame::Init()
 		shopInterior->SetActive(false);
 
 		shopTap = (ShopTap*)AddGo(new ShopTap("shop"));
+		shopTap->sortLayer = 101;
 		shopTap->SetPlayer(player2);
 		shopTap->SetInventory(inven);
+		shopTap->SetPierre(shopInterior->GetPierre());
 		shopTap->SetActive(false);
-		shopTap->sortLayer = 101;
 	}
 
 	for (auto go : gameObjects)

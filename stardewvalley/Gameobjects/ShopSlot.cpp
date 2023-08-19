@@ -3,9 +3,11 @@
 #include "DataTableMgr.h"
 #include "AllItemTable.h"
 #include "DataTable.h"
+#include "InputMgr.h"
+#include "SceneMgr.h"
 
 ShopSlot::ShopSlot(ItemId id, const std::string& textureId, const std::string& n, sf::Rect<float> centerRect, sf::Rect<float> size, int vc, const std::string& nickName)
-    : UiButton(),
+    : GameObject(n),
     id(id),
     cellBox(textureId, n, centerRect, size, vc),
     iconCell("graphics/MenuTiles.png", "invenCell", "invenCell"),
@@ -38,19 +40,16 @@ void ShopSlot::SetPosition(float x, float y)
 
 void ShopSlot::Init()
 {
-    UiButton::Init();
     cellBox.Init();
 }
 
 void ShopSlot::Release()
 {
-    UiButton::Release();
 }
 
 void ShopSlot::Reset()
 {
     // RESOURCE LOAD
-    UiButton::Reset(); 
     iconCell.Reset();
     itemIcon.Reset();
     itemText.Reset();
@@ -75,16 +74,47 @@ void ShopSlot::Reset()
 
     int price = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id)->price;
     coinText.SetText(to_string(price), 70, sf::Color::Black, Origins::MR, 100, position.x, position.y);
+
+	isHover = false;
 }
 
 void ShopSlot::Update(float dt)
 {
-    UiButton::Update(dt);
+	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+	sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
+
+	bool prevHover = isHover;
+	isHover = cellBox.vertexArray[0].position.x <= uiMousePos.x && cellBox.vertexArray[9].position.x >= uiMousePos.x && cellBox.vertexArray[0].position.y <= uiMousePos.y && cellBox.vertexArray[35].position.y >= uiMousePos.y;
+
+	// ±è¹ÎÁö, 230815, setActive false¸é ¾È ÇÏµµ·Ï ¼öÁ¤
+	if (this->GetActive())
+	{
+		if (!prevHover && isHover)
+		{
+			if (OnEnter != nullptr)
+			{
+				OnEnter();
+			}
+		}
+		if (prevHover && !isHover)
+		{
+			if (OnExit != nullptr)
+			{
+				OnExit();
+			}
+		}
+		if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+		{
+			if (OnClick != nullptr)
+			{
+				OnClick();
+			}
+		}
+	}
 }
 
 void ShopSlot::Draw(sf::RenderWindow& window)
 {
-    UiButton::Draw(window);
     cellBox.Draw(window);
     iconCell.Draw(window);
     itemIcon.Draw(window);

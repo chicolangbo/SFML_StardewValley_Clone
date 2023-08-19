@@ -1,11 +1,11 @@
 #pragma once
-#include "UiButton.h"
+#include "GameObject.h"
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "SliceImageGo.h"
 
 class ShopSlot :
-    public UiButton
+    public GameObject
 {
 protected:
     ItemId id = ItemId::none;
@@ -14,6 +14,7 @@ protected:
     TextGo itemText;
     SpriteGo coin;
     TextGo coinText;
+    bool isHover = false;
 
 public:
     SliceImageGo cellBox;
@@ -33,5 +34,9 @@ public:
 
     void SetItemId(ItemId i) { id = i; }
     ItemId GetItemId() { return id; }
+
+    function<void()> OnClick;
+    function<void()> OnEnter;
+    function<void()> OnExit;
 };
 

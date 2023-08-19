@@ -62,6 +62,9 @@ void ShopInterior::Init()
     {
         i->Init();
     }
+    //pierre.OnClickWorld = [this]() {
+    //    std::cout << "pierre" << std::endl;
+    //};
 }
 
 void ShopInterior::Reset()

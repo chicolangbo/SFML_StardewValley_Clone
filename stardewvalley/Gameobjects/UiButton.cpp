@@ -59,10 +59,13 @@ void UiButton::Update(float dt)
 	SpriteGo::Update(dt);
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
 	sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
 
 	bool prevHover = isHover;
+	bool prevHoverWorld = isHoverWorld;
 	isHover = sprite.getGlobalBounds().contains(uiMousePos);
+	isHoverWorld = sprite.getGlobalBounds().contains(worldMousePos);
 
 	// ±è¹ÎÁö, 230815, setActive false¸é ¾È ÇÏµµ·Ï ¼öÁ¤
 	if (this->GetActive())
@@ -86,6 +89,28 @@ void UiButton::Update(float dt)
 			if (OnClick != nullptr)
 			{
 				OnClick();
+			}
+		}
+		// world
+		if (!prevHoverWorld && isHoverWorld)
+		{
+			if(OnEnterWorld != nullptr)
+			{
+				OnEnterWorld();
+			}
+		}
+		if (prevHoverWorld && !isHoverWorld)
+		{
+			if (OnExitWorld != nullptr)
+			{
+				OnExitWorld();
+			}
+		}
+		if (isHoverWorld && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+		{
+			if (OnClickWorld != nullptr)
+			{
+				OnClickWorld();
 			}
 		}
 	}

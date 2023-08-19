@@ -57,7 +57,6 @@ ShopTap::ShopTap(const std::string& n)
         shopSlot.push_back(new ShopSlot((ItemId)itemNum, "graphics/shopCellBox.png", "shopCellBox" + num, { 27,27,26,26 }, {0,0,80,80}, NINE_SLICE));
         shopSlot[i]->shopSlotIndex = i;
         shopSlot[i]->SetOrigin(Origins::MC);
-        shopSlot[i]->colliderOnOff = false;
         AddUi(shopSlot[i]);
         itemNum++;
     }
@@ -105,13 +104,13 @@ bool ShopTap::Exist(GameObject* go)
 
 void ShopTap::Init()
 {
+    InitInfo();
+    ButtonSetUp();
+
     for (auto i : shopUiObjects)
     {
         i->Init();
     }
-
-    InitInfo();
-    //ButtonSetUp();
 }
 
 void ShopTap::Reset()
@@ -124,7 +123,6 @@ void ShopTap::Reset()
     {
         i->SetActive(false);
     }
-    ButtonSetUp();
     // BASE
     {
         sf::Vector2f size = FRAMEWORK.GetWindowSize();
@@ -216,8 +214,6 @@ void ShopTap::Reset()
         scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
         scrollBg.SetOrigin(Origins::TC);
         scrollBg.SetPosition(scrollBar.GetPosition());
-
-        ScrollViewSetUp();
     }
 }
 
@@ -245,7 +241,6 @@ void ShopTap::Update(float dt)
 
     PlayerInfoUpdate();
     IconUpdate();
-    ButtonSetUp();
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
@@ -308,12 +303,6 @@ void ShopTap::IconUpdate()
     }
 }
 
-void ShopTap::ScrollViewSetUp()
-{
-    scrollView.setSize(shopBox.GetSize() - sf::Vector2f(10.f, 10.f));
-    scrollView.setCenter(shopBox.GetPosition().x + shopBox.GetSize().x / 2.f, shopBox.GetPosition().y - shopBox.GetSize().y / 2.f);
-}
-
 void ShopTap::ButtonSetUp()
 {
     for (int i = 0; i< shopSlot.size(); ++i)
@@ -321,9 +310,6 @@ void ShopTap::ButtonSetUp()
         shopSlot[i]->OnClick = [this, i]() {
             // 이 아이템을 산다
             // 이 아이템에 해당하는 데이터테이블 정보 불러오고
-            std::cout << "클릭" << std::endl;
-            shopSlot[i]->sprite.setColor(sf::Color::Black);
-
             const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopSlot[i]->GetItemId());
             // 플레이어 머니 차감
             if (*moneyInt >= item->price)
@@ -353,7 +339,7 @@ void ShopTap::ButtonSetUp()
         }
     };
 
-    pierre->OnClick = [this]() {
+    pierre->OnClickWorld = [this]() {
         if (Utils::Distance(player->GetPosition(), pierre->GetPosition()) < 200.f)
         {
             for (auto i : shopUiObjects)
