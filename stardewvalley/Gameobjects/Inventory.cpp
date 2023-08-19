@@ -278,8 +278,8 @@ void Inventory::Update(float dt)
         m->Update(dt);
     }
     PlayerInfoUpdate();
+    ItemIndexUpdate();
 
-    // �κ�â ���ݱ�
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
@@ -341,8 +341,6 @@ void Inventory::SetItemWindow()
     make.SetPosition(makePos);
     xButton.SetPosition(xButtonPos);
     changeScene.SetPosition(changeScenePos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetMapWindow()
@@ -360,8 +358,6 @@ void Inventory::SetMapWindow()
     }
 
     xButton.SetPosition(mapImage.GetPosition() + sf::Vector2f{mapImage.sprite.getGlobalBounds().width / 2.f, - mapImage.sprite.getGlobalBounds().height / 2.f});
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetMakeWindow()
@@ -390,8 +386,6 @@ void Inventory::SetMakeWindow()
     map.SetPosition(mapPos);
     changeScene.SetPosition(changeScenePos);
     xButton.SetPosition(xButtonPos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetChangeSceneWindow()
@@ -414,8 +408,6 @@ void Inventory::SetChangeSceneWindow()
     map.SetPosition(mapPos);
     make.SetPosition(makePos);
     xButton.SetPosition(xButtonPos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetWindowClear()
@@ -424,8 +416,6 @@ void Inventory::SetWindowClear()
     {
         m->SetActive(false);
     }
-
-    ItemIndexUpdate();
 }
 
 void Inventory::ButtonSetUp()
@@ -460,7 +450,6 @@ void Inventory::ButtonSetUp()
             SetWindowClear();
             invenOnOff = false;
         }
-        //SetWindowClear();
     };
 }
 
@@ -496,7 +485,7 @@ void Inventory::SortGos()
         });
 }
 
-void Inventory::ItemIndexUpdate()//�ٲ� ��ġ ���� â�� ������ 
+void Inventory::ItemIndexUpdate()
 {
     for (tagItemInfo& pl : *playerItemList)
     {

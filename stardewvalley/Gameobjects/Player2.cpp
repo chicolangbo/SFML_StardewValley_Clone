@@ -508,20 +508,7 @@ void Player2::AddRootingItem() // 자석화 해야 함
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
 		{
 			item->SetActive(false);
-			bool found = false;
-			for (auto& playerItem : playerItemList)
-			{
-				if (playerItem.itemId == item->GetRootingItemId())
-				{
-					playerItem.count++;
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-			{
-				AddPlayerItem(item->GetRootingItemId());
-			}
+			AddPlayerItem(item->GetRootingItemId());
 		}
 	}
 }
@@ -529,16 +516,30 @@ void Player2::AddRootingItem() // 자석화 해야 함
 void Player2::AddPlayerItem(ItemId id)
 {
 	inven->IconUpdate();
-	int index = 0;
-	for (auto slot : *inven->GetSlot())
+	bool found = false;
+
+	for (auto& playerItem : playerItemList)
 	{
-		if (slot->IsItemIconEmpty())
+		if (playerItem.itemId == id)
 		{
-			index = slot->slotIndex;
+			playerItem.count++;
+			found = true;
 			break;
 		}
 	}
-	playerItemList.push_back({ id,1,index });
+	if (!found)
+	{
+		int index = 0;
+		for (auto slot : *inven->GetSlot())
+		{
+			if (slot->IsItemIconEmpty())
+			{
+				index = slot->slotIndex;
+				break;
+			}
+		}
+		playerItemList.push_back({ id,1,index });
+	}
 }
 
 void Player2::MoneyUpdate()

@@ -241,6 +241,7 @@ void ShopTap::Update(float dt)
 
     PlayerInfoUpdate();
     IconUpdate();
+    ItemIndexUpdate();
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
@@ -303,22 +304,32 @@ void ShopTap::IconUpdate()
     }
 }
 
+void ShopTap::ItemIndexUpdate()
+{
+    for (tagItemInfo& pl : *playerItemList)
+    {
+        for (ShopInvenSlot* sl : shopInvenSlot)
+        {
+            if (pl.itemId == sl->GetItemId())
+            {
+                pl.index = sl->slotIndex;
+                continue;
+            }
+        }
+    }
+}
+
 void ShopTap::ButtonSetUp()
 {
     for (int i = 0; i< shopSlot.size(); ++i)
     {
         shopSlot[i]->OnClick = [this, i]() {
-            // 이 아이템을 산다
-            // 이 아이템에 해당하는 데이터테이블 정보 불러오고
             const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopSlot[i]->GetItemId());
-            // 플레이어 머니 차감
-            if (*moneyInt >= item->price)
+            if (*player->GetMoney() >= item->price)
             {
-                *moneyInt -= item->price;
+                *moneyInt = -item->price;
+                player->AddPlayerItem(shopSlot[i]->GetItemId());
             }
-            // 플레이어 아이템에 푸시백하는 함수를 쓰자
-            player->AddPlayerItem(shopSlot[i]->GetItemId());
-            // 그러면 자동으로 샵인벤에 그려지니까??
         };
     }
 

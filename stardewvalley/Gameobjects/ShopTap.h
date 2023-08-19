@@ -70,5 +70,6 @@ public:
     void ButtonSetUp();
     void PlayerInfoUpdate();
     void IconUpdate();
+    void ItemIndexUpdate();
 };
 
