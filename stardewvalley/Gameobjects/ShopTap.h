@@ -39,6 +39,7 @@ protected:
     SpriteGo moneyBar;
     TextGo moneyText;
     int* moneyInt = nullptr;
+    int* tempMoney = nullptr;
     UiButton xButton;
     SliceImageGo invenBox;
     SliceImageGo scrollBg;

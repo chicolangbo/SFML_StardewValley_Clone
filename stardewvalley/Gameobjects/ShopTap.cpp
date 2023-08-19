@@ -270,13 +270,15 @@ void ShopTap::SortGos()
 void ShopTap::InitInfo()
 {
     playerItemList = player->GetPlayerItemList();
-    moneyInt = player->GetTempMoney();
+    moneyInt = player->GetMoney();
+    tempMoney = player->GetTempMoney();
     itemIconList = inven->GetItemIconList();
 }
 
 void ShopTap::PlayerInfoUpdate()
 {
     std::stringstream ss;
+    ss.str("");
     ss << *moneyInt;
     moneyText.SetString(ss.str()); // 현재 소지금
 }
@@ -351,7 +353,7 @@ void ShopTap::ButtonSetUp()
             const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopSlot[i]->GetItemId());
             if (*player->GetMoney() >= item->price)
             {
-                *moneyInt = -item->price;
+                *tempMoney = -item->price;
                 player->AddPlayerItem(shopSlot[i]->GetItemId());
             }
             // 피에르 클릭하면서 왜 동시에 클릭이 되냐고 순차적으로 돼야 하는데
@@ -368,7 +370,7 @@ void ShopTap::ButtonSetUp()
             }
             if (player->RemovePlayerItem(shopInvenSlot[i]->GetItemId()))
             {
-                *moneyInt = item->price / 2.f;
+                *tempMoney = item->price / 2.f;
             }
         };
     }
