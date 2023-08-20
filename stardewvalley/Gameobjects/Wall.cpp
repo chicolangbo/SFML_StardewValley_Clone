@@ -61,12 +61,12 @@ void Wall::SetPos()
 	int size = DATATABLE_MGR.Get<WallTable>(DataTable::Ids::Wall)->size;
 	for (int i = 0; i < size; i++)
 	{
-		if (locationType == Location::Home && i>10)
+		if (locationType == Location::Home && i>=10)
 		{
 			const WallInfo& info = DATATABLE_MGR.Get<WallTable>(DataTable::Ids::Wall)->Get((Types)i);
 			sf::RectangleShape rect; 
 			rect.setSize({ info.width, info.height });
-			rect.setScale(4.f, 4.f);
+			//rect.setScale(4.f, 4.f);
 			rect.setOrigin(0, 0);
 			rect.setPosition(info.left, info.top);
 			rect.setOutlineThickness(0.5f);

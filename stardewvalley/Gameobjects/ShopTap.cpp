@@ -235,6 +235,7 @@ void ShopTap::Reset()
             shopBoxMask.draw(shopSlot[i]->coinText.text);
         }
         shopBoxMask.display();
+
     }
 }
 

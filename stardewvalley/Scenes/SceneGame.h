@@ -12,6 +12,7 @@ class QuickInventory;
 class RectangleGo;
 class ShopTap;
 class ShopInterior;
+class HomeInterior;
 
 class SceneGame : public Scene
 {
@@ -20,6 +21,7 @@ protected:
 	sf::FloatRect wallBounds;
 
 	bool enterShop = false;
+	bool enterHome = false;
 	
 	Player2* player2;
 
@@ -28,24 +30,10 @@ protected:
 	SpriteGo* houseExterior; // Áý ¿ÜºÎ
 	SpriteGo* shopExterior; // ¼¥ ¿ÜºÎ
 
-	// TO SHOP CLASS
-		//SpriteGo* shopInside;
-		//SpriteGo* pierre;
-		//SpriteGo* robin;
-		//SpriteGo* shopCounter1;
-		//SpriteGo* shopCounter2;
-		//SpriteGo* shopMid1;
-		//SpriteGo* shopMid2_1;
-		//SpriteGo* shopMid2_2;
-		//SpriteGo* shopMid3_1;
-		//SpriteGo* shopMid3_2;
-		//SpriteGo* shopBox;
-		//Wall* homeWalls;
-		//Wall* shopWalls;
-
-	// ±è¹ÎÁö, 230817, SHOP CLASS
 	ShopTap* shopTap;
 	ShopInterior* shopInterior;
+	HomeInterior* homeInterior;
+	SpriteGo* bedding;
 
 	// INGAME UI
 	SpriteGo* energy;

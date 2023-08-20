@@ -30,9 +30,6 @@ protected:
     // SHOPTAP UI
     std::list<GameObject*> shopUiObjects;
     sf::RenderTexture shopBoxMask;
-    sf::RenderTexture maskTexture;
-    sf::Sprite renderSprite;
-    sf::Sprite maskSprite;
 
     SpriteGo pierrePortrait;
     TextGo pierreText1;

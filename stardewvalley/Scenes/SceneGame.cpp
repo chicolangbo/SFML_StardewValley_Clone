@@ -24,6 +24,7 @@
 #include "RectangleGo.h"
 #include "ShopTap.h"
 #include "ShopInterior.h"
+#include "HomeInterior.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -35,12 +36,14 @@ void SceneGame::Init()
 	Release();
 
 	// VIEW
-	auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;
-	worldView.setSize(size);
-	worldView.setCenter(0, 0);
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
+	{
+		auto size = FRAMEWORK.GetWindowSize();
+		sf::Vector2f centerPos = size * 0.5f;
+		worldView.setSize(size);
+		worldView.setCenter(0, 0);
+		uiView.setSize(size);
+		uiView.setCenter(size * 0.5f);
+	}
 
 	// TEST MAP
 	{
@@ -129,6 +132,19 @@ void SceneGame::Init()
 		shopTap->SetActive(false);
 	}
 
+	// HOME
+	{
+		homeInterior = (HomeInterior*)AddGo(new HomeInterior("homeInterior"));
+		homeInterior->SetPosition(0, 0);
+		homeInterior->SetActive(false);
+
+		bedding = (SpriteGo*)AddGo(new SpriteGo("map/bedding.png", "bedding"));
+		bedding->SetOrigin(Origins::TL);
+		bedding->SetPosition(544.f, 551.f);
+		bedding->sortLayer = 3;
+		bedding->SetActive(false);
+	}
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -165,8 +181,6 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
-
-	// MJ, 230818, ADD INITIAL SETTING
 }
 
 void SceneGame::Exit()
@@ -231,6 +245,7 @@ void SceneGame::Update(float dt)
 	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar->SetOrigin(Origins::BC);
 
+
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)
@@ -255,6 +270,8 @@ void SceneGame::Update(float dt)
 			inven->SetActive(true);
 			quickinven->SetActive(true);
 			energyBar->SetActive(true);
+			homeInterior->SetActive(false);
+			bedding->SetActive(false);
 		}
 		else
 		{
@@ -271,7 +288,6 @@ void SceneGame::Update(float dt)
 					go->SetActive(true);
 				}
 			}
-
 			player2->SetActive(true);	
 			player2->SetPosition(419.f, 1866.f); 
 			energy->SetActive(true);
@@ -279,8 +295,67 @@ void SceneGame::Update(float dt)
 			timeArrow->SetActive(true); 
 			inven->SetActive(true);
 			quickinven->SetActive(true);
-			energyBar->SetActive(true); 
+			energyBar->SetActive(true);
+			homeInterior->SetActive(false);
+			bedding->SetActive(false);
 		}
+	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
+	{
+		if (enterHome)
+		{
+			enterHome = false;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+			player2->SetActive(true);
+			player2->SetPosition(193.f, 728.f); // 집 대문 위치로
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true);
+			inven->SetActive(true);
+			quickinven->SetActive(true);
+			energyBar->SetActive(true);
+			shopInterior->SetActive(false);
+			bedding->SetActive(true);
+		}
+		else
+		{
+			enterHome = true;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+
+			player2->SetActive(true);
+			player2->SetPosition(193.f, 728.f);
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true);
+			inven->SetActive(true);
+			quickinven->SetActive(true);
+			energyBar->SetActive(true);
+			shopInterior->SetActive(false);
+			bedding->SetActive(true);
+		}
+
 	}
 	
 	worldView.setCenter(player2->GetPosition());
