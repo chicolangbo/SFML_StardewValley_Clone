@@ -387,7 +387,6 @@ void ShopTap::TapOnOff()
         {
             i->SetActive(false);
         }
-
     }
 }
 

@@ -180,6 +180,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Gameobjects\HomeInterior.cpp" />
+    <ClCompile Include="Gameobjects\HomeTap.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -188,6 +189,7 @@
     <ClCompile Include="Gameobjects\Pickax.cpp" />
     <ClCompile Include="Gameobjects\RootingItem.cpp" />
     <ClCompile Include="Gameobjects\QuickInventory.cpp" />
+    <ClCompile Include="Gameobjects\RectButton.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -239,6 +241,8 @@
     <ClInclude Include="Gameobjects\RootingItem.h" />
     <ClInclude Include="Gameobjects\QuickInventory.h" />
     <ClInclude Include="Gameobjects\HomeInterior.h" />
+    <ClInclude Include="Gameobjects\HomeTap.h" />
+    <ClInclude Include="Gameobjects\RectButton.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />

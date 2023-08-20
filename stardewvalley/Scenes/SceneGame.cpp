@@ -25,6 +25,7 @@
 #include "ShopTap.h"
 #include "ShopInterior.h"
 #include "HomeInterior.h"
+#include "HomeTap.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -34,10 +35,10 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
+	auto size = FRAMEWORK.GetWindowSize();
 
 	// VIEW
 	{
-		auto size = FRAMEWORK.GetWindowSize();
 		sf::Vector2f centerPos = size * 0.5f;
 		worldView.setSize(size);
 		worldView.setCenter(0, 0);
@@ -143,6 +144,12 @@ void SceneGame::Init()
 		bedding->SetPosition(544.f, 551.f);
 		bedding->sortLayer = 3;
 		bedding->SetActive(false);
+
+		homeTap = (HomeTap*)AddGo(new HomeTap("homeTap"));
+		homeTap->sortLayer = 100;
+		homeTap->SetBedding(bedding);
+		homeTap->SetPlayer(player2);
+		//homeTap->SetActive(false);
 	}
 
 	for (auto go : gameObjects)
@@ -303,9 +310,9 @@ void SceneGame::Update(float dt)
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
 	{
-		if (enterHome)
+		if (!enterHome)
 		{
-			enterHome = false;
+			enterHome = true;
 			for (auto go : gameObjects)
 			{
 				if (go->GetActive())
@@ -327,10 +334,11 @@ void SceneGame::Update(float dt)
 			energyBar->SetActive(true);
 			shopInterior->SetActive(false);
 			bedding->SetActive(true);
+			homeTap->SetActive(true);
 		}
 		else
 		{
-			enterHome = true;
+			enterHome = false;
 			for (auto go : gameObjects)
 			{
 				if (go->GetActive())
@@ -353,9 +361,32 @@ void SceneGame::Update(float dt)
 			quickinven->SetActive(true);
 			energyBar->SetActive(true);
 			shopInterior->SetActive(false);
-			bedding->SetActive(true);
+			bedding->SetActive(false);
+			homeTap->SetActive(true);
 		}
+	}
 
+	// PLAYER - BEDDING COLLIDE
+	if (enterHome)
+	{
+		// 나중에 좌표로 바꾸기
+		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+		{
+			std::cout << "충돌" << std::endl;
+			if (!once)
+			{
+				homeTap->homeTapOn = true;
+				homeTap->TapOnOff();
+				once = true;
+			}
+		}
+		else
+		{
+			once = false;
+			//homeTap->SetActive(false);
+			homeTap->homeTapOn = false;
+			homeTap->TapOnOff();
+		}
 	}
 	
 	worldView.setCenter(player2->GetPosition());

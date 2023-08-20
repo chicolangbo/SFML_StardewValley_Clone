@@ -1,62 +1,62 @@
 #include "stdafx.h"
-#include "UiButton.h"
+#include "RectButton.h"
 #include "InputMgr.h"
 #include "SceneMgr.h"
 
-UiButton::UiButton(const std::string& textureId, const std::string& n, const std::string& nickname)
-	:SpriteGo(textureId, n, nickname)
+RectButton::RectButton(sf::Vector2f size, const string& n)
+	:RectangleGo(size, n)
 {
 }
 
-UiButton::~UiButton()
+RectButton::~RectButton()
 {
 }
 
-void UiButton::Init()
+void RectButton::Init()
 {
-	SpriteGo::Init();
-	colliderOnOff = false;
+	RectangleGo::Init();
+	rectangle.setFillColor(sf::Color::Transparent);
+	rectangle.setOutlineColor(sf::Color::Transparent);
 }
 
-void UiButton::Release()
+void RectButton::Release()
 {
-	SpriteGo::Release();
+	RectangleGo::Release();
 }
 
-void UiButton::Reset()
+void RectButton::Reset()
 {
-	SpriteGo::Reset();
+	RectangleGo::Reset();
 	isHover = false;
 }
 
-void UiButton::SetPosition(const sf::Vector2f& p)
+void RectButton::SetPosition(const sf::Vector2f p)
 {
-	SpriteGo::SetPosition(p);
+	RectangleGo::SetPosition(p);
 	text.setPosition(p);
 }
 
-void UiButton::SetPosition(float x, float y)
+void RectButton::SetPosition(float x, float y)
 {
-	SpriteGo::SetPosition(x, y);
+	RectangleGo::SetPosition(x,y);
+	text.setPosition(x,y);
+}
+
+void RectButton::SetOrigin(Origins origin)
+{
+	RectangleGo::SetOrigin(origin);
+	Utils::SetOrigin(text, origin);
+}
+
+void RectButton::SetOrigin(float x, float y)
+{
+	RectangleGo::SetPosition(x, y);
 	text.setPosition(x, y);
 }
 
-void UiButton::SetOrigin(Origins origin)
+void RectButton::Update(float dt)
 {
-	SpriteGo::SetOrigin(origin);
-	Utils::SetOrigin(text, origin);
-	//text.setOrigin(text.getLocalBounds().width / 2.f, text.getLocalBounds().height / 2.f);
-}
-
-void UiButton::SetOrigin(float x, float y)
-{
-	SpriteGo::SetOrigin(x,y);
-	text.setOrigin(x, y);
-}
-
-void UiButton::Update(float dt)
-{
-	SpriteGo::Update(dt);
+	RectangleGo::Update(dt);
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
@@ -64,15 +64,15 @@ void UiButton::Update(float dt)
 
 	bool prevHover = isHover;
 	bool prevHoverWorld = isHoverWorld;
-	isHover = sprite.getGlobalBounds().contains(uiMousePos);
-	isHoverWorld = sprite.getGlobalBounds().contains(worldMousePos);
+	isHover = rectangle.getGlobalBounds().contains(uiMousePos);
+	isHoverWorld = rectangle.getGlobalBounds().contains(worldMousePos);
 
 	// ±è¹ÎÁö, 230815, setActive false¸é ¾È ÇÏµµ·Ï ¼öÁ¤
 	if (this->GetActive())
 	{
 		if (!prevHover && isHover)
 		{
-			if(OnEnter != nullptr)
+			if (OnEnter != nullptr)
 			{
 				OnEnter();
 			}
@@ -94,7 +94,7 @@ void UiButton::Update(float dt)
 		// world
 		if (!prevHoverWorld && isHoverWorld)
 		{
-			if(OnEnterWorld != nullptr)
+			if (OnEnterWorld != nullptr)
 			{
 				OnEnterWorld();
 			}
@@ -114,11 +114,11 @@ void UiButton::Update(float dt)
 			}
 		}
 	}
+
 }
 
-void UiButton::Draw(sf::RenderWindow& window)
+void RectButton::Draw(sf::RenderWindow& window)
 {
-	SpriteGo::Draw(window);
-	// ±è¹ÎÁö, 230813, Ãß°¡
+	RectangleGo::Draw(window);
 	window.draw(text);
 }

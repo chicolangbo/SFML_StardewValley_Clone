@@ -13,6 +13,7 @@ class RectangleGo;
 class ShopTap;
 class ShopInterior;
 class HomeInterior;
+class HomeTap;
 
 class SceneGame : public Scene
 {
@@ -31,6 +32,8 @@ protected:
 	SpriteGo* shopExterior; // ¼¥ ¿ÜºÎ
 
 	ShopTap* shopTap;
+	HomeTap* homeTap;
+
 	ShopInterior* shopInterior;
 	HomeInterior* homeInterior;
 	SpriteGo* bedding;
@@ -61,6 +64,7 @@ protected:
 	QuickInventory* quickinven;
 
 	bool off = false;
+	bool once = false;
 
 public:
 	SceneGame();
