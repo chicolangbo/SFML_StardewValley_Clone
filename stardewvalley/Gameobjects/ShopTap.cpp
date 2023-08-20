@@ -198,6 +198,7 @@ void ShopTap::Reset()
             shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
             shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->SetActive(false);
         }
     }
 
@@ -218,8 +219,10 @@ void ShopTap::Reset()
         scrollBg.SetPosition(scrollBar.GetPosition());
 
         // MASK
-        shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
+        shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x - 15.f, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
+        //shopBoxMask.create(FRAMEWORK.GetWindowSize().x, FRAMEWORK.GetWindowSize().y);
         shopBoxMask.clear(sf::Color::Transparent);
+
         sf::Texture texture;
         texture.loadFromFile("graphics/shopCellBox.png");
         for (int i = 0; i < shopSlot.size(); ++i)
@@ -257,21 +260,26 @@ void ShopTap::Update(float dt)
         i->Update(dt);
     }
 
+    sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+    sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
+    sf::Vector2f boxPos = shopBox.GetPosition();
+    if (uiMousePos.x >= boxPos.x && uiMousePos.x <= boxPos.x + shopBox.GetSize().x && uiMousePos.y >= boxPos.y && uiMousePos.y <= boxPos.y + shopBox.GetSize().y - 15.f)
+    {
+        for (int i = 0; i < shopSlot.size(); ++i)
+        {
+            shopSlot[i]->Update(dt);
+        }
+    }
+
     PlayerInfoUpdate();
     IconUpdate();
     ItemIndexUpdate();
-
-    for (int i = 0; i < shopSlot.size(); ++i)
-    {
-        shopSlot[i]->Update(dt);
-    }
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
 {
     SortGos();
 
-    Scene* scene = SCENE_MGR.GetCurrScene();
     for (auto m : shopUiObjects)
     {
         if (m->GetActive())
@@ -279,8 +287,11 @@ void ShopTap::Draw(sf::RenderWindow& window)
             m->Draw(window);
         }
     }
-    sf::Sprite m(shopBoxMask.getTexture());
-    window.draw(m);
+    if (shopSlot[0]->GetActive())
+    {
+        sf::Sprite m(shopBoxMask.getTexture());
+        window.draw(m);
+    }
 }
 
 void ShopTap::SortGos()
@@ -359,6 +370,10 @@ void ShopTap::TapOnOff()
         {
             i->SetActive(true);
         }
+        for (auto i : shopSlot)
+        {
+            i->SetActive(true);
+        }
     }
 
     else
@@ -367,6 +382,11 @@ void ShopTap::TapOnOff()
         {
             i->SetActive(false);
         }
+        for (auto i : shopSlot)
+        {
+            i->SetActive(false);
+        }
+
     }
 }
 
@@ -381,7 +401,6 @@ void ShopTap::ButtonSetUp()
                 *tempMoney = -item->price;
                 player->AddPlayerItem(shopSlot[i]->GetItemId());
             }
-            // 피에르 클릭하면서 왜 동시에 클릭이 되냐고 순차적으로 돼야 하는데
         };
     }
 
