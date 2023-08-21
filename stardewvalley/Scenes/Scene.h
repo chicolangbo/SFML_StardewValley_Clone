@@ -20,7 +20,7 @@ protected:
 	sf::View worldView;
 	sf::View uiView;
 
-	// ±è¹ÎÁö, 230812, ½ºÅ©¸° »çÀÌÁî Ãß°¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½, 230812, ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 	sf::Vector2f windowSize;
 	
 	sf::RenderWindow& window;
@@ -36,7 +36,7 @@ public:
 	void RemoveGo(GameObject* go);
 	void SortGos();
 
-	//0816, À±À¯¸², ¾À¾ÆÀÌµð ¹ÝÈ¯ ÇÔ¼ö
+	//0816, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½È¯ ï¿½Ô¼ï¿½
 	SceneId GetSceneId();
 	//
 
@@ -54,5 +54,7 @@ public:
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window);
 
+	sf::View* GetUiViewPort() { return &uiView; }
+	sf::View* GetWorldViewPort() { return &worldView; }
 };
 

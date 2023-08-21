@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "SpriteGo.h"
 #include "Wall.h"
+#include "UiButton.h"
 
 class ShopInterior :
     public GameObject
@@ -10,8 +11,7 @@ protected:
     // SHOP INERIOR UI
     std::list<GameObject*> shopInteriors;
     SpriteGo shopInside;
-    SpriteGo pierre;
-    SpriteGo robin;
+    UiButton pierre;
     SpriteGo shopCounter1;
     SpriteGo shopCounter2;
     SpriteGo shopObj1;
@@ -34,5 +34,7 @@ public:
     virtual void Release() override;
     virtual void Update(float dt) override;
     virtual void Draw(sf::RenderWindow& window) override;
+
+    UiButton* GetPierre() { return &pierre; }
 };
 

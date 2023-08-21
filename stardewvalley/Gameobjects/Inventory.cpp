@@ -281,20 +281,19 @@ void Inventory::Update(float dt)
         m->Update(dt);
     }
     PlayerInfoUpdate();
+    ItemIndexUpdate();
+    IconUpdate();
 
-    // �κ�â ���ݱ�
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
         {
             SetItemWindow();
-            IconUpdate();
             invenOnOff = true;
         }
         else if(mouseSlot->GetItemIcon() == nullptr)
         {
             SetWindowClear();
-            IconUpdate();
             invenOnOff = false;
         }
     }
@@ -345,8 +344,6 @@ void Inventory::SetItemWindow()
     make.SetPosition(makePos);
     xButton.SetPosition(xButtonPos);
     changeScene.SetPosition(changeScenePos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetMapWindow()
@@ -364,8 +361,6 @@ void Inventory::SetMapWindow()
     }
 
     xButton.SetPosition(mapImage.GetPosition() + sf::Vector2f{mapImage.sprite.getGlobalBounds().width / 2.f, - mapImage.sprite.getGlobalBounds().height / 2.f});
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetMakeWindow()
@@ -394,8 +389,6 @@ void Inventory::SetMakeWindow()
     map.SetPosition(mapPos);
     changeScene.SetPosition(changeScenePos);
     xButton.SetPosition(xButtonPos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetChangeSceneWindow()
@@ -418,8 +411,6 @@ void Inventory::SetChangeSceneWindow()
     map.SetPosition(mapPos);
     make.SetPosition(makePos);
     xButton.SetPosition(xButtonPos);
-
-    ItemIndexUpdate();
 }
 
 void Inventory::SetWindowClear()
@@ -428,8 +419,6 @@ void Inventory::SetWindowClear()
     {
         m->SetActive(false);
     }
-
-    ItemIndexUpdate();
 }
 
 void Inventory::ButtonSetUp()
@@ -464,7 +453,6 @@ void Inventory::ButtonSetUp()
             SetWindowClear();
             invenOnOff = false;
         }
-        //SetWindowClear();
     };
     title.OnClick = [this]() {
         SCENE_MGR.ChangeScene(SceneId::Title);
@@ -507,7 +495,7 @@ void Inventory::SortGos()
         });
 }
 
-void Inventory::ItemIndexUpdate()//�ٲ� ��ġ ���� â�� ������ 
+void Inventory::ItemIndexUpdate()
 {
     for (tagItemInfo& pl : *playerItemList)
     {
@@ -544,9 +532,9 @@ void Inventory::IconUpdate()
 {
     int num = 0;
 
-    for (tagItemInfo& pl : *playerItemList)
+    for (Slot* sl : slot)
     {
-        for (Slot* sl : slot)
+        for (tagItemInfo& pl : *playerItemList)
         {
             if (pl.index == sl->slotIndex)
             {
@@ -557,6 +545,11 @@ void Inventory::IconUpdate()
                     sl->SetItemId(pl.itemId);
                     break;
                 }
+            }
+            else
+            {
+                sl->SetItemIcon(nullptr);
+                sl->SetItemId(ItemId::none);
             }
         }
     }

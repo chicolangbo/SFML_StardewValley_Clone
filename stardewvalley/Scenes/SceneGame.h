@@ -14,6 +14,8 @@ class ShopTap;
 class ShopInterior;
 class TileMap;
 class TextGo;
+class HomeInterior;
+class HomeTap;
 
 class SceneGame : public Scene
 {
@@ -22,35 +24,24 @@ protected:
 	sf::FloatRect wallBounds;
 
 	bool enterShop = false;
+	bool enterHome = false;
 	
 	Player2* player2;
 
-	// ÀÓ½Ã ¸Ê
+	// ï¿½Ó½ï¿½ ï¿½ï¿½
 	TileMap* testFarmMap;
 	TileMap* testFarmMap2;
 	TileMap* testFarmMapObj;
-	//SpriteGo* testFarmMap; // ³óÀå Åë¸Ê
-	SpriteGo* houseExterior; // Áý ¿ÜºÎ
-	SpriteGo* shopExterior; // ¼¥ ¿ÜºÎ
+	//SpriteGo* testFarmMap; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+	SpriteGo* houseExterior; // ï¿½ï¿½ ï¿½Üºï¿½
+	SpriteGo* shopExterior; // ï¿½ï¿½ ï¿½Üºï¿½
 
-	// TO SHOP CLASS
-		//SpriteGo* shopInside;
-		//SpriteGo* pierre;
-		//SpriteGo* robin;
-		//SpriteGo* shopCounter1;
-		//SpriteGo* shopCounter2;
-		//SpriteGo* shopMid1;
-		//SpriteGo* shopMid2_1;
-		//SpriteGo* shopMid2_2;
-		//SpriteGo* shopMid3_1;
-		//SpriteGo* shopMid3_2;
-		//SpriteGo* shopBox;
-		//Wall* homeWalls;
-		//Wall* shopWalls;
-
-	// ±è¹ÎÁö, 230817, SHOP CLASS
 	ShopTap* shopTap;
+	HomeTap* homeTap;
+
 	ShopInterior* shopInterior;
+	HomeInterior* homeInterior;
+	SpriteGo* bedding;
 
 	// INGAME UI
 	SpriteGo* energy;
@@ -80,6 +71,7 @@ protected:
 	QuickInventory* quickinven;
 
 	bool off = false;
+	bool once = false;
 
 	sf::Vector2f tileSize;
 	sf::Vector2f shopPos = { 9.f, 16.f };

@@ -6,8 +6,11 @@
 #include "SceneMgr.h"
 #include "Framework.h"
 #include "StringTable.h"
+#include "AllItemTable.h"
 #include "DataTableMgr.h"
 #include "ShopInvenSlot.h"
+#include "Utils.h"
+#include "InputMgr.h"
 
 ShopTap::ShopTap(const std::string& n)
 	: GameObject(n),
@@ -21,8 +24,14 @@ ShopTap::ShopTap(const std::string& n)
     moneyBar("graphics/Cursors.ko-KR.png", "moneyBar", "money"),
     moneyText("moneyText", "fonts/SDMiSaeng.ttf"),
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
-    invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE)
+    invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE),
+    scrollBg("graphics/scrollBg.png", "scrollBg", {2, 2, 2, 2}, {0,0,6,6}, NINE_SLICE),
+    scrollBar("graphics/Cursors.ko-KR.png", "scrollBar", "scrollBar"),
+    scrollUp("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"),
+    scrollDown("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown")
 {
+
+
     // SHOP TAP
     AddUi(&pierrePortrait);
     AddUi(&pierreText1);
@@ -35,6 +44,10 @@ ShopTap::ShopTap(const std::string& n)
     AddUi(&moneyText);
     AddUi(&xButton);
     AddUi(&invenBox);
+    AddUi(&scrollBg);
+    AddUi(&scrollBar);
+    AddUi(&scrollUp);
+    AddUi(&scrollDown);
     
     int itemNum = 9;
     for (int i = 0; i < shopSlotCount; ++i)
@@ -44,8 +57,7 @@ ShopTap::ShopTap(const std::string& n)
         shopSlot.push_back(new ShopSlot((ItemId)itemNum, "graphics/shopCellBox.png", "shopCellBox" + num, { 27,27,26,26 }, {0,0,80,80}, NINE_SLICE));
         shopSlot[i]->shopSlotIndex = i;
         shopSlot[i]->SetOrigin(Origins::MC);
-        shopSlot[i]->colliderOnOff = false;
-        AddUi(shopSlot[i]);
+        //AddUi(shopSlot[i]);
         itemNum++;
     }
 
@@ -92,12 +104,13 @@ bool ShopTap::Exist(GameObject* go)
 
 void ShopTap::Init()
 {
+    InitInfo();
+    ButtonSetUp();
+
     for (auto i : shopUiObjects)
     {
         i->Init();
     }
-
-    InitInfo();
 }
 
 void ShopTap::Reset()
@@ -106,7 +119,10 @@ void ShopTap::Reset()
     {
         i->Reset();
     }
-
+    for (auto i : shopUiObjects)
+    {
+        i->SetActive(false);
+    }
     // BASE
     {
         sf::Vector2f size = FRAMEWORK.GetWindowSize();
@@ -114,7 +130,7 @@ void ShopTap::Reset()
         // PIERRE PORTRAIT
         pierrePortrait.SetOrigin(Origins::TR);
         pierrePortrait.SetScale(4.f, 4.f);
-        pierrePortrait.SetPosition(size.x/6.f + 100.f, 100.f);
+        pierrePortrait.SetPosition(size.x/7.f + 100.f, 100.f);
         pierrePortrait.colliderOnOff = false;
 
         // PIERRE TEXTBOX
@@ -135,7 +151,7 @@ void ShopTap::Reset()
         // SHOP BOX
         shopBox.SetSize({ size.x / 1.5f, 120.f*4.f });
         shopBox.SetOrigin(Origins::TL);
-        shopBox.SetPosition(pierrePortrait.GetPosition().x + 30.f, pierrePortrait.GetPosition().y);
+        shopBox.SetPosition(pierrePortrait.GetPosition().x + 10.f, pierrePortrait.GetPosition().y);
 
         // MONEY BAR
         moneyBar.SetOrigin(Origins::TL);
@@ -177,11 +193,49 @@ void ShopTap::Reset()
         sf::Vector2f shopSlotPos = { shopBox.vertexArray[0].position };
         for (int i = 0; i < shopSlotCount; ++i)
         {
-            shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x, shopBox.GetSize().y / 4.f });
+            shopSlot[i]->Init();
+            shopSlot[i]->Reset();
+            shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
-            shopSlot[i]->SetPosition(shopSlotPos.x, shopSlotPos.y + i*shopSlot[i]->cellBox.GetSize().y);
-            shopSlot[i]->sortLayer = 110;
+            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->SetActive(false);
         }
+    }
+
+    // SCROLL
+    {
+        scrollUp.SetOrigin(Origins::TC);
+        scrollUp.SetPosition(shopBox.GetPosition().x + shopBox.GetSize().x + 50.f, shopBox.GetPosition().y);
+
+        scrollBar.SetScale(4.f, 4.f);
+        scrollBar.SetOrigin(Origins::TC);
+        scrollBar.SetPosition(scrollUp.GetPosition().x, scrollUp.GetPosition().y + scrollUp.sprite.getGlobalBounds().height + 10.f);
+
+        scrollDown.SetOrigin(Origins::BC);
+        scrollDown.SetPosition(scrollUp.GetPosition().x, invenBox.vertexArray[35].position.y);
+
+        scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
+        scrollBg.SetOrigin(Origins::TC);
+        scrollBg.SetPosition(scrollBar.GetPosition());
+
+        // MASK
+        shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x - 15.f, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
+        //shopBoxMask.create(FRAMEWORK.GetWindowSize().x, FRAMEWORK.GetWindowSize().y);
+        shopBoxMask.clear(sf::Color::Transparent);
+
+        sf::Texture texture;
+        texture.loadFromFile("graphics/shopCellBox.png");
+        for (int i = 0; i < shopSlot.size(); ++i)
+        {
+            shopBoxMask.draw(shopSlot[i]->cellBox.vertexArray, &texture);
+            shopBoxMask.draw(shopSlot[i]->iconCell.sprite);
+            shopBoxMask.draw(shopSlot[i]->itemIcon.sprite);
+            shopBoxMask.draw(shopSlot[i]->itemText.text);
+            shopBoxMask.draw(shopSlot[i]->coin.sprite);
+            shopBoxMask.draw(shopSlot[i]->coinText.text);
+        }
+        shopBoxMask.display();
+
     }
 }
 
@@ -207,8 +261,20 @@ void ShopTap::Update(float dt)
         i->Update(dt);
     }
 
+    sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+    sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
+    sf::Vector2f boxPos = shopBox.GetPosition();
+    if (uiMousePos.x >= boxPos.x && uiMousePos.x <= boxPos.x + shopBox.GetSize().x && uiMousePos.y >= boxPos.y && uiMousePos.y <= boxPos.y + shopBox.GetSize().y - 15.f)
+    {
+        for (int i = 0; i < shopSlot.size(); ++i)
+        {
+            shopSlot[i]->Update(dt);
+        }
+    }
+
     PlayerInfoUpdate();
     IconUpdate();
+    ItemIndexUpdate();
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)
@@ -221,6 +287,11 @@ void ShopTap::Draw(sf::RenderWindow& window)
         {
             m->Draw(window);
         }
+    }
+    if (shopSlot[0]->GetActive())
+    {
+        sf::Sprite m(shopBoxMask.getTexture());
+        window.draw(m);
     }
 }
 
@@ -236,13 +307,15 @@ void ShopTap::SortGos()
 void ShopTap::InitInfo()
 {
     playerItemList = player->GetPlayerItemList();
-    moneyInt = player->GetTempMoney();
+    moneyInt = player->GetMoney();
+    tempMoney = player->GetTempMoney();
     itemIconList = inven->GetItemIconList();
 }
 
 void ShopTap::PlayerInfoUpdate()
 {
     std::stringstream ss;
+    ss.str("");
     ss << *moneyInt;
     moneyText.SetString(ss.str()); // 현재 소지금
 }
@@ -251,9 +324,9 @@ void ShopTap::IconUpdate()
 {
     int num = 0;
 
-    for (tagItemInfo& pl : *playerItemList)
+    for (ShopInvenSlot* sl : shopInvenSlot)
     {
-        for (ShopInvenSlot* sl : shopInvenSlot)
+        for (tagItemInfo& pl : *playerItemList)
         {
             if (pl.index == sl->slotIndex)
             {
@@ -266,11 +339,118 @@ void ShopTap::IconUpdate()
                     break;
                 }
             }
+            else
+            {
+                sl->SetItemIcon(nullptr);
+                sl->SetItemId(ItemId::none);
+            }
+        }
+    }
+}
+
+void ShopTap::ItemIndexUpdate()
+{
+    for (tagItemInfo& pl : *playerItemList)
+    {
+        for (ShopInvenSlot* sl : shopInvenSlot)
+        {
+            if (pl.itemId == sl->GetItemId())
+            {
+                pl.index = sl->slotIndex;
+                continue;
+            }
+        }
+    }
+}
+
+void ShopTap::TapOnOff()
+{
+    if (shopTapOn)
+    {
+        for (auto i : shopUiObjects)
+        {
+            i->SetActive(true);
+        }
+        for (auto i : shopSlot)
+        {
+            i->SetActive(true);
+        }
+    }
+
+    else
+    {
+        for (auto i : shopUiObjects)
+        {
+            i->SetActive(false);
+        }
+        for (auto i : shopSlot)
+        {
+            i->SetActive(false);
         }
     }
 }
 
 void ShopTap::ButtonSetUp()
 {
+    for (int i = 0; i< shopSlot.size(); ++i)
+    {
+        shopSlot[i]->OnClick = [this, i]() {
+            const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopSlot[i]->GetItemId());
+            if (*player->GetMoney() >= item->price)
+            {
+                *tempMoney = -item->price;
+                player->AddPlayerItem(shopSlot[i]->GetItemId());
+            }
+        };
+    }
 
+    for (int i = 0; i < shopInvenSlot.size(); ++i)
+    {
+        shopInvenSlot[i]->OnClick = [this, i]() {
+            const ItemInfo* item = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(shopInvenSlot[i]->GetItemId());
+            if (item == nullptr || item->price == 0)
+            {
+                return;
+            }
+            if (player->RemovePlayerItem(shopInvenSlot[i]->GetItemId()))
+            {
+                *tempMoney = item->price / 2.f;
+            }
+        };
+    }
+
+    xButton.OnClick = [this]() {
+        shopTapOn = false;
+        TapOnOff();
+    };
+
+    pierre->OnClickWorld = [this]() {
+        if (Utils::Distance(player->GetPosition(), pierre->GetPosition()) < 200.f)
+        {
+            shopTapOn = true;
+            TapOnOff();
+            // TEST CODE
+           /* shopSlot[4]->SetActive(false);
+            shopSlot[5]->SetActive(false);
+            shopSlot[6]->SetActive(false);
+            shopSlot[7]->SetActive(false);
+            shopSlot[8]->SetActive(false);
+            shopSlot[9]->SetActive(false);*/
+        }
+    };
+
+    // SCROLL : 여기는 드래그라서 수정해야 함 ㅠㅠ
+    {
+        scrollBar.OnClick = [this]() {
+
+        };
+
+        scrollUp.OnClick = [this]() {
+
+        };
+
+        scrollDown.OnClick = [this]() {
+
+        };
+    }
 }

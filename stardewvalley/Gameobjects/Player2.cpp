@@ -427,7 +427,7 @@ void Player2::Update(float dt)
 	animation.Update(dt);
 
 	// 아이템 관련
-	AddPlayerItem();
+	AddRootingItem();
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
@@ -492,7 +492,7 @@ void Player2::SetCollider(const sf::FloatRect& coll)
 	playerBound = coll;
 }
 
-void Player2::AddPlayerItem() // 자석화 해야 함
+void Player2::AddRootingItem() // 자석화 해야 함
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -508,31 +508,64 @@ void Player2::AddPlayerItem() // 자석화 해야 함
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
 		{
 			item->SetActive(false);
-			bool found = false;
-			for (auto& playerItem : playerItemList)
-			{
-				if (playerItem.itemId == item->GetRootingItemId())
-				{
-					playerItem.count++;
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-			{
-				int index = 0;
-				for (auto slot : *inven->GetSlot())
-				{
-					if (slot->IsItemIconEmpty())
-					{
-						index = slot->slotIndex;
-						break;
-					}
-				}
-				playerItemList.push_back({ item->GetRootingItemId(),1,index });				
-			}
+			AddPlayerItem(item->GetRootingItemId());
 		}
 	}
+}
+
+void Player2::AddPlayerItem(ItemId id)
+{
+	inven->IconUpdate();
+	bool found = false;
+
+	for (auto& playerItem : playerItemList)
+	{
+		if (playerItem.itemId == id)
+		{
+			playerItem.count++;
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+	{
+		int index = 0;
+		for (auto slot : *inven->GetSlot())
+		{
+			if (slot->IsItemIconEmpty())
+			{
+				index = slot->slotIndex;
+				break;
+			}
+		}
+		playerItemList.push_back({ id,1,index });
+	}
+}
+
+bool Player2::RemovePlayerItem(ItemId id)
+{
+	bool found = false;
+	auto it = playerItemList.begin();
+	while (it != playerItemList.end())
+	{
+		if (it->itemId == id)
+		{
+			if (it->count > 1)
+			{
+				it->count--;
+				return found = true;
+				break;
+			}
+			else if (it->count <= 1)
+			{
+				it = playerItemList.erase(it); // erase() 함수를 사용하여 현재 요소를 삭제하고 다음 요소로 이동
+				return found = true;
+				break;
+			}
+		}
+		++it; // 다음 요소로 이동
+	}
+	return found;
 }
 
 void Player2::MoneyUpdate()

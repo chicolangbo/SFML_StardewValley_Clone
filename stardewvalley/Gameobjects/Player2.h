@@ -40,13 +40,12 @@ protected:
 
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
-	//test
+	
 	ItemId item;
 
 	int maxEnergy = 270;
 	int energy = 270;
 	int money = 500;
-	// 김민지, 230816, 추가
 	int tempMoney = 0;
 
 	std::vector<sf::FloatRect> wallBounds;
@@ -93,7 +92,9 @@ public:
 
 	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
-	void AddPlayerItem();
+	void AddRootingItem();
+	void AddPlayerItem(ItemId id);
+	bool RemovePlayerItem(ItemId id);
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }

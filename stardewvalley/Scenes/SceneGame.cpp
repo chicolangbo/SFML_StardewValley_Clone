@@ -26,6 +26,8 @@
 #include "ShopInterior.h"
 #include "TileMap.h"
 #include "rapidcsv.h"
+#include "HomeInterior.h"
+#include "HomeTap.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -35,14 +37,16 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
+	auto size = FRAMEWORK.GetWindowSize();
 
 	// VIEW
-	auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;
-	worldView.setSize(size);
-	worldView.setCenter(0, 0);
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
+	{
+		sf::Vector2f centerPos = size * 0.5f;
+		worldView.setSize(size);
+		worldView.setCenter(0, 0);
+		uiView.setSize(size);
+		uiView.setCenter(size * 0.5f);
+	}
 
 	// TEST MAP
 	{	//0818 맵툴 맵 적용
@@ -143,10 +147,30 @@ void SceneGame::Init()
 		shopInterior->SetActive(false);
 
 		shopTap = (ShopTap*)AddGo(new ShopTap("shop"));
+		shopTap->sortLayer = 101;
 		shopTap->SetPlayer(player2);
 		shopTap->SetInventory(inven);
+		shopTap->SetPierre(shopInterior->GetPierre());
 		shopTap->SetActive(false);
-		shopTap->sortLayer = 101;
+	}
+
+	// HOME
+	{
+		homeInterior = (HomeInterior*)AddGo(new HomeInterior("homeInterior"));
+		homeInterior->SetPosition(0, 0);
+		homeInterior->SetActive(false);
+
+		bedding = (SpriteGo*)AddGo(new SpriteGo("map/bedding.png", "bedding"));
+		bedding->SetOrigin(Origins::TL);
+		bedding->SetPosition(544.f, 551.f);
+		bedding->sortLayer = 3;
+		bedding->SetActive(false);
+
+		homeTap = (HomeTap*)AddGo(new HomeTap("homeTap"));
+		homeTap->sortLayer = 100;
+		homeTap->SetBedding(bedding);
+		homeTap->SetPlayer(player2);
+		//homeTap->SetActive(false);
 	}
 
 	//TEXT
@@ -174,6 +198,7 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
+	shopTap->SetPierre(shopInterior->GetPierre());
 	Scene::Enter();
 
 	// VIEW
@@ -191,27 +216,7 @@ void SceneGame::Enter()
 	walls.push_back(shopExterior->GetCollider()); 
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
-	//walls.push_back(shopCounter1->GetCollider()); 
-	//walls.push_back(shopMid1->GetCollider()); 
-	//walls.push_back(shopMid2_1->GetCollider()); 
-	//walls.push_back(shopMid2_2->GetCollider()); 
-	//walls.push_back(shopMid3_1->GetCollider()); 
-	//walls.push_back(shopMid3_2->GetCollider()); 
-	//walls.push_back(shopBox->GetCollider()); 
 
-	//for (int i = 0; i < shopWalls->Walls.size(); ++i)
-	//{
-	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
-	//}
-	
-	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
-	//960 540 동일
-	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
-	//960 540 동일
-	// �����, 230807, �׽�Ʈ�� �ּ�ó��
-	//player2->SetOrigin(Origins::MC);
-	//player2->SetPosition(centerPos);
-	//
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
 
@@ -307,6 +312,7 @@ void SceneGame::Update(float dt)
 	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar->SetOrigin(Origins::BC);
 
+
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)
@@ -331,6 +337,8 @@ void SceneGame::Update(float dt)
 			inven->SetActive(true);
 			quickinven->SetActive(true);
 			energyBar->SetActive(true);
+			homeInterior->SetActive(false);
+			bedding->SetActive(false);
 		}
 		else
 		{
@@ -347,7 +355,6 @@ void SceneGame::Update(float dt)
 					go->SetActive(true);
 				}
 			}
-
 			player2->SetActive(true);	
 			player2->SetPosition(419.f, 1866.f); 
 			energy->SetActive(true);
@@ -355,7 +362,90 @@ void SceneGame::Update(float dt)
 			timeArrow->SetActive(true); 
 			inven->SetActive(true);
 			quickinven->SetActive(true);
-			energyBar->SetActive(true); 
+			energyBar->SetActive(true);
+			homeInterior->SetActive(false);
+			bedding->SetActive(false);
+		}
+	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
+	{
+		if (!enterHome)
+		{
+			enterHome = true;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+			player2->SetActive(true);
+			player2->SetPosition(193.f, 728.f); // �� �빮 ��ġ��
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true);
+			inven->SetActive(true);
+			quickinven->SetActive(true);
+			energyBar->SetActive(true);
+			shopInterior->SetActive(false);
+			bedding->SetActive(true);
+			homeTap->SetActive(true);
+		}
+		else
+		{
+			enterHome = false;
+			for (auto go : gameObjects)
+			{
+				if (go->GetActive())
+				{
+					go->SetActive(false);
+
+				}
+				else
+				{
+					go->SetActive(true);
+				}
+			}
+
+			player2->SetActive(true);
+			player2->SetPosition(193.f, 728.f);
+			energy->SetActive(true);
+			info->SetActive(true);
+			timeArrow->SetActive(true);
+			inven->SetActive(true);
+			quickinven->SetActive(true);
+			energyBar->SetActive(true);
+			shopInterior->SetActive(false);
+			bedding->SetActive(false);
+			homeTap->SetActive(true);
+		}
+	}
+
+	// PLAYER - BEDDING COLLIDE
+	if (enterHome)
+	{
+		// ���߿� ��ǥ�� �ٲٱ�
+		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+		{
+			std::cout << "�浹" << std::endl;
+			if (!once)
+			{
+				homeTap->homeTapOn = true;
+				homeTap->TapOnOff();
+				once = true;
+			}
+		}
+		else
+		{
+			once = false;
+			//homeTap->SetActive(false);
+			homeTap->homeTapOn = false;
+			homeTap->TapOnOff();
 		}
 	}
 	

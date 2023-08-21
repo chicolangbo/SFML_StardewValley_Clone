@@ -16,7 +16,18 @@ public:
 		Shop_B3,
 		Shop_B4,
 		Shop_B5,
-		Home,
+		Home_L,
+		Home_T,
+		Home_M1,
+		Home_M2,
+		Home_M3,
+		Home_M4,
+		Home_M5,
+		Home_R,
+		Home_B1,
+		Home_B2,
+		Home_B3,
+		Home_B4
 	};
 
 	enum class Location

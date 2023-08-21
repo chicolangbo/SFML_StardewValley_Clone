@@ -184,7 +184,7 @@ sf::Vector2f SliceImageGo::GetSize()
 	if (vertexCount == NINE_SLICE)
 	{
 		float x = vertexArray[9].position.x - vertexArray[0].position.x;
-		float y = vertexArray[34].position.y - vertexArray[0].position.y;
+		float y = vertexArray[35].position.y - vertexArray[0].position.y;
 		return sf::Vector2f{ x,y };
 	}
 	else

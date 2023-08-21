@@ -6,6 +6,7 @@
 #include "TextGo.h"
 #include "Player2.h"
 #include "Inventory.h"
+#include "RectangleGo.h"
 
 class ShopSlot;
 class ShopInvenSlot;
@@ -14,10 +15,12 @@ class ShopTap :
     public GameObject
 {
 protected:
-    Player2* player;
-    Inventory* inven;
+    Player2* player = nullptr;
+    UiButton* pierre = nullptr;
+    Inventory* inven = nullptr;
     std::list<tagItemInfo>* playerItemList = nullptr;
     std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
+    bool shopTapOn = false;
 
     // SHOP, INVEN SLOT VECTOR
     std::vector<ShopSlot*> shopSlot;
@@ -26,6 +29,8 @@ protected:
 
     // SHOPTAP UI
     std::list<GameObject*> shopUiObjects;
+    sf::RenderTexture shopBoxMask;
+
     SpriteGo pierrePortrait;
     TextGo pierreText1;
     TextGo pierreText2;
@@ -36,8 +41,15 @@ protected:
     SpriteGo moneyBar;
     TextGo moneyText;
     int* moneyInt = nullptr;
+    int* tempMoney = nullptr;
     UiButton xButton;
     SliceImageGo invenBox;
+    SliceImageGo scrollBg;
+    sf::Vector2f scrollBarSize = {0.f,0.f};
+    UiButton scrollBar;
+    UiButton scrollUp;
+    UiButton scrollDown;
+    sf::View scrollView;
 
 public:
     ShopTap(const std::string& n = "");
@@ -55,11 +67,15 @@ public:
     void SortGos();
     void SetPlayer(Player2* p) { player = p; }
     void SetInventory(Inventory* i) { this->inven = i; }
+    void SetPierre(UiButton* p) { pierre = p; }
 
     void InitInfo();
 
     void ButtonSetUp();
     void PlayerInfoUpdate();
-    void IconUpdate(); 
+    void IconUpdate();
+    void ItemIndexUpdate();
+
+    void TapOnOff();
 };
 

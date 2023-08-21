@@ -1,21 +1,22 @@
 #pragma once
-#include "UiButton.h"
+#include "GameObject.h"
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "SliceImageGo.h"
 
 class ShopSlot :
-    public UiButton
+    public GameObject
 {
 protected:
     ItemId id = ItemId::none;
+    bool isHover = false;
+
+public:
     SpriteGo iconCell;
     SpriteGo itemIcon;
     TextGo itemText;
     SpriteGo coin;
     TextGo coinText;
-
-public:
     SliceImageGo cellBox;
     int shopSlotIndex = 0;
 
@@ -32,5 +33,10 @@ public:
     virtual void Draw(sf::RenderWindow& window) override;
 
     void SetItemId(ItemId i) { id = i; }
+    ItemId GetItemId() { return id; }
+
+    function<void()> OnClick;
+    function<void()> OnEnter;
+    function<void()> OnExit;
 };
 

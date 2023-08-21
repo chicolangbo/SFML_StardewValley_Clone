@@ -48,6 +48,9 @@
     <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
     <ClCompile Include="Gameobjects\Stone.cpp" />
     <ClCompile Include="Gameobjects\Bird.cpp" />
+    <ClCompile Include="Gameobjects\HomeInterior.cpp" />
+    <ClCompile Include="Gameobjects\HomeTap.cpp" />
+    <ClCompile Include="Gameobjects\RectButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -102,5 +105,8 @@
     <ClInclude Include="Gameobjects\ShopInvenSlot.h" />
     <ClInclude Include="Gameobjects\Stone.h" />
     <ClInclude Include="Gameobjects\Bird.h" />
+    <ClInclude Include="Gameobjects\HomeInterior.h" />
+    <ClInclude Include="Gameobjects\HomeTap.h" />
+    <ClInclude Include="Gameobjects\RectButton.h" />
   </ItemGroup>
 </Project>
