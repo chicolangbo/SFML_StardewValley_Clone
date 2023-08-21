@@ -9,7 +9,11 @@ bool ObjectTable::Load()
 	for (int i = 2; i < doc.GetRowCount(); i++)
 	{
 		auto rows = doc.GetRow<int>(i);
-		table.push_back({ rows[0], rows[1], (float)rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (ObjType)rows[6] });
+		ObjectInfo oInfo
+		{
+			rows[1], rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (float)rows[6], (ObjType)rows[7]
+		};
+		table.insert({ rows[0], oInfo});
 	}
 	return true;
 }
@@ -44,5 +48,17 @@ bool ObjectTable::Save(vector<ObjectInfo> objects, int col, int row)
 
 	outputFile.close();
 	return true;
+}
+
+const ObjectInfo& ObjectTable::Get(ObjType id) const
+{
+	//auto find = table.find(id);
+	//if (find == table.end()) //존재하지 않을 때
+	//{
+	//	cout << "ERR: Failed to Data Table Load" << endl;
+	//	exit(-1);
+	//}
+	//return find->second;
+	return table.find(0)->second;
 }
 

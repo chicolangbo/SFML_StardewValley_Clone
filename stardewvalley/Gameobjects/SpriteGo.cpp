@@ -156,3 +156,8 @@ void SpriteGo::Setting(std::string textureId, std::string n, std::string nickNam
 	this->name = n;
 	this->nickName = nickName;
 }
+
+void SpriteGo::SetColliderSize(sf::Vector2f size)
+{
+	collider.setSize(size);
+}
