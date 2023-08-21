@@ -39,10 +39,10 @@ void SceneGame::Init()
 	// VIEW
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
-	worldView.setSize(size);
-	worldView.setCenter(0, 0);
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
+	//worldView.setSize(size);
+	//worldView.setCenter(0, 0);
+	//uiView.setSize(size);
+	//uiView.setCenter(size * 0.5f);
 
 	// TEST MAP
 	{	//0818 맵툴 맵 적용
@@ -175,45 +175,24 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	Scene::Enter();
+	auto size = FRAMEWORK.GetWindowSize();
+	sf::Vector2f centerPos = size * 0.5f;
+	worldView.setSize(size);
+	worldView.setCenter(0, 0);
+	uiView.setSize(size);
+	uiView.setCenter(size * 0.5f);
 
-	// VIEW
-
-	//ui뷰 변경내용 인벤 포지션 변경부분찾기
-
-	//auto size = FRAMEWORK.GetWindowSize();
-	//sf::Vector2f centerPos = size * 0.5f;
-	//worldView.setSize(size);
-	//worldView.setCenter(0, 0);
-	//uiView.setSize(size);
-	//uiView.setCenter(size * 0.5f);
 
 	walls.push_back(houseExterior->GetCollider()); 
 	walls.push_back(shopExterior->GetCollider()); 
-	auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;
-	//walls.push_back(shopCounter1->GetCollider()); 
-	//walls.push_back(shopMid1->GetCollider()); 
-	//walls.push_back(shopMid2_1->GetCollider()); 
-	//walls.push_back(shopMid2_2->GetCollider()); 
-	//walls.push_back(shopMid3_1->GetCollider()); 
-	//walls.push_back(shopMid3_2->GetCollider()); 
-	//walls.push_back(shopBox->GetCollider()); 
 
-	//for (int i = 0; i < shopWalls->Walls.size(); ++i)
-	//{
-	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
-	//}
-	
 	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
 	//960 540 동일
 	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
 	//960 540 동일
-	// �����, 230807, �׽�Ʈ�� �ּ�ó��
-	//player2->SetOrigin(Origins::MC);
-	//player2->SetPosition(centerPos);
-	//
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
+
+	//uiView.setSize(size);
+	//uiView.setCenter(centerPos);
 
 	testFarmMap->SetPosition(0, 0);
 	testFarmMap2->SetPosition(testFarmMap->GetPosition());
@@ -241,9 +220,12 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
-	//
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
+	
+
+	//quickinven->SetPosition(size);
+	//inven->SetPosition(size.x,size.y);
+
+	std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
 }
 
 void SceneGame::Exit()
@@ -388,6 +370,12 @@ void SceneGame::Update(float dt)
 	if (inven->GetEndGame())
 	{
 		window.close();
+	}
+
+	if (inven->GetChageScene())
+	{
+		inven->SetChageScene(false);
+		SCENE_MGR.ChangeScene(SceneId::Title);
 	}
 
 }

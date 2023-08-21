@@ -309,6 +309,15 @@ void Inventory::Draw(sf::RenderWindow& window)
 {
     SortGos();
 
+
+    const sf::View& save = window.getView();
+    Scene* scene = SCENE_MGR.GetCurrScene();
+    sf::View& uiView = scene->GetUiView();
+    window.setView(uiView);
+
+    std::cout << invenBox.GetPosition().x << " " << invenBox.GetPosition().y << std::endl;//960 540 == "
+    std::cout << invenLine.GetPosition().x << " " << invenLine.GetPosition().y << std::endl;//960 545->960 340
+
     for (auto m : invenUiObjects)
     {
         if (m->GetActive())
@@ -316,6 +325,9 @@ void Inventory::Draw(sf::RenderWindow& window)
             m->Draw(window);
         }
     }
+
+    window.setView(save);
+   
 }
 
 void Inventory::SetItemWindow()
@@ -467,7 +479,8 @@ void Inventory::ButtonSetUp()
         //SetWindowClear();
     };
     title.OnClick = [this]() {
-        SCENE_MGR.ChangeScene(SceneId::Title);
+        //SCENE_MGR.ChangeScene(SceneId::Title);
+        chageScene = true;
     };
     end.OnClick = [this]() {
         EndGame = true;    

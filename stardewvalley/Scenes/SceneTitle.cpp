@@ -22,11 +22,7 @@ void SceneTitle::Init()
 {
 	Release();
 
-	sf::Vector2f size = FRAMEWORK.GetWindowSize(); 
-	worldView.setSize(size * 0.5f); 
-	worldView.setCenter(0, 0);
-	uiView.setSize(size);
-	uiView.setCenter(0,0);
+
 
 	titleBg = (SpriteGo*)AddGo(new SpriteGo("graphics/sky.png", "sky", "sky"));
 	titleBg->SetScale(2.f, 3.f);
@@ -108,6 +104,13 @@ void SceneTitle::Release()
 void SceneTitle::Enter()
 {
 	Scene::Enter();
+
+	sf::Vector2f size = FRAMEWORK.GetWindowSize();
+	worldView.setSize(size * 0.5f);
+	worldView.setCenter(0, 0);
+	uiView.setSize(size);
+	uiView.setCenter(0, 0);
+
 	titleBg->SetPosition(0.f, -350.f);
 	star->SetPosition(0.f, -600.f);
 	mountBack->SetPosition(0.f, 90.f);

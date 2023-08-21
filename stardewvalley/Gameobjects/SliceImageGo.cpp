@@ -63,6 +63,7 @@ void SliceImageGo::SetTextureSize()
 			vertexArray[index + 3].texCoords = { textureHorizontal[i], textureVertical[1] };
 		}
 	}
+
 }
 
 void SliceImageGo::SetSize(sf::Vector2f size)
@@ -115,6 +116,9 @@ void SliceImageGo::SetSize(sf::Vector2f size)
 			}
 		}
 	}
+	origin = Origins::TL;
+	position = { 0, 0 };
+	originPosition = { 0, 0 };
 }
 
 void SliceImageGo::SetSize(float w)
@@ -152,6 +156,9 @@ void SliceImageGo::SetSize(float w)
 			vertexArray[index + 3].position = { positionX[i], positionY[1] };
 		}
 	}
+	origin = Origins::TL;
+	position = { 0, 0 };
+	originPosition = { 0, 0 };
 }
 
 void SliceImageGo::Init()
