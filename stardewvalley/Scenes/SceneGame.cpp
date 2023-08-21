@@ -38,9 +38,8 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
-
-	// VIEW
 	auto size = FRAMEWORK.GetWindowSize();
+	// VIEW
 	sf::Vector2f centerPos = size * 0.5f;
 
 	// TEST MAP
