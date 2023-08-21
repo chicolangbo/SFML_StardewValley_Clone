@@ -42,12 +42,8 @@ protected:
     int* tempMoney = nullptr;
     UiButton xButton;
     SliceImageGo invenBox;
-    SliceImageGo scrollBg;
-    sf::Vector2f scrollBarSize = {0.f,0.f};
-    UiButton scrollBar;
     UiButton scrollUp;
     UiButton scrollDown;
-    sf::View scrollView;
 
 public:
     ShopTap(const std::string& n = "");
