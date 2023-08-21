@@ -199,7 +199,7 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	Scene::Enter();
+	
 
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
@@ -244,7 +244,7 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
-	
+	Scene::Enter();
 }
 
 void SceneGame::Exit()
