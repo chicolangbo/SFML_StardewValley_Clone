@@ -191,7 +191,7 @@ void ShopTap::Reset()
             shopSlot[i]->Reset();
             shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
-            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  (i/4)*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  (i%4)*shopSlot[0]->cellBox.GetSize().y);
             shopSlot[i]->SetActive(false);
         }
     }
@@ -224,10 +224,6 @@ void ShopTap::Release()
 void ShopTap::Update(float dt)
 {
     for (auto i : shopUiObjects)
-    {
-        i->Update(dt);
-    }
-    for (auto i : shopSlot)
     {
         i->Update(dt);
     }
@@ -347,7 +343,7 @@ void ShopTap::TapOnOff()
         }
         for (int i = 0; i<shopSlot.size(); ++i)
         {
-            if (i == 3)
+            if (i == 4)
             {
                 break;
             }
@@ -419,11 +415,93 @@ void ShopTap::ButtonSetUp()
     // SCROLL
     {
         scrollUp.OnClick = [this]() {
-
+            if (shopSlot[4]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 0 && i <= 3)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            if (shopSlot[8]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 4 && i <= 7)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            if (shopSlot[12]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 8 && i <= 11)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
         };
 
         scrollDown.OnClick = [this]() {
-            //if()
+            if (shopSlot[0]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 4 && i <= 7)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            else if (shopSlot[4]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 8 && i <= 11)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            else if (shopSlot[8]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i == 12)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
         };
     }
 }

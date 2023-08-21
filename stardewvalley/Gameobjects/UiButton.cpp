@@ -84,7 +84,7 @@ void UiButton::Update(float dt)
 				OnExit();
 			}
 		}
-		if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+		if (isHover && INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 		{
 			if (OnClick != nullptr)
 			{
