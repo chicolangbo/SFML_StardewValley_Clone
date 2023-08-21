@@ -3,13 +3,13 @@
 
 struct Tile
 {
-	int x = 0;
+	int x = 0;//¾ê³×°¡ ÀÎµ¦½º
 	int y = 0;
 	float texLeft;
 	float texTop;
 	float texWidth;
 	float texHeight;
-	//int texIndex = 0;
+	int texIndex = 0;
 	//TileType type;
 };
 

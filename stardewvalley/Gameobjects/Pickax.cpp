@@ -7,6 +7,8 @@
 #include "SceneMgr.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "RectangleGo.h"
+
 
 void Pickax::Init()
 {
@@ -20,12 +22,17 @@ void Pickax::Init()
 	sprite.setScale(4.5f, 4.5f);
 
 	SetOrigin(Origins::BC);
+
+	hitBox.setSize({20.f, 20.f});
+	hitBox.setFillColor(sf::Color::Green);
+	
 }
 
 void Pickax::Reset()
 {
 	SetOrigin(origin);
 	SetPosition({ 0, 0 });
+	
 }
 
 void Pickax::Update(float dt)

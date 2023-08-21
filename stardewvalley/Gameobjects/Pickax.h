@@ -1,10 +1,14 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+
 class Pickax : public SpriteGo
 {
 protected:
 	AnimationController animation;
+	
+	sf::RectangleShape hitBox;
+	sf::FloatRect hitB;
 
 	bool flipX;
 

@@ -232,7 +232,7 @@ sf::Vector2f TileMap::GetTileMapSize()
 
 int TileMap::GetTileIndex(int x, int y)
 {
-    /*for (int i = 0; i < tiles.size(); i++)
+    for (int i = 0; i < tiles.size(); i++)
     {
         Tile tile = tiles.at(i);
         if (tile.x == x && tile.y == y)
@@ -240,7 +240,7 @@ int TileMap::GetTileIndex(int x, int y)
             return tile.texIndex;
         }
     }
-    return -1;*/
+    /*return -1;*/
     return 0;
 }
 
