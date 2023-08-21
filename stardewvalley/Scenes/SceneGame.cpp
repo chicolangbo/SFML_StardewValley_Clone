@@ -29,6 +29,8 @@
 #include "HomeTap.h"
 #include "ObjectTable.h"
 #include "Stone.h"
+#include "Timber.h"
+#include "Weed.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -76,13 +78,28 @@ void SceneGame::Init()
 		Objtable->Load();
 		for (auto obj : Objtable->GetTable())
 		{
+			auto objInfo = obj.second;
+			sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
 			if (obj.second.type == ObjType::Stone)
 			{
-				auto objInfo = obj.second;
-				sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
 				Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone"+to_string(stoneCount)));
 				stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				stones.push_back(stone);
 				stoneCount++;
+			}
+			else if (obj.second.type == ObjType::Timber)
+			{
+				Timber* timber = (Timber*)AddGo(new Timber("map/object.png", "timber" + to_string(timberCount)));
+				timber->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				timbers.push_back(timber);
+				timberCount++;
+			}
+			else if (obj.second.type == ObjType::Weed)
+			{
+				Weed* weed = (Weed*)AddGo(new Weed("map/object.png", "weed" + to_string(weedCount)));
+				weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				weeds.push_back(weed);
+				weedCount++;
 			}
 		}
 	}
@@ -199,8 +216,6 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	Scene::Enter();
-
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 
@@ -218,11 +233,24 @@ void SceneGame::Enter()
 
 	tileSize = testFarmMap->GetTileSize();
 
+	//stoneCount = 0;
+	//timberCount = 0;
+
 	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
-	for (int i = 0; i < stoneCount; i++)
+	for (int i = 0; i < stones.size(); i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
 		stone->SetMapLT(mapLT);
+	}
+	for (int i = 0; i < timbers.size(); i++)
+	{
+		Timber* timber = (Timber*)FindGo("timber" + to_string(i));
+		timber->SetMapLT(mapLT);
+	}
+	for (int i = 0; i < weeds.size(); i++)
+	{
+		Weed* weed = (Weed*)FindGo("weed" + to_string(i));
+		weed->SetMapLT(mapLT);
 	}
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
 	walls.push_back(houseExterior->GetCollider());
@@ -245,6 +273,7 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]);
 	}
 	
+	Scene::Enter();
 }
 
 void SceneGame::Exit()
@@ -254,8 +283,8 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-	
 	Scene::Update(dt);
+
 	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
 	if (time >= 7.f)

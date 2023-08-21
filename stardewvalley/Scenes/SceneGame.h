@@ -17,11 +17,14 @@ class TextGo;
 class HomeInterior;
 class HomeTap;
 class ObjectTable;
+class Stone;
+class Timber;
+class Weed;
 
 class SceneGame : public Scene
 {
 protected:
-	int stoneCount = 0;
+	
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
 
@@ -40,7 +43,13 @@ protected:
 
 	//오브젝트테이블
 	ObjectTable* Objtable;
+	vector<Stone*> stones;
+	vector<Timber*> timbers;
+	vector<Weed*> weeds;
 
+	int stoneCount = 0;
+	int timberCount = 0;
+	int weedCount = 0;
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;
