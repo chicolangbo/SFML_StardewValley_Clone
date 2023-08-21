@@ -5,7 +5,7 @@ void Objects::Init()
 {
 	SpriteGo::Init();
 
-	SetOrigin(Origins::TL);
+	
 	sprite.setScale({ 4.5f, 4.5f });
 }
 
@@ -13,9 +13,11 @@ void Objects::Reset()
 {
 	SpriteGo::Reset();
 
-	SetPosition(mapLT.x + tileSize.x * indexX, mapLT.y + tileSize.y * indexY);
 	sprite.setTextureRect(texRect);
+	SetOrigin(Origins::TL);
+
 	SetColliderSize(tileSize);
+	SetPosition(mapLT.x + tileSize.x * indexX, mapLT.y + tileSize.y * indexY);
 }
 
 void Objects::Update(float dt)

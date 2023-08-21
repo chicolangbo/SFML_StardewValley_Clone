@@ -20,6 +20,7 @@ class ObjectTable;
 class Stone;
 class Timber;
 class Weed;
+class Tree;
 
 class SceneGame : public Scene
 {
@@ -46,10 +47,15 @@ protected:
 	vector<Stone*> stones;
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
+	vector<Tree*> trees;
 
 	int stoneCount = 0;
 	int timberCount = 0;
 	int weedCount = 0;
+	int treeCount = 0;
+
+	string branchNick;
+	string branchId;
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;
