@@ -121,7 +121,7 @@ void SceneTitle::Enter()
 
 void SceneTitle::Exit()
 {
-	Scene::Exit();
+	//Scene::Exit();
 }
 
 void SceneTitle::Update(float dt) 

@@ -22,7 +22,7 @@ protected:
 
 	// 김민지, 230812, 스크린 사이즈 추가
 	sf::Vector2f windowSize;
-
+	
 	sf::RenderWindow& window;
 
 public:

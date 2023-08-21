@@ -107,8 +107,6 @@ void Inventory::Init()
 
 void Inventory::Reset()
 {
-   
-
     for (auto m : invenUiObjects)
     {
         m->Reset();

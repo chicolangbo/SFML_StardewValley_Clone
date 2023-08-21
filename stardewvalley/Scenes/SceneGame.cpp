@@ -73,13 +73,13 @@ void SceneGame::Init()
 	// INVEN
 	{
 		inven = (Inventory*)AddGo(new Inventory("inven"));
-		inven->sortLayer = 100;
+		inven->sortLayer = 150;
 		inven->SetPosition(windowSize / 2.f);
 		inven->SetPlayer(player2);
 		player2->SetInventory(inven);
 
 		quickinven = (QuickInventory*)AddGo(new QuickInventory("quickinven"));
-		quickinven->sortLayer = 101;
+		quickinven->sortLayer = 150;
 		quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
 		quickinven->SetPlayer(player2);
 
@@ -155,21 +155,18 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	// VIEW
-	auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;
-	worldView.setSize(size);
-	worldView.setCenter(0, 0);
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
-	//ui뷰 변경내용 인벤 포지션 변경부분찾기
-
 	Scene::Enter();
 
+	// VIEW
 
-	//quickinven->SetPosition(0.f, 0.f);
-	/*auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;*/
+	//ui뷰 변경내용 인벤 포지션 변경부분찾기
+
+	//auto size = FRAMEWORK.GetWindowSize();
+	//sf::Vector2f centerPos = size * 0.5f;
+	//worldView.setSize(size);
+	//worldView.setCenter(0, 0);
+	//uiView.setSize(size);
+	//uiView.setCenter(size * 0.5f);
 
 	walls.push_back(houseExterior->GetCollider()); 
 	walls.push_back(shopExterior->GetCollider()); 
@@ -179,11 +176,13 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]); 
 	}
 
-	//uiView.setSize(size);
-	//uiView.setCenter(centerPos);
+	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
+	//960 540 동일
+	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
+	//960 540 동일
+	//std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
+	//960 880 동일
 
-	//여기서의 포지션은 동일함
-	//inven->SetOrigin(Origins::TL);
 }
 
 void SceneGame::Exit()
@@ -330,9 +329,6 @@ void SceneGame::Update(float dt)
 		window.close();
 	}
 
-	
-	std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
-	
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
