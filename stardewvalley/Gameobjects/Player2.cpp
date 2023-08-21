@@ -116,6 +116,7 @@ void Player2::Update(float dt)
 		//sf::Vector2f newPosition = position + direction * dt * speed;
 		//collider.setPosition(newPosition);
 
+		playerBound = collider.getGlobalBounds(); 
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
 			if (collider.getGlobalBounds().intersects(wallBounds[i]))
