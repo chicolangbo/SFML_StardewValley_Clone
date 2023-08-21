@@ -881,12 +881,12 @@ bool SceneEditor::SaveObject(const std::string& filePath)
 	outputFile << "cols,rows" << endl;
 	outputFile << col << "," << row << endl;
 
-	outputFile << "indexX,indexY,left,top,width,height,type" << endl;
+	outputFile << "index,indexX,indexY,left,top,width,height,type" << endl;
 
 	for (int i = 0; i < objects.size(); ++i)
 	{
 		auto objs = objects[i];
-		outputFile << objs.indexX << "," << objs.indexY << "," << objs.left << "," << objs.top << "," <<
+		outputFile << i <<"," << objs.indexX << "," << objs.indexY << "," << objs.left << "," << objs.top << "," <<
 			objs.width << "," << objs.height << "," << (int)objs.type << endl;
 	}
 
@@ -905,7 +905,8 @@ bool SceneEditor::LoadObject(const std::string& filePath)
 	for (int i = 2; i < doc.GetRowCount(); i++)
 	{
 		auto rows = doc.GetRow<int>(i);
-		objects.push_back({ rows[0], rows[1], (float)rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (ObjType)rows[6] });
+		objects.push_back({ rows[1], rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (float)rows[6],(ObjType)rows[7] });
+		//objects.push_back({  rows[0], rows[1], (float)rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (ObjType)rows[6]});
 	}
 	return true;
 }

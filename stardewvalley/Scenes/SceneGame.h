@@ -16,10 +16,12 @@ class TileMap;
 class TextGo;
 class HomeInterior;
 class HomeTap;
+class ObjectTable;
 
 class SceneGame : public Scene
 {
 protected:
+	int stoneCount = 0;
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
 
@@ -35,6 +37,10 @@ protected:
 	//SpriteGo* testFarmMap; // ���� ���
 	SpriteGo* houseExterior; // �� �ܺ�
 	SpriteGo* shopExterior; // �� �ܺ�
+
+	//오브젝트테이블
+	ObjectTable* Objtable;
+
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;

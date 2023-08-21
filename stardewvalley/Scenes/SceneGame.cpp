@@ -28,6 +28,8 @@
 #include "rapidcsv.h"
 #include "HomeInterior.h"
 #include "HomeTap.h"
+#include "ObjectTable.h"
+#include "Stone.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -65,10 +67,10 @@ void SceneGame::Init()
 		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
 		testFarmMap2->SetOrigin(Origins::MC);
 
-		testFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
-		testFarmMapObj->Reset();
-		testFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
-		testFarmMapObj->SetOrigin(Origins::MC);
+		//testFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
+		//testFarmMapObj->Reset();
+		//testFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
+		//testFarmMapObj->SetOrigin(Origins::MC);
 
 		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
 		houseExterior->sprite.setScale(4.f, 4.f);
@@ -83,7 +85,23 @@ void SceneGame::Init()
 		//shopExterior->SetPosition(-537, -785);
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
-	
+	// OBJECT
+	{	
+		Objtable = (ObjectTable*)(new ObjectTable());
+		Objtable->Load();
+		for (auto obj : Objtable->GetTable())
+		{
+			if (obj.second.type == ObjType::Stone)
+			{
+				auto objInfo = obj.second;
+				sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
+				Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone"+to_string(stoneCount)));
+				stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				stoneCount++;
+			}
+		}
+	}
+
 	// PLAYER
 	{
 		player2 = (Player2*)AddGo(new Player2());
@@ -199,7 +217,6 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	shopTap->SetPierre(shopInterior->GetPierre());
-	Scene::Enter();
 
 	// VIEW
 
@@ -212,8 +229,8 @@ void SceneGame::Enter()
 	//uiView.setSize(size);
 	//uiView.setCenter(size * 0.5f);
 
-	walls.push_back(houseExterior->GetCollider()); 
-	walls.push_back(shopExterior->GetCollider()); 
+	walls.push_back(houseExterior->GetCollider());
+	walls.push_back(shopExterior->GetCollider());
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 
@@ -222,11 +239,16 @@ void SceneGame::Enter()
 
 	testFarmMap->SetPosition(0, 0);
 	testFarmMap2->SetPosition(testFarmMap->GetPosition());
-	testFarmMapObj->SetPosition(testFarmMap->GetPosition());
+	//testFarmMapObj->SetPosition(testFarmMap->GetPosition());
 
 	tileSize = testFarmMap->GetTileSize();
-	
+
 	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+	for (int i = 0; i < stoneCount; i++)
+	{
+		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
+		stone->SetMapLT(mapLT);
+	}
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
 	walls.push_back(houseExterior->GetCollider());
 
@@ -246,9 +268,14 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
-	//
+
+	Scene::Enter();
+
 	uiView.setSize(size);
 	uiView.setCenter(centerPos);
+
+	cout << testFarmMap->vertexArray.getBounds().left  << "," << testFarmMap->vertexArray.getBounds().top << endl;
+
 }
 
 void SceneGame::Exit()
