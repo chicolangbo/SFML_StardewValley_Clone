@@ -99,5 +99,6 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void SpawnRootingItem(ItemId id);
+	void SetAct(bool is);
 };
 

@@ -452,28 +452,6 @@ void SceneEditor::Init()
 		rowText->SetString(to_string(row));
 
 		SetColliders();
-		/*if (!colliders.empty())
-		{
-			for (auto rect : colliders)
-			{
-				RemoveGo(rect);
-			}
-			colliders.clear();
-		}
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				RectangleGo* newRect = new RectangleGo(tilesize);
-				newRect->rectangle.setFillColor(sf::Color::Transparent);
-				newRect->rectangle.setOutlineThickness(1.f);
-				newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
-				newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
-				AddGo(newRect);
-				newRect->SetActive(false);
-				colliders.push_back(newRect);
-			}
-		}*/
 		LoadCollider("tables/newMapCollider.csv");
 		LoadObject("tables/newMapObj.csv");
 		for (int i = 0; i < tempcolliders.size(); i++)
@@ -906,7 +884,6 @@ bool SceneEditor::LoadObject(const std::string& filePath)
 	{
 		auto rows = doc.GetRow<int>(i);
 		objects.push_back({ rows[1], rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (float)rows[6],(ObjType)rows[7] });
-		//objects.push_back({  rows[0], rows[1], (float)rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (ObjType)rows[6]});
 	}
 	return true;
 }

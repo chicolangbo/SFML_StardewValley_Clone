@@ -86,6 +86,7 @@ void Player2::Reset()
 	energy = maxEnergy;
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
+	collider.setScale({ 0.3, 0.3 });
 	SetOrigin(origin);
 
 	playerItemList.push_back({ ItemId::ax, 1, 0 });
@@ -99,17 +100,10 @@ void Player2::Update(float dt)
 {
 	SpriteGo::Update(dt);
 	
-	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos(); 
-	//sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
-	//sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(position);
-	
 	sf::Vector2f playerPos = GetPosition();
-	//std::cout << playerPos.x << " " << playerPos.y << std::endl;
-	//�̵�
 
 	if (!playerDie)
 	{
-		
 		direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 		direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
 
@@ -119,9 +113,12 @@ void Player2::Update(float dt)
 			direction /= magnitude;
 		}
 
+		//sf::Vector2f newPosition = position + direction * dt * speed;
+		//collider.setPosition(newPosition);
+
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
-			if (playerBound.intersects(wallBounds[i]))
+			if (collider.getGlobalBounds().intersects(wallBounds[i]))
 			{
 				if (position.x < wallBoundsLT[i].x)
 				{

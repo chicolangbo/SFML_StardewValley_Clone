@@ -5,7 +5,6 @@
 #include "ResourceMgr.h"
 #include "GameObject.h"
 #include "SpriteGo.h"
-#include "Player.h"
 #include "Framework.h"
 #include "Ground.h"
 #include "VertexArrayGo.h"
@@ -33,7 +32,7 @@
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	resourceListPath = "scripts/defaultResourceList.csv";
+	//resourceListPath = "scripts/defaultResourceList.csv";
 }
 
 void SceneGame::Init()
@@ -43,18 +42,9 @@ void SceneGame::Init()
 	// VIEW
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
-	//worldView.setSize(size);
-	//worldView.setCenter(0, 0);
-	//uiView.setSize(size);
-	//uiView.setCenter(size * 0.5f);
 
 	// TEST MAP
-	{	//0818 맵툴 맵 적용
-		/*testFarmMap = (SpriteGo*)AddGo(new SpriteGo("map/testFarmMap.png", "testFarmMap", "testFarmMap"));
-		testFarmMap->sprite.setScale(3.f, 3.f);
-		testFarmMap->SetOrigin(Origins::MC);
-		testFarmMap->SetPosition(0, 0);*/
-
+	{	//0818 맵툴 맵 적용]
 		testFarmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
 		testFarmMap->Reset();
 		testFarmMap->Load("tables/newMapLayer1.csv");
@@ -73,14 +63,12 @@ void SceneGame::Init()
 		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
 		houseExterior->sprite.setScale(4.f, 4.f);
 		houseExterior->SetOrigin(Origins::BC);
-		//houseExterior->SetPosition(473, -785);
 		houseExterior->collider.setScale(1.f, 0.3f);
 		houseExterior->sortLayer = 1;
 
 		shopExterior = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 		shopExterior->sprite.setScale(4.f, 4.f);
 		shopExterior->SetOrigin(Origins::BC);
-		//shopExterior->SetPosition(-537, -785);
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
 	// OBJECT
@@ -121,7 +109,6 @@ void SceneGame::Init()
 		quickinven->sortLayer = 150;
 		quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
 		quickinven->SetPlayer(player2);
-
 	}
 
 	// INGAME UI
@@ -147,7 +134,6 @@ void SceneGame::Init()
 
 		sf::Vector2f recsize(26.f, 1.f);
 		energyBar = (RectangleGo*)AddGo(new RectangleGo(recsize)); 
-		//energyBar.SetSize(sf::Vector2f(26.f, 1.f));  
 		energyBar->SetOrigin(Origins::BC);;
 		energyBar->SetPosition(energy->GetPosition());
 		energyBar->SetColor(sf::Color::Green);
@@ -215,26 +201,17 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	Scene::Enter();
+
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
+
 	worldView.setSize(size);
 	worldView.setCenter(0, 0);
+
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
 	shopTap->SetPierre(shopInterior->GetPierre());
-
-
-	walls.push_back(houseExterior->GetCollider()); 
-	walls.push_back(shopExterior->GetCollider()); 
-
-	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
-	//960 540 동일
-	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
-	//960 540 동일
-
-	//uiView.setSize(size);
-	//uiView.setCenter(centerPos);
 
 	testFarmMap->SetPosition(0, 0);
 	testFarmMap2->SetPosition(testFarmMap->GetPosition());
@@ -254,6 +231,7 @@ void SceneGame::Enter()
 	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
 	walls.push_back(shopExterior->GetCollider());
 
+	//맵 툴 충돌체 설정
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
 	for (int i = 2; i < doc.GetRowCount(); i++)
@@ -268,11 +246,6 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]);
 	}
 	
-
-	//quickinven->SetPosition(size);
-	//inven->SetPosition(size.x,size.y);
-
-	std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
 }
 
 void SceneGame::Exit()
@@ -316,6 +289,7 @@ void SceneGame::Update(float dt)
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
 
+	//UI(돈, 시간, 날짜)
 	texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
 	
 	texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
@@ -324,14 +298,7 @@ void SceneGame::Update(float dt)
 
 	texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
 	dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
-
-
 	
-	playerBound = player2->GetCollider(); 
-	mapBound = testFarmMap->vertexArray.getBounds();
-	
-	player2->SetCollider(playerBound);
-
 	energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
 	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar->SetOrigin(Origins::BC);
@@ -353,14 +320,8 @@ void SceneGame::Update(float dt)
 					go->SetActive(true);
 				}
 			}
-			player2->SetActive(true);
+			SetAct(true);
 			player2->SetPosition(-463.f, -770.f); 
-			energy->SetActive(true);
-			info->SetActive(true);
-			timeArrow->SetActive(true);
-			inven->SetActive(true);
-			quickinven->SetActive(true);
-			energyBar->SetActive(true);
 			homeInterior->SetActive(false);
 			bedding->SetActive(false);
 		}
@@ -372,21 +333,14 @@ void SceneGame::Update(float dt)
 				if (go->GetActive())
 				{
 					go->SetActive(false);
-					
 				}
 				else
 				{
 					go->SetActive(true);
 				}
 			}
-			player2->SetActive(true);	
-			player2->SetPosition(419.f, 1866.f); 
-			energy->SetActive(true);
-			info->SetActive(true);
-			timeArrow->SetActive(true); 
-			inven->SetActive(true);
-			quickinven->SetActive(true);
-			energyBar->SetActive(true);
+			SetAct(true);	
+			player2->SetPosition(419.f, 1866.f); //shop position
 			homeInterior->SetActive(false);
 			bedding->SetActive(false);
 		}
@@ -408,14 +362,8 @@ void SceneGame::Update(float dt)
 					go->SetActive(true);
 				}
 			}
-			player2->SetActive(true);
+			SetAct(true);
 			player2->SetPosition(193.f, 728.f); // �� �빮 ��ġ��
-			energy->SetActive(true);
-			info->SetActive(true);
-			timeArrow->SetActive(true);
-			inven->SetActive(true);
-			quickinven->SetActive(true);
-			energyBar->SetActive(true);
 			shopInterior->SetActive(false);
 			bedding->SetActive(true);
 			homeTap->SetActive(true);
@@ -435,15 +383,8 @@ void SceneGame::Update(float dt)
 					go->SetActive(true);
 				}
 			}
-
-			player2->SetActive(true);
+			SetAct(true);
 			player2->SetPosition(193.f, 728.f);
-			energy->SetActive(true);
-			info->SetActive(true);
-			timeArrow->SetActive(true);
-			inven->SetActive(true);
-			quickinven->SetActive(true);
-			energyBar->SetActive(true);
 			shopInterior->SetActive(false);
 			bedding->SetActive(false);
 			homeTap->SetActive(true);
@@ -525,6 +466,17 @@ void SceneGame::SpawnRootingItem(ItemId id)
 	{
 		r->Reset();
 	}
+}
+
+void SceneGame::SetAct(bool is)
+{
+	player2->SetActive(is);
+	energy->SetActive(is);
+	info->SetActive(is);
+	timeArrow->SetActive(is);
+	inven->SetActive(is);
+	quickinven->SetActive(is);
+	energyBar->SetActive(is);
 }
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
