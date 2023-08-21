@@ -283,18 +283,22 @@ void Inventory::Update(float dt)
         m->Update(dt);
     }
     PlayerInfoUpdate();
-    ItemIndexUpdate();
-    IconUpdate();
+    //ItemIndexUpdate();
+    //IconUpdate();
 
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
     {
         if (!invenOnOff)
         {
+            ItemIndexUpdate();
+            IconUpdate();
             SetItemWindow();
             invenOnOff = true;
         }
         else if(mouseSlot->GetItemIcon() == nullptr)
         {
+            ItemIndexUpdate();
+            IconUpdate();
             SetWindowClear();
             invenOnOff = false;
         }
@@ -347,7 +351,7 @@ void Inventory::SetItemWindow()
             slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
         }
     }
-
+    ItemIndexUpdate();
     bag.SetPosition(bagPos.x, bagPos.y + 10.f);
     map.SetPosition(mapPos);
     make.SetPosition(makePos);
@@ -368,7 +372,7 @@ void Inventory::SetMapWindow()
             m->SetActive(false);
         }
     }
-
+    ItemIndexUpdate();
     xButton.SetPosition(mapImage.GetPosition() + sf::Vector2f{mapImage.sprite.getGlobalBounds().width / 2.f, - mapImage.sprite.getGlobalBounds().height / 2.f});
 }
 
@@ -392,7 +396,7 @@ void Inventory::SetMakeWindow()
     {
         slot[i]->SetPosition(slot[i]->GetPosition() + diff);
     }
-
+    ItemIndexUpdate();
     make.SetPosition(makePos.x, makePos.y + 10.f);
     bag.SetPosition(bagPos);
     map.SetPosition(mapPos);
@@ -413,7 +417,7 @@ void Inventory::SetChangeSceneWindow()
             m->SetActive(false);
         }
     }
-
+    ItemIndexUpdate();
     xButton.SetPosition(invenBox.vertexArray[9].position);
     changeScene.SetPosition(changeScenePos.x, changeScenePos.y + 10.f);
     bag.SetPosition(bagPos);
@@ -428,6 +432,7 @@ void Inventory::SetWindowClear()
     {
         m->SetActive(false);
     }
+    ItemIndexUpdate();
 }
 
 void Inventory::ButtonSetUp()
