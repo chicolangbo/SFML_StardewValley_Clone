@@ -213,7 +213,7 @@ void SceneEditor::Init()
 	ObjPallet = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "objPallet"));
 	ObjPallet->SetOrigin(Origins::TL);
 	ObjPallet->sortLayer = 101;
-	ObjPallet->SetScale(tileScale);
+	ObjPallet->SetScale({ 3.f, 3.f });
 	ObjPallet->SetActive(false);
 
 	selPalTile = (RectangleGo*)AddGo(new RectangleGo(palletTileSize));
@@ -478,7 +478,7 @@ void SceneEditor::Init()
 		LoadObject("tables/newMapObj.csv");
 		for (int i = 0; i < tempcolliders.size(); i++)
 		{
-			int index = tempcolliders[i].indexY * row + tempcolliders[i].indexX;
+			int index = tempcolliders[i].indexY * col + tempcolliders[i].indexX;
 			colliders[index]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
 			colliders[index]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
 		}
@@ -635,7 +635,7 @@ void SceneEditor::Update(float dt)
 			{
 				sf::IntRect texRect = curTile->sprite.getTextureRect();
 				selectMap->ChangeTexRect(tileX, tileY, texRect);
-				if (currentLayer == 2 && !IsObjectAdded(tileX, tileY, GetObjType(texRect)))
+				if (currentLayer == 2 && !IsObjectAdded(tileX, tileY, GetObjType(texRect))) //오브젝트 추가
 				{
 					AddObject(tileX, tileY, texRect, GetObjType(texRect));
 				}

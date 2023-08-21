@@ -46,6 +46,7 @@
     <ClCompile Include="Gameobjects\ShopInterior.cpp" />
     <ClCompile Include="DataTables\ObjectTable.cpp" />
     <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
+    <ClCompile Include="Gameobjects\Stone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -98,5 +99,6 @@
     <ClInclude Include="Gameobjects\Wateringcan.h" />
     <ClInclude Include="DataTables\ObjectTable.h" />
     <ClInclude Include="Gameobjects\ShopInvenSlot.h" />
+    <ClInclude Include="Gameobjects\Stone.h" />
   </ItemGroup>
 </Project>
