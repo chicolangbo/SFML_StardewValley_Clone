@@ -309,12 +309,10 @@ void Inventory::Update(float dt)
 void Inventory::Draw(sf::RenderWindow& window)
 {
     SortGos();
-
-
-    const sf::View& save = window.getView();
-    Scene* scene = SCENE_MGR.GetCurrScene();
-    sf::View& uiView = scene->GetUiView();
-    window.setView(uiView);
+    //const sf::View& save = window.getView();
+    //Scene* scene = SCENE_MGR.GetCurrScene();
+    //sf::View& uiView = scene->GetUiView();
+    //window.setView(uiView);
 
     for (auto m : invenUiObjects)
     {
@@ -324,7 +322,7 @@ void Inventory::Draw(sf::RenderWindow& window)
         }
     }
 
-    window.setView(save);
+   // window.setView(save);
    
 }
 
