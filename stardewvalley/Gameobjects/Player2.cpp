@@ -119,6 +119,7 @@ void Player2::Update(float dt)
 			direction /= magnitude;
 		}
 
+		playerBound = collider.getGlobalBounds(); 
 		for (int i = 0; i < wallBounds.size(); ++i)
 		{
 			if (playerBound.intersects(wallBounds[i]))

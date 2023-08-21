@@ -39,7 +39,7 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
-	auto size = FRAMEWORK.GetWindowSize();
+	//auto size = FRAMEWORK.GetWindowSize();
 
 	// VIEW
 	auto size = FRAMEWORK.GetWindowSize();

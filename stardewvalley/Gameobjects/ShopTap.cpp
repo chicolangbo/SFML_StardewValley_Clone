@@ -276,8 +276,8 @@ void ShopTap::Draw(sf::RenderWindow& window)
     }
     //if (shopSlot[0]->GetActive())
     //{
-        sf::Sprite m(shopBoxMask.getTexture());
-        window.draw(m);
+      //  sf::Sprite m(shopBoxMask.getTexture());
+       // window.draw(m);
     //}
 }
 
