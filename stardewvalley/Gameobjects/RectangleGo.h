@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
-class RectangleGo :
-    public GameObject
+class RectangleGo : public GameObject
 {
 public:
 	sf::RectangleShape rectangle;

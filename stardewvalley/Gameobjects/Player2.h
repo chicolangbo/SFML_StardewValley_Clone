@@ -66,8 +66,10 @@ protected:
 	Inventory* inven;
 	float pos = 0.6f;
 
-public:
+	sf::RectangleShape hitBox;
 
+public:
+	//플레이어 포지션 / 타일 한칸의 사이즈 == 2차원 배열의 인덱스?
 	Player2(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}
 	virtual ~Player2() override { Release(); }
@@ -98,7 +100,6 @@ public:
 	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }
-	//this code is kill player lol
 	void ZeroEnergy() { energy = 0; }
 };
 

@@ -98,6 +98,9 @@ protected:
 	sf::Vector2f shopPos = { 9.f, 16.f };
 	sf::Vector2f housePos = { 21.f, 16.f };
 
+	//test
+	sf::RectangleShape testbox;
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

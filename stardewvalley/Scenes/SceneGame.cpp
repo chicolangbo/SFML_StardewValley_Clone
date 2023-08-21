@@ -47,11 +47,12 @@ void SceneGame::Init()
 
 	// TEST MAP
 	{	//0818 맵툴 맵 적용]
+		//땅
 		testFarmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
 		testFarmMap->Reset();
 		testFarmMap->Load("tables/newMapLayer1.csv");
 		testFarmMap->SetOrigin(Origins::MC);
-
+		//울타리나 절벽
 		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
 		testFarmMap2->Reset();
 		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
@@ -74,7 +75,7 @@ void SceneGame::Init()
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
 	// OBJECT
-	{	
+	{
 		Objtable = (ObjectTable*)(new ObjectTable());
 		Objtable->Load();
 		for (auto obj : Objtable->GetTable())
@@ -184,7 +185,7 @@ void SceneGame::Init()
 		timeArrow->sortLayer = 100;
 
 		sf::Vector2f recsize(26.f, 1.f);
-		energyBar = (RectangleGo*)AddGo(new RectangleGo(recsize)); 
+		energyBar = (RectangleGo*)AddGo(new RectangleGo(recsize));
 		energyBar->SetOrigin(Origins::BC);;
 		energyBar->SetPosition(energy->GetPosition());
 		energyBar->SetColor(sf::Color::Green);
@@ -227,12 +228,17 @@ void SceneGame::Init()
 	}
 
 	//TEXT
-	texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf")); 
+	texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf"));
 	texMin = (TextGo*)AddGo(new TextGo("TexMin", "fonts/SDMiSaeng.ttf"));
 	texHour = (TextGo*)AddGo(new TextGo("TexHour", "fonts/SDMiSaeng.ttf"));
-	collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf")); 
+	collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf"));
 	texDay = (TextGo*)AddGo(new TextGo("TexDay", "fonts/SDMiSaeng.ttf"));
-	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf")); 
+	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf"));
+
+	//test
+	testbox.setSize({ 72.f, 72.f });
+	testbox.setFillColor(sf::Color::Blue);
+	
  
 	for (auto go : gameObjects)
 	{
@@ -260,10 +266,10 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
+	Scene::Enter();
 	shopTap->SetPierre(shopInterior->GetPierre());
 
-	testFarmMap->SetPosition(0, 0);
-	testFarmMap2->SetPosition(testFarmMap->GetPosition());
+	
 	//testFarmMapObj->SetPosition(testFarmMap->GetPosition());
 
 	tileSize = testFarmMap->GetTileSize();
@@ -297,6 +303,11 @@ void SceneGame::Enter()
 	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
 	walls.push_back(shopExterior->GetCollider());
 
+	for (int i = 0; i < stoneCount; i++)
+	{
+		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
+		walls.push_back(stone->GetCollider());
+	}
 	//맵 툴 충돌체 설정
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
@@ -533,11 +544,28 @@ void SceneGame::Update(float dt)
 		SCENE_MGR.ChangeScene(SceneId::Title);
 	}
 
+	sf::Vector2f playerTilePos;
+
+	playerTilePos.x = player2->GetPosition().x / 72.f;
+	playerTilePos.y = player2->GetPosition().y / 72.f;
+
+	//for (int i = 0; i < testFarmMap->tiles.size(); ++i) //지우지 마세여,,,제발,,,
+	//{
+	//	if ((int)playerTilePos.x == testFarmMap->GetTile((int)playerTilePos.x - MapLT /*전역변수로 변경*/, (int)playerTilePos.y).x &&
+	//		(int)playerTilePos.y == testFarmMap->GetTile((int)playerTilePos.x, (int)playerTilePos.y).y)
+	//	{
+
+	//		testbox.setPosition(playerTilePos);
+
+	//	}
+	//}
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+	window.draw(testbox);
 }
 
 void SceneGame::SpawnRootingItem(ItemId id)
