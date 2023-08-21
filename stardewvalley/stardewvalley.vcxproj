@@ -206,6 +206,7 @@
     <ClCompile Include="Gameobjects\ShopSlot.cpp" />
     <ClCompile Include="Gameobjects\ShopInterior.cpp" />
     <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
+    <ClCompile Include="Gameobjects\Stone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -258,6 +259,7 @@
     <ClInclude Include="Global\Variables.h" />
     <ClInclude Include="GameObjects\UiButton.h" />
     <ClInclude Include="Gameobjects\Wateringcan.h" />
+    <ClInclude Include="Gameobjects\Stone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -182,7 +182,7 @@ void SceneEditor::Init()
 
 	//커서가 올라간 타일
 	selectTile = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut.png", "selectTile"));
-	selectTile->SetScale({ 3.f, 3.f });
+	selectTile->SetScale(tileScale);
 	selectTile->SetOrigin(Origins::TL);
 	sf::IntRect texRect(0, 0, 16, 16);
  	selectTile->sprite.setTextureRect(texRect);
@@ -191,7 +191,7 @@ void SceneEditor::Init()
 
 	//선택된 오브젝트 타일
 	selectObj = (SpriteGo*)AddGo(new SpriteGo("map/object.png", "selectObj"));
-	selectObj->SetScale({ 3.f, 3.f });
+	selectObj->SetScale(tileScale);
 	selectObj->SetOrigin(Origins::TL);
 	selectObj->sprite.setTextureRect(texRect);
 	selectObj->SetActive(false);
@@ -478,7 +478,7 @@ void SceneEditor::Init()
 		LoadObject("tables/newMapObj.csv");
 		for (int i = 0; i < tempcolliders.size(); i++)
 		{
-			int index = tempcolliders[i].indexY * row + tempcolliders[i].indexX;
+			int index = tempcolliders[i].indexY * col + tempcolliders[i].indexX;
 			colliders[index]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
 			colliders[index]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
 		}
@@ -618,7 +618,7 @@ void SceneEditor::Update(float dt)
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
-		if (!IsCollActive)
+		if (!IsCollActive && curTile!=nullptr)
 		{
 			curTile->SetActive(true);
 			curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
@@ -635,7 +635,7 @@ void SceneEditor::Update(float dt)
 			{
 				sf::IntRect texRect = curTile->sprite.getTextureRect();
 				selectMap->ChangeTexRect(tileX, tileY, texRect);
-				if (currentLayer == 2 && !IsObjectAdded(tileX, tileY, GetObjType(texRect)))
+				if (currentLayer == 2 && !IsObjectAdded(tileX, tileY, GetObjType(texRect))) //오브젝트 추가
 				{
 					AddObject(tileX, tileY, texRect, GetObjType(texRect));
 				}
@@ -648,8 +648,8 @@ void SceneEditor::Update(float dt)
 		}
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right) && IsCollActive)
 		{
-			colliders[tileY * row + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
-			colliders[tileY * row + tileX]->rectangle.setFillColor(sf::Color::Transparent);
+			colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+			colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color::Transparent);
 		}
 	}
 	else

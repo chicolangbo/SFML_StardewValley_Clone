@@ -12,6 +12,7 @@ class QuickInventory;
 class RectangleGo;
 class ShopTap;
 class ShopInterior;
+class TileMap;
 
 class SceneGame : public Scene
 {
@@ -24,7 +25,10 @@ protected:
 	Player2* player2;
 
 	// ¿”Ω√ ∏ 
-	SpriteGo* testFarmMap; // ≥Û¿Â ≈Î∏ 
+	TileMap* testFarmMap;
+	TileMap* testFarmMap2;
+	TileMap* testFarmMapObj;
+	//SpriteGo* testFarmMap; // ≥Û¿Â ≈Î∏ 
 	SpriteGo* houseExterior; // ¡˝ ø‹∫Œ
 	SpriteGo* shopExterior; // º• ø‹∫Œ
 
@@ -73,6 +77,10 @@ protected:
 	QuickInventory* quickinven;
 
 	bool off = false;
+
+	sf::Vector2f tileSize;
+	sf::Vector2f shopPos = { 9.f, 16.f };
+	sf::Vector2f housePos = { 21.f, 16.f };
 
 public:
 	SceneGame();
