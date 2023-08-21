@@ -10,7 +10,7 @@ protected:
 	Origins origin = Origins::TL;
 
 public:
-
+	
 	int sortLayer = 0;
 	int sortOrder = 0;
 

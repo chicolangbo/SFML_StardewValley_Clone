@@ -13,6 +13,7 @@ class RectangleGo;
 class ShopTap;
 class ShopInterior;
 class TileMap;
+class TextGo;
 
 class SceneGame : public Scene
 {
@@ -58,11 +59,13 @@ protected:
 	float arrowSpin = 0.f;
 	RectangleGo* energyBar; 
 	int energys;
-	sf::Text textMoney;
-	sf::Text textMin;
-	sf::Text textHour;
-	sf::Text textDay;
-	sf::Font font;
+	TextGo* texMoney;
+	TextGo* texMin;
+	TextGo* texHour;
+	TextGo* collon;
+	TextGo* texDay;
+	TextGo* dayday;
+
 	float time = 0.f;
 	int min = 0;
 	int hour = 6;

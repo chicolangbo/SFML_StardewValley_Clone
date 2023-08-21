@@ -75,6 +75,9 @@ private:
 	TextGo totalEarnings;
 	TextGo totalEarningsValue;
 
+	//게임 종료
+	bool EndGame = false;
+
 public:
 	Inventory(const std::string& n = "");
 	virtual ~Inventory() override;
@@ -108,4 +111,5 @@ public:
 	int GetItemCapacity() { return itemCapacity; }
 	std::vector<Slot*>* GetSlot() { return &slot; } 
 	bool GetInvenOff() { return invenOnOff; }
+	bool GetEndGame() { return EndGame; }
 };

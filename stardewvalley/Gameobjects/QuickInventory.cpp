@@ -74,13 +74,14 @@ void QuickInventory::Reset()
 	quickInven.SetSize({ 895.f,125.f });
 	quickInven.SetOrigin(Origins::MC);
 	quickInven.SetPosition(position.x,position.y+140.f);
-	quickInven.sortLayer = 120;
+	//quickInven.SetPosition(960.f,1020.f);
+	quickInven.sortLayer = 150;
 
 	for (int i = 0; i < 12; ++i)
 	{
 
 		quickslots[i]->SetPosition({ 575.f + (i * 70.f),1025.f });
-		quickslots[i]->sortLayer = 121;
+		quickslots[i]->sortLayer = 150;
 	}
 	mark.SetOrigin(Origins::MC); 
 	mark.SetPosition(quickslots[0]->GetPosition().x, quickslots[0]->GetPosition().y);

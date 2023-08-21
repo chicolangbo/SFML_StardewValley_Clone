@@ -92,14 +92,16 @@ void SceneGame::Init()
 	// INVEN
 	{
 		inven = (Inventory*)AddGo(new Inventory("inven"));
-		inven->sortLayer = 100;
+		inven->sortLayer = 150;
 		inven->SetPosition(windowSize / 2.f);
 		inven->SetPlayer(player2);
 		player2->SetInventory(inven);
+
 		quickinven = (QuickInventory*)AddGo(new QuickInventory("quickinven"));
-		quickinven->sortLayer = 101;
+		quickinven->sortLayer = 150;
 		quickinven->SetPosition(windowSize.x * 0.5f, windowSize.y - 200.f);
 		quickinven->SetPlayer(player2);
+
 	}
 
 	// INGAME UI
@@ -147,6 +149,14 @@ void SceneGame::Init()
 		shopTap->sortLayer = 101;
 	}
 
+	//TEXT
+	texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf")); 
+	texMin = (TextGo*)AddGo(new TextGo("TexMin", "fonts/SDMiSaeng.ttf"));
+	texHour = (TextGo*)AddGo(new TextGo("TexHour", "fonts/SDMiSaeng.ttf"));
+	collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf")); 
+	texDay = (TextGo*)AddGo(new TextGo("TexDay", "fonts/SDMiSaeng.ttf"));
+	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf")); 
+ 
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -165,6 +175,20 @@ void SceneGame::Release()
 void SceneGame::Enter()
 {
 	Scene::Enter();
+
+	// VIEW
+
+	//ui뷰 변경내용 인벤 포지션 변경부분찾기
+
+	//auto size = FRAMEWORK.GetWindowSize();
+	//sf::Vector2f centerPos = size * 0.5f;
+	//worldView.setSize(size);
+	//worldView.setCenter(0, 0);
+	//uiView.setSize(size);
+	//uiView.setCenter(size * 0.5f);
+
+	walls.push_back(houseExterior->GetCollider()); 
+	walls.push_back(shopExterior->GetCollider()); 
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 	//walls.push_back(shopCounter1->GetCollider()); 
@@ -179,17 +203,20 @@ void SceneGame::Enter()
 	//{
 	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
 	//}
-	
+	for (int i = 0; i < walls.size(); ++i)
+	{
+		player2->SetWallBounds(walls[i]); 
+	}
 	font.loadFromFile("fonts/SDMiSaeng.ttf");
 	textMoney.setFont(font);
 	textMin.setFont(font);
 	textHour.setFont(font);
 	textDay.setFont(font);
 
-	// ������, 230811, uiview�� Init���� �ִ� ���� �� ���� ����. �ּ�ó��
-	//uiView.setSize(size);
-	//uiView.setCenter(centerPos);
-
+	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
+	//960 540 동일
+	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
+	//960 540 동일
 	// �����, 230807, �׽�Ʈ�� �ּ�ó��
 	//player2->SetOrigin(Origins::MC);
 	//player2->SetPosition(centerPos);
@@ -223,6 +250,9 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
+	//
+	uiView.setSize(size);
+	uiView.setCenter(centerPos);
 }
 
 void SceneGame::Exit()
@@ -232,6 +262,7 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
+	
 	Scene::Update(dt);
 	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
@@ -247,35 +278,33 @@ void SceneGame::Update(float dt)
 	}
 	if (hour == 24)
 	{
-		hour = 6;
+		hour = 0;
 		day += 1;
 		arrowSpin = 0;
 	}
-	
+	if (hour == 2)
+	{
+		player2->ZeroEnergy();
+		hour = 6;
+	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5))
+	{
+		hour += 1;
+	}
 	arrowSpin += dt * 0.2381f;
 	timeArrow->SetOrigin(Origins::BC);
 	timeArrow->sprite.setRotation(arrowSpin);
 
-	std::stringstream ss; 
-	ss << *player2->GetMoney();
-	textMoney.setString(ss.str());
-	textMoney.setCharacterSize(50);
-	textMoney.setPosition(1675.f, 195.f);
-	textMoney.setFillColor(sf::Color::Black);
+	texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
+	
+	texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
+	collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
+	texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
 
-	std::stringstream sss;
-	sss << hour << ":" << min; 
-	textHour.setString(sss.str()); 
-	textHour.setCharacterSize(50); 
-	textHour.setPosition(1710.f, 115.f); 
-	textHour.setFillColor(sf::Color::Black); 
+	texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
+	dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
 
-	std::stringstream ssss; 
-	ssss << day << "Day"; 
-	textDay.setString(ssss.str());
-	textDay.setCharacterSize(50);
-	textDay.setPosition(1775.f, 12.f);
-	textDay.setFillColor(sf::Color::Black);
 
 	
 	playerBound = player2->GetCollider(); 
@@ -364,15 +393,17 @@ void SceneGame::Update(float dt)
 	{
 		quickinven->SetActive(true);
 	}
-	
+
+	if (inven->GetEndGame())
+	{
+		window.close();
+	}
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	window.draw(textMoney);
-	window.draw(textHour);
-	window.draw(textDay);
 }
 
 void SceneGame::SpawnRootingItem(ItemId id)
