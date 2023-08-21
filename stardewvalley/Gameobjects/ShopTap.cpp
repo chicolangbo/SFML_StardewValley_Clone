@@ -51,7 +51,7 @@ ShopTap::ShopTap(const std::string& n)
         shopSlot.push_back(new ShopSlot((ItemId)itemNum, "graphics/shopCellBox.png", "shopCellBox" + num, { 27,27,26,26 }, {0,0,80,80}, NINE_SLICE));
         shopSlot[i]->shopSlotIndex = i;
         shopSlot[i]->SetOrigin(Origins::MC);
-        AddUi(shopSlot[i]);
+        //AddUi(shopSlot[i]);
         itemNum++;
     }
 
@@ -191,7 +191,7 @@ void ShopTap::Reset()
             shopSlot[i]->Reset();
             shopSlot[i]->cellBox.SetSize({ shopBox.GetSize().x - 30.f, (shopBox.GetSize().y - 30.f) / 4.f });
             shopSlot[i]->SetOrigin(Origins::TL);
-            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  i*shopSlot[i]->cellBox.GetSize().y);
+            shopSlot[i]->SetPosition(shopSlotPos.x + 15.f, shopSlotPos.y + 15.f +  (i%4)*shopSlot[0]->cellBox.GetSize().y);
             shopSlot[i]->SetActive(false);
         }
     }
@@ -253,6 +253,14 @@ void ShopTap::Draw(sf::RenderWindow& window)
         if (m->GetActive())
         {
             m->Draw(window);
+        }
+    }
+
+    for (auto i : shopSlot)
+    {
+        if (i->GetActive())
+        {
+            i->Draw(window);
         }
     }
 }
@@ -333,12 +341,24 @@ void ShopTap::TapOnOff()
         {
             i->SetActive(true);
         }
+        for (int i = 0; i<shopSlot.size(); ++i)
+        {
+            if (i == 4)
+            {
+                break;
+            }
+            shopSlot[i]->SetActive(true);
+        }
     }
     else
     {
         for (auto i : shopUiObjects)
         {
             i->SetActive(false);
+        }
+        for (int i = 0; i < shopSlot.size(); ++i)
+        {
+            shopSlot[i]->SetActive(false);
         }
     }
 }
@@ -392,14 +412,96 @@ void ShopTap::ButtonSetUp()
         }
     };
 
-    // SCROLL : 여기는 드래그라서 수정해야 함 ㅠㅠ
+    // SCROLL
     {
         scrollUp.OnClick = [this]() {
-
+            if (shopSlot[4]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 0 && i <= 3)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            if (shopSlot[8]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 4 && i <= 7)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            if (shopSlot[12]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 8 && i <= 11)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
         };
 
         scrollDown.OnClick = [this]() {
-
+            if (shopSlot[0]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 4 && i <= 7)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            else if (shopSlot[4]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i >= 8 && i <= 11)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
+            else if (shopSlot[8]->GetActive())
+            {
+                for (int i = 0; i < shopSlot.size(); ++i)
+                {
+                    if (i == 12)
+                    {
+                        shopSlot[i]->SetActive(true);
+                    }
+                    else
+                    {
+                        shopSlot[i]->SetActive(false);
+                    }
+                }
+            }
         };
     }
 }
