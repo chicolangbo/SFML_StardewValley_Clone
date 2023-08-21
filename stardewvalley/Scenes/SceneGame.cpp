@@ -236,8 +236,10 @@ void SceneGame::Init()
 	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf"));
 
 	//test
-	testbox.setSize({ 72.f, 72.f });
-	testbox.setFillColor(sf::Color::Blue);
+	sf::Vector2f rectsize = { 72.f,72.f };
+	testbox = (RectangleGo*)AddGo(new RectangleGo(rectsize)); 
+	testbox->sortLayer = 3;
+	testbox->SetColor(sf::Color::Blue);
 	
  
 	for (auto go : gameObjects)
@@ -275,7 +277,7 @@ void SceneGame::Enter()
 	tileSize = testFarmMap->GetTileSize();
 
 	
-	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+	mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
 	for (int i = 0; i < stones.size(); i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
@@ -303,11 +305,8 @@ void SceneGame::Enter()
 	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
 	walls.push_back(shopExterior->GetCollider());
 
-	for (int i = 0; i < stoneCount; i++)
-	{
-		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
-		walls.push_back(stone->GetCollider());
-	}
+
+	Scene::Enter();
 	//맵 툴 충돌체 설정
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
@@ -318,12 +317,17 @@ void SceneGame::Enter()
 		walls.push_back(rect);
 	}
 
+	for (int i = 0; i < stoneCount; i++)
+	{
+		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
+		walls.push_back(stone->GetCollider());
+	}
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
 	}
+
 	
-	Scene::Enter();
 }
 
 void SceneGame::Exit()
@@ -544,28 +548,60 @@ void SceneGame::Update(float dt)
 		SCENE_MGR.ChangeScene(SceneId::Title);
 	}
 
-	sf::Vector2f playerTilePos;
+	//sf::Vector2f playerTilePos;
 
-	playerTilePos.x = player2->GetPosition().x / 72.f;
-	playerTilePos.y = player2->GetPosition().y / 72.f;
+	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
+	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
 
-	//for (int i = 0; i < testFarmMap->tiles.size(); ++i) //지우지 마세여,,,제발,,,
-	//{
-	//	if ((int)playerTilePos.x == testFarmMap->GetTile((int)playerTilePos.x - MapLT /*전역변수로 변경*/, (int)playerTilePos.y).x &&
-	//		(int)playerTilePos.y == testFarmMap->GetTile((int)playerTilePos.x, (int)playerTilePos.y).y)
-	//	{
+	//플레이어가 서있는 타일의 인덱스
 
-	//		testbox.setPosition(playerTilePos);
+	int tileX = 0;
+	int tileY = 0;
 
-	//	}
-	//}
+	if (player2->GetDirection().x > 0.f)
+	{
+		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX += 1;
+		tileSize.x* tileX + mapLT.x;
+		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+	}
+	else if (player2->GetDirection().x < 0.f)
+	{
+		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX -= 1;
+		tileSize.x* tileX + mapLT.x;
+		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+	}
+	else if (player2->GetDirection().y > 0.f)
+	{
+		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY += 1;
+		tileSize.y* tileY + mapLT.y;
+		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+	}
+	else if (player2->GetDirection().y < 0.f)
+	{
+		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY -= 1;
+		tileSize.y* tileY + mapLT.y;
+		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+	}
 
+	//std::cout << tileX << " " << tileY << std::endl;
+	
+	
+	//testFarmMap->GetTilePosition(playerTilePos.x, playerTilePos.y);
+
+	
+
+
+	//std::cout << tileSize.x * tileX + mapLT.x << " " << tileSize.y * tileY + mapLT.y << std::endl;
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	window.draw(testbox);
+	
 }
 
 void SceneGame::SpawnRootingItem(ItemId id)

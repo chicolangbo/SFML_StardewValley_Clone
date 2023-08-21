@@ -342,6 +342,18 @@ void TileMap::ChangeTexRect(int x, int y, sf::IntRect texRect)
     }
 }
 
+sf::Vector2f TileMap::GetTilePosition(float x, float y)
+{
+    for (int i = 0; i < tiles.size(); i++)
+    {
+        if (tiles[i].x == x && tiles[i].y == y)
+        {
+            return sf::Vector2f(tiles[i].texLeft, tiles[i].texTop);
+        }
+    }
+
+}
+
 sf::Vector2i TileMap::GetSize()
 {
     return size;

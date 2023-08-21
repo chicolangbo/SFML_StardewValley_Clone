@@ -83,6 +83,8 @@ protected:
 	int hour = 6;
 	int day = 1;
 
+	sf::Vector2f mapLT;
+
 	std::vector<sf::FloatRect> walls;
 	sf::FloatRect playerBound; 
 	sf::FloatRect mapBound;
@@ -99,8 +101,8 @@ protected:
 	sf::Vector2f housePos = { 21.f, 16.f };
 
 	//test
-	sf::RectangleShape testbox;
-
+	RectangleGo* testbox;
+	
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
