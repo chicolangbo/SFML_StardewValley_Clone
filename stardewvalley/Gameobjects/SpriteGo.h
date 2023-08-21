@@ -46,5 +46,8 @@ public:
 	sf::FloatRect GetCollider();
 
 	void Setting(std::string textureId, std::string n, std::string nickName);
+
+	//윤유림, 230821, 콜라이더 수동으로 크기 변경해주는 함수
+	void SetColliderSize(sf::Vector2f size);
 };
 

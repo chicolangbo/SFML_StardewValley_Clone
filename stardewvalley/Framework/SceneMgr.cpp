@@ -12,11 +12,9 @@ void SceneMgr::Init()
 	{
 		Release();
 	}
-	scenes.push_back(new SceneEditor());
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneTitle());
-	
-	
+	scenes.push_back(new SceneEditor());
 
 	for (auto scene : scenes)
 	{
