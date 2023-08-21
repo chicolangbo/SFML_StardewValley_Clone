@@ -42,13 +42,12 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 	// VIEW
-	{
-		sf::Vector2f centerPos = size * 0.5f;
-		worldView.setSize(size);
-		worldView.setCenter(0, 0);
-		uiView.setSize(size);
-		uiView.setCenter(size * 0.5f);
-	}
+	auto size = FRAMEWORK.GetWindowSize();
+	sf::Vector2f centerPos = size * 0.5f;
+	//worldView.setSize(size);
+	//worldView.setCenter(0, 0);
+	//uiView.setSize(size);
+	//uiView.setCenter(size * 0.5f);
 
 	// TEST MAP
 	{	//0818 맵툴 맵 적용
@@ -216,26 +215,27 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	shopTap->SetPierre(shopInterior->GetPierre());
-
-	// VIEW
-
-	//ui뷰 변경내용 인벤 포지션 변경부분찾기
-
-	//auto size = FRAMEWORK.GetWindowSize();
-	//sf::Vector2f centerPos = size * 0.5f;
-	//worldView.setSize(size);
-	//worldView.setCenter(0, 0);
-	//uiView.setSize(size);
-	//uiView.setCenter(size * 0.5f);
-
-	walls.push_back(houseExterior->GetCollider());
-	walls.push_back(shopExterior->GetCollider());
+	Scene::Enter();
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
-
+	worldView.setSize(size);
+	worldView.setCenter(0, 0);
 	uiView.setSize(size);
-	uiView.setCenter(centerPos);
+	uiView.setCenter(size * 0.5f);
+
+	shopTap->SetPierre(shopInterior->GetPierre());
+
+
+	walls.push_back(houseExterior->GetCollider()); 
+	walls.push_back(shopExterior->GetCollider()); 
+
+	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
+	//960 540 동일
+	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
+	//960 540 동일
+
+	//uiView.setSize(size);
+	//uiView.setCenter(centerPos);
 
 	testFarmMap->SetPosition(0, 0);
 	testFarmMap2->SetPosition(testFarmMap->GetPosition());
@@ -268,14 +268,12 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
+	
 
-	Scene::Enter();
+	//quickinven->SetPosition(size);
+	//inven->SetPosition(size.x,size.y);
 
-	uiView.setSize(size);
-	uiView.setCenter(centerPos);
-
-	cout << testFarmMap->vertexArray.getBounds().left  << "," << testFarmMap->vertexArray.getBounds().top << endl;
-
+	std::cout << quickinven->GetPosition().x << " " << quickinven->GetPosition().y << std::endl;
 }
 
 void SceneGame::Exit()
@@ -505,6 +503,12 @@ void SceneGame::Update(float dt)
 	if (inven->GetEndGame())
 	{
 		window.close();
+	}
+
+	if (inven->GetChageScene())
+	{
+		inven->SetChageScene(false);
+		SCENE_MGR.ChangeScene(SceneId::Title);
 	}
 
 }

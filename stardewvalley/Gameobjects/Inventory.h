@@ -77,6 +77,7 @@ private:
 
 	//게임 종료
 	bool EndGame = false;
+	bool chageScene = false;
 
 public:
 	Inventory(const std::string& n = "");
@@ -112,4 +113,6 @@ public:
 	std::vector<Slot*>* GetSlot() { return &slot; } 
 	bool GetInvenOff() { return invenOnOff; }
 	bool GetEndGame() { return EndGame; }
+	bool GetChageScene() { return chageScene; }
+	void SetChageScene(bool s) { chageScene = s; }
 };
