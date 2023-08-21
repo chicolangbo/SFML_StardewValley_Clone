@@ -218,24 +218,10 @@ void ShopTap::Reset()
         scrollBg.SetOrigin(Origins::TC);
         scrollBg.SetPosition(scrollBar.GetPosition());
 
-        // MASK
-        shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x - 15.f, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
-        //shopBoxMask.create(FRAMEWORK.GetWindowSize().x, FRAMEWORK.GetWindowSize().y);
-        shopBoxMask.clear(sf::Color::Transparent);
-
-        sf::Texture texture;
-        texture.loadFromFile("graphics/shopCellBox.png");
-        for (int i = 0; i < shopSlot.size(); ++i)
-        {
-            shopBoxMask.draw(shopSlot[i]->cellBox.vertexArray, &texture);
-            shopBoxMask.draw(shopSlot[i]->iconCell.sprite);
-            shopBoxMask.draw(shopSlot[i]->itemIcon.sprite);
-            shopBoxMask.draw(shopSlot[i]->itemText.text);
-            shopBoxMask.draw(shopSlot[i]->coin.sprite);
-            shopBoxMask.draw(shopSlot[i]->coinText.text);
-        }
-        shopBoxMask.display();
-
+        //// MASK
+        //shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x - 15.f, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
+        ////shopBoxMask.create(FRAMEWORK.GetWindowSize().x, FRAMEWORK.GetWindowSize().y);
+        //shopBoxMask.clear(sf::Color::Transparent);
     }
 }
 
@@ -283,16 +269,16 @@ void ShopTap::Draw(sf::RenderWindow& window)
 
     for (auto m : shopUiObjects)
     {
-        if (m->GetActive())
-        {
+        //if (m->GetActive())
+        //{
             m->Draw(window);
-        }
+        //}
     }
-    if (shopSlot[0]->GetActive())
-    {
+    //if (shopSlot[0]->GetActive())
+    //{
         sf::Sprite m(shopBoxMask.getTexture());
         window.draw(m);
-    }
+    //}
 }
 
 void ShopTap::SortGos()

@@ -106,6 +106,7 @@ void SpriteGo::Reset()
 		if (tempRect != sf::IntRect{ 0, 0, 0, 0 })
 		{
 			sprite.setTextureRect(tempRect);
+			collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 		}
 	}
 	//

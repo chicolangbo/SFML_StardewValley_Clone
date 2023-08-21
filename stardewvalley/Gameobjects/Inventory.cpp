@@ -107,6 +107,8 @@ void Inventory::Init()
 
 void Inventory::Reset()
 {
+    auto size = FRAMEWORK.GetWindowSize();
+
     for (auto m : invenUiObjects)
     {
         m->Reset();
@@ -115,7 +117,7 @@ void Inventory::Reset()
     {
         invenBox.SetSize({ 1040.f, 670.f });
         invenBox.SetOrigin(Origins::MC);
-        invenBox.SetPosition(position);
+        invenBox.SetPosition(size/2.f);
         invenBox.sortLayer = (int)UiType::BOX;
 
         slotPos = { invenBox.vertexArray[0].position.x + 80.f, invenBox.vertexArray[0].position.y + 100.f };
