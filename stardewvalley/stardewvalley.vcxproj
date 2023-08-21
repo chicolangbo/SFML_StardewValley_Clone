@@ -192,6 +192,7 @@
     <ClCompile Include="Gameobjects\QuickInventory.cpp" />
     <ClCompile Include="DataTables\ObjectTable.cpp" />
     <ClCompile Include="Gameobjects\RectButton.cpp" />
+    <ClCompile Include="Gameobjects\Objects.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -211,6 +212,9 @@
     <ClCompile Include="Gameobjects\ShopInterior.cpp" />
     <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
     <ClCompile Include="Gameobjects\Stone.cpp" />
+    <ClCompile Include="Gameobjects\Timber.cpp" />
+    <ClCompile Include="Tree.cpp" />
+    <ClCompile Include="Weed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -248,6 +252,7 @@
     <ClInclude Include="Gameobjects\HomeInterior.h" />
     <ClInclude Include="Gameobjects\HomeTap.h" />
     <ClInclude Include="Gameobjects\RectButton.h" />
+    <ClInclude Include="Gameobjects\Objects.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -268,6 +273,9 @@
     <ClInclude Include="GameObjects\UiButton.h" />
     <ClInclude Include="Gameobjects\Wateringcan.h" />
     <ClInclude Include="Gameobjects\Stone.h" />
+    <ClInclude Include="Gameobjects\Timber.h" />
+    <ClInclude Include="Tree.h" />
+    <ClInclude Include="Weed.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

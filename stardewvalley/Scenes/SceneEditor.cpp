@@ -591,7 +591,7 @@ void SceneEditor::Update(float dt)
 	
 	//¸Ê
 	if (worldMousPos.x >= MapLT.x && worldMousPos.x <= MapLT.x + MapSize.x
-		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y)
+		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y && mousePosition.x > palletBg->GetTileMapSize().x)
 	{
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);

@@ -29,6 +29,9 @@
 #include "HomeTap.h"
 #include "ObjectTable.h"
 #include "Stone.h"
+#include "Timber.h"
+#include "Weed.h"
+#include "Tree.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -76,13 +79,62 @@ void SceneGame::Init()
 		Objtable->Load();
 		for (auto obj : Objtable->GetTable())
 		{
+			auto objInfo = obj.second;
+			sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
 			if (obj.second.type == ObjType::Stone)
 			{
-				auto objInfo = obj.second;
-				sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
 				Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone"+to_string(stoneCount)));
 				stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				stones.push_back(stone);
+				stone->sortLayer = 1;
 				stoneCount++;
+			}
+			else if (obj.second.type == ObjType::Timber)
+			{
+				Timber* timber = (Timber*)AddGo(new Timber("map/object.png", "timber" + to_string(timberCount)));
+				timber->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				timbers.push_back(timber);
+				timber->sortLayer = 1;
+				timberCount++;
+			}
+			else if (obj.second.type == ObjType::Weed)
+			{
+				Weed* weed = (Weed*)AddGo(new Weed("map/object.png", "weed" + to_string(weedCount)));
+				weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				weeds.push_back(weed);
+				weed->sortLayer = 1;
+				weedCount++;
+			}
+			else if (obj.second.type == ObjType::Tree)
+			{
+				switch ((int)objInfo.left)
+				{
+				case 144: //2
+				{
+					branchNick = "branch2";
+					branchId = "map/tree2_spring.png";
+					break;
+				}
+				case 160: //1
+				{
+					branchNick = "branch";
+					branchId = "map/tree1_spring.png";
+					break;
+				}
+				case 176: //3
+				{
+					branchNick = "branch3";
+					branchId = "map/tree3_spring.png";
+					break;
+				}
+				default:
+					break;
+				}
+				Tree* tree = (Tree*)AddGo(new Tree("tree" + to_string(treeCount), branchId, "map/object.png", branchNick, "stump"));
+				tree->stump->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				trees.push_back(tree);
+				tree->sortLayer = 2;
+				treeCount++;
 			}
 		}
 	}
@@ -91,7 +143,7 @@ void SceneGame::Init()
 	{
 		player2 = (Player2*)AddGo(new Player2());
 		player2->SetOrigin(Origins::BC);
-		player2->sortLayer = 2;
+		player2->sortLayer = 2; 
 		player2->collider.setScale(0.5f, 0.1f);
 		player2->SetRootingItems(&rootingItems);
 	}
@@ -199,8 +251,6 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	Scene::Enter();
-
 	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 
@@ -218,12 +268,29 @@ void SceneGame::Enter()
 
 	tileSize = testFarmMap->GetTileSize();
 
+	
 	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
-	for (int i = 0; i < stoneCount; i++)
+	for (int i = 0; i < stones.size(); i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
 		stone->SetMapLT(mapLT);
 	}
+	for (int i = 0; i < timbers.size(); i++)
+	{
+		Timber* timber = (Timber*)FindGo("timber" + to_string(i));
+		timber->SetMapLT(mapLT);
+	}
+	for (int i = 0; i < weeds.size(); i++)
+	{
+		Weed* weed = (Weed*)FindGo("weed" + to_string(i));
+		weed->SetMapLT(mapLT);
+	}
+	for (int i = 0; i < trees.size(); i++)
+	{
+		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
+		tree->stump->SetMapLT(mapLT);
+	}
+
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
 	walls.push_back(houseExterior->GetCollider());
 
@@ -245,6 +312,7 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]);
 	}
 	
+	Scene::Enter();
 }
 
 void SceneGame::Exit()
@@ -254,8 +322,24 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-	
 	Scene::Update(dt);
+
+	//나무 뒤로 가면 나무 투명화
+	for (auto tree : trees)
+	{
+		sf::FloatRect intersection;
+		if (tree->GetHitbox().getGlobalBounds().intersects(player2->GetCollider(), intersection))
+		{
+			if (intersection.width >= player2->GetCollider().width)
+			{
+				tree->branch.setColor(sf::Color(255, 255, 255, 150));
+			}
+		}
+		else
+		{
+			tree->branch.setColor(sf::Color(255, 255, 255, 255));
+		}
+	}
 	player2->SetItemId(quickinven->GetItemId()); 
 	time +=dt;
 	if (time >= 7.f)
@@ -301,7 +385,6 @@ void SceneGame::Update(float dt)
 	energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
 	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar->SetOrigin(Origins::BC);
-
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
