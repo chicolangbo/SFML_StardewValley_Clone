@@ -203,16 +203,7 @@ void SceneGame::Enter()
 	//{
 	//	walls.push_back(shopWalls->Walls[i].getGlobalBounds());
 	//}
-	for (int i = 0; i < walls.size(); ++i)
-	{
-		player2->SetWallBounds(walls[i]); 
-	}
-	font.loadFromFile("fonts/SDMiSaeng.ttf");
-	textMoney.setFont(font);
-	textMin.setFont(font);
-	textHour.setFont(font);
-	textDay.setFont(font);
-
+	
 	//std::cout << uiView.getCenter().x << " " << uiView.getCenter().y << std::endl;
 	//960 540 동일
 	//std::cout << inven->GetPosition().x << " " << inven->GetPosition().y << std::endl;
