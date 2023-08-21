@@ -42,7 +42,6 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 	// VIEW
-	auto size = FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = size * 0.5f;
 	//worldView.setSize(size);
 	//worldView.setCenter(0, 0);

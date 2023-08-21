@@ -25,13 +25,9 @@ ShopTap::ShopTap(const std::string& n)
     moneyText("moneyText", "fonts/SDMiSaeng.ttf"),
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
     invenBox("graphics/box1.png", "shopInvenBox", { 22,27,36,31 }, { 0,0,80,80 }, NINE_SLICE),
-    scrollBg("graphics/scrollBg.png", "scrollBg", {2, 2, 2, 2}, {0,0,6,6}, NINE_SLICE),
-    scrollBar("graphics/Cursors.ko-KR.png", "scrollBar", "scrollBar"),
     scrollUp("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"),
     scrollDown("graphics/Cursors.ko-KR.png", "arrowDown", "arrowDown")
 {
-
-
     // SHOP TAP
     AddUi(&pierrePortrait);
     AddUi(&pierreText1);
@@ -44,8 +40,6 @@ ShopTap::ShopTap(const std::string& n)
     AddUi(&moneyText);
     AddUi(&xButton);
     AddUi(&invenBox);
-    AddUi(&scrollBg);
-    AddUi(&scrollBar);
     AddUi(&scrollUp);
     AddUi(&scrollDown);
     
@@ -57,7 +51,7 @@ ShopTap::ShopTap(const std::string& n)
         shopSlot.push_back(new ShopSlot((ItemId)itemNum, "graphics/shopCellBox.png", "shopCellBox" + num, { 27,27,26,26 }, {0,0,80,80}, NINE_SLICE));
         shopSlot[i]->shopSlotIndex = i;
         shopSlot[i]->SetOrigin(Origins::MC);
-        //AddUi(shopSlot[i]);
+        AddUi(shopSlot[i]);
         itemNum++;
     }
 
@@ -207,21 +201,8 @@ void ShopTap::Reset()
         scrollUp.SetOrigin(Origins::TC);
         scrollUp.SetPosition(shopBox.GetPosition().x + shopBox.GetSize().x + 50.f, shopBox.GetPosition().y);
 
-        scrollBar.SetScale(4.f, 4.f);
-        scrollBar.SetOrigin(Origins::TC);
-        scrollBar.SetPosition(scrollUp.GetPosition().x, scrollUp.GetPosition().y + scrollUp.sprite.getGlobalBounds().height + 10.f);
-
         scrollDown.SetOrigin(Origins::BC);
-        scrollDown.SetPosition(scrollUp.GetPosition().x, invenBox.vertexArray[35].position.y);
-
-        scrollBg.SetSize({ scrollBar.sprite.getGlobalBounds().width, (scrollDown.GetPosition().y - scrollDown.sprite.getGlobalBounds().height - 10.f) - scrollBar.GetPosition().y });
-        scrollBg.SetOrigin(Origins::TC);
-        scrollBg.SetPosition(scrollBar.GetPosition());
-
-        //// MASK
-        //shopBoxMask.create(shopBox.GetPosition().x + shopBox.GetSize().x - 15.f, shopBox.GetPosition().y + shopBox.GetSize().y - 15.f);
-        ////shopBoxMask.create(FRAMEWORK.GetWindowSize().x, FRAMEWORK.GetWindowSize().y);
-        //shopBoxMask.clear(sf::Color::Transparent);
+        scrollDown.SetPosition(scrollUp.GetPosition().x, shopBox.vertexArray[35].position.y);
     }
 }
 
@@ -269,16 +250,11 @@ void ShopTap::Draw(sf::RenderWindow& window)
 
     for (auto m : shopUiObjects)
     {
-        //if (m->GetActive())
-        //{
+        if (m->GetActive())
+        {
             m->Draw(window);
-        //}
+        }
     }
-    //if (shopSlot[0]->GetActive())
-    //{
-        sf::Sprite m(shopBoxMask.getTexture());
-        window.draw(m);
-    //}
 }
 
 void ShopTap::SortGos()
@@ -357,19 +333,10 @@ void ShopTap::TapOnOff()
         {
             i->SetActive(true);
         }
-        for (auto i : shopSlot)
-        {
-            i->SetActive(true);
-        }
     }
-
     else
     {
         for (auto i : shopUiObjects)
-        {
-            i->SetActive(false);
-        }
-        for (auto i : shopSlot)
         {
             i->SetActive(false);
         }
@@ -427,10 +394,6 @@ void ShopTap::ButtonSetUp()
 
     // SCROLL : 여기는 드래그라서 수정해야 함 ㅠㅠ
     {
-        scrollBar.OnClick = [this]() {
-
-        };
-
         scrollUp.OnClick = [this]() {
 
         };
