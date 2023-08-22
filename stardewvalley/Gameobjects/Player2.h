@@ -47,6 +47,7 @@ protected:
 	int energy = 270;
 	int money = 500;
 	int tempMoney = 0;
+	int totalEarningsInt = 500;
 
 	std::vector<sf::FloatRect> wallBounds;
 	std::vector<sf::Vector2f> wallBoundsLT;
@@ -61,7 +62,6 @@ protected:
 	
 	std::list<tagItemInfo> playerItemList;
 	std::list<RootingItem*>*rootingItemList;
-	int totalEarningsInt = 500; // ���� �ڱ�
 
 	Inventory* inven;
 	float pos = 0.6f;
@@ -93,6 +93,7 @@ public:
 	AnimationController GetAnimation() { return animation; }
 
 	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
+	void LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM);
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
 	void AddRootingItem();
 	void AddPlayerItem(ItemId id);

@@ -10,7 +10,7 @@ protected:
 public:
     sf::Text text;
 
-	RectButton(sf::Vector2f size, const string& n = "");
+	RectButton(const string& path, sf::Vector2f size, const string& n = "");
 	virtual ~RectButton() override;
 
 	virtual void Init() override;

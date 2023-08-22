@@ -2,10 +2,12 @@
 #include "RectButton.h"
 #include "InputMgr.h"
 #include "SceneMgr.h"
+#include "ResourceMgr.h"
 
-RectButton::RectButton(sf::Vector2f size, const string& n)
+RectButton::RectButton(const string& path, sf::Vector2f size, const string& n)
 	:RectangleGo(size, n)
 {
+	text.setFont(*RESOURCE_MGR.GetFont(path));
 }
 
 RectButton::~RectButton()

@@ -32,6 +32,7 @@
 #include "Timber.h"
 #include "Weed.h"
 #include "Tree.h"
+#include "SaveLoadData.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -324,6 +325,8 @@ void SceneGame::Enter()
 	}
 	
 	Scene::Enter();
+
+	SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
 }
 
 void SceneGame::Exit()
@@ -516,11 +519,11 @@ void SceneGame::Update(float dt)
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
-		SpawnRootingItem(ItemId::branch);
+		SpawnRootingItem(ItemId::branch, {0,0});
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
 	{
-		SpawnRootingItem(ItemId::coal);
+		SpawnRootingItem(ItemId::coal, { 0,0 });
 	}
 
 	
@@ -568,13 +571,14 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	window.draw(testbox);
 }
 
-void SceneGame::SpawnRootingItem(ItemId id)
+void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 {
 	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
-	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName)));
+	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName))); // 아이템 먹으면 딜리트
 	for (auto r : rootingItems)
 	{
 		r->Reset();
+		r->SetPosition(pos.x, pos.y);
 	}
 }
 

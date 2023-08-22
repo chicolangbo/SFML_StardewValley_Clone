@@ -25,22 +25,19 @@ class Tree;
 class SceneGame : public Scene
 {
 protected:
-	
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
 
 	bool enterShop = false;
 	bool enterHome = false;
-	
+
 	Player2* player2;
 
-	// �ӽ� ��
 	TileMap* testFarmMap;
 	TileMap* testFarmMap2;
 	TileMap* testFarmMapObj;
-	//SpriteGo* testFarmMap; // ���� ���
-	SpriteGo* houseExterior; // �� �ܺ�
-	SpriteGo* shopExterior; // �� �ܺ�
+	SpriteGo* houseExterior;
+	SpriteGo* shopExterior;
 
 	//오브젝트테이블
 	ObjectTable* Objtable;
@@ -69,7 +66,7 @@ protected:
 	SpriteGo* info;
 	SpriteGo* timeArrow;
 	float arrowSpin = 0.f;
-	RectangleGo* energyBar; 
+	RectangleGo* energyBar;
 	int energys;
 	TextGo* texMoney;
 	TextGo* texMin;
@@ -84,11 +81,11 @@ protected:
 	int day = 1;
 
 	std::vector<sf::FloatRect> walls;
-	sf::FloatRect playerBound; 
+	sf::FloatRect playerBound;
 	sf::FloatRect mapBound;
 
 	Inventory* inven;
-	std::list<RootingItem*>rootingItems; 
+	std::list<RootingItem*>rootingItems;
 	QuickInventory* quickinven;
 
 	bool off = false;
@@ -116,7 +113,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SpawnRootingItem(ItemId id);
+	void SpawnRootingItem(ItemId id, sf::Vector2f pos);
 	void SetAct(bool is);
+	//void SetPlayerLocation();
 };
-
