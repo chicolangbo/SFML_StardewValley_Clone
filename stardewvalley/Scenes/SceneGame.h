@@ -118,7 +118,11 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SpawnRootingItem(ItemId id);
+	void SpawnRootingItem(ItemId id, sf::Vector2f pos);
 	void SetAct(bool is);
+
+	void HitStone(int x, int y);
+	void HitTimber(int x, int y);
+	void HitTree(int x, int y);
 };
 

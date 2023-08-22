@@ -86,6 +86,7 @@ void SceneGame::Init()
 			{
 				Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone"+to_string(stoneCount)));
 				stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				stone->SetHp(1);
 				stones.push_back(stone);
 				stone->sortLayer = 1;
 				stoneCount++;
@@ -94,6 +95,7 @@ void SceneGame::Init()
 			{
 				Timber* timber = (Timber*)AddGo(new Timber("map/object.png", "timber" + to_string(timberCount)));
 				timber->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				timber->SetHp(1);
 				timbers.push_back(timber);
 				timber->sortLayer = 1;
 				timberCount++;
@@ -101,6 +103,7 @@ void SceneGame::Init()
 			else if (obj.second.type == ObjType::Weed)
 			{
 				Weed* weed = (Weed*)AddGo(new Weed("map/object.png", "weed" + to_string(weedCount)));
+				weed->SetHp(1);
 				weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
 				weeds.push_back(weed);
 				weed->sortLayer = 1;
@@ -133,6 +136,7 @@ void SceneGame::Init()
 				}
 				Tree* tree = (Tree*)AddGo(new Tree("tree" + to_string(treeCount), branchId, "map/object.png", branchNick, "stump"));
 				tree->stump->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+				tree->stump->SetHp(15);
 				trees.push_back(tree);
 				tree->sortLayer = 2;
 				treeCount++;
@@ -342,7 +346,6 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]);
 	}
 
-	
 }
 
 void SceneGame::Exit()
@@ -535,11 +538,11 @@ void SceneGame::Update(float dt)
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
-		SpawnRootingItem(ItemId::branch);
+		SpawnRootingItem(ItemId::branch, {0,0});
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
 	{
-		SpawnRootingItem(ItemId::coal);
+		SpawnRootingItem(ItemId::coal, { 0,0 });
 	}
 
 	
@@ -578,82 +581,62 @@ void SceneGame::Update(float dt)
 	{
 		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 		tileX += 1;
-		tileSize.x* tileX + mapLT.x;
+		//tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.x < 0.f)
 	{
 		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 		tileX -= 1;
-		tileSize.x* tileX + mapLT.x;
+		//tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.y > 0.f)
 	{
 		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 		tileY += 1;
-		tileSize.y* tileY + mapLT.y;
+		//tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.y < 0.f)
 	{
 		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 		tileY -= 1;
-		tileSize.y* tileY + mapLT.y;
+		//tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 
-	
-	for (auto it = stones.begin(); it != stones.end();)
+	int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
+	int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
+
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left)&& player2->GetPlayerItemId() == ItemId::pick)
 	{
-		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
-		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
-		//ItemId* itme = player2->GetPlayerItemId();
-	    
-		if (stoneX == tileX && stoneY == tileY) 
-		{
-			std::cout << "this" << std::endl;
-
-			sf::FloatRect wal = (*it)->GetCollider();
-			auto wallIt = std::find(walls.begin(), walls.end(), wal); 
-			if (wallIt != walls.end())
-			{ 
-				walls.erase(wallIt); 
-			} 
-
-			(*it)->SetActive(false);
-			it = stones.erase(it);
-			//RemoveGo(*it);
-			player2->ClearWalls();
-
-			for (int i = 0; i < walls.size(); ++i) 
-			{
-				player2->SetWallBounds(walls[i]); 
-			} 
-			break;
-		}
-		else
-		{
-			++it;
-		}
-
+		HitStone(BtileX, BtileY); 
 	}
-
+	
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+	{
+		HitTimber(BtileX, BtileY);
+	}
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
+	{
+		HitTree(BtileX, BtileY); 
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	
 }
 
-void SceneGame::SpawnRootingItem(ItemId id)
+void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 {
 	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
 	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName)));
 	for (auto r : rootingItems)
 	{
 		r->Reset();
+		r->SetPosition(pos);
 	}
 }
 
@@ -666,6 +649,141 @@ void SceneGame::SetAct(bool is)
 	inven->SetActive(is);
 	quickinven->SetActive(is);
 	energyBar->SetActive(is);
+}
+
+void SceneGame::HitStone(int x, int y)
+{
+	for (auto it = stones.begin(); it != stones.end();)
+	{
+		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
+		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		//ItemId* itme = player2->GetPlayerItemId();
+
+		if (stoneX == x && stoneY == y)
+		{
+			(*it)->Hit(1);
+			std::cout << (*it)->GetHp() << std::endl;
+			if ((*it)->GetHp() <= 0)
+			{
+				sf::FloatRect wal = (*it)->GetCollider();
+				auto wallIt = std::find(walls.begin(), walls.end(), wal);
+				if (wallIt != walls.end())
+				{
+					walls.erase(wallIt);//해당 돌의 콜라이더 삭제
+				}
+
+				(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
+				it = stones.erase(it);//돌의 백터 배열에서 제거
+				//RemoveGo(*it);
+				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
+
+				//testbox->SetPosition(tileSize.x * tileX + mapLT.x, tileSize.y * tileY + mapLT.y);
+
+				SpawnRootingItem(ItemId::stone, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
+
+				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
+				for (int i = 0; i < walls.size(); ++i)
+				{
+					player2->SetWallBounds(walls[i]);//다시 콜라이더 배열 업데이트
+				}
+			}
+			break;
+		}
+		else
+		{
+			++it;
+		}
+
+	}
+}
+
+void SceneGame::HitTimber(int x, int y)
+{
+	for (auto it = timbers.begin(); it != timbers.end();)
+	{
+		int timberX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
+		int timberY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		//ItemId* itme = player2->GetPlayerItemId();
+
+		if (timberX == x && timberY == y)
+		{
+			(*it)->Hit(1);
+			std::cout << (*it)->GetHp() << std::endl;
+			if ((*it)->GetHp() <= 0)
+			{
+				sf::FloatRect wal = (*it)->GetCollider();
+				auto wallIt = std::find(walls.begin(), walls.end(), wal);
+				if (wallIt != walls.end())
+				{
+					walls.erase(wallIt);//해당 돌의 콜라이더 삭제
+				}
+
+				(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
+				it = timbers.erase(it);//돌의 백터 배열에서 제거
+				//RemoveGo(*it);
+				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
+
+				SpawnRootingItem(ItemId::branch, { tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y });
+
+				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
+				for (int i = 0; i < walls.size(); ++i)
+				{
+					player2->SetWallBounds(walls[i]);//다시 콜라이더 배열 업데이트
+				}
+			}
+			break;
+		}
+		else
+		{
+			++it;
+		}
+
+	}
+}
+
+void SceneGame::HitTree(int x, int y)
+{
+	for (auto it = trees.begin(); it != trees.end();)
+	{
+		int treeX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
+		int treeY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		
+		if (treeX == x && treeY == y)
+		{
+			(*it)->stump->Hit(1);
+			if ((*it)->stump->GetHp() == 5)
+			{
+				(*it)->TreeRotation();
+			}
+			else if ((*it)->stump->GetHp() == 0)  
+			{
+				sf::FloatRect wal = (*it)->stump->GetCollider();
+				auto wallIt = std::find(walls.begin(), walls.end(), wal);
+				if (wallIt != walls.end())
+				{
+					walls.erase(wallIt);
+				}
+
+				(*it)->SetActive(false);
+				it = trees.erase(it); 
+				
+				player2->ClearWalls();
+
+				SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
+
+				for (int i = 0; i < walls.size(); ++i)
+				{
+					player2->SetWallBounds(walls[i]);
+				}
+			}
+			break;
+		}
+		else
+		{
+			++it;
+		}
+
+	}
 }
 
 VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)

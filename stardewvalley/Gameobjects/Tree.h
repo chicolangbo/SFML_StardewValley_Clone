@@ -12,10 +12,17 @@ protected:
 	string branchId;
 	string branchNick;
 
+	int branchHp = 10;
+	int stumpHp = 5;
+
+	bool treeRotation = false;
+	bool fallingTree = false;
+	float rotation = 0.f;
 public:
 
 	Objects* stump; //그루터기
 	sf::Sprite branch; //몸통
+	//처음에는 브랜치 hp로 다음에는 스텀프 hp로 세팅
 
 	Tree(const std::string& name ="", const std::string & branchId = "", const std::string & stumpId = "",
 		const std::string& branchNick = "", const std::string& stumpNick = "");
@@ -36,5 +43,7 @@ public:
 	virtual void SetOrigin(float x, float y);
 
 	sf::RectangleShape GetHitbox();
+
+	void TreeRotation() { treeRotation = true; }
 };
 

@@ -3,7 +3,7 @@
 class Weed :public Objects
 {
 protected:
-
+	int hp = 1;
 public:
 
 	Weed(const std::string& textureId = "", const std::string& n = "", const string& nickName = "")

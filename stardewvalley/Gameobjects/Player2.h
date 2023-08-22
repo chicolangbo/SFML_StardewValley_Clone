@@ -103,7 +103,7 @@ public:
 	void ZeroEnergy() { energy = 0; }
 	sf::Vector2f GetDirection() { return direction; }
 
-	ItemId* GetPlayerItemId() { return &item; } 
+	ItemId GetPlayerItemId() { return item; } 
 
 };
 
