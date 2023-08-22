@@ -38,7 +38,7 @@ void Tree::Reset()
 	sf::IntRect texRect = RESOURCE_MGR.GetTextureRect(branchNick);
 	branch.setTextureRect(texRect);
 	Utils::SetOrigin(branch, Origins::BC);
-	branch.setPosition(stump->GetPosition().x + 36, stump->GetPosition().y+15);
+	branch.setPosition(stump->GetPosition().x + 36, stump->GetPosition().y + 15);
 
 	hitbox.setSize({ branch.getGlobalBounds().width, branch.getGlobalBounds().height });
 	hitbox.setFillColor(sf::Color::Transparent);
@@ -68,6 +68,7 @@ void Tree::SetPosition(const sf::Vector2f& p)
 	GameObject::SetPosition(p);
 	branch.setPosition(p);
 	stump->SetPosition(p);
+	hitbox.setPosition(p);
 }
 
 void Tree::SetPosition(float x, float y)
@@ -75,6 +76,7 @@ void Tree::SetPosition(float x, float y)
 	GameObject::SetPosition(x, y);
 	branch.setPosition(x, y);
 	stump->SetPosition(x, y);
+	hitbox.setPosition(x, y);
 }
 
 void Tree::SetOrigin(Origins origin)
@@ -84,6 +86,7 @@ void Tree::SetOrigin(Origins origin)
 	{
 		Utils::SetOrigin(branch, origin);
 		stump->SetOrigin(origin);
+		Utils::SetOrigin(hitbox, origin);
 	}
 }
 
@@ -92,6 +95,7 @@ void Tree::SetOrigin(float x, float y)
 	GameObject::SetOrigin(x, y);
 	branch.setOrigin(x, y);
 	stump->SetOrigin(x, y);
+	hitbox.setOrigin(x, y);
 }
 
 sf::RectangleShape Tree::GetHitbox()

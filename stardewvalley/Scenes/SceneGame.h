@@ -21,6 +21,7 @@ class Stone;
 class Timber;
 class Weed;
 class Tree;
+class HoeDirt;
 
 class SceneGame : public Scene
 {
@@ -42,7 +43,7 @@ protected:
 	SpriteGo* houseExterior; // �� �ܺ�
 	SpriteGo* shopExterior; // �� �ܺ�
 
-	//오브젝트테이블
+	//object
 	ObjectTable* Objtable;
 	vector<Stone*> stones;
 	vector<Timber*> timbers;
@@ -56,6 +57,10 @@ protected:
 
 	string branchNick;
 	string branchId;
+
+	//hoe dirt
+	HoeDirt* dirt;
+
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;
@@ -104,8 +109,6 @@ protected:
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
-
-	VertexArrayGo* CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId);
 
 	virtual void Init() override;
 	virtual void Release() override;

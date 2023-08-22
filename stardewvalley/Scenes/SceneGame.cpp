@@ -32,6 +32,7 @@
 #include "Timber.h"
 #include "Weed.h"
 #include "Tree.h"
+#include "HoeDirt.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -52,16 +53,15 @@ void SceneGame::Init()
 		testFarmMap->Reset();
 		testFarmMap->Load("tables/newMapLayer1.csv");
 		testFarmMap->SetOrigin(Origins::MC);
+		testFarmMap->sortLayer = 0;
+		testFarmMap->sortOrder = 0;
 		//울타리나 절벽
 		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
 		testFarmMap2->Reset();
 		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
 		testFarmMap2->SetOrigin(Origins::MC);
-
-		//testFarmMapObj = (TileMap*)AddGo(new TileMap("map/object.png", "MapObj"));
-		//testFarmMapObj->Reset();
-		//testFarmMapObj->Load("tables/newMapLayerObj.csv"); //투명한 타일 96, 16
-		//testFarmMapObj->SetOrigin(Origins::MC);
+		testFarmMap2->sortLayer = 0;
+		testFarmMap2->sortOrder = 1;
 
 		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
 		houseExterior->sprite.setScale(4.f, 4.f);
@@ -139,6 +139,12 @@ void SceneGame::Init()
 			}
 		}
 	}
+
+	//HOE DIRT
+	{
+		dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+		dirt->sortLayer = 0;
+		dirt->sortOrder = 2;	}
 
 	// PLAYER
 	{
@@ -266,16 +272,9 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	Scene::Enter();
-	shopTap->SetPierre(shopInterior->GetPierre());
-
-	
-	//testFarmMapObj->SetPosition(testFarmMap->GetPosition());
-
 	tileSize = testFarmMap->GetTileSize();
-
-	
 	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+
 	for (int i = 0; i < stones.size(); i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
@@ -296,6 +295,10 @@ void SceneGame::Enter()
 		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
 		tree->stump->SetMapLT(mapLT);
 	}
+
+	Scene::Enter();
+
+	shopTap->SetPierre(shopInterior->GetPierre());
 
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
 	walls.push_back(houseExterior->GetCollider());
@@ -322,8 +325,8 @@ void SceneGame::Enter()
 	{
 		player2->SetWallBounds(walls[i]);
 	}
-	
-	Scene::Enter();
+
+	dirt->SetPosition(0, 0);
 }
 
 void SceneGame::Exit()
@@ -396,6 +399,13 @@ void SceneGame::Update(float dt)
 	energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
 	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
 	energyBar->SetOrigin(Origins::BC);
+
+	//물주기 테스트 코드
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad0))
+	{
+		dirt->SetIsWatered(true);
+	}
+	//
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
@@ -487,7 +497,6 @@ void SceneGame::Update(float dt)
 	// PLAYER - BEDDING COLLIDE
 	if (enterHome)
 	{
-		// ���߿� ��ǥ�� �ٲٱ�
 		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 		{
 			std::cout << "�浹" << std::endl;
@@ -507,6 +516,7 @@ void SceneGame::Update(float dt)
 		}
 	}
 	
+	//SET VIEW
 	worldView.setCenter(player2->GetPosition());
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
@@ -554,9 +564,7 @@ void SceneGame::Update(float dt)
 	//	if ((int)playerTilePos.x == testFarmMap->GetTile((int)playerTilePos.x - MapLT /*전역변수로 변경*/, (int)playerTilePos.y).x &&
 	//		(int)playerTilePos.y == testFarmMap->GetTile((int)playerTilePos.x, (int)playerTilePos.y).y)
 	//	{
-
 	//		testbox.setPosition(playerTilePos);
-
 	//	}
 	//}
 
@@ -587,54 +595,4 @@ void SceneGame::SetAct(bool is)
 	inven->SetActive(is);
 	quickinven->SetActive(is);
 	energyBar->SetActive(is);
-}
-
-VertexArrayGo* SceneGame::CreateBackGround(sf::Vector2i size, sf::Vector2f tileSize, sf::Vector2f texSize, string textureId)
-{
-	VertexArrayGo* background = new VertexArrayGo(textureId, "Background");
-	background->vertexArray.setPrimitiveType(sf::Quads);
-	background->vertexArray.resize(size.x * size.y * 4); 
-
-	sf::Vector2f startPos = { 0, 0 }; 
-	sf::Vector2f offsets[4] =
-	{
-		{0.f, 0.f},
-		{tileSize.x, 0.f},
-		{tileSize.x, tileSize.y},
-		{0.f, tileSize.y}
-	}; 
-	sf::Vector2f texOffsets[4] =
-	{
-		{0.f, 0.f},
-		{texSize.x, 0.f},
-		{texSize.x, texSize.y},
-		{0.f, texSize.y}
-	};
-
-	sf::Vector2f currPos = startPos;
-	for (int i = 0; i < size.y; i++)
-	{
-		for (int j = 0; j < size.x; j++)
-		{
-			int texIndex = 3;
-			if (i != 0 && i != size.y - 1 && j != 0 && j != size.x - 1)
-				
-			{
-				texIndex = Utils::RandomRange(0, 3); 
-			}
-
-			int tileIndex = size.x * i + j; 
-			for (int k = 0; k < 4; k++) 
-			{
-				int vertexIndex = tileIndex * 4 + k;
-				background->vertexArray[vertexIndex].position = currPos + offsets[k];
-				background->vertexArray[vertexIndex].texCoords = texOffsets[k];
-				background->vertexArray[vertexIndex].texCoords.y += texSize.y * texIndex;
-			}
-			currPos.x += tileSize.x;
-		}
-		currPos.x = startPos.x;
-		currPos.y += tileSize.y;
-	}
-	return background;
 }

@@ -175,6 +175,8 @@ void Player2::Update(float dt)
 		position += direction * speed * dt;
 		SetPosition(position);
 
+
+		//도구 사용
 		axe.Update(dt);
 		axe.SetPosition(position);
 		axe.SetOrigins();
