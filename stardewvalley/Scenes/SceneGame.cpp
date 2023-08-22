@@ -239,7 +239,7 @@ void SceneGame::Init()
 	sf::Vector2f rectsize = { 72.f,72.f };
 	testbox = (RectangleGo*)AddGo(new RectangleGo(rectsize)); 
 	testbox->sortLayer = 3;
-	testbox->SetColor(sf::Color::Blue);
+	testbox->SetColor(sf::Color(0,0,255,100));
 	
  
 	for (auto go : gameObjects)
@@ -321,6 +321,21 @@ void SceneGame::Enter()
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
 		walls.push_back(stone->GetCollider());
+	}
+	for (int i = 0; i < timberCount; ++i)
+	{
+		Timber* timber = (Timber*)FindGo("timber" + to_string(i));
+		walls.push_back(timber->GetCollider());
+	}
+	for (int i = 0; i < weedCount; ++i)
+	{
+		Weed* weed = (Weed*)FindGo("weed" + to_string(i));
+		walls.push_back(weed->GetCollider());
+	}
+	for (int i = 0; i < treeCount; ++i)
+	{
+		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
+		walls.push_back(tree->stump->GetCollider());
 	}
 	for (int i = 0; i < walls.size(); ++i)
 	{
@@ -553,49 +568,77 @@ void SceneGame::Update(float dt)
 	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
 	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
 
-	//플레이어가 서있는 타일의 인덱스
+	//플레이어가 바라보고있는 타일
 
-	int tileX = 0;
-	int tileY = 0;
+	int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+	int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+	sf::Vector2f direction = player2->GetDirection(); 
 
-	if (player2->GetDirection().x > 0.f)
+	if (direction.x > 0.f)
 	{
-		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 		tileX += 1;
 		tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
-	else if (player2->GetDirection().x < 0.f)
+	else if (direction.x < 0.f)
 	{
-		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 		tileX -= 1;
 		tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
-	else if (player2->GetDirection().y > 0.f)
+	else if (direction.y > 0.f)
 	{
-		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 		tileY += 1;
 		tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
-	else if (player2->GetDirection().y < 0.f)
+	else if (direction.y < 0.f)
 	{
-		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 		tileY -= 1;
 		tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 
-	//std::cout << tileX << " " << tileY << std::endl;
 	
-	
-	//testFarmMap->GetTilePosition(playerTilePos.x, playerTilePos.y);
+	for (auto it = stones.begin(); it != stones.end();)
+	{
+		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
+		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		//ItemId* itme = player2->GetPlayerItemId();
+	    
+		if (stoneX == tileX && stoneY == tileY) 
+		{
+			std::cout << "this" << std::endl;
 
-	
+			sf::FloatRect wal = (*it)->GetCollider();
+			auto wallIt = std::find(walls.begin(), walls.end(), wal); 
+			if (wallIt != walls.end())
+			{ 
+				walls.erase(wallIt); 
+			} 
 
+			(*it)->SetActive(false);
+			it = stones.erase(it);
+			//RemoveGo(*it);
+			player2->ClearWalls();
 
-	//std::cout << tileSize.x * tileX + mapLT.x << " " << tileSize.y * tileY + mapLT.y << std::endl;
+			for (int i = 0; i < walls.size(); ++i) 
+			{
+				player2->SetWallBounds(walls[i]); 
+			} 
+			break;
+		}
+		else
+		{
+			++it;
+		}
+
+	}
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
