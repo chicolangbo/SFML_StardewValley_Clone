@@ -11,7 +11,7 @@ void SaveLoadData::Save()
 	// 기존값 파일로 저장
 }
 
-void SaveLoadData::Load(Player2* p, int* d, int* h, int* m, float* t)
+void SaveLoadData::Load(Player2* p,  int* d, int* h, int* m, float* t)
 {
 	// TEST SAVE VALUE
 	playerItemList.push_back({ ItemId::branch, 1, 5 });

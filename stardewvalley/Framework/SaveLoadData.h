@@ -4,6 +4,10 @@
 
 class Player2;
 class GameObject;
+class Stone;
+class Timber;
+class Weed;
+class Tree;
 
 class SaveLoadData : public Singleton<SaveLoadData>
 {
@@ -26,8 +30,13 @@ protected:
 	int day;
 
 	// OBJECT
-	// REMOVEGO 한 오브젝트들만 INIT할때 생기는 오브젝트에서 삭제하는 게 나을듯
-	std::list<GameObject*> removeGameObjects;
+	// fix obj : 추가로 저장.. 맵로딩할 때 쓰는 파일이랑 같은 형식
+	vector<Stone*> stones;
+	vector<Timber*> timbers;
+	vector<Weed*> weeds;
+	vector<Tree*> trees;
+	// ground : 경작지 pos, 마른 상태로 변경
+	// crops : 성장상태, pos, GetAcitve 정보 저장?
 
 public:
 	SaveLoadData() = default;
