@@ -496,6 +496,14 @@ void Player2::SetCollider(const sf::FloatRect& coll)
 	playerBound = coll;
 }
 
+void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM)
+{
+	playerItemList = loadI;
+	totalEarningsInt = loadTM;
+	money = loadM;
+	item = ItemId::none;
+}
+
 void Player2::AddRootingItem() // 자석화 해야 함
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());

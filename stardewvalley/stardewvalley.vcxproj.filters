@@ -55,6 +55,7 @@
     <ClCompile Include="Gameobjects\Objects.cpp" />
     <ClCompile Include="Weed.cpp" />
     <ClCompile Include="Tree.cpp" />
+    <ClCompile Include="Framework\SaveLoadData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -116,5 +117,6 @@
     <ClInclude Include="Gameobjects\Objects.h" />
     <ClInclude Include="Weed.h" />
     <ClInclude Include="Tree.h" />
+    <ClInclude Include="Framework\SaveLoadData.h" />
   </ItemGroup>
 </Project>

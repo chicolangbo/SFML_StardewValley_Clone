@@ -32,6 +32,7 @@
 #include "Timber.h"
 #include "Weed.h"
 #include "Tree.h"
+#include "SaveLoadData.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -324,6 +325,8 @@ void SceneGame::Enter()
 	}
 	
 	Scene::Enter();
+
+	SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
 }
 
 void SceneGame::Exit()

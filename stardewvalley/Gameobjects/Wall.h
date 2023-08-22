@@ -30,12 +30,6 @@ public:
 		Home_B4
 	};
 
-	enum class Location
-	{
-		Shop,
-		Home
-	};
-
 protected:
 	
 	Types wallType;
