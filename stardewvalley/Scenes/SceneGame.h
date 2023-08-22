@@ -41,8 +41,7 @@ protected:
 
 	sf::Vector2f mapLT;
 
-	SpriteGo* houseExterior; 
-	SpriteGo* shopExterior; 
+	
 
 	//object
 	ObjectTable* Objtable;
@@ -70,6 +69,8 @@ protected:
 
 	ShopInterior* shopInterior;
 	HomeInterior* homeInterior;
+	SpriteGo* houseExterior;
+
 	SpriteGo* bedding;
 
 	// INGAME UI
@@ -90,8 +91,6 @@ protected:
 	int min = 0;
 	int hour = 6;
 	int day = 1;
-
-	sf::Vector2f mapLT;
 
 	std::vector<sf::FloatRect> walls;
 	sf::FloatRect playerBound;
