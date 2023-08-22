@@ -55,14 +55,19 @@ void SaveLoadData::SaveCSV()
 		single_doc.Clear();
 
 		single_doc.SetColumnName(0,"totalEarningsInt");
-		single_doc.SetColumnName(0,"money");
-		single_doc.SetColumnName(0,"energy");
-		single_doc.SetColumnName(0,"min");
-		single_doc.SetColumnName(0,"hour");
-		single_doc.SetColumnName(0,"day");
+		single_doc.SetColumnName(1,"money");
+		single_doc.SetColumnName(2,"energy");
+		single_doc.SetColumnName(3,"min");
+		single_doc.SetColumnName(4,"hour");
+		single_doc.SetColumnName(5,"day");
 
 		std::vector<int> values = { totalEarningsInt, money, energy, min, hour, day };
-		single_doc.SetRow<int>("row1", values);
+		single_doc.SetCell<int>("totalEarningsInt", 0, totalEarningsInt);
+		single_doc.SetCell<int>("money", 0, money);
+		single_doc.SetCell<int>("energy", 0, energy);
+		single_doc.SetCell<int>("min", 0, min);
+		single_doc.SetCell<int>("hour", 0, hour);
+		single_doc.SetCell<int>("day", 0, day);
 
 		single_doc.Save();
 	}
@@ -71,13 +76,13 @@ void SaveLoadData::SaveCSV()
 void SaveLoadData::LoadCSV(DataLoad* ldata)
 {
 	// TEST SAVE VALUE
-	playerItemList.push_back({ ItemId::branch, 1, 5 });
-	totalEarningsInt = 30;
-	money = 50;
-	energy = 200;
-	day = 2;
-	hour = 25;
-	min = 30; // 60 + 30 = 90 => 2.5*9 = 22.5 => 270 - 22.5 = 248.5
+	//playerItemList.push_back({ ItemId::branch, 1, 5 });
+	//totalEarningsInt = 30;
+	//money = 50;
+	//energy = 200;
+	//day = 2;
+	//hour = 25;
+	//min = 30; // 60 + 30 = 90 => 2.5*9 = 22.5 => 270 - 22.5 = 248.5
 	
 	// 저장된 파일 데이터 읽어오기
 	// PLAYER DATA LOAD
@@ -95,7 +100,7 @@ void SaveLoadData::LoadCSV(DataLoad* ldata)
 		count = pl_doc.GetColumn<int>("Count");
 		index = pl_doc.GetColumn<int>("Index");
 
-		for (int i; i < id.size(); ++i)
+		for (int i = 0; i < id.size(); ++i)
 		{
 			playerItemList.push_back({ id[i], count[i], index[i] });
 		}
@@ -105,24 +110,27 @@ void SaveLoadData::LoadCSV(DataLoad* ldata)
 		const std::string fileName2 = "tables/save_singleData.csv";
 		rapidcsv::Document single_doc(fileName2);
 
-		totalEarningsInt = single_doc.GetCell<int>(0,"totalEarningsInt");
-		money = single_doc.GetCell<int>(0,"money");
-		energy = single_doc.GetCell<int>(0,"energy");
-		min = single_doc.GetCell<int>(0,"min");
-		hour = single_doc.GetCell<int>(0,"hour");
-		day = single_doc.GetCell<int>(0,"day");
+		std::vector<int>values;
+		values = single_doc.GetRow<int>(0);
+		totalEarningsInt = values[0];
+		money = values[1];
+		energy = values[2];
+		min = values[3];
+		hour = values[4];
+		day = values[5];
 	}
 
-	// 그대로 로드
+	// LOAD WITH NO CHANGE
 	ldata->pl_ItemList = playerItemList;
 	ldata->pl_money = money;
 	ldata->pl_totalMoney = totalEarningsInt;
 	
-	// 바뀌어서 로드 : stone, timber, weed, tree 정보 읽어와서 푸시백 후 포인터에 대입
+	// LOAD WITH CHANGES : stone, timber, weed, tree LEFT
 	if (hour >= 24)
 	{
 		ldata->pl_energy =  energy - (energy * (((hour - 24) * 60 + min)/10) * 0.025f);
 	}
+	ldata->pl_energy = 270;
 	ldata->game_hour = 6;
 	ldata->game_min = 0;
 	ldata->game_day++;
