@@ -539,7 +539,7 @@ void Inventory::ItemIconSetUp()
         it.second.Reset();
         it.second.colliderOnOff = false;
         it.second.SetOrigin(Origins::MC);
-        it.second.SetScale(5.f, 5.f);
+        it.second.SetScale(4.5f, 4.5f);
     }
 }
 

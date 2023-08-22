@@ -101,5 +101,6 @@ public:
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }
 	void ZeroEnergy() { energy = 0; }
+	ItemId GetEquipItem();
 };
 

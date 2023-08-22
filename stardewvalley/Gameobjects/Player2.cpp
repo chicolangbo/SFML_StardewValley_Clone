@@ -175,6 +175,8 @@ void Player2::Update(float dt)
 		position += direction * speed * dt;
 		SetPosition(position);
 
+
+		//도구 사용
 		axe.Update(dt);
 		axe.SetPosition(position);
 		axe.SetOrigins();
@@ -215,9 +217,7 @@ void Player2::Update(float dt)
 				animation.Play(clipId);
 			}
 		}
-		
-		
-	
+
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
 		{
 			energy = 0;
@@ -239,13 +239,11 @@ void Player2::Update(float dt)
 					animation.Play("AttackSide");
 					if (filpX)
 					{
-						//������ ����
 						scythe.SetFlipX(true);
 						scythe.PlayAnimation("ScytheSide");
 					}
 					else
 					{
-						//���� �����ϴ� �ִϸ��̼� ����
 						scythe.SetFlipX(false);
 						scythe.PlayAnimation("ScytheSide");
 
@@ -265,7 +263,6 @@ void Player2::Update(float dt)
 				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
 				{
 					animation.Play("Tool");
-					//����ٰ� Ŭ��ID�ѱ�� �����
 					axe.SetFlipX(true);
 					axe.PlayAnimation("AxeFront");
 				}
@@ -274,13 +271,11 @@ void Player2::Update(float dt)
 					animation.Play("ToolSide");
 					if (filpX)
 					{
-						//������ ����
 						axe.SetFlipX(true);
 						axe.PlayAnimation("AxeSide");
 					}
 					else
 					{
-						//���� �����ϴ� �ִϸ��̼� ����
 						axe.SetFlipX(false);
 						axe.PlayAnimation("AxeSide");
 
@@ -338,13 +333,11 @@ void Player2::Update(float dt)
 					animation.Play("ToolSide");
 					if (filpX)
 					{
-						//���� �����ϴ� �ִϸ��̼� ����
 						hoe.SetFlipX(true);
 						hoe.PlayAnimation("HoeSide");
 					}
 					else
 					{
-						//������ ����
 						hoe.SetFlipX(false);
 						hoe.PlayAnimation("HoeSide");
 					}
@@ -583,5 +576,10 @@ void Player2::MoneyUpdate()
 		}
 	}
 	tempMoney = 0;
+}
+
+ItemId Player2::GetEquipItem()
+{
+	return item;
 }
 

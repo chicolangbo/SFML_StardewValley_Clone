@@ -53,8 +53,9 @@
     <ClCompile Include="Gameobjects\RectButton.cpp" />
     <ClCompile Include="Gameobjects\Timber.cpp" />
     <ClCompile Include="Gameobjects\Objects.cpp" />
-    <ClCompile Include="Weed.cpp" />
-    <ClCompile Include="Tree.cpp" />
+    <ClCompile Include="Gameobjects\Weed.cpp" />
+    <ClCompile Include="Gameobjects\Tree.cpp" />
+    <ClCompile Include="Gameobjects\HoeDirt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -114,7 +115,8 @@
     <ClInclude Include="Gameobjects\RectButton.h" />
     <ClInclude Include="Gameobjects\Timber.h" />
     <ClInclude Include="Gameobjects\Objects.h" />
-    <ClInclude Include="Weed.h" />
-    <ClInclude Include="Tree.h" />
+    <ClInclude Include="Gameobjects\Weed.h" />
+    <ClInclude Include="Gameobjects\Tree.h" />
+    <ClInclude Include="Gameobjects\HoeDirt.h" />
   </ItemGroup>
 </Project>
