@@ -326,7 +326,7 @@ void SceneGame::Enter()
 	
 	Scene::Enter();
 
-	SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
+	//SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
 }
 
 void SceneGame::Exit()
