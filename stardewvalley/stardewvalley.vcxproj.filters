@@ -55,7 +55,7 @@
     <ClCompile Include="Gameobjects\Objects.cpp" />
     <ClCompile Include="Gameobjects\Weed.cpp" />
     <ClCompile Include="Gameobjects\Tree.cpp" />
-    <ClCompile Include="HoeDirt.cpp" />
+    <ClCompile Include="Gameobjects\HoeDirt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -117,6 +117,6 @@
     <ClInclude Include="Gameobjects\Objects.h" />
     <ClInclude Include="Gameobjects\Weed.h" />
     <ClInclude Include="Gameobjects\Tree.h" />
-    <ClInclude Include="HoeDirt.h" />
+    <ClInclude Include="Gameobjects\HoeDirt.h" />
   </ItemGroup>
 </Project>
