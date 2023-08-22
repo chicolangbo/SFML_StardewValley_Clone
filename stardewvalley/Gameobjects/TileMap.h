@@ -48,4 +48,6 @@ public:
 
 	void ChangeTexRect(int x, int y, sf::IntRect texRect);
 	
+	sf::Vector2f GetTilePosition(float x, float y);
+	
 };

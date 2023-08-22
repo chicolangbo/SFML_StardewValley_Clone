@@ -217,8 +217,8 @@
     <ClCompile Include="Gameobjects\ShopInvenSlot.cpp" />
     <ClCompile Include="Gameobjects\Stone.cpp" />
     <ClCompile Include="Gameobjects\Timber.cpp" />
-    <ClCompile Include="Tree.cpp" />
-    <ClCompile Include="Weed.cpp" />
+    <ClCompile Include="Gameobjects\Tree.cpp" />
+    <ClCompile Include="Gameobjects\Weed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -283,8 +283,8 @@
     <ClInclude Include="Gameobjects\Wateringcan.h" />
     <ClInclude Include="Gameobjects\Stone.h" />
     <ClInclude Include="Gameobjects\Timber.h" />
-    <ClInclude Include="Tree.h" />
-    <ClInclude Include="Weed.h" />
+    <ClInclude Include="Gameobjects\Tree.h" />
+    <ClInclude Include="Gameobjects\Weed.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

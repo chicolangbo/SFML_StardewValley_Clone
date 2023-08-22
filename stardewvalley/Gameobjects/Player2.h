@@ -40,7 +40,7 @@ protected:
 
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
-	
+
 	ItemId item;
 
 	int maxEnergy = 270;
@@ -51,7 +51,7 @@ protected:
 
 	std::vector<sf::FloatRect> wallBounds;
 	std::vector<sf::Vector2f> wallBoundsLT;
-	std::vector<sf::Vector2f> wallBoundsRB; 
+	std::vector<sf::Vector2f> wallBoundsRB;
 
 	sf::FloatRect playerBound;
 
@@ -59,16 +59,15 @@ protected:
 	bool playingAnimation = false;
 	bool one = true;
 	bool boundwall = false;
-	
+
 	std::list<tagItemInfo> playerItemList;
 	std::list<RootingItem*>*rootingItemList;
 
 	Inventory* inven;
 	float pos = 0.6f;
 
-	sf::RectangleShape hitBox;
-
 public:
+
 	//플레이어 포지션 / 타일 한칸의 사이즈 == 2차원 배열의 인덱스?
 	Player2(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}
@@ -87,6 +86,7 @@ public:
 	int* GetTempMoney() { return &tempMoney; }
 
 	void SetWallBounds(const sf::FloatRect& bounds);
+	void ClearWalls();
 	void SetCollider(const sf::FloatRect& coll);
 	void SetInventory(Inventory* i) { inven = i; }
 
@@ -98,9 +98,13 @@ public:
 	void AddRootingItem();
 	void AddPlayerItem(ItemId id);
 	bool RemovePlayerItem(ItemId id);
-	void SetRootingItems(std::list<RootingItem*>*r) { rootingItemList = r; }
+	void SetRootingItems(std::list<RootingItem*>* r) { rootingItemList = r; }
 	void MoneyUpdate();
 	void SetItemId(ItemId id) { item = id; }
 	void ZeroEnergy() { energy = 0; }
+	sf::Vector2f GetDirection() { return direction; }
+
+	ItemId GetPlayerItemId() { return item; } 
+
 };
 
