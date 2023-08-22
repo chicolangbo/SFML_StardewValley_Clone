@@ -27,5 +27,6 @@ public:
 	void SetType(int x, int y, sf::IntRect tex, sf::Vector2f size);
 	void SetMapLT(sf::Vector2f pos);
 
+	sf::Vector2f GetIndex() { return sf::Vector2f(indexX, indexY); }
 };
 

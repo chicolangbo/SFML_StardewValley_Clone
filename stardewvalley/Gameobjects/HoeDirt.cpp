@@ -37,6 +37,11 @@ void HoeDirt::Reset()
 	waterDirt.setTextureRect(texRect);
 
 	SetOrigin(origin);
+
+	int day = 0;
+	bool plantedCrop = false;
+	bool isWatered = false;
+
 }
 
 void HoeDirt::Update(float dt)

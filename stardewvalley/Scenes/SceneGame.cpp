@@ -56,6 +56,9 @@ void SceneGame::Init()
 		testFarmMap->SetOrigin(Origins::MC);
 		testFarmMap->sortLayer = 0;
 		testFarmMap->sortOrder = 0;
+		col = testFarmMap->GetSize().x;
+		row = testFarmMap->GetSize().y;
+
 		//울타리나 절벽
 		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
 		testFarmMap2->Reset();
@@ -147,9 +150,25 @@ void SceneGame::Init()
 
 	//HOE DIRT
 	{
-		dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
-		dirt->sortLayer = 0;
-		dirt->sortOrder = 2;	}
+		dirtArray.resize(row);
+		for (int i = 0; i < row; i++)
+		{
+			dirtArray[i].resize(col);
+		}
+
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+				dirt->sortLayer = 0;
+				dirt->sortOrder = 2;
+				dirt->SetIndex(j, i);
+				dirt->SetActive(false);
+				dirtArray[i][j] = dirt;
+			}
+		}
+	}
 
 	// PLAYER
 	{
@@ -289,11 +308,7 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	
 	shopTap->SetPierre(shopInterior->GetPierre());
-
-	
-	//testFarmMapObj->SetPosition(testFarmMap->GetPosition());
 
 	tileSize = testFarmMap->GetTileSize();
 	mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
@@ -319,21 +334,31 @@ void SceneGame::Enter()
 		tree->stump->SetMapLT(mapLT);
 	}
 
-	Scene::Enter();
-
 	shopTap->SetPierre(shopInterior->GetPierre());
 
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
-	walls.push_back(houseExterior->GetCollider());
-
 	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
-	walls.push_back(shopExterior->GetCollider());
+
 
 	for (int i = 0; i < stoneCount; i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
 		walls.push_back(stone->GetCollider());
 	}
+
+	//set dirt Position 
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+		}
+	}
+
+	Scene::Enter();
+	walls.push_back(houseExterior->GetCollider());
+	walls.push_back(shopExterior->GetCollider());
+
 	//맵 툴 충돌체 설정
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
@@ -364,23 +389,18 @@ void SceneGame::Enter()
 		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
 		walls.push_back(tree->stump->GetCollider());
 	}
-	Scene::Enter();
+
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
 	}
 
 	//농사 임시세팅
-	dirt->SetPosition(0, 0);
+
 	for (int i = 0; i < 5; i++)
 	{
 		player2->AddPlayerItem(ItemId::parsnipSeed);
 	}
-	
-	
-	
-
-	//SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
 }
 
 void SceneGame::Exit()
@@ -391,6 +411,10 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
+
+	//mousePos
+	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
 	//나무 뒤로 가면 나무 투명화
 	for (auto tree : trees)
@@ -462,23 +486,23 @@ void SceneGame::Update(float dt)
 	{
 		dirt->SetIsWatered(true);
 	}
-	//
+
+	//Player Tile index
+	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+
+	//Set Green Box
 	if (player2->GetEquipItem() == ItemId::parsnipSeed)
 	{
 		selectTile->SetActive(true);
-
-		sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
-		sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
 		int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
 		int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
 
 		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
 
-		int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
-		int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
-
-		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
+			&& dirtArray[mouseTileY][mouseTileX]->GetActive())
 		{
 			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
 			canPlant = true;
@@ -491,7 +515,7 @@ void SceneGame::Update(float dt)
 
 		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
 		{
-
+			//작물 심을 곳
 		}
 	}
 	else
@@ -590,7 +614,7 @@ void SceneGame::Update(float dt)
 	{
 		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 		{
-			std::cout << "�浹" << std::endl;
+			std::cout << "충돌" << std::endl;
 			if (!once)
 			{
 				homeTap->homeTapOn = true;
@@ -645,62 +669,77 @@ void SceneGame::Update(float dt)
 		SCENE_MGR.ChangeScene(SceneId::Title);
 	}
 
-	//sf::Vector2f playerTilePos;
-
-	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
-	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
-
 	//플레이어가 바라보고있는 타일
 
-	int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
-	int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+	int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+	int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+
 	sf::Vector2f direction = player2->GetDirection(); 
 
 	if (direction.x > 0.f)
 	{
-		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
 		tileX += 1;
 		//tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.x < 0.f)
 	{
-		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.y);
 		tileX -= 1;
 		//tileSize.x* tileX + mapLT.x;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.y > 0.f)
 	{
-		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 		tileY += 1;
 		//tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 	else if (direction.y < 0.f)
 	{
-		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 		tileY -= 1;
 		//tileSize.y* tileY + mapLT.y;
 		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 	}
 
-	int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
-	int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
+	int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / tileSize.x);
+	int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / tileSize.y);
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left)&& player2->GetPlayerItemId() == ItemId::pick)
 	{
 		HitStone(BtileX, BtileY); 
+		if (dirtArray[BtileY][BtileX]->GetActive())
+		{
+			dirtArray[BtileY][BtileX]->SetActive(false);
+			dirtArray[BtileY][BtileX]->Reset();
+		}
 	}
-	
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 	{
 		HitTimber(BtileX, BtileY);
 	}
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
 	{
 		HitTree(BtileX, BtileY); 
 	}
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
+	{
+		if (!HasObjectAt(BtileX, BtileY) && !dirtArray[BtileY][BtileX]->GetActive())
+		{
+			dirtArray[BtileY][BtileX]->SetActive(true);
+		}
+	}
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
+	{
+		if (dirtArray[BtileY][BtileX]->GetActive())
+		{
+			dirtArray[BtileY][BtileX]->SetIsWatered(true);
+		}
+	}
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -863,4 +902,41 @@ void SceneGame::HitTree(int x, int y)
 		}
 
 	}
+}
+
+bool SceneGame::HasObjectAt(int x, int y)
+{
+	for (auto stone : stones)
+	{
+		if (stone->GetIndex().x == x && stone->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto timber : timbers)
+	{
+		if (timber->GetIndex().x == x && timber->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto weed : weeds)
+	{
+		if (weed->GetIndex().x == x && weed->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto tree : trees)
+	{
+		if (tree->stump->GetIndex().x == x && tree->stump->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void SceneGame::SetGreenTile()
+{
 }

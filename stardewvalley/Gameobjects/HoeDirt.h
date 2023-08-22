@@ -37,5 +37,7 @@ public:
 	virtual void SetOrigin(float x, float y);
 
 	void SetIsWatered(bool is) { isWatered = is; }
+	void SetIndex(int x, int y) { indexX = x; indexY = y; }
+
 };
 

@@ -22,6 +22,8 @@ protected:
 	sf::Vector2f texSize = { 16.f, 16.f };
 	sf::Vector2i size = { 20, 20 };
 
+	int col;
+	int row;
 	int count = 0;
 	
 public:

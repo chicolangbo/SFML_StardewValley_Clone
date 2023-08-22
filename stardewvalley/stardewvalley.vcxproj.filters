@@ -57,6 +57,8 @@
     <ClCompile Include="Framework\SaveLoadData.cpp" />
     <ClCompile Include="Gameobjects\Weed.cpp" />
     <ClCompile Include="Gameobjects\Tree.cpp" />
+    <ClCompile Include="Gameobjects\Crop.cpp" />
+    <ClCompile Include="Parsnip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -120,5 +122,7 @@
     <ClInclude Include="Framework\SaveLoadData.h" />
     <ClInclude Include="Gameobjects\Weed.h" />
     <ClInclude Include="Gameobjects\Tree.h" />
+    <ClInclude Include="Gameobjects\Crop.h" />
+    <ClInclude Include="Parsnip.h" />
   </ItemGroup>
 </Project>

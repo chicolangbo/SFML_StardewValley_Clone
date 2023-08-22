@@ -40,9 +40,8 @@ protected:
 	SpriteGo* shopExterior; // �� �ܺ�
 
 	sf::Vector2f mapLT;
-
-	
-
+	int col = 0;
+	int row = 0;
 	//object
 	ObjectTable* Objtable;
 	vector<Stone*> stones;
@@ -60,6 +59,7 @@ protected:
 
 	//hoe dirt
 	HoeDirt* dirt;
+	vector<vector<HoeDirt*>> dirtArray;
 
 	SpriteGo* selectTile; //red or green box
 	bool canPlant = false;
@@ -129,5 +129,8 @@ public:
 	void HitStone(int x, int y);
 	void HitTimber(int x, int y);
 	void HitTree(int x, int y);
+
+	bool HasObjectAt(int x, int y);
+	void SetGreenTile();
 };
 
