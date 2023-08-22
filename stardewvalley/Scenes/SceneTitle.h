@@ -16,7 +16,8 @@ protected:
 	SpriteGo* star;
 
 	UiButton* start;  
-	UiButton* exit;  
+	UiButton* exit;
+	UiButton* load;
 
 	Bird* bird1;
 	Bird* bird2;
@@ -24,7 +25,10 @@ protected:
 	float time;
 	float timer;
 	float viewPos = 0.f;
+
+
 public:
+	bool loadData = false;
 	SceneTitle();
 	virtual ~SceneTitle() override = default;
 
@@ -38,5 +42,6 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 	void ShowStartButton();
 	void ShowExitButton();
+	void ShowLoadButton();
 };
 

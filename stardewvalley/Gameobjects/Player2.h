@@ -93,7 +93,7 @@ public:
 	AnimationController GetAnimation() { return animation; }
 
 	std::list<tagItemInfo>* GetPlayerItemList() { return &playerItemList; }
-	void LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM);
+	void LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM, int loadE);
 	int* GetTotalEarningsInt() { return &totalEarningsInt; }
 	void AddRootingItem();
 	void AddPlayerItem(ItemId id);

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Scene.h"
+#include "Item.h"
 
 class VertexArrayGo;
 class Player2;
@@ -23,6 +24,17 @@ class Weed;
 class Tree;
 class HoeDirt;
 
+struct DataLoad
+{
+	std::list<tagItemInfo> pl_ItemList;
+	int pl_totalMoney;
+	int pl_money;
+	int pl_energy;
+	int game_min;
+	int game_hour;
+	int game_day;
+};
+
 class SceneGame : public Scene
 {
 protected:
@@ -41,7 +53,9 @@ protected:
 
 	sf::Vector2f mapLT;
 
-	
+	//data Save & Load
+	DataLoad lData;
+	DataLoad sData;
 
 	//object
 	ObjectTable* Objtable;

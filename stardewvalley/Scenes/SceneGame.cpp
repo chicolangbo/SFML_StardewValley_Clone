@@ -34,6 +34,7 @@
 #include "Tree.h"
 #include "HoeDirt.h"
 #include "SaveLoadData.h"
+#include "SceneTitle.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -319,8 +320,6 @@ void SceneGame::Enter()
 		tree->stump->SetMapLT(mapLT);
 	}
 
-	Scene::Enter();
-
 	shopTap->SetPierre(shopInterior->GetPierre());
 
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
@@ -335,6 +334,7 @@ void SceneGame::Enter()
 		walls.push_back(stone->GetCollider());
 	}
 	//맵 툴 충돌체 설정
+	Scene::Enter();
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
 	for (int i = 2; i < doc.GetRowCount(); i++)
@@ -364,7 +364,6 @@ void SceneGame::Enter()
 		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
 		walls.push_back(tree->stump->GetCollider());
 	}
-	Scene::Enter();
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
@@ -377,10 +376,16 @@ void SceneGame::Enter()
 		player2->AddPlayerItem(ItemId::parsnipSeed);
 	}
 	
-	
-	
-
-	//SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
+	// FILE LOAD
+	if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
+	{
+		SAVELOAD_DATA.LoadCSV(&lData);
+		player2->LoadData(lData.pl_ItemList, lData.pl_totalMoney, lData.pl_money, lData.pl_energy);
+		min = lData.game_min;
+		hour = lData.game_hour;
+		day = lData.game_day;
+		dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
+	}
 }
 
 void SceneGame::Exit()
@@ -590,7 +595,6 @@ void SceneGame::Update(float dt)
 	{
 		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 		{
-			std::cout << "�浹" << std::endl;
 			if (!once)
 			{
 				homeTap->homeTapOn = true;

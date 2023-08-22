@@ -14,7 +14,7 @@ protected:
 	SceneId currentSceneId = SceneId::None;
 	Scene* currentScene = nullptr;
 
-	SceneId startSceneId = SceneId::Game;
+	SceneId startSceneId = SceneId::Title;
 
 public:
 	void Init();
@@ -25,7 +25,8 @@ public:
 
 	void ChangeScene(SceneId id);
 	Scene* GetCurrScene() const;
-
+	Scene* GetGameScene() const;
+	Scene* GetTitleScene() const;
 };
 
 #define SCENE_MGR (SceneMgr::Instance())

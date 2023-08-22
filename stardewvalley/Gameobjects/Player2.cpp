@@ -494,11 +494,13 @@ void Player2::ClearWalls()
 	wallBoundsRB.clear(); 
 }
 
-void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM)
+void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM, int loadE)
 {
+	playerItemList.clear();
 	playerItemList = loadI;
 	totalEarningsInt = loadTM;
 	money = loadM;
+	energy = loadE;
 	item = ItemId::none;
 }
 

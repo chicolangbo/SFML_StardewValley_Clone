@@ -1,6 +1,7 @@
 #pragma once
 #include "Item.h"
 #include "Singleton.h"
+#include "SceneGame.h"
 
 class Player2;
 class GameObject;
@@ -40,10 +41,11 @@ protected:
 
 public:
 	SaveLoadData() = default;
-	virtual ~SaveLoadData();
+	virtual ~SaveLoadData() override;
 
-	void Save();
-	void Load(Player2* p, int* d, int* h, int* m, float* t);
+	void SaveData(DataLoad* sdata);
+	void SaveCSV();
+	void LoadCSV(DataLoad* ldata);
 };
 
 #define SAVELOAD_DATA (SaveLoadData::Instance())
