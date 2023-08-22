@@ -245,7 +245,17 @@ void SceneGame::Init()
 	testbox.setSize({ 72.f, 72.f });
 	testbox.setFillColor(sf::Color::Blue);
 	
- 
+
+	//FARMING
+	{
+		selectTile = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "greenTile", "greenTile"));
+		selectTile->SetScale({ 4.5f, 4.5f });
+		selectTile->SetOrigin(Origins::TL);
+		selectTile->SetActive(false);
+		selectTile->sortLayer = 2;
+		selectTile->sortOrder = 0;
+	}
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -273,7 +283,7 @@ void SceneGame::Enter()
 	uiView.setCenter(size * 0.5f);
 
 	tileSize = testFarmMap->GetTileSize();
-	sf::Vector2f mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+	mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
 
 	for (int i = 0; i < stones.size(); i++)
 	{
@@ -326,7 +336,13 @@ void SceneGame::Enter()
 		player2->SetWallBounds(walls[i]);
 	}
 
+	//농사 임시세팅
 	dirt->SetPosition(0, 0);
+	for (int i = 0; i < 5; i++)
+	{
+		player2->AddPlayerItem(ItemId::parsnipSeed);
+	}
+	
 }
 
 void SceneGame::Exit()
@@ -354,7 +370,10 @@ void SceneGame::Update(float dt)
 			tree->branch.setColor(sf::Color(255, 255, 255, 255));
 		}
 	}
+
 	player2->SetItemId(quickinven->GetItemId()); 
+
+	//date, tile, ui Set
 	time +=dt;
 	if (time >= 7.f)
 	{
@@ -406,7 +425,41 @@ void SceneGame::Update(float dt)
 		dirt->SetIsWatered(true);
 	}
 	//
+	if (player2->GetEquipItem() == ItemId::parsnipSeed)
+	{
+		selectTile->SetActive(true);
 
+		sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+		sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
+
+		int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
+		int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
+
+		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
+
+		int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+		int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+
+		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+		{
+			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
+			canPlant = true;
+		}
+		else
+		{
+			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
+			canPlant = false;
+		}
+
+		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
+		{
+
+		}
+	}
+	else
+	{
+		selectTile->SetActive(false);
+	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
 		if (enterShop)

@@ -35,13 +35,14 @@ protected:
 	
 	Player2* player2;
 
-	// �ӽ� ��
 	TileMap* testFarmMap;
 	TileMap* testFarmMap2;
 	TileMap* testFarmMapObj;
-	//SpriteGo* testFarmMap; // ���� ���
-	SpriteGo* houseExterior; // �� �ܺ�
-	SpriteGo* shopExterior; // �� �ܺ�
+
+	sf::Vector2f mapLT;
+
+	SpriteGo* houseExterior; 
+	SpriteGo* shopExterior; 
 
 	//object
 	ObjectTable* Objtable;
@@ -61,6 +62,8 @@ protected:
 	//hoe dirt
 	HoeDirt* dirt;
 
+	SpriteGo* selectTile; //red or green box
+	bool canPlant = false;
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;
