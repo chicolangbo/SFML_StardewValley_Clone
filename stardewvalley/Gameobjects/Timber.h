@@ -4,7 +4,7 @@
 class Timber : public Objects
 {
 protected:
-
+	int hp = 1;
 public:
 	Timber(const std::string& textureId = "", const std::string& n = "", const string& nickName = "") 
 		: Objects(textureId, n, nickName) {}

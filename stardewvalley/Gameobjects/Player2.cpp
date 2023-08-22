@@ -63,8 +63,8 @@ void Player2::Init()
 	scythe.Init();
 	watering.Init(); 
 
-	hitBox.setSize({ 20.f,20.f });
-	hitBox.setFillColor(sf::Color::Green);
+	/*hitBox.setSize({ 20.f,20.f });
+	hitBox.setFillColor(sf::Color::Green);*/
 
 }
 
@@ -103,7 +103,7 @@ void Player2::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	hitBox.setPosition(GetPosition());
+	//hitBox.setPosition(GetPosition());
 	
 	sf::Vector2f playerPos = GetPosition();
 
@@ -458,7 +458,6 @@ void Player2::Draw(sf::RenderWindow& window)
 	window.draw(hoe.sprite);
 	window.draw(scythe.sprite);
 	window.draw(watering.sprite);
-	window.draw(hitBox);
 }
 
 bool Player2::GetFlipX() const
@@ -478,7 +477,6 @@ void Player2::SetFlipX(bool filp)
 void Player2::SetWallBounds(const sf::FloatRect& bounds)
 {
 	wallBounds.push_back(bounds); 
-
 	wallBoundsLT.push_back({ bounds.left, bounds.top });
 	wallBoundsRB.push_back({ bounds.left + bounds.width, bounds.top + bounds.height });
 
@@ -487,6 +485,21 @@ void Player2::SetWallBounds(const sf::FloatRect& bounds)
 void Player2::SetCollider(const sf::FloatRect& coll)
 {
 	playerBound = coll;
+}
+
+void Player2::ClearWalls()
+{
+	wallBounds.clear();
+	wallBoundsLT.clear();
+	wallBoundsRB.clear(); 
+}
+
+void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM)
+{
+	playerItemList = loadI;
+	totalEarningsInt = loadTM;
+	money = loadM;
+	item = ItemId::none;
 }
 
 void Player2::AddRootingItem() // 자석화 해야 함

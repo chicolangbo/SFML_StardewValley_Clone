@@ -1,8 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 
-class RootingItem :
-    public SpriteGo
+class RootingItem : public SpriteGo
 {
 protected:
 	ItemId id;

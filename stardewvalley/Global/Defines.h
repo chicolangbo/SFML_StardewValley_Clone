@@ -91,5 +91,11 @@ enum class  ItemId
 	coli
 };
 
-//
+enum class Location
+{
+	Farm,
+	Shop,
+	Home
+};
+
 #include "AnimationClip.h"

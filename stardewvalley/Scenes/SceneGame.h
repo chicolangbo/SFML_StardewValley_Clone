@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 
 class VertexArrayGo;
@@ -26,18 +26,18 @@ class HoeDirt;
 class SceneGame : public Scene
 {
 protected:
-	
 	VertexArrayGo* background;
 	sf::FloatRect wallBounds;
 
 	bool enterShop = false;
 	bool enterHome = false;
-	
+
 	Player2* player2;
 
 	TileMap* testFarmMap;
 	TileMap* testFarmMap2;
 	TileMap* testFarmMapObj;
+	SpriteGo* shopExterior; // �� �ܺ�
 
 	sf::Vector2f mapLT;
 
@@ -77,7 +77,7 @@ protected:
 	SpriteGo* info;
 	SpriteGo* timeArrow;
 	float arrowSpin = 0.f;
-	RectangleGo* energyBar; 
+	RectangleGo* energyBar;
 	int energys;
 	TextGo* texMoney;
 	TextGo* texMin;
@@ -91,12 +91,14 @@ protected:
 	int hour = 6;
 	int day = 1;
 
+	sf::Vector2f mapLT;
+
 	std::vector<sf::FloatRect> walls;
-	sf::FloatRect playerBound; 
+	sf::FloatRect playerBound;
 	sf::FloatRect mapBound;
 
 	Inventory* inven;
-	std::list<RootingItem*>rootingItems; 
+	std::list<RootingItem*>rootingItems;
 	QuickInventory* quickinven;
 
 	bool off = false;
@@ -107,8 +109,8 @@ protected:
 	sf::Vector2f housePos = { 21.f, 16.f };
 
 	//test
-	sf::RectangleShape testbox;
-
+	RectangleGo* testbox;
+	
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
@@ -122,7 +124,11 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SpawnRootingItem(ItemId id);
+	void SpawnRootingItem(ItemId id, sf::Vector2f pos);
 	void SetAct(bool is);
+
+	void HitStone(int x, int y);
+	void HitTimber(int x, int y);
+	void HitTree(int x, int y);
 };
 

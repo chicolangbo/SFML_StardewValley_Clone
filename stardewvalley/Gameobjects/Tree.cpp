@@ -54,12 +54,25 @@ void Tree::Update(float dt)
 	{
 		stump->colliderOnOff = !(stump->colliderOnOff);
 	}
+
+	if (treeRotation)
+	{
+		rotation += dt * 300.f;
+		branch.rotate(rotation);
+		if (rotation >= 90.f)
+		{
+			fallingTree = true;
+		}
+	}
 }
 
 void Tree::Draw(sf::RenderWindow& window)
 {
 	stump->Draw(window);
-	window.draw(branch);
+	if (!fallingTree)
+	{
+		window.draw(branch);
+	}
 	//window.draw(hitbox);
 }
 

@@ -121,7 +121,7 @@ void ShopInterior::Reset()
         shopObj4.SetScale(4.f, 4.f);
         shopObj4.SetOrigin(Origins::TL);
         shopObj4.SetPosition(288.f * 4, 434.f * 4);
-        shopWalls.SetType(Wall::Location::Shop);
+        shopWalls.SetType(Location::Shop);
         shopWalls.SetPos();
     }
 }

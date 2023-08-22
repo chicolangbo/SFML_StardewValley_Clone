@@ -54,7 +54,7 @@ void HomeInterior::Reset()
     homeInside.SetOrigin(Origins::TL);
     homeInside.SetPosition(0, 0);
 
-    homeWalls.SetType(Wall::Location::Home);
+    homeWalls.SetType(Location::Home);
     homeWalls.SetPos();
 }
 

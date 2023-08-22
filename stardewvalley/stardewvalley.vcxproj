@@ -194,6 +194,10 @@
     <ClCompile Include="DataTables\ObjectTable.cpp" />
     <ClCompile Include="Gameobjects\RectButton.cpp" />
     <ClCompile Include="Gameobjects\Objects.cpp" />
+    <ClCompile Include="Framework\SaveLoadData.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -255,11 +259,16 @@
     <ClInclude Include="Gameobjects\RectButton.h" />
     <ClInclude Include="Gameobjects\Objects.h" />
     <ClInclude Include="Gameobjects\HoeDirt.h" />
+    <ClInclude Include="Framework\SaveLoadData.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
-    <ClInclude Include="Global\Singleton.h" />
+    <ClInclude Include="Global\Singleton.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="GameObjects\SpriteGo.h" />
     <ClInclude Include="Gameobjects\Wall.h" />
     <ClInclude Include="DataTables\WallTable.h" />
