@@ -130,6 +130,7 @@ protected:
 
 	//test
 	RectangleGo* testbox;
+	//RectangleGo* night; 
 	
 public:
 	SceneGame();

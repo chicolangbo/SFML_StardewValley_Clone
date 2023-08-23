@@ -424,7 +424,7 @@ void Player2::Update(float dt)
 
 	// 아이템 관련
 	AddRootingItem();
-
+		
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
 		int a = 0;
@@ -504,7 +504,7 @@ void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM, int 
 	item = ItemId::none;
 }
 
-void Player2::AddRootingItem() // 자석화 해야 함
+void Player2::AddRootingItem() // 자석화 해야 함 // 했음
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -519,8 +519,12 @@ void Player2::AddRootingItem() // 자석화 해야 함
 	{
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
 		{
-			item->SetActive(false);
-			AddPlayerItem(item->GetRootingItemId());
+			if (item->PongEnd())
+			{
+				item->SetActive(false);
+				AddPlayerItem(item->GetRootingItemId());
+			}
+			//check = false;
 		}
 	}
 }

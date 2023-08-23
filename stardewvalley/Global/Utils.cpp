@@ -132,3 +132,22 @@ float Utils::Angle(const sf::Vector2f& dir)
 {
 	return (float)(atan2(dir.y, dir.x) * (180.f / M_PI));
 }
+
+int Utils::RadomOneOrTwo(const int num1, const int num2)
+{
+	std::random_device rd; 
+	std::mt19937 gen(rd()); 
+
+	std::uniform_int_distribution<> dist(0, 1); 
+
+	int randomNumber = dist(gen); 
+
+	if (randomNumber == 0) 
+	{
+		return num1;
+	}
+	else 
+	{
+		return num2;
+	}
+}

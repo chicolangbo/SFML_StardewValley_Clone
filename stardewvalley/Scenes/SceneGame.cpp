@@ -252,6 +252,11 @@ void SceneGame::Init()
 		testbox = (RectangleGo*)AddGo(new RectangleGo(rectsize)); 
 		testbox->sortLayer = 3;
 		testbox->SetColor(sf::Color(0,0,255,100));
+
+		/*rectsize = { 1980.f,1080.f };
+		night = (RectangleGo*)AddGo(new RectangleGo(rectsize));
+		night->sortLayer = 3;
+		night->SetColor(sf::Color(0, 0, 128, 200));*/
 	}
 	
 	//FARMING
@@ -467,7 +472,7 @@ void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
 
-	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
+	//std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 
 	// TREE TRANSPARENT
 	{
@@ -858,6 +863,9 @@ void SceneGame::Update(float dt)
 			
 		}
 	}
+
+	//night->SetOrigin(Origins::MC);
+	//night->SetPosition(player2->GetPosition());
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 
@@ -875,6 +883,8 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	}
 	rootingItems.back()->SetPosition(pos); 
 	rootingItems.back()->SetPlayer(player2); 
+	rootingItems.back()->SetPosY(pos.y); 
+
 }
 
 void SceneGame::SetAct(bool is)
@@ -899,7 +909,7 @@ void SceneGame::HitStone(int x, int y)
 		if (stoneX == x && stoneY == y)
 		{
 			(*it)->Hit(1);
-			std::cout << (*it)->GetHp() << std::endl;
+			//std::cout << (*it)->GetHp() << std::endl;
 			if ((*it)->GetHp() <= 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -918,8 +928,11 @@ void SceneGame::HitStone(int x, int y)
 
 				//testbox->SetPosition(tileSize.x * tileX + mapLT.x, tileSize.y * tileY + mapLT.y);
 
-				SpawnRootingItem(ItemId::stone, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
-
+				for (int i = 0; i < 10; ++i)
+				{
+					SpawnRootingItem(ItemId::stone, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
+					//std::cout << i << std::endl;
+				}
 				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
 				for (int i = 0; i < walls.size(); ++i)
 				{
@@ -947,7 +960,7 @@ void SceneGame::HitTimber(int x, int y)
 		if (timberX == x && timberY == y)
 		{
 			(*it)->Hit(1);
-			std::cout << (*it)->GetHp() << std::endl;
+			//std::cout << (*it)->GetHp() << std::endl;
 			if ((*it)->GetHp() <= 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -1011,8 +1024,10 @@ void SceneGame::HitTree(int x, int y)
 				
 				player2->ClearWalls();
 
-				SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
-
+				for (int i = 0; i < 13; ++i)
+				{
+					SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
+				}
 				for (int i = 0; i < walls.size(); ++i)
 				{
 					player2->SetWallBounds(walls[i]);

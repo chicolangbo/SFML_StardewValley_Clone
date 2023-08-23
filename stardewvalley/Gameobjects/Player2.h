@@ -66,6 +66,8 @@ protected:
 	Inventory* inven;
 	float pos = 0.6f;
 
+	
+
 public:
 
 	//플레이어 포지션 / 타일 한칸의 사이즈 == 2차원 배열의 인덱스?

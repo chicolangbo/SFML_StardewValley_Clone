@@ -10,14 +10,17 @@ protected:
 
 	Player2* player;
 
-
 	sf::Vector2f pos;
 	sf::Vector2f look;
 	sf::Vector2f direction;
-
-	//sf::Vector2f pongDirection;
-
+	
+	bool pong = true; 
+	bool pongend = false;
+	float pongspeed = -1000.f;
+	float gravity = 2500.f;
 	float speed = 500.f;
+	float saveY;
+	float randX;//º¸·ù
 
 public:
 	RootingItem(ItemId id, const std::string& textureId = "", const std::string& n = "", const std::string& nickName = "");
@@ -33,5 +36,8 @@ public:
 	//
 
 	ItemId GetRootingItemId() { return id; }
+	void SetPosY(float y) { saveY = y; }
+
+	bool PongEnd() { return pongend; }
 };
 

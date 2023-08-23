@@ -27,21 +27,32 @@ void RootingItem::Reset()
 	SpriteGo::Reset();
 	sprite.setScale(5.f, 5.f);
 	
+	//directionX = Utils::RandomRange(-1, 1);
+	pongspeed = Utils::RandomRange(-1300, -700);
+	randX = Utils::RadomOneOrTwo(-1, 1);
 }
 
 void RootingItem::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	//std::cout << player->GetDirection().y << std::endl;
 	//일단 플레이어를 따라감
 	pos = GetPosition();
  
-	direction = { Utils::RandomRange(-1.f, 1.f),-1.f };
-	//pos += direction * dt * speed;
-
-	if (1)
+	if (pong)
 	{
+		pongspeed += gravity * dt;
+		pos.y += pongspeed * dt;
+		if (saveY <= pos.y)
+		{
+			pos.y = saveY;
+			pong = false;
+		}
+	}
+
+	if (!pong)
+	{
+		pongend = true;
 		direction = Utils::Normalize(player->GetPosition() - GetPosition());
 		sprite.setRotation(Utils::Angle(look));
 		float distance = Utils::Distance(player->GetPosition(), GetPosition());
@@ -53,7 +64,10 @@ void RootingItem::Update(float dt)
 	}
 	else
 	{
-		//SetPosition(pos);
+		//pos.x += speed * dt * randX; 
+		pos.y += speed * dt;
+
+		SetPosition(pos);
 	}
 
 }
