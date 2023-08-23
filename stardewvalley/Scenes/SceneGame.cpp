@@ -391,7 +391,35 @@ void SceneGame::Enter()
 
 	// PLAYER COLLIDER SETTING
 	{
-		walls.push_back(shopExterior->GetCollider());
+		//walls.push_back(shopExterior->GetCollider());
+		farmWalls.push_back(shopExterior->GetCollider());
+	}
+
+	// SET SHOP COLLIDER
+	{
+		for (auto coll : shopInterior->GetshopInteriors())
+		{
+			shopWalls.push_back(coll.GetCollider());
+		}
+		for (auto wall : shopInterior->GetWall().Walls)
+		{
+			shopWalls.push_back(wall.rect.getGlobalBounds());
+			if (wall.wallType == Wall::Types::Shop_B3)
+			{
+				shopExit = wall.rect;
+			}
+		}
+	}
+	// SET HOME COLLIDER
+	{
+		for (auto wall : homeInterior->GetWall().Walls)
+		{
+			houseWalls.push_back(wall.rect.getGlobalBounds());
+			if (wall.wallType == Wall::Types::Home_B3)
+			{
+				homeExit = wall.rect;
+			}
+		}
 	}
 
 	// MAP COLLIDER SETTING
@@ -401,31 +429,37 @@ void SceneGame::Enter()
 		{
 			auto rows = doc.GetRow<int>(i);
 			sf::FloatRect rect = { mapLT.x + rows[0] * tileSize.x, mapLT.y + rows[1] * tileSize.y, tileSize.x, tileSize.y };
-			walls.push_back(rect);
+			//walls.push_back(rect);
+			farmWalls.push_back(rect);
 		}
 		for (int i = 0; i < stoneCount; i++)
 		{
 			Stone* stone = (Stone*)FindGo("stone" + to_string(i));
-			walls.push_back(stone->GetCollider());
+			//walls.push_back(stone->GetCollider());
+			farmWalls.push_back(stone->GetCollider());
 		}
 		for (int i = 0; i < timberCount; ++i)
 		{
 			Timber* timber = (Timber*)FindGo("timber" + to_string(i));
-			walls.push_back(timber->GetCollider());
+			//walls.push_back(timber->GetCollider());
+			farmWalls.push_back(timber->GetCollider());
 		}
 		for (int i = 0; i < weedCount; ++i)
 		{
 			Weed* weed = (Weed*)FindGo("weed" + to_string(i));
-			walls.push_back(weed->GetCollider());
+			//walls.push_back(weed->GetCollider());
+			farmWalls.push_back(weed->GetCollider());
 		}
 		for (int i = 0; i < treeCount; ++i)
 		{
 			Tree* tree = (Tree*)FindGo("tree" + to_string(i));
-			walls.push_back(tree->stump->GetCollider());
+			//walls.push_back(tree->stump->GetCollider());
+			farmWalls.push_back(tree->stump->GetCollider());
 		}
-		for (int i = 0; i < walls.size(); ++i)
+		for (int i = 0; i < houseWalls.size(); ++i)
 		{
-			player2->SetWallBounds(walls[i]);
+			//player2->SetWallBounds(walls[i]);
+			player2->SetWallBounds(houseWalls[i]);
 		}
 	}
 
@@ -473,6 +507,7 @@ void SceneGame::Enter()
 		location = Location::Home;
 		player2->SetPosition(playerSpwan);
 	}
+	
 }
 
 void SceneGame::Exit()
@@ -658,6 +693,11 @@ void SceneGame::Update(float dt)
 			}
 			SetAct(true);
 			location = Location::Home;
+			player2->ClearWalls();
+			for (int i = 0; i < houseWalls.size(); ++i)
+			{
+				player2->SetWallBounds(houseWalls[i]);
+			}
 			player2->SetPosition(houseInEnter);
 		}
 		else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) &&
@@ -679,6 +719,11 @@ void SceneGame::Update(float dt)
 				}
 			}
 			SetAct(true);
+			player2->ClearWalls();
+			for (int i = 0; i < shopWalls.size(); ++i)
+			{
+				player2->SetWallBounds(shopWalls[i]);
+			}
 			location = Location::Shop;
 			player2->SetPosition(shopInEnter);
 		}
@@ -723,7 +768,8 @@ void SceneGame::Update(float dt)
 			}
 			// OUT
 			{
-				if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+				//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+				if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
 				{
 					for (auto go : gameObjects)
 					{
@@ -742,6 +788,11 @@ void SceneGame::Update(float dt)
 						}
 					}
 					SetAct(true);
+					player2->ClearWalls();
+					for (int i = 0; i < farmWalls.size(); ++i)
+					{
+						player2->SetWallBounds(farmWalls[i]);
+					}
 					player2->SetPosition(207.f, -424.f);
 					location = Location::Farm;
 				}
@@ -750,7 +801,8 @@ void SceneGame::Update(float dt)
 		case Location::Shop:
 			// OUT
 			{
-				if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+				//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+				if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
 				{
 					for (auto go : gameObjects)
 					{
@@ -768,6 +820,11 @@ void SceneGame::Update(float dt)
 						}
 					}
 					SetAct(true);
+					player2->ClearWalls();
+					for (int i = 0; i < farmWalls.size(); ++i)
+					{
+						player2->SetWallBounds(farmWalls[i]);
+					}
 					player2->SetPosition(shopOutEnter);
 
 					location = Location::Farm;

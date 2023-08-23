@@ -45,6 +45,10 @@ protected:
 	// PLAYER COLLIDE
 	Player2* player2;
 	std::vector<sf::FloatRect> walls;
+	std::vector<sf::FloatRect> farmWalls;
+	std::vector<sf::FloatRect> shopWalls;
+	std::vector<sf::FloatRect> houseWalls;
+
 	sf::FloatRect playerBound;
 	sf::FloatRect mapBound;
 
@@ -88,10 +92,11 @@ protected:
 
 	// HOME, SHOP
 	Location location = Location::Home;
+	sf::RectangleShape homeExit;
+	sf::RectangleShape shopExit;
 	bool enterShop = false;
 	bool enterHome = false;
 	bool init = false;
-	
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;

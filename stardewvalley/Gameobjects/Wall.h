@@ -40,10 +40,16 @@ protected:
 	float height;
 	bool colliderOnOff;
 
+	struct wallstruct
+	{
+		sf::RectangleShape rect;
+		Types wallType;
+	};
+
 public:
 	//임형준, 230814, 플레이어에 정보를 넘겨줄 용도로 protected->public으로 변경
-	std::vector<sf::RectangleShape> Walls; 
-
+	//std::vector<sf::RectangleShape> Walls; 
+	std::vector<wallstruct> Walls;
 	Wall(const std::string& n = "");
 	virtual ~Wall() override;
 
