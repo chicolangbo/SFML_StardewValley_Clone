@@ -54,14 +54,13 @@ void Crop::Update(float dt)
 	if (tempcurrentday != currentday)
 	{
 		currentday = tempcurrentday;
-		day++;
-		if (isWatered && level<3)
+		if (isWatered && level<4)
 		{
+			day++;
 			LevelUp();
 		}
 		isWatered = false;
 	}
-
 }
 
 void Crop::SetIndex(int x, int y)
@@ -107,6 +106,9 @@ void Crop::LevelUp()
 	if (period[level] == day)
 	{
 		level++;
-		sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level]));
+		sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level - 1]));
+		day = 0;
+
+		cout << (int)id << "," << level << endl;
 	}
 }

@@ -51,7 +51,7 @@ void Wall::Draw(sf::RenderWindow& window)
 	{
 		for (auto it : Walls)
 		{
-			window.draw(it);
+			window.draw(it.rect);
 		}		
 	}
 }
@@ -72,7 +72,7 @@ void Wall::SetPos()
 			rect.setOutlineThickness(0.5f);
 			rect.setOutlineColor(sf::Color::Red);
 			rect.setFillColor(sf::Color::Transparent);
-			Walls.push_back(rect);
+			Walls.push_back({rect, (Types)i });
 		}
 		else if (locationType == Location::Shop && i < 10)
 		{
@@ -85,8 +85,7 @@ void Wall::SetPos()
 			rect.setOutlineThickness(0.5f);
 			rect.setOutlineColor(sf::Color::Red);
 			rect.setFillColor(sf::Color::Transparent);
-			Walls.push_back(rect);
-
+			Walls.push_back({ rect, (Types)i });
 		}
 	}
 }

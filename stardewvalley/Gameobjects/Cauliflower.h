@@ -1,13 +1,12 @@
 #pragma once
 #include "Crop.h"
-
-class Parsnip :public Crop
+class Cauliflower : public Crop
 {
 protected:
 
 public:
-	Parsnip(const string& textureId = "", const string& n = "", const string& nickname = "");
-	virtual ~Parsnip() override;
+	Cauliflower(const string& textureId = "", const string& n = "", const string& nickname = "");
+	virtual ~Cauliflower() override;
 
 	virtual void Init() override;
 	virtual void Release() override;

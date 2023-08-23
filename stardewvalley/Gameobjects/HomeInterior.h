@@ -19,6 +19,7 @@ public:
 
     GameObject* AddInteriors(GameObject* go);
     bool Exist(GameObject* go);
+    Wall GetWall() { return homeWalls; }
 
     virtual void Init() override;
     virtual void Reset() override;

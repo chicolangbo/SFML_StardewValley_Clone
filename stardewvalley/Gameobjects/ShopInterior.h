@@ -10,6 +10,8 @@ class ShopInterior :
 protected:
     // SHOP INERIOR UI
     std::list<GameObject*> shopInteriors;
+    std::list<SpriteGo> shopInteriosSp;
+
     SpriteGo shopInside;
     UiButton pierre;
     SpriteGo shopCounter1;
@@ -28,6 +30,8 @@ public:
 
     GameObject* AddInteriors(GameObject* go);
     bool Exist(GameObject* go);
+    std::list<SpriteGo> GetshopInteriors() { return shopInteriosSp; }
+    Wall GetWall() { return shopWalls; }
 
     virtual void Init() override;
     virtual void Reset() override;

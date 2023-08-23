@@ -25,6 +25,8 @@ class Weed;
 class Tree;
 class HoeDirt;
 class Parsnip;
+class Potato;
+class Cauliflower;
 
 struct DataLoad
 {
@@ -43,6 +45,10 @@ protected:
 	// PLAYER COLLIDE
 	Player2* player2;
 	std::vector<sf::FloatRect> walls;
+	std::vector<sf::FloatRect> farmWalls;
+	std::vector<sf::FloatRect> shopWalls;
+	std::vector<sf::FloatRect> houseWalls;
+
 	sf::FloatRect playerBound;
 	sf::FloatRect mapBound;
 
@@ -80,11 +86,15 @@ protected:
 	int col = 0;
 	int row = 0;
 
-	//crop pool
+	// CROP POOL
 	ObjectPool<Parsnip> parsnipPool;
+	ObjectPool<Potato> potatoPool;
+	ObjectPool<Cauliflower> cauliflowerPool;
 
 	// HOME, SHOP
 	Location location = Location::Home;
+	sf::RectangleShape homeExit;
+	sf::RectangleShape shopExit;
 	bool enterShop = false;
 	bool enterHome = false;
 	bool init = false;
@@ -154,7 +164,11 @@ public:
 
 	bool HasObjectAt(int x, int y);
 	void SetGreenTile();
+
 	void PlantParsnip(int x, int y);
+	void PlantPotato(int x, int y);
+	void PlantCauli(int x, int y);
+
 	int GetDay() { return day; }
 
 	void ChangeDate();

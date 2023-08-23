@@ -28,6 +28,7 @@ ShopInterior::ShopInterior(const std::string& n)
     AddInteriors(&shopObj3_2);
     AddInteriors(&shopObj4);
     AddInteriors(&shopWalls);
+
 }
 
 ShopInterior::~ShopInterior()
@@ -124,6 +125,14 @@ void ShopInterior::Reset()
         shopWalls.SetType(Location::Shop);
         shopWalls.SetPos();
     }
+
+    shopInteriosSp.push_back(shopCounter1);
+    shopInteriosSp.push_back(shopCounter2);
+    shopInteriosSp.push_back(shopObj1);
+    shopInteriosSp.push_back(shopObj2_1);
+    shopInteriosSp.push_back(shopObj2_2);
+    shopInteriosSp.push_back(shopObj3_1);
+    shopInteriosSp.push_back(shopObj4);
 }
 
 void ShopInterior::Release()
