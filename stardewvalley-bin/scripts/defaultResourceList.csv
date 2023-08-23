@@ -104,7 +104,6 @@
 3,tables/MoveFront.csv,N,-1,-1,-1,-1,
 3,tables/MoveBack.csv,N,-1,-1,-1,-1,
 3,tables/MoveLeft.csv,N,-1,-1,-1,-1,
-0,graphics/RubySheet.png,N,-1,-1,-1,-1,
 0,map/testMap.png,N,-1,-1,-1,-1,
 0,map/spring_outdoorsTileSheet.png,tree1,0,4,48,92,
 0,map/spring_outdoorsTileSheet.png,tree2,48,6,47,90,
@@ -120,8 +119,8 @@
 0,graphics/Pierre.png,pierre,0,3,16,29,
 0,graphics/Robin.png,robin,1,4,14,28,
 0,map/testFarmMap.png,N,-1,-1,-1,-1,
-3,animations/player_Idle.csv,N,-1,-1,-1,-1,������
-3,animations/player_Idle-side.csv,N,-1,-1,-1,-1,
+3,animations/player_Idle.csv,N,-1,-1,-1,-1,
+3,animations/player_Idle-side.csv,N,-1,-1,-1,-1,������
 3,animations/player_Idle-up.csv,N,-1,-1,-1,-1,
 3,animations/player_Move.csv,N,-1,-1,-1,-1,
 3,animations/player_Move-side.csv,N,-1,-1,-1,-1,
@@ -135,8 +134,8 @@
 3,animations/player_Attack-up.csv,N,-1,-1,-1,-1,
 3,animations/Axe_Side.csv,N,-1,-1,-1,-1,
 3,animations/Pickax_Side.csv,N,-1,-1,-1,-1,
-1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,������
-0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,
+1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,
+0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,������
 0,map/walls_and_floors.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,SideAxe,260,158,10,23,
 3,animations/Axe_Back.csv,N,-1,-1,-1,-1,
