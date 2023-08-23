@@ -635,11 +635,11 @@ void SceneGame::Update(float dt)
 
 	// FARMING
 	{
-		if (player2->GetEquipItem() == ItemId::parsnipSeed 
-			|| player2->GetEquipItem() == ItemId::potatoSeed 
-			|| player2->GetEquipItem() == ItemId::coliSeed)
+		if (player2->GetPlayerItemId() == ItemId::parsnipSeed
+			|| player2->GetPlayerItemId() == ItemId::potatoSeed
+			|| player2->GetPlayerItemId() == ItemId::coliSeed)
 		{
-			ItemId itemId = player2->GetEquipItem();
+			ItemId itemId = player2->GetPlayerItemId();
 			selectTile->SetActive(true);
 			selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
 
