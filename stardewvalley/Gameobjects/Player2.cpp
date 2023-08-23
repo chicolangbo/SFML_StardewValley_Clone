@@ -89,7 +89,7 @@ void Player2::Reset()
 	energy = maxEnergy;
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
-	collider.setScale({ 0.3, 0.3 });
+	collider.setScale({ 0.2f, 0.3f });
 	SetOrigin(origin);
 
 	playerItemList.push_back({ ItemId::ax, 1, 0 });

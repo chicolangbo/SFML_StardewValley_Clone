@@ -163,7 +163,7 @@ void SceneTitle::ShowStartButton()
 	start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "newGame1", "newGame1"));
 	start->SetOrigin(Origins::TL);
 	start->SetPosition(-390.f, 30.f);
-	start->SetScale(2.f, 2.f);
+	start->SetScale(2.5f, 2.5f);
 	start->sortLayer = 100;
 	start->SetActive(false);
 
@@ -177,8 +177,8 @@ void SceneTitle::ShowExitButton()
 {
 	exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1"));
 	exit->SetOrigin(Origins::TL);
-	exit->SetPosition(250.f, 30.f);
-	exit->SetScale(2.f, 2.f);
+	exit->SetPosition(210.f, 30.f);
+	exit->SetScale(2.5f, 2.5f);
 	exit->sortLayer = 100;
 	exit->SetActive(false);
 

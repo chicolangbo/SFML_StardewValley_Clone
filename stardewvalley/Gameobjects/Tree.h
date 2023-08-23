@@ -18,6 +18,7 @@ protected:
 	bool treeRotation = false;
 	bool fallingTree = false;
 	float rotation = 0.f;
+	float time = 0.f;
 public:
 
 	Objects* stump; //그루터기

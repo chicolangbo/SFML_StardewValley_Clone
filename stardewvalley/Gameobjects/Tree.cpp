@@ -57,9 +57,10 @@ void Tree::Update(float dt)
 
 	if (treeRotation)
 	{
-		rotation += dt * 300.f;
+		rotation += dt * 0.5f;
 		branch.rotate(rotation);
-		if (rotation >= 90.f)
+		time += dt;
+		if (time >= 0.65f)
 		{
 			fallingTree = true;
 		}

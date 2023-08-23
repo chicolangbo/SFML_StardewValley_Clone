@@ -143,5 +143,6 @@ public:
 	void HitStone(int x, int y);
 	void HitTimber(int x, int y);
 	void HitTree(int x, int y);
+	void HitWeed(int x, int y);
 };
 
