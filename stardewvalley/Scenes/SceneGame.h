@@ -52,6 +52,8 @@ protected:
 	SpriteGo* shopExterior; // �� �ܺ�
 
 	sf::Vector2f mapLT;
+	int col = 0;
+	int row = 0;
 
 	//data Save & Load
 	DataLoad lData;
@@ -74,6 +76,7 @@ protected:
 
 	//hoe dirt
 	HoeDirt* dirt;
+	vector<vector<HoeDirt*>> dirtArray;
 
 	SpriteGo* selectTile; //red or green box
 	bool canPlant = false;
@@ -144,5 +147,8 @@ public:
 	void HitTimber(int x, int y);
 	void HitTree(int x, int y);
 	void HitWeed(int x, int y);
+
+	bool HasObjectAt(int x, int y);
+	void SetGreenTile();
 };
 

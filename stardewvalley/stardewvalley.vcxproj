@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gameobjects\Crop.cpp" />
     <ClCompile Include="Gameobjects\Bird.cpp" />
     <ClCompile Include="DataTables\AllItemTable.cpp" />
     <ClCompile Include="Animation\AnimationClip.cpp" />
@@ -198,6 +199,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Parsnip.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -223,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="Gameobjects\Crop.h" />
     <ClInclude Include="Gameobjects\Bird.h" />
     <ClInclude Include="DataTables\AllItemTable.h" />
     <ClInclude Include="Animation\AnimationController.h" />
@@ -262,6 +265,7 @@
     <ClInclude Include="Framework\SaveLoadData.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Parsnip.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />

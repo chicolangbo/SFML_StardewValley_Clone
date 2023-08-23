@@ -57,6 +57,9 @@ void SceneGame::Init()
 		testFarmMap->SetOrigin(Origins::MC);
 		testFarmMap->sortLayer = 0;
 		testFarmMap->sortOrder = 0;
+		col = testFarmMap->GetSize().x;
+		row = testFarmMap->GetSize().y;
+
 		//울타리나 절벽
 		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
 		testFarmMap2->Reset();
@@ -148,9 +151,25 @@ void SceneGame::Init()
 
 	//HOE DIRT
 	{
-		dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
-		dirt->sortLayer = 0;
-		dirt->sortOrder = 2;	}
+		dirtArray.resize(row);
+		for (int i = 0; i < row; i++)
+		{
+			dirtArray[i].resize(col);
+		}
+
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+				dirt->sortLayer = 0;
+				dirt->sortOrder = 2;
+				dirt->SetIndex(j, i);
+				dirt->SetActive(false);
+				dirtArray[i][j] = dirt;
+			}
+		}
+	}
 
 	// PLAYER
 	{
@@ -290,11 +309,7 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	
 	shopTap->SetPierre(shopInterior->GetPierre());
-
-	
-	//testFarmMapObj->SetPosition(testFarmMap->GetPosition());
 
 	tileSize = testFarmMap->GetTileSize();
 	mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
@@ -323,9 +338,18 @@ void SceneGame::Enter()
 	shopTap->SetPierre(shopInterior->GetPierre());
 
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
-
 	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
-	
+
+
+	//set dirt Position 
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+		}
+	}
+
 	//맵 툴 충돌체 설정
 	
 	Scene::Enter();
@@ -366,15 +390,13 @@ void SceneGame::Enter()
 		walls.push_back(tree->stump->GetCollider());
 	}
 
-	
-
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
 	}
 
 	//농사 임시세팅
-	dirt->SetPosition(0, 0);
+
 	for (int i = 0; i < 5; i++)
 	{
 		player2->AddPlayerItem(ItemId::parsnipSeed);
@@ -419,6 +441,9 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
+	//mousePos
+	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
 	// PLAYER EQUIP
 	{
@@ -681,7 +706,7 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-	//sf::Vector2f playerTilePos;
+	//플레이어가 바라보고있는 타일
 
 	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
 	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
@@ -744,6 +769,21 @@ void SceneGame::Update(float dt)
 			HitWeed(BtileX, BtileY);
 		}
 	}
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
+	{
+		if (!HasObjectAt(BtileX, BtileY) && !dirtArray[BtileY][BtileX]->GetActive())
+		{
+			dirtArray[BtileY][BtileX]->SetActive(true);
+		}
+	}
+	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
+	{
+		if (dirtArray[BtileY][BtileX]->GetActive())
+		{
+			dirtArray[BtileY][BtileX]->SetIsWatered(true);
+		}
+	}
+
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 
@@ -951,4 +991,41 @@ void SceneGame::HitWeed(int x, int y)
 		}
 
 	}
+}
+
+bool SceneGame::HasObjectAt(int x, int y)
+{
+	for (auto stone : stones)
+	{
+		if (stone->GetIndex().x == x && stone->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto timber : timbers)
+	{
+		if (timber->GetIndex().x == x && timber->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto weed : weeds)
+	{
+		if (weed->GetIndex().x == x && weed->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	for (auto tree : trees)
+	{
+		if (tree->stump->GetIndex().x == x && tree->stump->GetIndex().y == y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void SceneGame::SetGreenTile()
+{
 }
