@@ -4,6 +4,7 @@
 #include "ClipTable.h"
 #include "WallTable.h"
 #include "AllItemTable.h"
+#include "CropTable.h"
 
 void DataTableMgr::LoadAll()
 {
@@ -11,6 +12,7 @@ void DataTableMgr::LoadAll()
 	tables.insert({ DataTable::Ids::Clip, new ClipTable() });
 	tables.insert({ DataTable::Ids::Wall, new WallTable() });
 	tables.insert({ DataTable::Ids::AllItem, new AllItemTable() });
+	tables.insert({ DataTable::Ids::Crop, new CropTable() });
 
 	for (auto pair : tables)
 	{

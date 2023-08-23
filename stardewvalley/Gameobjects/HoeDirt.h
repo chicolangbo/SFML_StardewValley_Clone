@@ -11,9 +11,10 @@ protected:
 
 	int indexX = 0;
 	int indexY = 0;
-	int day = 0;
+	int day = 0; //땅이 파진 날짜
 	bool plantedCrop = false;
 	bool isWatered = false;
+	int currentDay = 0;
 
 public:
 	sf::Sprite dirt;
@@ -38,6 +39,11 @@ public:
 
 	void SetIsWatered(bool is) { isWatered = is; }
 	void SetIndex(int x, int y) { indexX = x; indexY = y; }
+	void SetPlantedCrop(bool is) { plantedCrop = is; }
+	void SetCurrentDay(bool is) { currentDay = is; }
 
+	sf::Vector2i GetIndex() { return sf::Vector2i(indexX, indexY); }
+	bool GetIsWatered() { return isWatered; }
+	bool GetIsPlanted() { return plantedCrop; }
 };
 

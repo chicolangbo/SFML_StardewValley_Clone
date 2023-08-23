@@ -2,6 +2,8 @@
 #include "HoeDirt.h"
 #include "Utils.h"
 #include "ResourceMgr.h"
+#include "SceneMgr.h"
+#include "SceneGame.h"
 
 HoeDirt::HoeDirt(const string& n, const string& textureId, const string& dirtNick, const string& waterNick)
 	:GameObject(n), textureId(textureId), dirtNick(dirtNick), waterNick(waterNick)
@@ -46,6 +48,16 @@ void HoeDirt::Reset()
 
 void HoeDirt::Update(float dt)
 {
+	Scene* scene = SCENE_MGR.GetCurrScene();
+	SceneGame* sceneGame = dynamic_cast<SceneGame*>(scene);
+
+	int tempcurrentday = sceneGame->GetDay();
+	if (tempcurrentday != currentDay)
+	{
+		currentDay = tempcurrentday;
+		day++;
+		isWatered = false;
+	}
 }
 
 void HoeDirt::Draw(sf::RenderWindow& window)

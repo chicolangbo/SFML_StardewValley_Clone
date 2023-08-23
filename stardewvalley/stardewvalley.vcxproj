@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTables\CropTable.cpp" />
     <ClCompile Include="Gameobjects\Crop.cpp" />
     <ClCompile Include="Gameobjects\Bird.cpp" />
     <ClCompile Include="DataTables\AllItemTable.cpp" />
@@ -225,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="DataTables\CropTable.h" />
     <ClInclude Include="Gameobjects\Crop.h" />
     <ClInclude Include="Gameobjects\Bird.h" />
     <ClInclude Include="DataTables\AllItemTable.h" />

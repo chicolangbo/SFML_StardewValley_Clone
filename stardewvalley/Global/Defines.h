@@ -91,6 +91,12 @@ enum class  ItemId
 	coli
 };
 
+enum class CropId
+{
+	Parsnip,
+	Potato,
+	Cauliflower,
+};
 enum class Location
 {
 	Farm,

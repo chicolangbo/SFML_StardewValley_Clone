@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Scene.h"
 #include "Item.h"
+#include "ObjectPool.h"
 
 class VertexArrayGo;
 class Player2;
@@ -23,6 +24,7 @@ class Timber;
 class Weed;
 class Tree;
 class HoeDirt;
+class Parsnip;
 
 struct DataLoad
 {
@@ -49,7 +51,7 @@ protected:
 	TileMap* testFarmMap;
 	TileMap* testFarmMap2;
 	TileMap* testFarmMapObj;
-	SpriteGo* shopExterior; // �� �ܺ�
+	SpriteGo* shopExterior;
 
 	sf::Vector2f mapLT;
 	int col = 0;
@@ -80,6 +82,9 @@ protected:
 
 	SpriteGo* selectTile; //red or green box
 	bool canPlant = false;
+
+	//crop pool
+	ObjectPool<Parsnip> parsnipPool;
 
 	ShopTap* shopTap;
 	HomeTap* homeTap;
@@ -150,5 +155,21 @@ public:
 
 	bool HasObjectAt(int x, int y);
 	void SetGreenTile();
+	void PlantParsnip(int x, int y);
+	int GetDay() { return day; }
+
+	void ChangeDate();
+
+	template <typename T>
+	void ClearObjectPool(ObjectPool<T>& pool);
 };
 
+template<typename T>
+inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
+{
+	for (auto obj : pool.GetUseList())
+	{
+		RemoveGo(obj);
+	}
+	pool.Clear();
+}

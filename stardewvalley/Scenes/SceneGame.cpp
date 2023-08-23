@@ -35,6 +35,8 @@
 #include "HoeDirt.h"
 #include "SaveLoadData.h"
 #include "SceneTitle.h"
+#include "Parsnip.h"
+#include "Crop.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -145,28 +147,6 @@ void SceneGame::Init()
 				trees.push_back(tree);
 				tree->sortLayer = 2;
 				treeCount++;
-			}
-		}
-	}
-
-	//HOE DIRT
-	{
-		dirtArray.resize(row);
-		for (int i = 0; i < row; i++)
-		{
-			dirtArray[i].resize(col);
-		}
-
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
-				dirt->sortLayer = 0;
-				dirt->sortOrder = 2;
-				dirt->SetIndex(j, i);
-				dirt->SetActive(false);
-				dirtArray[i][j] = dirt;
 			}
 		}
 	}
@@ -283,6 +263,39 @@ void SceneGame::Init()
 		selectTile->sortOrder = 0;
 	}
 
+	//HOE DIRT
+	{
+		dirtArray.resize(row);
+		for (int i = 0; i < row; i++)
+		{
+			dirtArray[i].resize(col);
+		}
+
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+				dirt->sortLayer = 0;
+				dirt->sortOrder = 2;
+				dirt->SetIndex(j, i);
+				dirt->SetActive(false);
+				dirtArray[i][j] = dirt;
+			}
+		}
+	}
+
+	//SET CROP POOL
+	{
+		parsnipPool.OnCreate = [this](Parsnip* parsnip)
+		{
+			parsnip->sortLayer = 1;
+			parsnip->SetType(CropId::Parsnip);
+		};
+		parsnipPool.Init();
+	}
+
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -291,6 +304,8 @@ void SceneGame::Init()
 
 void SceneGame::Release()
 {
+	parsnipPool.Release();
+
 	for (auto go : gameObjects)
 	{
 		//go->Release();
@@ -358,8 +373,6 @@ void SceneGame::Enter()
 
 	walls.push_back(shopExterior->GetCollider());
 
-
-
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 	
 	for (int i = 2; i < doc.GetRowCount(); i++)
@@ -416,6 +429,7 @@ void SceneGame::Enter()
 
 void SceneGame::Exit()
 {
+	ClearObjectPool(parsnipPool);
 	Scene::Exit();
 }
 
@@ -467,6 +481,14 @@ void SceneGame::Update(float dt)
 		}
 	}
 
+	// TEST CODE : day +1
+	{
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::F6))
+		{
+			ChangeDate();
+		}
+	}
+
 	// UI : TIME DATA SETTING
 	{
 		time +=dt;
@@ -482,14 +504,16 @@ void SceneGame::Update(float dt)
 		}
 		if (hour == 24)
 		{
-			hour = 0;
+			ChangeDate();
+			/*hour = 0;
 			day += 1;
-			arrowSpin = 0;
+			arrowSpin = 0;*/
 		}
 		if (hour == 2)
 		{
 			player2->ZeroEnergy();
-			hour = 6;
+			/*hour = 6;*/
+			ChangeDate();
 		}
 		arrowSpin += dt * 0.2381f;
 		timeArrow->SetOrigin(Origins::BC);
@@ -531,9 +555,11 @@ void SceneGame::Update(float dt)
 				canPlant = false;
 			}
 
+			//PLANT CROP
 			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
 			{
-
+				//PLANT PARSNIP
+				PlantParsnip(mouseTileX, mouseTileY);
 			}
 		}
 		else
@@ -767,6 +793,7 @@ void SceneGame::Update(float dt)
 			if (!HasObjectAt(BtileX, BtileY) && !dirtArray[BtileY][BtileX]->GetActive())
 			{
 				dirtArray[BtileY][BtileX]->SetActive(true);
+				dirtArray[BtileY][BtileX]->SetCurrentDay(day);
 			}
 		}
 		else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
@@ -774,7 +801,18 @@ void SceneGame::Update(float dt)
 			if (dirtArray[BtileY][BtileX]->GetActive())
 			{
 				dirtArray[BtileY][BtileX]->SetIsWatered(true);
+				if (dirtArray[BtileY][BtileX]->GetIsPlanted())
+				{
+					for (auto crop : parsnipPool.GetUseList())
+					{
+						if (crop->GetIndex().x == BtileX && crop->GetIndex().y == BtileY)
+						{
+							crop->SetIsWatered(true);
+						}
+					}
+				}
 			}
+			
 		}
 	}
 }
@@ -1021,4 +1059,29 @@ bool SceneGame::HasObjectAt(int x, int y)
 
 void SceneGame::SetGreenTile()
 {
+}
+
+void SceneGame::PlantParsnip(int x, int y)
+{
+	Parsnip* parsnip = parsnipPool.Get();
+	parsnip->SetPosition({ x * tileSize.x + mapLT.x, y * tileSize.y + mapLT.y });
+	parsnip->SetDirtTile(dirtArray[y][x]);
+	parsnip->SetDate(day);
+	parsnip->SetIndex(x, y);
+	parsnip->SetIsWatered(dirtArray[y][x]->GetIsWatered());
+	AddGo(parsnip);
+
+	dirtArray[y][x]->SetPlantedCrop(true);
+
+	player2->RemovePlayerItem(ItemId::parsnipSeed);
+}
+
+void SceneGame::ChangeDate()
+{
+	day += 1;
+
+	time = 0;
+	hour = 6;
+	min = 0;
+	arrowSpin = 0;
 }

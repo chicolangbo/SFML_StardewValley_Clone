@@ -11,6 +11,7 @@ public:
 		Wall,
 		AllItem,
 		Object,
+		Crop,
 	};
 
 	DataTable(const DataTable& other) = delete;
