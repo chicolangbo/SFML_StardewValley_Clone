@@ -353,10 +353,20 @@ void SceneGame::Enter()
 
 	// SHOP, HOUSE
 	{
-		shopTap->SetPierre(shopInterior->GetPierre());
-		houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
-		houseExterior->colliderOnOff = false;
-		shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
+		// SHOP
+		{
+			shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
+			shopInterior->SetActive(false);
+			shopTap->SetActive(false);
+			shopTap->SetPierre(shopInterior->GetPierre());
+		}
+		// HOME
+		{
+			houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
+			houseExterior->colliderOnOff = false;
+			homeInterior->SetActive(false);
+			bedding->SetActive(false);
+		}
 	}
 
 	// DIRT POSITION SETTING
@@ -421,6 +431,26 @@ void SceneGame::Enter()
 		}
 	}
 	
+	// INIT SETTING
+	{
+		for (auto go : gameObjects)
+		{
+			if (go->GetActive())
+			{
+				go->SetActive(false);
+			}
+		}
+		SetAct(true);
+		shopTap->SetActive(true); // 내부에서 active 관리
+		homeTap->SetActive(true); // 내부에서 active 관리
+		homeInterior->SetActive(true);
+		bedding->SetActive(true);
+		quickinven->SetActive(true);
+		location = Location::Home;
+		player2->SetPosition(playerSpwan);
+		init = false;
+	}
+	
 	// FILE LOAD
 	{
 		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
@@ -433,28 +463,6 @@ void SceneGame::Enter()
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
 	}
-
-	// INIT HOME SETTING
-	{
-		for (auto go : gameObjects)
-		{
-			if (go->GetActive())
-			{
-				if (go->GetName() == "homeTap")
-					continue;
-				go->SetActive(false);
-			}
-			else
-			{
-				if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
-					continue;
-				go->SetActive(true);
-			}
-		}
-		SetAct(true);
-		location = Location::Home;
-		player2->SetPosition(playerSpwan);
-	}
 }
 
 void SceneGame::Exit()
@@ -466,8 +474,6 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
-
-	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 
 	// TREE TRANSPARENT
 	{
@@ -570,7 +576,7 @@ void SceneGame::Update(float dt)
 
 	// FARMING
 	{
-		if (player2->GetEquipItem() == ItemId::parsnipSeed)
+		if (player2->GetPlayerItemId() == ItemId::parsnipSeed)
 		{
 			selectTile->SetActive(true);
 			selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
@@ -687,7 +693,7 @@ void SceneGame::Update(float dt)
 			}
 			// OUT
 			{
-				if (player2->GetPosition().y >= houseInEnter.y + 50.f && player2->GetDirection().y <= 0)
+				if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
 				{
 					for (auto go : gameObjects)
 					{
@@ -714,7 +720,7 @@ void SceneGame::Update(float dt)
 		case Location::Shop:
 			// OUT
 			{
-				if (player2->GetPosition().y >= shopInEnter.y + 50.f && player2->GetDirection().y <= 0)
+				if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
 				{
 					for (auto go : gameObjects)
 					{
@@ -767,15 +773,24 @@ void SceneGame::Update(float dt)
 		}
 	}
 	
-	// QUICK INVEN ONOFF
+	// QUICK & INVEN ONOFF
 	{
-		if (inven->GetInvenOff())
+		if (inven->GetInvenOff() || shopTap->shopTapOn || homeTap->homeTapOn)
 		{
 			quickinven->SetActive(false);
 		}
 		else
 		{
 			quickinven->SetActive(true);
+		}
+
+		if (shopTap->shopTapOn || homeTap->homeTapOn)
+		{
+			inven->invenTapOn = false;
+		}
+		else
+		{
+			inven->invenTapOn = true;
 		}
 	}
 
@@ -886,6 +901,12 @@ void SceneGame::SetAct(bool is)
 	inven->SetActive(is);
 	quickinven->SetActive(is);
 	energyBar->SetActive(is);
+	texMoney->SetActive(is);
+	texMin->SetActive(is);
+	texHour->SetActive(is);
+	collon->SetActive(is);
+	texDay->SetActive(is);
+	dayday->SetActive(is);
 }
 
 void SceneGame::HitStone(int x, int y)

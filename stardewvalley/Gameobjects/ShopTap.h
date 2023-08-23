@@ -20,7 +20,6 @@ protected:
     Inventory* inven = nullptr;
     std::list<tagItemInfo>* playerItemList = nullptr;
     std::unordered_map<ItemId, SpriteGo>* itemIconList = nullptr;
-    bool shopTapOn = false;
 
     // SHOP, INVEN SLOT VECTOR
     std::vector<ShopSlot*> shopSlot;
@@ -46,6 +45,7 @@ protected:
     UiButton scrollDown;
 
 public:
+    bool shopTapOn = false;
     ShopTap(const std::string& n = "");
     virtual ~ShopTap() override;
 

@@ -64,7 +64,6 @@ protected:
 	std::list<RootingItem*>*rootingItemList;
 
 	Inventory* inven;
-	float pos = 0.6f;
 
 public:
 
@@ -105,7 +104,5 @@ public:
 	sf::Vector2f GetDirection() { return direction; }
 
 	ItemId GetPlayerItemId() { return item; } 
-
-	ItemId GetEquipItem();
 };
 

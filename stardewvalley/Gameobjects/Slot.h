@@ -5,7 +5,6 @@
 class Slot : public UiButton
 {
 protected:
-   
     Slot* mouseIcon = nullptr;
     ItemId id = ItemId::none;
     SpriteGo* itemIcon = nullptr;
