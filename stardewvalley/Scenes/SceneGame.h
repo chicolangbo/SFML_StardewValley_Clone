@@ -78,15 +78,17 @@ protected:
 	int row = 0;
 
 	// HOME, SHOP
-	Location location = Location::Farm;
+	Location location = Location::Home;
 	bool enterShop = false;
 	bool enterHome = false;
+	bool init = false;
 	ShopTap* shopTap;
 	HomeTap* homeTap;
 	ShopInterior* shopInterior;
 	HomeInterior* homeInterior;
 	SpriteGo* houseExterior;
 	SpriteGo* bedding;
+	sf::Vector2f playerSpwan = { 606.f, 653.f };
 	sf::Vector2f shopPos = { 9.f, 16.f };
 	sf::Vector2f housePos = { 21.f, 16.f };
 	sf::Vector2f houseInEnter = { 193.f, 728.f };

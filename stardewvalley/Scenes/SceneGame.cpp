@@ -418,6 +418,28 @@ void SceneGame::Enter()
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
 	}
+
+	// INIT HOME SETTING
+	{
+		for (auto go : gameObjects)
+		{
+			if (go->GetActive())
+			{
+				if (go->GetName() == "homeTap")
+					continue;
+				go->SetActive(false);
+			}
+			else
+			{
+				if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+					continue;
+				go->SetActive(true);
+			}
+		}
+		SetAct(true);
+		location = Location::Home;
+		player2->SetPosition(playerSpwan);
+	}
 }
 
 void SceneGame::Exit()
@@ -552,7 +574,7 @@ void SceneGame::Update(float dt)
 
 	// LOCATION ENTER
 	{
-		if (Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
+		if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
 			for (auto go : gameObjects)
@@ -574,7 +596,7 @@ void SceneGame::Update(float dt)
 			location = Location::Home;
 			player2->SetPosition(houseInEnter);
 		}
-		else if (Utils::Distance(shopOutEnter, player2->GetPosition()) &&
+		else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
 			for (auto go : gameObjects)
@@ -604,8 +626,12 @@ void SceneGame::Update(float dt)
 		case Location::Home:
 			// BEDDING COLLIDE
 			{
-				std::cout << (int)location << std::endl;
-				if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+				if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+				{
+					init = true;
+				}
+
+				if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 				{
 					if (!once)
 					{
