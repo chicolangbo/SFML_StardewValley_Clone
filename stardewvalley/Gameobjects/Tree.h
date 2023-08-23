@@ -17,8 +17,12 @@ protected:
 
 	bool treeRotation = false;
 	bool fallingTree = false;
+	bool hit = false;
+
 	float rotation = 0.f;
 	float time = 0.f;
+	float shake = 0.f;
+	float direction = 1.f;
 public:
 
 	Objects* stump; //그루터기
@@ -46,5 +50,6 @@ public:
 	sf::RectangleShape GetHitbox();
 
 	void TreeRotation() { treeRotation = true; }
+	void Hit() { hit = true; }
 };
 

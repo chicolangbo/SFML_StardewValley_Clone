@@ -6,7 +6,6 @@ class Stone :public Objects
 {
 protected:
 	AnimationController animation;
-	int hp = 1;
 	bool bang = false;
 public:
 	Stone(const std::string& textureId = "", const std::string& n = "", const string& nickName = "") 
@@ -16,10 +15,8 @@ public:
 	virtual void Init() override; 
 	virtual void Reset() override; 
 	virtual void Update(float dt) override; 
-	void SetBang() { bang = true; }
-	//virtual void Init() override;
-	//virtual void Reset() override;
-	//virtual void Update(float dt) override;
 
+	void SetBang() { bang = true; }
+	
 };
 

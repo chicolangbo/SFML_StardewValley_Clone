@@ -869,15 +869,12 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 {
 	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
 	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName))); // 아이템 먹으면 딜리트
-
-	auto lastItem = rootingItems.back();
-	lastItem->Reset();
-	lastItem->SetPosition(pos);
-
-	for (auto it = rootingItems.begin(); it != std::prev(rootingItems.end()); ++it)
+	for (auto r : rootingItems)
 	{
-		(*it)->Reset();
+		r->Reset();
 	}
+	rootingItems.back()->SetPosition(pos); 
+	rootingItems.back()->SetPlayer(player2); 
 }
 
 void SceneGame::SetAct(bool is)
@@ -957,20 +954,21 @@ void SceneGame::HitTimber(int x, int y)
 				auto wallIt = std::find(walls.begin(), walls.end(), wal);
 				if (wallIt != walls.end())
 				{
-					walls.erase(wallIt);//해당 돌의 콜라이더 삭제
+					walls.erase(wallIt);
 				}
 
-				(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
-				it = timbers.erase(it);//돌의 백터 배열에서 제거
-				//RemoveGo(*it);
-				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
+				(*it)->SetBang();
+				//(*it)->SetActive(false);
+				it = timbers.erase(it);
+			
+				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::branch, { tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y });
 
-				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
+				
 				for (int i = 0; i < walls.size(); ++i)
 				{
-					player2->SetWallBounds(walls[i]);//다시 콜라이더 배열 업데이트
+					player2->SetWallBounds(walls[i]);
 				}
 			}
 			break;
@@ -993,6 +991,7 @@ void SceneGame::HitTree(int x, int y)
 		if (treeX == x && treeY == y)
 		{
 			(*it)->stump->Hit(1);
+			(*it)->Hit();
 			if ((*it)->stump->GetHp() == 5)
 			{
 				(*it)->TreeRotation();
@@ -1048,8 +1047,8 @@ void SceneGame::HitWeed(int x, int y)
 				{
 					walls.erase(wallIt);
 				}
-
-				(*it)->SetActive(false);
+				(*it)->SetBang();
+				//(*it)->SetActive(false);
 				it = weeds.erase(it);
 
 				player2->ClearWalls();
