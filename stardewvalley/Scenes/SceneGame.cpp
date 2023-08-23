@@ -441,10 +441,19 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
-	//mousePos
+
+	//MOUSE POS
 	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
+	//MOUSE TILE
+	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
+	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
+
+	//PLAYER TILE
+	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+	
 	// PLAYER EQUIP
 	{
 		player2->SetItemId(quickinven->GetItemId()); 
@@ -503,29 +512,15 @@ void SceneGame::Update(float dt)
 		energyBar->SetOrigin(Origins::BC);
 	}
 
-	// WATERING TEST CODE
+	// FARMING
 	{
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad0))
-		{
-			dirt->SetIsWatered(true);
-		}
-		//
 		if (player2->GetEquipItem() == ItemId::parsnipSeed)
 		{
 			selectTile->SetActive(true);
-
-			sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
-			sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
-
-			int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
-			int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
-
 			selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
 
-			int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
-			int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
-
-			if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+			if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
+				&& dirtArray[mouseTileY][mouseTileX]->GetActive())
 			{
 				selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
 				canPlant = true;
@@ -757,33 +752,31 @@ void SceneGame::Update(float dt)
 			HitStone(BtileX, BtileY);
 			HitWeed(BtileX, BtileY);
 		}
-
-		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+		else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 		{
 			HitTree(BtileX, BtileY);
 			HitTimber(BtileX, BtileY);
 			HitWeed(BtileX, BtileY);
 		}
-		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
+		else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
 		{
 			HitWeed(BtileX, BtileY);
 		}
-	}
-	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
-	{
-		if (!HasObjectAt(BtileX, BtileY) && !dirtArray[BtileY][BtileX]->GetActive())
+		else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 		{
-			dirtArray[BtileY][BtileX]->SetActive(true);
+			if (!HasObjectAt(BtileX, BtileY) && !dirtArray[BtileY][BtileX]->GetActive())
+			{
+				dirtArray[BtileY][BtileX]->SetActive(true);
+			}
+		}
+		else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
+		{
+			if (dirtArray[BtileY][BtileX]->GetActive())
+			{
+				dirtArray[BtileY][BtileX]->SetIsWatered(true);
+			}
 		}
 	}
-	else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
-	{
-		if (dirtArray[BtileY][BtileX]->GetActive())
-		{
-			dirtArray[BtileY][BtileX]->SetIsWatered(true);
-		}
-	}
-
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 

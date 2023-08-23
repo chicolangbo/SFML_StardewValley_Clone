@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Crop.h"
 
-Crop::Crop(const string& textureId, const string& n, const string& nickname = "")
+Crop::Crop(const string& textureId, const string& n, const string& nickname)
 	:SpriteGo(textureId, n, nickname)
 {
 }

@@ -193,7 +193,7 @@ void SceneTitle::ShowLoadButton()
 	load = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "load1", "load1"));
 	load->SetOrigin(Origins::TL);
 	load->SetPosition(start->GetPosition() + ((exit->GetPosition() - start->GetPosition()) / 2.f));
-	load->SetScale(2.f, 2.f);
+	load->SetScale(2.5f, 2.5f);
 	load->sortLayer = 100;
 	load->SetActive(false);
 
