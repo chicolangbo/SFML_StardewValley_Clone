@@ -1,0 +1,14 @@
+﻿ID,FPS,LOOPTYPE,,
+Timber,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/animations.png,0,780,56,48
+graphics/animations.png,66,780,56,48
+graphics/animations.png,130,780,56,48
+graphics/animations.png,192,780,56,48
+graphics/animations.png,256,780,60,48
+graphics/animations.png,319,780,60,48
+graphics/animations.png,380,780,52,48
+graphics/animations.png,432,780,52,48
+graphics/animations.png,481,780,52,48
+graphics/animations.png,527,780,52,48

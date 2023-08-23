@@ -25,7 +25,7 @@ void Stone::Update(float dt)
 	Objects::Update(dt);
 	if (bang)
 	{
-		SetPosition(position.x - 100.f, position.y - 400.f);
+		SetPosition(position.x +20.f, position.y +70.f);
 		SetOrigin(Origins::BC);
 		animation.Play("Stone");
 		bang = false;

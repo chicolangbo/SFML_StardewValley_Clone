@@ -1,0 +1,12 @@
+﻿ID,FPS,LOOPTYPE,,
+Weed,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/animations.png,0,1088,64,56
+graphics/animations.png,63,1088,64,56
+graphics/animations.png,128,1088,64,56
+graphics/animations.png,192,1088,64,56
+graphics/animations.png,256,1088,64,56
+graphics/animations.png,320,1088,64,56
+graphics/animations.png,384,1088,64,56
+graphics/animations.png,448,1088,64,56

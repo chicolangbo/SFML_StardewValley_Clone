@@ -55,12 +55,33 @@ void Tree::Update(float dt)
 		stump->colliderOnOff = !(stump->colliderOnOff);
 	}
 
+	if (hit)
+	{
+		time += dt;
+		if (shake >= 0.1f)
+		{
+			direction = -1.f;
+		}
+		else if (shake <= -0.1f)
+		{
+			direction = 1.f;
+		}
+
+		shake += dt * direction;
+		branch.rotate(shake);
+		if (time >= 0.5f)
+		{
+			hit = false;
+			time = 0;
+		}
+	}
+
 	if (treeRotation)
 	{
-		rotation += dt * 0.5f;
+		rotation += dt * 0.1f;
 		branch.rotate(rotation);
 		time += dt;
-		if (time >= 0.65f)
+		if (time >= 1.6f)
 		{
 			fallingTree = true;
 		}
