@@ -86,6 +86,8 @@ void QuickInventory::Reset()
 	mark.SetPosition(quickslots[0]->GetPosition().x, quickslots[0]->GetPosition().y);
 	mark.colliderOnOff = false; 
 	mark.sortLayer = 130; 
+
+	itemid = ItemId::none;
 }
 
 void QuickInventory::Release()

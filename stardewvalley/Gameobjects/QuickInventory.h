@@ -26,8 +26,6 @@ protected:
 
 	Player2* player;
 
-	bool off = false;
-
 public:
 	QuickInventory(const std::string& n = "");
 	~QuickInventory();

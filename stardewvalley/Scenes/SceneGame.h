@@ -64,6 +64,7 @@ protected:
 	string branchId;
 
 	// HOE DIRT
+	vector<HoeDirt*> tempDirt;
 	HoeDirt* dirt;
 	vector<vector<HoeDirt*>> dirtArray;
 	SpriteGo* selectTile; //red or green box
@@ -87,8 +88,6 @@ protected:
 	bool enterShop = false;
 	bool enterHome = false;
 	bool init = false;
-	
-
 	ShopTap* shopTap;
 	HomeTap* homeTap;
 	ShopInterior* shopInterior;

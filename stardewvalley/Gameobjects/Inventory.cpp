@@ -260,6 +260,9 @@ void Inventory::Reset()
 
         mouseSlot->sortLayer = (int)UiType::LINE;
         mouseSlot->sortOrder = 2;
+
+        invenOnOff = false; 
+        invenTapOn = false;
     }
 
     SetWindowClear();
@@ -286,7 +289,7 @@ void Inventory::Update(float dt)
     //ItemIndexUpdate();
     //IconUpdate();
 
-    if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+    if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape) && invenTapOn)
     {
         if (!invenOnOff)
         {

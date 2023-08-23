@@ -80,6 +80,8 @@ private:
 	bool chageScene = false;
 
 public:
+	bool invenTapOn = false;
+
 	Inventory(const std::string& n = "");
 	virtual ~Inventory() override;
 

@@ -73,7 +73,6 @@ void Player2::Reset()
 	SpriteGo::Reset();
 	animation.Play("Idle");
 	
-	//SetPosition({ 0, 0 });
 	SetFlipX(false);
 
 	axe.Reset();
@@ -87,16 +86,21 @@ void Player2::Reset()
 	playerDie = false;
 	one = true;
 	energy = maxEnergy;
+	money = 500;
+	tempMoney = 0;
+	totalEarningsInt = 500;
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	collider.setScale({ 0.2f, 0.3f });
 	SetOrigin(origin);
 
+	playerItemList.clear();
 	playerItemList.push_back({ ItemId::ax, 1, 0 });
 	playerItemList.push_back({ ItemId::homi, 1, 1 });
 	playerItemList.push_back({ ItemId::hook, 1, 2 });
 	playerItemList.push_back({ ItemId::pick, 1, 3 });
 	playerItemList.push_back({ ItemId::waterCan, 1, 4 });
+	item = ItemId::none;
 }
 
 void Player2::Update(float dt)
@@ -596,9 +600,3 @@ void Player2::MoneyUpdate()
 	}
 	tempMoney = 0;
 }
-
-ItemId Player2::GetEquipItem()
-{
-	return item;
-}
-
