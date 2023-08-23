@@ -552,8 +552,7 @@ void SceneGame::Update(float dt)
 
 	// LOCATION ENTER
 	{
-		if (houseOutEnter.x - 30.f <= player2->GetPosition().x && player2->GetPosition().x <= houseOutEnter.x + 30.f &&
-			houseOutEnter.y + 30.f >= player2->GetPosition().y && player2->GetPosition().y >= houseOutEnter.y - 30.f &&
+		if (Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
 			for (auto go : gameObjects)
@@ -575,8 +574,7 @@ void SceneGame::Update(float dt)
 			location = Location::Home;
 			player2->SetPosition(houseInEnter);
 		}
-		else if (shopOutEnter.x - 30.f <= player2->GetPosition().x && player2->GetPosition().x <= shopOutEnter.x + 30.f &&
-			shopOutEnter.y + 30.f >= player2->GetPosition().y && player2->GetPosition().y >= shopOutEnter.y - 30.f &&
+		else if (Utils::Distance(shopOutEnter, player2->GetPosition()) &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
 			for (auto go : gameObjects)
