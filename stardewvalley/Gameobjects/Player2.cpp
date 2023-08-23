@@ -73,7 +73,7 @@ void Player2::Reset()
 	SpriteGo::Reset();
 	animation.Play("Idle");
 	
-	SetPosition({ 0, 0 });
+	//SetPosition({ 0, 0 });
 	SetFlipX(false);
 
 	axe.Reset();

@@ -105,6 +105,7 @@ void SaveLoadData::LoadCSV(DataLoad* ldata)
 			playerItemList.push_back({ id[i], count[i], index[i] });
 		}
 	}
+
 	// SINGLE DATA LOAD
 	{
 		const std::string fileName2 = "tables/save_singleData.csv";
@@ -121,17 +122,21 @@ void SaveLoadData::LoadCSV(DataLoad* ldata)
 	}
 
 	// LOAD WITH NO CHANGE
-	ldata->pl_ItemList = playerItemList;
-	ldata->pl_money = money;
-	ldata->pl_totalMoney = totalEarningsInt;
+	{
+		ldata->pl_ItemList = playerItemList;
+		ldata->pl_money = money;
+		ldata->pl_totalMoney = totalEarningsInt;
+	}
 	
 	// LOAD WITH CHANGES : stone, timber, weed, tree LEFT
-	if (hour >= 24)
 	{
-		ldata->pl_energy =  energy - (energy * (((hour - 24) * 60 + min)/10) * 0.025f);
+		if (hour >= 24)
+		{
+			ldata->pl_energy =  energy - (energy * (((hour - 24) * 60 + min)/10) * 0.025f);
+		}
+		ldata->pl_energy = 270;
+		ldata->game_hour = 6;
+		ldata->game_min = 0;
+		ldata->game_day++;
 	}
-	ldata->pl_energy = 270;
-	ldata->game_hour = 6;
-	ldata->game_min = 0;
-	ldata->game_day++;
 }
