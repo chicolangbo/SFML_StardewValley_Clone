@@ -79,6 +79,7 @@ void SceneGame::Init()
 		shopExterior->SetOrigin(Origins::BC);
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
+
 	// OBJECT
 	{
 		Objtable = (ObjectTable*)(new ObjectTable());
@@ -255,24 +256,24 @@ void SceneGame::Init()
 		homeTap->sortLayer = 100;
 		homeTap->SetBedding(bedding);
 		homeTap->SetPlayer(player2);
-		//homeTap->SetActive(false);
 	}
 
 	//TEXT
-	texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf"));
-	texMin = (TextGo*)AddGo(new TextGo("TexMin", "fonts/SDMiSaeng.ttf"));
-	texHour = (TextGo*)AddGo(new TextGo("TexHour", "fonts/SDMiSaeng.ttf"));
-	collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf"));
-	texDay = (TextGo*)AddGo(new TextGo("TexDay", "fonts/SDMiSaeng.ttf"));
-	dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf"));
+	{
+		texMoney = (TextGo*)AddGo(new TextGo("TexMoney", "fonts/SDMiSaeng.ttf"));
+		texMin = (TextGo*)AddGo(new TextGo("TexMin", "fonts/SDMiSaeng.ttf"));
+		texHour = (TextGo*)AddGo(new TextGo("TexHour", "fonts/SDMiSaeng.ttf"));
+		collon = (TextGo*)AddGo(new TextGo("Collon", "fonts/SDMiSaeng.ttf"));
+		texDay = (TextGo*)AddGo(new TextGo("TexDay", "fonts/SDMiSaeng.ttf"));
+		dayday = (TextGo*)AddGo(new TextGo("DayDay", "fonts/SDMiSaeng.ttf"));
 
-	//test
-	sf::Vector2f rectsize = { 72.f,72.f };
-	testbox = (RectangleGo*)AddGo(new RectangleGo(rectsize)); 
-	testbox->sortLayer = 3;
-	testbox->SetColor(sf::Color(0,0,255,100));
+		//test
+		sf::Vector2f rectsize = { 72.f,72.f };
+		testbox = (RectangleGo*)AddGo(new RectangleGo(rectsize)); 
+		testbox->sortLayer = 3;
+		testbox->SetColor(sf::Color(0,0,255,100));
+	}
 	
-
 	//FARMING
 	{
 		selectTile = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "greenTile", "greenTile"));
@@ -300,117 +301,122 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-	auto size = FRAMEWORK.GetWindowSize();
-	sf::Vector2f centerPos = size * 0.5f;
-
-	worldView.setSize(size);
-	worldView.setCenter(0, 0);
-
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
-
-	shopTap->SetPierre(shopInterior->GetPierre());
-
-	tileSize = testFarmMap->GetTileSize();
-	mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
-
-	for (int i = 0; i < stones.size(); i++)
+	// VIEW
 	{
-		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
-		stone->SetMapLT(mapLT);
-	}
-	for (int i = 0; i < timbers.size(); i++)
-	{
-		Timber* timber = (Timber*)FindGo("timber" + to_string(i));
-		timber->SetMapLT(mapLT);
-	}
-	for (int i = 0; i < weeds.size(); i++)
-	{
-		Weed* weed = (Weed*)FindGo("weed" + to_string(i));
-		weed->SetMapLT(mapLT);
-	}
-	for (int i = 0; i < trees.size(); i++)
-	{
-		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
-		tree->stump->SetMapLT(mapLT);
+		auto size = FRAMEWORK.GetWindowSize();
+		sf::Vector2f centerPos = size * 0.5f;
+
+		worldView.setSize(size);
+		worldView.setCenter(0, 0);
+
+		uiView.setSize(size);
+		uiView.setCenter(size * 0.5f);
 	}
 
-	shopTap->SetPierre(shopInterior->GetPierre());
-
-	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
-	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
-
-
-	//set dirt Position 
-	for (int i = 0; i < row; i++)
+	// OBJECT SET MAP LT
 	{
-		for (int j = 0; j < col; j++)
+		tileSize = testFarmMap->GetTileSize();
+		mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
+
+		for (int i = 0; i < stones.size(); i++)
 		{
-			dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+			stones[i]->SetMapLT(mapLT);
+		}
+		for (int i = 0; i < timbers.size(); i++)
+		{
+			timbers[i]->SetMapLT(mapLT);
+		}
+		for (int i = 0; i < weeds.size(); i++)
+		{
+			weeds[i]->SetMapLT(mapLT);
+		}
+		for (int i = 0; i < trees.size(); i++)
+		{
+			trees[i]->stump->SetMapLT(mapLT);
 		}
 	}
 
-	//맵 툴 충돌체 설정
+	// SHOP, HOUSE
+	{
+		shopTap->SetPierre(shopInterior->GetPierre());
+		houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
+		houseExterior->colliderOnOff = false;
+		shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
+	}
+
+	// DIRT POSITION SETTING
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+			}
+		}
+	}
 	
 	Scene::Enter();
 
-	walls.push_back(houseExterior->GetCollider());
-
-	walls.push_back(shopExterior->GetCollider());
-
-
-
-	rapidcsv::Document doc("tables/newMapCollider.csv");
-	
-	for (int i = 2; i < doc.GetRowCount(); i++)
+	// PLAYER COLLIDER SETTING
 	{
-		auto rows = doc.GetRow<int>(i);
-		sf::FloatRect rect = { mapLT.x + rows[0] * tileSize.x, mapLT.y + rows[1] * tileSize.y, tileSize.x, tileSize.y };
-		walls.push_back(rect);
+		//walls.push_back(houseExterior->GetCollider());
+		walls.push_back(shopExterior->GetCollider());
 	}
 
-	for (int i = 0; i < stoneCount; i++)
+	// MAP COLLIDER SETTING
 	{
-		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
-		walls.push_back(stone->GetCollider());
-	}
-	for (int i = 0; i < timberCount; ++i)
-	{
-		Timber* timber = (Timber*)FindGo("timber" + to_string(i));
-		walls.push_back(timber->GetCollider());
-	}
-	for (int i = 0; i < weedCount; ++i)
-	{
-		Weed* weed = (Weed*)FindGo("weed" + to_string(i));
-		walls.push_back(weed->GetCollider());
-	}
-	for (int i = 0; i < treeCount; ++i)
-	{
-		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
-		walls.push_back(tree->stump->GetCollider());
+		rapidcsv::Document doc("tables/newMapCollider.csv");
+		for (int i = 2; i < doc.GetRowCount(); i++)
+		{
+			auto rows = doc.GetRow<int>(i);
+			sf::FloatRect rect = { mapLT.x + rows[0] * tileSize.x, mapLT.y + rows[1] * tileSize.y, tileSize.x, tileSize.y };
+			walls.push_back(rect);
+		}
+		for (int i = 0; i < stoneCount; i++)
+		{
+			Stone* stone = (Stone*)FindGo("stone" + to_string(i));
+			walls.push_back(stone->GetCollider());
+		}
+		for (int i = 0; i < timberCount; ++i)
+		{
+			Timber* timber = (Timber*)FindGo("timber" + to_string(i));
+			walls.push_back(timber->GetCollider());
+		}
+		for (int i = 0; i < weedCount; ++i)
+		{
+			Weed* weed = (Weed*)FindGo("weed" + to_string(i));
+			walls.push_back(weed->GetCollider());
+		}
+		for (int i = 0; i < treeCount; ++i)
+		{
+			Tree* tree = (Tree*)FindGo("tree" + to_string(i));
+			walls.push_back(tree->stump->GetCollider());
+		}
+		for (int i = 0; i < walls.size(); ++i)
+		{
+			player2->SetWallBounds(walls[i]);
+		}
 	}
 
-	for (int i = 0; i < walls.size(); ++i)
+	// FARM TEST SETTING
 	{
-		player2->SetWallBounds(walls[i]);
-	}
-
-	//농사 임시세팅
-
-	for (int i = 0; i < 5; i++)
-	{
-		player2->AddPlayerItem(ItemId::parsnipSeed);
+		for (int i = 0; i < 5; i++)
+		{
+			player2->AddPlayerItem(ItemId::parsnipSeed);
+		}
 	}
 	
 	// FILE LOAD
-	if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
 	{
-		SAVELOAD_DATA.LoadCSV(&lData);
-		player2->LoadData(lData.pl_ItemList, lData.pl_totalMoney, lData.pl_money, lData.pl_energy);
-		min = lData.game_min;
-		hour = lData.game_hour;
-		day = lData.game_day;
-		dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
+		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
+		{
+			SAVELOAD_DATA.LoadCSV(&lData);
+			player2->LoadData(lData.pl_ItemList, lData.pl_totalMoney, lData.pl_money, lData.pl_energy);
+			min = lData.game_min;
+			hour = lData.game_hour;
+			day = lData.game_day;
+			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
+		}
 	}
 }
 
@@ -422,6 +428,8 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
+
+	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 
 	// TREE TRANSPARENT
 	{
@@ -442,15 +450,15 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-	//MOUSE POS
+	// MOUSE POS
 	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
-	//MOUSE TILE
+	// MOUSE TILE
 	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
 	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
 
-	//PLAYER TILE
+	// PLAYER TILE
 	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
 	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 	
@@ -542,127 +550,145 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-	// INTO SHOP
+	// LOCATION ENTER
 	{
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
+		if (houseOutEnter.x - 30.f <= player2->GetPosition().x && player2->GetPosition().x <= houseOutEnter.x + 30.f &&
+			houseOutEnter.y + 30.f >= player2->GetPosition().y && player2->GetPosition().y >= houseOutEnter.y - 30.f &&
+			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
-			if (enterShop)
+			for (auto go : gameObjects)
 			{
-				enterShop = false;
-				for (auto go : gameObjects)
+				if (go->GetActive())
 				{
-					if (go->GetActive())
-					{
-						go->SetActive(false);
-					}
-					else
-					{
-						go->SetActive(true);
-					}
+					if (go->GetName() == "homeTap")
+						continue;
+					go->SetActive(false);
 				}
-				SetAct(true);
-				player2->SetPosition(-463.f, -770.f); 
-				homeInterior->SetActive(false);
-				bedding->SetActive(false);
+				else
+				{
+					if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+						continue;
+					go->SetActive(true);
+				}
 			}
-			else
+			SetAct(true);
+			location = Location::Home;
+			player2->SetPosition(houseInEnter);
+		}
+		else if (shopOutEnter.x - 30.f <= player2->GetPosition().x && player2->GetPosition().x <= shopOutEnter.x + 30.f &&
+			shopOutEnter.y + 30.f >= player2->GetPosition().y && player2->GetPosition().y >= shopOutEnter.y - 30.f &&
+			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
+		{
+			for (auto go : gameObjects)
 			{
-				enterShop = true;
-				for (auto go : gameObjects)
+				if (go->GetActive())
 				{
-					if (go->GetActive())
-					{
-						go->SetActive(false);
-					}
-					else
-					{
-						go->SetActive(true);
-					}
+					if (go->GetName() == "homeTap")
+						continue;
+					go->SetActive(false);
 				}
-				SetAct(true);	
-				player2->SetPosition(419.f, 1866.f); //shop position
-				homeInterior->SetActive(false);
-				bedding->SetActive(false);
+				else
+				{
+					if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+						continue;
+					go->SetActive(true);
+				}
 			}
+			SetAct(true);
+			location = Location::Shop;
+			player2->SetPosition(shopInEnter);
 		}
 	}
 
-	// INTO HOME
-	{
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
+	// LOCATION PATTERN
+	switch (location)
 		{
-			if (!enterHome)
+		case Location::Home:
+			// BEDDING COLLIDE
 			{
-				enterHome = true;
-				for (auto go : gameObjects)
+				std::cout << (int)location << std::endl;
+				if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 				{
-					if (go->GetActive())
+					if (!once)
 					{
-						go->SetActive(false);
-					}
-					else
-					{
-						go->SetActive(true);
+						homeTap->homeTapOn = true;
+						homeTap->TapOnOff();
+						once = true;
 					}
 				}
-				SetAct(true);
-				player2->SetPosition(193.f, 728.f);
-				shopInterior->SetActive(false);
-				bedding->SetActive(true);
-				homeTap->SetActive(true);
-			}
-			else
-			{
-				enterHome = false;
-				for (auto go : gameObjects)
+				else
 				{
-					if (go->GetActive())
-					{
-						go->SetActive(false);
-
-					}
-					else
-					{
-						go->SetActive(true);
-					}
-				}
-				SetAct(true);
-				player2->SetPosition(193.f, 728.f);
-				shopInterior->SetActive(false);
-				bedding->SetActive(false);
-				homeTap->SetActive(true);
-			}
-		}
-	}
-
-	// PLAYER - BEDDING COLLIDE & SAVE
-	{
-		if (enterHome)
-		{
-			if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
-			{
-				if (!once)
-				{
-					homeTap->homeTapOn = true;
+					once = false;
+					homeTap->homeTapOn = false;
 					homeTap->TapOnOff();
-					once = true;
 				}
 			}
-			else
+			// SAVE
 			{
-				once = false;
-				homeTap->homeTapOn = false;
-				homeTap->TapOnOff();
+				if (homeTap->save)
+				{
+					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day };
+					SAVELOAD_DATA.SaveData(&sData);
+					SAVELOAD_DATA.SaveCSV();
+					homeTap->save = false;
+				}
 			}
+			// OUT
+			{
+				if (player2->GetPosition().y >= houseInEnter.y + 50.f && player2->GetDirection().y <= 0)
+				{
+					for (auto go : gameObjects)
+					{
+						if (go->GetActive())
+						{
+							if (go->GetName() == "homeTap")
+								continue;
+							go->SetActive(false);
+
+						}
+						else
+						{
+							if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
+								continue;
+							go->SetActive(true);
+						}
+					}
+					SetAct(true);
+					player2->SetPosition(207.f, -424.f);
+					location = Location::Farm;
+				}
+			}
+			break;
+		case Location::Shop:
+			// OUT
+			{
+				if (player2->GetPosition().y >= shopInEnter.y + 50.f && player2->GetDirection().y <= 0)
+				{
+					for (auto go : gameObjects)
+					{
+						if (go->GetActive())
+						{
+							if (go->GetName() == "homeTap")
+								continue;
+							go->SetActive(false);
+						}
+						else
+						{
+							if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+								continue;
+							go->SetActive(true);
+						}
+					}
+					SetAct(true);
+					player2->SetPosition(shopOutEnter);
+
+					location = Location::Farm;
+				}
+			}
+			break;
+		case Location::Farm:
+			break;
 		}
-		if (homeTap->save)
-		{
-			sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day };
-			SAVELOAD_DATA.SaveData(&sData);
-			SAVELOAD_DATA.SaveCSV();
-			homeTap->save = false;
-		}
-	}
 	
 	//SET VIEW
 	{
@@ -701,41 +727,32 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-	//플레이어가 바라보고있는 타일
-
-	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
-	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
-
 	// PLAYER HEADING TILE
 	{
-		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
-		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		int tileX = playerTileX;
+		int tileY = playerTileY;
 		sf::Vector2f direction = player2->GetDirection(); 
 
 		if (direction.x > 0.f)
 		{
-			tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 			tileX += 1;
 			//tileSize.x* tileX + mapLT.x;
 			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 		}
 		else if (direction.x < 0.f)
 		{
-			tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
 			tileX -= 1;
 			//tileSize.x* tileX + mapLT.x;
 			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 		}
 		else if (direction.y > 0.f)
 		{
-			tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 			tileY += 1;
 			//tileSize.y* tileY + mapLT.y;
 			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
 		}
 		else if (direction.y < 0.f)
 		{
-			tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
 			tileY -= 1;
 			//tileSize.y* tileY + mapLT.y;
 			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
@@ -788,10 +805,14 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 {
 	const ItemInfo* info = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->Get(id);
 	rootingItems.push_back((RootingItem*)AddGo(new RootingItem(info->itemId, info->resource, info->name_e, info->nickName))); // 아이템 먹으면 딜리트
-	for (auto r : rootingItems)
+
+	auto lastItem = rootingItems.back();
+	lastItem->Reset();
+	lastItem->SetPosition(pos);
+
+	for (auto it = rootingItems.begin(); it != std::prev(rootingItems.end()); ++it)
 	{
-		r->Reset();
-		r->SetPosition(pos);
+		(*it)->Reset();
 	}
 }
 

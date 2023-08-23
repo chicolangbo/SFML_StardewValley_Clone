@@ -38,91 +38,86 @@ struct DataLoad
 class SceneGame : public Scene
 {
 protected:
-	VertexArrayGo* background;
-	sf::FloatRect wallBounds;
-
-	bool enterShop = false;
-	bool enterHome = false;
-
+	// PLAYER COLLIDE
 	Player2* player2;
+	std::vector<sf::FloatRect> walls;
+	sf::FloatRect playerBound;
+	sf::FloatRect mapBound;
 
-	TileMap* testFarmMap;
-	TileMap* testFarmMap2;
-	TileMap* testFarmMapObj;
-	SpriteGo* shopExterior; // �� �ܺ�
-
-	sf::Vector2f mapLT;
-	int col = 0;
-	int row = 0;
-
-	//data Save & Load
+	// DATA SAVE & LOAD
 	DataLoad lData;
 	DataLoad sData;
 
-	//object
+	// OBJECT
 	ObjectTable* Objtable;
 	vector<Stone*> stones;
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
 	vector<Tree*> trees;
-
 	int stoneCount = 0;
 	int timberCount = 0;
 	int weedCount = 0;
 	int treeCount = 0;
-
 	string branchNick;
 	string branchId;
 
-	//hoe dirt
+	// HOE DIRT
 	HoeDirt* dirt;
 	vector<vector<HoeDirt*>> dirtArray;
-
 	SpriteGo* selectTile; //red or green box
 	bool canPlant = false;
 
+	// FARM MAP
+	TileMap* testFarmMap;
+	TileMap* testFarmMap2;
+	TileMap* testFarmMapObj;
+	SpriteGo* shopExterior;
+	sf::Vector2f mapLT;
+	sf::Vector2f tileSize;
+	int col = 0;
+	int row = 0;
+
+	// HOME, SHOP
+	Location location = Location::Farm;
+	bool enterShop = false;
+	bool enterHome = false;
 	ShopTap* shopTap;
 	HomeTap* homeTap;
-
 	ShopInterior* shopInterior;
 	HomeInterior* homeInterior;
 	SpriteGo* houseExterior;
-
 	SpriteGo* bedding;
+	sf::Vector2f shopPos = { 9.f, 16.f };
+	sf::Vector2f housePos = { 21.f, 16.f };
+	sf::Vector2f houseInEnter = { 193.f, 728.f };
+	sf::Vector2f shopInEnter = { 416.f, 1882.f };
+	sf::Vector2f houseOutEnter = { 207.f, -424.f };
+	sf::Vector2f shopOutEnter = { -642.f, -282.f };
 
 	// INGAME UI
 	SpriteGo* energy;
 	SpriteGo* info;
 	SpriteGo* timeArrow;
-	float arrowSpin = 0.f;
 	RectangleGo* energyBar;
-	int energys;
 	TextGo* texMoney;
 	TextGo* texMin;
 	TextGo* texHour;
 	TextGo* collon;
 	TextGo* texDay;
 	TextGo* dayday;
-
+	float arrowSpin = 0.f;
+	int energys;
 	float time = 0.f;
 	int min = 0;
 	int hour = 6;
 	int day = 1;
 
-	std::vector<sf::FloatRect> walls;
-	sf::FloatRect playerBound;
-	sf::FloatRect mapBound;
-
+	// INVEN & ITEMS
 	Inventory* inven;
 	std::list<RootingItem*>rootingItems;
 	QuickInventory* quickinven;
-
 	bool off = false;
 	bool once = false;
-
-	sf::Vector2f tileSize;
-	sf::Vector2f shopPos = { 9.f, 16.f };
-	sf::Vector2f housePos = { 21.f, 16.f };
 
 	//test
 	RectangleGo* testbox;
