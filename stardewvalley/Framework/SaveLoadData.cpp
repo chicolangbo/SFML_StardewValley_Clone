@@ -2,6 +2,12 @@
 #include "SaveLoadData.h"
 #include "Player2.h"
 #include "rapidcsv.h"
+#include "ObjectTable.h"
+#include "Stone.h"
+#include "Timber.h"
+#include "Weed.h"
+#include "Tree.h"
+#include "HoeDirt.h"
 
 SaveLoadData::~SaveLoadData()
 {
@@ -16,6 +22,11 @@ void SaveLoadData::SaveData(DataLoad* sdata)
 	min = sdata->game_min;
 	hour = sdata->game_hour;
 	day = sdata->game_day;
+	stones = *sdata->stones;
+	timbers = *sdata->timbers;
+	weeds = *sdata->weeds;
+	trees = *sdata->trees;
+	dirtArray = *sdata->dirtArray;
 }
 
 void SaveLoadData::SaveCSV()
@@ -70,6 +81,38 @@ void SaveLoadData::SaveCSV()
 		single_doc.SetCell<int>("day", 0, day);
 
 		single_doc.Save();
+	}
+
+	// OBJECT DATA SAVE
+	{
+		std::ofstream outputFile("tables/save_mapObj.csv");
+		outputFile.clear();
+
+		if (!outputFile.is_open())
+		{
+			cout << "ERR: 파일을 열 수 없습니다." << endl;
+		}
+
+		outputFile << "cols,rows" << endl;
+		outputFile << cols << "," << rows << endl;
+
+		outputFile << "index, indexX,indexY,left,top,width,height,type" << endl;
+		for (int i = 0; i < stones.size(); ++i)
+		{
+			outputFile << i << "," << stones[i]->GetIndex().x << "," << stones[i]->GetIndex().y << "," << stones[i]->GetTexRect().left << "," << stones[i]->GetTexRect().top << "," <<
+				stones[i]->GetTexRect().width << "," << stones[i]->GetTexRect().height << "," << (int)ObjType::Stone << endl;
+		}
+		for (int i = 0; i < weeds.size(); ++i)
+		{
+			outputFile << i + stones.size() << "," << weeds[i]->GetIndex().x << "," << weeds[i]->GetIndex().y << "," << weeds[i]->GetTexRect().left << "," << weeds[i]->GetTexRect().top << "," <<
+				weeds[i]->GetTexRect().width << "," << weeds[i]->GetTexRect().height << "," << (int)ObjType::Weed << endl;
+		}
+		for (int i = 0; i < timbers.size(); ++i)
+		{
+			outputFile << i + weeds.size() + +stones.size() << "," << timbers[i]->GetIndex().x << "," << timbers[i]->GetIndex().y << "," << timbers[i]->GetTexRect().left << "," << timbers[i]->GetTexRect().top << "," <<
+				timbers[i]->GetTexRect().width << "," << timbers[i]->GetTexRect().height << "," << (int)ObjType::Timber << endl;
+		}
+		outputFile.close();
 	}
 }
 

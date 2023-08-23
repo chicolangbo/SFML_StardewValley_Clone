@@ -318,7 +318,6 @@ void SceneGame::Init()
 		cauliflowerPool.Init();
 	}
 
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -425,6 +424,7 @@ void SceneGame::Enter()
 			}
 		}
 	}
+
 	// SET HOME COLLIDER
 	{
 		for (auto wall : homeInterior->GetWall().Walls)
@@ -740,110 +740,112 @@ void SceneGame::Update(float dt)
 	}
 
 	// LOCATION PATTERN
-	switch (location)
-		{
-		case Location::Home:
-			// BEDDING COLLIDE
+	{
+		switch (location)
 			{
-				if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+			case Location::Home:
+				// BEDDING COLLIDE
 				{
-					init = true;
-				}
-
-				if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
-				{
-					if (!once)
+					if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 					{
-						homeTap->homeTapOn = true;
+						init = true;
+					}
+
+					if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+					{
+						if (!once)
+						{
+							homeTap->homeTapOn = true;
+							homeTap->TapOnOff();
+							once = true;
+						}
+					}
+					else
+					{
+						once = false;
+						homeTap->homeTapOn = false;
 						homeTap->TapOnOff();
-						once = true;
 					}
 				}
-				else
+				// SAVE
 				{
-					once = false;
-					homeTap->homeTapOn = false;
-					homeTap->TapOnOff();
-				}
-			}
-			// SAVE
-			{
-				if (homeTap->save)
-				{
-					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day };
-					SAVELOAD_DATA.SaveData(&sData);
-					SAVELOAD_DATA.SaveCSV();
-					homeTap->save = false;
-				}
-			}
-			// OUT
-			{
-				//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
-				if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
-				{
-					for (auto go : gameObjects)
+					if (homeTap->save)
 					{
-						if (go->GetActive())
+						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, &stones, &timbers, &weeds, &trees, &dirtArray };
+						SAVELOAD_DATA.SaveData(&sData);
+						SAVELOAD_DATA.SaveCSV();
+						homeTap->save = false;
+					}
+				}
+				// OUT
+				{
+					//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
+					{
+						for (auto go : gameObjects)
 						{
-							if (go->GetName() == "homeTap")
-								continue;
-							go->SetActive(false);
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
 
+							}
+							else
+							{
+								if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
 						}
-						else
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < farmWalls.size(); ++i)
 						{
-							if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
-								continue;
-							go->SetActive(true);
+							player2->SetWallBounds(farmWalls[i]);
 						}
+						player2->SetPosition(207.f, -424.f);
+						location = Location::Farm;
 					}
-					SetAct(true);
-					player2->ClearWalls();
-					for (int i = 0; i < farmWalls.size(); ++i)
-					{
-						player2->SetWallBounds(farmWalls[i]);
-					}
-					player2->SetPosition(207.f, -424.f);
-					location = Location::Farm;
 				}
-			}
-			break;
-		case Location::Shop:
-			// OUT
-			{
-				//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
-				if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
+				break;
+			case Location::Shop:
+				// OUT
 				{
-					for (auto go : gameObjects)
+					//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+					if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
 					{
-						if (go->GetActive())
+						for (auto go : gameObjects)
 						{
-							if (go->GetName() == "homeTap")
-								continue;
-							go->SetActive(false);
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
+							}
+							else
+							{
+								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
 						}
-						else
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < farmWalls.size(); ++i)
 						{
-							if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-								continue;
-							go->SetActive(true);
+							player2->SetWallBounds(farmWalls[i]);
 						}
-					}
-					SetAct(true);
-					player2->ClearWalls();
-					for (int i = 0; i < farmWalls.size(); ++i)
-					{
-						player2->SetWallBounds(farmWalls[i]);
-					}
-					player2->SetPosition(shopOutEnter);
+						player2->SetPosition(shopOutEnter);
 
-					location = Location::Farm;
+						location = Location::Farm;
+					}
 				}
+				break;
+			case Location::Farm:
+				break;
 			}
-			break;
-		case Location::Farm:
-			break;
-		}
+	}
 	
 	//SET VIEW
 	{

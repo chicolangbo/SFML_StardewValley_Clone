@@ -1,6 +1,2 @@
 totalEarningsInt,money,energy,min,hour,day
-<<<<<<< HEAD
-500,500,234,30,8,1
-=======
-500,500,258,20,7,2
->>>>>>> feature/MJ
+500,500,250,0,7,1

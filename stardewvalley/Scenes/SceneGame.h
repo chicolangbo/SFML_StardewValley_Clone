@@ -37,6 +37,11 @@ struct DataLoad
 	int game_min;
 	int game_hour;
 	int game_day;
+	vector<Stone*>* stones;
+	vector<Timber*>* timbers;
+	vector<Weed*>* weeds;
+	vector<Tree*>* trees;
+	vector<vector<HoeDirt*>>* dirtArray;
 };
 
 class SceneGame : public Scene

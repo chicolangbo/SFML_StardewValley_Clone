@@ -24,12 +24,15 @@ protected:
 	int hour;
 	int day;
 
-	// OBJECT
-	// fix obj : 추가로 저장.. 맵로딩할 때 쓰는 파일이랑 같은 형식
+	// MAP OBJECT
 	vector<Stone*> stones;
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
 	vector<Tree*> trees;
+	vector<vector<HoeDirt*>> dirtArray;
+	int cols = 38;
+	int rows = 41;
+
 	// ground : 경작지 pos, 마른 상태로 변경
 	// crops : 성장상태, pos, GetAcitve 정보 저장?
 
