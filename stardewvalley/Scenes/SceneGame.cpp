@@ -34,6 +34,7 @@
 #include "Tree.h"
 #include "HoeDirt.h"
 #include "SaveLoadData.h"
+#include "SceneTitle.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -319,8 +320,6 @@ void SceneGame::Enter()
 		tree->stump->SetMapLT(mapLT);
 	}
 
-	Scene::Enter();
-
 	shopTap->SetPierre(shopInterior->GetPierre());
 
 	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
@@ -335,6 +334,7 @@ void SceneGame::Enter()
 		walls.push_back(stone->GetCollider());
 	}
 	//맵 툴 충돌체 설정
+	Scene::Enter();
 	rapidcsv::Document doc("tables/newMapCollider.csv");
 
 	for (int i = 2; i < doc.GetRowCount(); i++)
@@ -364,7 +364,6 @@ void SceneGame::Enter()
 		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
 		walls.push_back(tree->stump->GetCollider());
 	}
-	Scene::Enter();
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
@@ -377,10 +376,16 @@ void SceneGame::Enter()
 		player2->AddPlayerItem(ItemId::parsnipSeed);
 	}
 	
-	
-	
-
-	//SAVELOAD_DATA.Load(player2, &day, &hour, &min, &time);
+	// FILE LOAD
+	if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
+	{
+		SAVELOAD_DATA.LoadCSV(&lData);
+		player2->LoadData(lData.pl_ItemList, lData.pl_totalMoney, lData.pl_money, lData.pl_energy);
+		min = lData.game_min;
+		hour = lData.game_hour;
+		day = lData.game_day;
+		dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
+	}
 }
 
 void SceneGame::Exit()
@@ -392,257 +397,284 @@ void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
 
-	//나무 뒤로 가면 나무 투명화
-	for (auto tree : trees)
+	// TREE TRANSPARENT
 	{
-		sf::FloatRect intersection;
-		if (tree->GetHitbox().getGlobalBounds().intersects(player2->GetCollider(), intersection))
+		for (auto tree : trees)
 		{
-			if (intersection.width >= player2->GetCollider().width)
+			sf::FloatRect intersection;
+			if (tree->GetHitbox().getGlobalBounds().intersects(player2->GetCollider(), intersection))
 			{
-				tree->branch.setColor(sf::Color(255, 255, 255, 150));
+				if (intersection.width >= player2->GetCollider().width)
+				{
+					tree->branch.setColor(sf::Color(255, 255, 255, 150));
+				}
+			}
+			else
+			{
+				tree->branch.setColor(sf::Color(255, 255, 255, 255));
 			}
 		}
-		else
+	}
+
+	// PLAYER EQUIP
+	{
+		player2->SetItemId(quickinven->GetItemId()); 
+	}
+
+	// TEST CODE : HOUR +1
+	{
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5))
 		{
-			tree->branch.setColor(sf::Color(255, 255, 255, 255));
+			hour += 1;
 		}
 	}
 
-	player2->SetItemId(quickinven->GetItemId()); 
+	// UI : TIME DATA SETTING
+	{
+		time +=dt;
+		if (time >= 7.f)
+		{
+			min += 10;
+			time = 0.f;
+		}
+		if (min == 60)
+		{
+			min = 0;
+			hour += 1;
+		}
+		if (hour == 24)
+		{
+			hour = 0;
+			day += 1;
+			arrowSpin = 0;
+		}
+		if (hour == 2)
+		{
+			player2->ZeroEnergy();
+			hour = 6;
+		}
+		arrowSpin += dt * 0.2381f;
+		timeArrow->SetOrigin(Origins::BC);
+		timeArrow->sprite.setRotation(arrowSpin);
+	}
 
-	//date, tile, ui Set
-	time +=dt;
-	if (time >= 7.f)
+	// UI : MONEY, TIME, DATE
 	{
-		min += 10;
-		time = 0.f;
-	}
-	if (min == 60)
-	{
-		min = 0;
-		hour += 1;
-	}
-	if (hour == 24)
-	{
-		hour = 0;
-		day += 1;
-		arrowSpin = 0;
-	}
-	if (hour == 2)
-	{
-		player2->ZeroEnergy();
-		hour = 6;
-	}
-
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5))
-	{
-		hour += 1;
-	}
-	arrowSpin += dt * 0.2381f;
-	timeArrow->SetOrigin(Origins::BC);
-	timeArrow->sprite.setRotation(arrowSpin);
-
-	//UI(돈, 시간, 날짜)
-	texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
+		texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
 	
-	texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
-	collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
-	texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
+		texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
+		collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
+		texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
 
-	texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
-	dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
+		texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
+		dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
 	
-	energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
-	energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
-	energyBar->SetOrigin(Origins::BC);
-
-	//물주기 테스트 코드
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad0))
-	{
-		dirt->SetIsWatered(true);
+		energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
+		energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
+		energyBar->SetOrigin(Origins::BC);
 	}
-	//
-	if (player2->GetEquipItem() == ItemId::parsnipSeed)
+
+	// WATERING TEST CODE
 	{
-		selectTile->SetActive(true);
-
-		sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
-		sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
-
-		int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
-		int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
-
-		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
-
-		int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
-		int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
-
-		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad0))
 		{
-			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
-			canPlant = true;
+			dirt->SetIsWatered(true);
+		}
+		//
+		if (player2->GetEquipItem() == ItemId::parsnipSeed)
+		{
+			selectTile->SetActive(true);
+
+			sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+			sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
+
+			int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
+			int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
+
+			selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
+
+			int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+			int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+
+			if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+			{
+				selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
+				canPlant = true;
+			}
+			else
+			{
+				selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
+				canPlant = false;
+			}
+
+			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
+			{
+
+			}
 		}
 		else
 		{
-			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
-			canPlant = false;
-		}
-
-		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
-		{
-
-		}
-	}
-	else
-	{
-		selectTile->SetActive(false);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
-	{
-		if (enterShop)
-		{
-			enterShop = false;
-			for (auto go : gameObjects)
-			{
-				if (go->GetActive())
-				{
-					go->SetActive(false);
-				}
-				else
-				{
-					go->SetActive(true);
-				}
-			}
-			SetAct(true);
-			player2->SetPosition(-463.f, -770.f); 
-			homeInterior->SetActive(false);
-			bedding->SetActive(false);
-		}
-		else
-		{
-			enterShop = true;
-			for (auto go : gameObjects)
-			{
-				if (go->GetActive())
-				{
-					go->SetActive(false);
-				}
-				else
-				{
-					go->SetActive(true);
-				}
-			}
-			SetAct(true);	
-			player2->SetPosition(419.f, 1866.f); //shop position
-			homeInterior->SetActive(false);
-			bedding->SetActive(false);
+			selectTile->SetActive(false);
 		}
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
+	// INTO SHOP
 	{
-		if (!enterHome)
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 		{
-			enterHome = true;
-			for (auto go : gameObjects)
+			if (enterShop)
 			{
-				if (go->GetActive())
+				enterShop = false;
+				for (auto go : gameObjects)
 				{
-					go->SetActive(false);
+					if (go->GetActive())
+					{
+						go->SetActive(false);
+					}
+					else
+					{
+						go->SetActive(true);
+					}
 				}
-				else
-				{
-					go->SetActive(true);
-				}
+				SetAct(true);
+				player2->SetPosition(-463.f, -770.f); 
+				homeInterior->SetActive(false);
+				bedding->SetActive(false);
 			}
-			SetAct(true);
-			player2->SetPosition(193.f, 728.f); // �� �빮 ��ġ��
-			shopInterior->SetActive(false);
-			bedding->SetActive(true);
-			homeTap->SetActive(true);
-		}
-		else
-		{
-			enterHome = false;
-			for (auto go : gameObjects)
+			else
 			{
-				if (go->GetActive())
+				enterShop = true;
+				for (auto go : gameObjects)
 				{
-					go->SetActive(false);
-
+					if (go->GetActive())
+					{
+						go->SetActive(false);
+					}
+					else
+					{
+						go->SetActive(true);
+					}
 				}
-				else
-				{
-					go->SetActive(true);
-				}
+				SetAct(true);	
+				player2->SetPosition(419.f, 1866.f); //shop position
+				homeInterior->SetActive(false);
+				bedding->SetActive(false);
 			}
-			SetAct(true);
-			player2->SetPosition(193.f, 728.f);
-			shopInterior->SetActive(false);
-			bedding->SetActive(false);
-			homeTap->SetActive(true);
 		}
 	}
 
-	// PLAYER - BEDDING COLLIDE
-	if (enterHome)
+	// INTO HOME
 	{
-		if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
 		{
-			std::cout << "�浹" << std::endl;
-			if (!once)
+			if (!enterHome)
 			{
-				homeTap->homeTapOn = true;
+				enterHome = true;
+				for (auto go : gameObjects)
+				{
+					if (go->GetActive())
+					{
+						go->SetActive(false);
+					}
+					else
+					{
+						go->SetActive(true);
+					}
+				}
+				SetAct(true);
+				player2->SetPosition(193.f, 728.f);
+				shopInterior->SetActive(false);
+				bedding->SetActive(true);
+				homeTap->SetActive(true);
+			}
+			else
+			{
+				enterHome = false;
+				for (auto go : gameObjects)
+				{
+					if (go->GetActive())
+					{
+						go->SetActive(false);
+
+					}
+					else
+					{
+						go->SetActive(true);
+					}
+				}
+				SetAct(true);
+				player2->SetPosition(193.f, 728.f);
+				shopInterior->SetActive(false);
+				bedding->SetActive(false);
+				homeTap->SetActive(true);
+			}
+		}
+	}
+
+	// PLAYER - BEDDING COLLIDE & SAVE
+	{
+		if (enterHome)
+		{
+			if (player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+			{
+				if (!once)
+				{
+					homeTap->homeTapOn = true;
+					homeTap->TapOnOff();
+					once = true;
+				}
+			}
+			else
+			{
+				once = false;
+				homeTap->homeTapOn = false;
 				homeTap->TapOnOff();
-				once = true;
 			}
 		}
-		else
+		if (homeTap->save)
 		{
-			once = false;
-			//homeTap->SetActive(false);
-			homeTap->homeTapOn = false;
-			homeTap->TapOnOff();
+			sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day };
+			SAVELOAD_DATA.SaveData(&sData);
+			SAVELOAD_DATA.SaveCSV();
+			homeTap->save = false;
 		}
 	}
 	
 	//SET VIEW
-	worldView.setCenter(player2->GetPosition());
-
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
 	{
-		SCENE_MGR.ChangeScene(SceneId::Editor);
+		worldView.setCenter(player2->GetPosition());
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	// EDITOR ON
 	{
-		SpawnRootingItem(ItemId::branch, {0,0});
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
-	{
-		SpawnRootingItem(ItemId::coal, { 0,0 });
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+		{
+			SCENE_MGR.ChangeScene(SceneId::Editor);
+		}
 	}
 
+	// ITEM ROOTING TEST CODE
+	{
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+		{
+			SpawnRootingItem(ItemId::branch, {0,0});
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
+		{
+			SpawnRootingItem(ItemId::coal, { 0,0 });
+		}
+	}
 	
-	if (inven->GetInvenOff())
+	// QUICK INVEN ONOFF
 	{
-		quickinven->SetActive(false);
-	}
-	else if (!inven->GetInvenOff())
-	{
-		quickinven->SetActive(true);
-	}
-
-	if (inven->GetEndGame())
-	{
-		window.close();
-	}
-
-	if (inven->GetChageScene())
-	{
-		inven->SetChageScene(false);
-		SCENE_MGR.ChangeScene(SceneId::Title);
+		if (inven->GetInvenOff())
+		{
+			quickinven->SetActive(false);
+		}
+		else
+		{
+			quickinven->SetActive(true);
+		}
 	}
 
 	//sf::Vector2f playerTilePos;
@@ -650,56 +682,60 @@ void SceneGame::Update(float dt)
 	//playerTilePos.x = (player2->GetPosition().x - mapLT.x) / 72.f;
 	//playerTilePos.y = (player2->GetPosition().y - mapLT.y) / 72.f;
 
-	//플레이어가 바라보고있는 타일
+	// PLAYER HEADING TILE
+	{
+		int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+		int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+		sf::Vector2f direction = player2->GetDirection(); 
 
-	int tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
-	int tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
-	sf::Vector2f direction = player2->GetDirection(); 
-
-	if (direction.x > 0.f)
-	{
-		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
-		tileX += 1;
-		//tileSize.x* tileX + mapLT.x;
-		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-	}
-	else if (direction.x < 0.f)
-	{
-		tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
-		tileX -= 1;
-		//tileSize.x* tileX + mapLT.x;
-		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-	}
-	else if (direction.y > 0.f)
-	{
-		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
-		tileY += 1;
-		//tileSize.y* tileY + mapLT.y;
-		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-	}
-	else if (direction.y < 0.f)
-	{
-		tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
-		tileY -= 1;
-		//tileSize.y* tileY + mapLT.y;
-		testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+		if (direction.x > 0.f)
+		{
+			tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+			tileX += 1;
+			//tileSize.x* tileX + mapLT.x;
+			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+		}
+		else if (direction.x < 0.f)
+		{
+			tileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / 72);
+			tileX -= 1;
+			//tileSize.x* tileX + mapLT.x;
+			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+		}
+		else if (direction.y > 0.f)
+		{
+			tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+			tileY += 1;
+			//tileSize.y* tileY + mapLT.y;
+			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+		}
+		else if (direction.y < 0.f)
+		{
+			tileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / 72);
+			tileY -= 1;
+			//tileSize.y* tileY + mapLT.y;
+			testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
+		}
 	}
 
-	int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
-	int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
-
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left)&& player2->GetPlayerItemId() == ItemId::pick)
+	// PLAYER OBJECT HIT TEST CODE
 	{
-		HitStone(BtileX, BtileY); 
-	}
+		int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
+		int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
+
+		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left)&& player2->GetPlayerItemId() == ItemId::pick)
+		{
+			HitStone(BtileX, BtileY); 
+		}
 	
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
-	{
-		HitTimber(BtileX, BtileY);
-	}
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
-	{
-		HitTree(BtileX, BtileY); 
+		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+		{
+			HitTimber(BtileX, BtileY);
+		}
+		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
+		{
+			HitTree(BtileX, BtileY); 
+		}
 	}
 }
 

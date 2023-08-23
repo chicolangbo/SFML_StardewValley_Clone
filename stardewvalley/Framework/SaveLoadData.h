@@ -1,9 +1,8 @@
 #pragma once
 #include "Item.h"
 #include "Singleton.h"
+#include "SceneGame.h"
 
-class Player2;
-class GameObject;
 class Stone;
 class Timber;
 class Weed;
@@ -19,14 +18,10 @@ protected:
 	int totalEarningsInt;
 	int money;
 	int energy;
-	//bool playerDie = false;
-	//bool playingAnimation = false;
-	//bool one = true;
-	//bool boundwall = false;
 
 	// SCENEGAME
-	int min; // NEED TO CONTAIN SAVE TIME
-	int hour; // NEED TO CONTAIN SAVE TIME
+	int min;
+	int hour;
 	int day;
 
 	// OBJECT
@@ -40,10 +35,11 @@ protected:
 
 public:
 	SaveLoadData() = default;
-	virtual ~SaveLoadData();
+	virtual ~SaveLoadData() override;
 
-	void Save();
-	void Load(Player2* p, int* d, int* h, int* m, float* t);
+	void SaveData(DataLoad* sdata);
+	void SaveCSV();
+	void LoadCSV(DataLoad* ldata);
 };
 
 #define SAVELOAD_DATA (SaveLoadData::Instance())

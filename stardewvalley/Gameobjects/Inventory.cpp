@@ -469,11 +469,11 @@ void Inventory::ButtonSetUp()
         }
     };
     title.OnClick = [this]() {
-        //SCENE_MGR.ChangeScene(SceneId::Title);
-        chageScene = true;
+        SCENE_MGR.ChangeScene(SceneId::Title);
+        //chageScene = true;
     };
     end.OnClick = [this]() {
-        EndGame = true;    
+        FRAMEWORK.GetWindow().close();
     };
     
 }

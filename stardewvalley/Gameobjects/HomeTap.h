@@ -22,6 +22,7 @@ protected:
     RectButton no;
 
 public:
+    bool save = false;
     bool homeTapOn = false;
 
     HomeTap(const std::string& n = "");

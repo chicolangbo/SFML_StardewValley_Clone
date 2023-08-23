@@ -147,7 +147,7 @@ void HomeTap::TapOnOff()
 void HomeTap::ButtonSetUp()
 {
     yes.OnClick = [this]() {
-        // ¿˙¿Â
+        save = true;
         homeTapOn = false;
         TapOnOff();
     };

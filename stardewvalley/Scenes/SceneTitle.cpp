@@ -12,6 +12,7 @@
 #include "SliceImageGo.h"
 #include "DataTableMgr.h"
 #include "Bird.h"
+#include "SceneGame.h"
 
 SceneTitle::SceneTitle()
 {
@@ -21,8 +22,6 @@ SceneTitle::SceneTitle()
 void SceneTitle::Init()
 {
 	Release();
-
-
 
 	titleBg = (SpriteGo*)AddGo(new SpriteGo("graphics/sky.png", "sky", "sky"));
 	titleBg->SetScale(2.f, 3.f);
@@ -61,31 +60,10 @@ void SceneTitle::Init()
 	logo->SetOrigin(Origins::MC);   
 	logo->SetPosition(0,-600.f); 
 
-	start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png","newGame1","newGame1")); 
-	start->SetOrigin(Origins::TL); 
-	start->SetPosition(-390.f,30.f); 
-	start->SetScale(2.5f,2.5f);  
-	start->sortLayer = 100; 
-	start->SetActive(false);
-
-	exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1")); 
-	exit->SetOrigin(Origins::TL); 
-	exit->SetPosition(210.f,30.f); 
-	exit->SetScale(2.5f, 2.5f); 
-	exit->sortLayer = 100; 
-	exit->SetActive(false);
-
-	start->OnClick = [this]()
-	{
-		SCENE_MGR.ChangeScene(SceneId::Game); 
-	};
-
-	exit->OnClick = [this]()
-	{
-		window.close();
-	};
+	ShowStartButton();
+	ShowExitButton();
+	ShowLoadButton();
 	
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -120,6 +98,7 @@ void SceneTitle::Enter()
 	viewPos = 0;
 	start->SetActive(false);
 	exit->SetActive(false);
+	load->SetActive(false);
 }
 
 void SceneTitle::Exit()
@@ -161,7 +140,11 @@ void SceneTitle::Update(float dt)
 		{
 			start->SetActive(true);
 		}
-		if (time >= 2.f && !exit->GetActive())
+		if (time >= 2.f && !load->GetActive())
+		{
+			load->SetActive(true);
+		}
+		if (time >= 2.5f && !exit->GetActive())
 		{
 			exit->SetActive(true);
 		}
@@ -182,6 +165,7 @@ void SceneTitle::ShowStartButton()
 	start->SetPosition(-390.f, 30.f);
 	start->SetScale(2.f, 2.f);
 	start->sortLayer = 100;
+	start->SetActive(false);
 
 	start->OnClick = [this]()
 	{
@@ -196,9 +180,26 @@ void SceneTitle::ShowExitButton()
 	exit->SetPosition(250.f, 30.f);
 	exit->SetScale(2.f, 2.f);
 	exit->sortLayer = 100;
+	exit->SetActive(false);
 
 	exit->OnClick = [this]()
 	{
 		window.close();
+	};
+}
+
+void SceneTitle::ShowLoadButton()
+{
+	load = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "load1", "load1"));
+	load->SetOrigin(Origins::TL);
+	load->SetPosition(start->GetPosition() + ((exit->GetPosition() - start->GetPosition()) / 2.f));
+	load->SetScale(2.f, 2.f);
+	load->sortLayer = 100;
+	load->SetActive(false);
+
+	load->OnClick = [this]()
+	{
+		loadData = true;
+		SCENE_MGR.ChangeScene(SceneId::Game);
 	};
 }
