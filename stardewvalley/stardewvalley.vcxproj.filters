@@ -59,6 +59,7 @@
     <ClCompile Include="Gameobjects\Tree.cpp" />
     <ClCompile Include="Gameobjects\Crop.cpp" />
     <ClCompile Include="Gameobjects\Parsnip.cpp" />
+    <ClCompile Include="DataTables\CropTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -124,5 +125,6 @@
     <ClInclude Include="Gameobjects\Tree.h" />
     <ClInclude Include="Gameobjects\Crop.h" />
     <ClInclude Include="Gameobjects\Parsnip.h" />
+    <ClInclude Include="DataTables\CropTable.h" />
   </ItemGroup>
 </Project>

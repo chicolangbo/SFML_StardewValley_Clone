@@ -13,10 +13,6 @@ Parsnip::~Parsnip()
 void Parsnip::Init()
 {
 	Crop::Init();
-	string lev1Nick;
-	string lev2Nick;
-	string lev3Nick;
-	string lev4Nick;
 }
 
 void Parsnip::Release()
