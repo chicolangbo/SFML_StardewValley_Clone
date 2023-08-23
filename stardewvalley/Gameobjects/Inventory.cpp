@@ -473,6 +473,7 @@ void Inventory::ButtonSetUp()
         //chageScene = true;
     };
     end.OnClick = [this]() {
+        SCENE_MGR.GetCurrScene()->Exit();
         FRAMEWORK.GetWindow().close();
     };
     

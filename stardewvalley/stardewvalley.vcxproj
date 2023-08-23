@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gameobjects\Cauliflower.cpp" />
     <ClCompile Include="DataTables\CropTable.cpp" />
     <ClCompile Include="Gameobjects\Crop.cpp" />
     <ClCompile Include="Gameobjects\Bird.cpp" />
@@ -201,6 +202,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Gameobjects\Parsnip.cpp" />
+    <ClCompile Include="Gameobjects\Potato.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -226,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="Gameobjects\Cauliflower.h" />
     <ClInclude Include="DataTables\CropTable.h" />
     <ClInclude Include="Gameobjects\Crop.h" />
     <ClInclude Include="Gameobjects\Bird.h" />
@@ -268,6 +271,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Gameobjects\Parsnip.h" />
+    <ClInclude Include="Gameobjects\Potato.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />

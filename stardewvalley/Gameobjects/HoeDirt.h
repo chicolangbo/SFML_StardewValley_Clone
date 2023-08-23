@@ -16,6 +16,8 @@ protected:
 	bool isWatered = false;
 	int currentDay = 0;
 
+	CropId cropId;
+
 public:
 	sf::Sprite dirt;
 	sf::Sprite waterDirt;
@@ -41,9 +43,11 @@ public:
 	void SetIndex(int x, int y) { indexX = x; indexY = y; }
 	void SetPlantedCrop(bool is) { plantedCrop = is; }
 	void SetCurrentDay(bool is) { currentDay = is; }
+	void SetCropId(CropId id) { cropId = id; }
 
 	sf::Vector2i GetIndex() { return sf::Vector2i(indexX, indexY); }
 	bool GetIsWatered() { return isWatered; }
 	bool GetIsPlanted() { return plantedCrop; }
+	CropId GetCropId() { return cropId; }
 };
 
