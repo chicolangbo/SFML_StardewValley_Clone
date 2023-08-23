@@ -1,0 +1,13 @@
+﻿ID,FPS,LOOPTYPE,,
+Stone,5,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/animations.png,0,1728,68,128
+graphics/animations.png,64,1728,68,128
+graphics/animations.png,126,1728,68,128
+graphics/animations.png,192,1728,68,128
+graphics/animations.png,252,1728,68,128
+graphics/animations.png,316,1728,68,128
+graphics/animations.png,384,1728,68,128
+graphics/animations.png,448,1728,68,128
+graphics/animations.png,515,1728,68,128

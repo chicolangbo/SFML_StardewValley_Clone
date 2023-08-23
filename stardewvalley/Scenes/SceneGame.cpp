@@ -319,24 +319,30 @@ void SceneGame::Enter()
 		tree->stump->SetMapLT(mapLT);
 	}
 
-	Scene::Enter();
-
-	shopTap->SetPierre(shopInterior->GetPierre());
-
-	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
-	walls.push_back(houseExterior->GetCollider());
-
-	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
-	walls.push_back(shopExterior->GetCollider());
-
 	for (int i = 0; i < stoneCount; i++)
 	{
 		Stone* stone = (Stone*)FindGo("stone" + to_string(i));
 		walls.push_back(stone->GetCollider());
 	}
-	//맵 툴 충돌체 설정
-	rapidcsv::Document doc("tables/newMapCollider.csv");
 
+	shopTap->SetPierre(shopInterior->GetPierre());
+
+	houseExterior->SetPosition(mapLT.x + tileSize.x * housePos.x, mapLT.y + tileSize.y * housePos.y);
+
+	shopExterior->SetPosition(mapLT.x + tileSize.x * shopPos.x, mapLT.y + tileSize.y * shopPos.y);
+	
+	//맵 툴 충돌체 설정
+	
+	Scene::Enter();
+
+	walls.push_back(houseExterior->GetCollider());
+
+	walls.push_back(shopExterior->GetCollider());
+
+
+
+	rapidcsv::Document doc("tables/newMapCollider.csv");
+	
 	for (int i = 2; i < doc.GetRowCount(); i++)
 	{
 		auto rows = doc.GetRow<int>(i);
@@ -364,7 +370,9 @@ void SceneGame::Enter()
 		Tree* tree = (Tree*)FindGo("tree" + to_string(i));
 		walls.push_back(tree->stump->GetCollider());
 	}
-	Scene::Enter();
+
+	
+
 	for (int i = 0; i < walls.size(); ++i)
 	{
 		player2->SetWallBounds(walls[i]);
@@ -691,16 +699,20 @@ void SceneGame::Update(float dt)
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left)&& player2->GetPlayerItemId() == ItemId::pick)
 	{
 		HitStone(BtileX, BtileY); 
+		HitWeed(BtileX, BtileY);
 	}
 	
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
-	{
-		HitTimber(BtileX, BtileY);
-	}
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax) 
 	{
 		HitTree(BtileX, BtileY); 
+		HitTimber(BtileX, BtileY); 
+		HitWeed(BtileX, BtileY);
 	}
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
+	{
+		HitWeed(BtileX, BtileY);
+	}
+	
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -750,8 +762,10 @@ void SceneGame::HitStone(int x, int y)
 				{
 					walls.erase(wallIt);//해당 돌의 콜라이더 삭제
 				}
+				//(*it)->SetOrigin(Origins::BC);
+				(*it)->SetBang();
 
-				(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
+				//(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
 				it = stones.erase(it);//돌의 백터 배열에서 제거
 				//RemoveGo(*it);
 				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
@@ -824,8 +838,8 @@ void SceneGame::HitTree(int x, int y)
 {
 	for (auto it = trees.begin(); it != trees.end();)
 	{
-		int treeX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
-		int treeY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		int treeX = static_cast<int>(((*it)->stump->GetPosition().x - mapLT.x) / 72);
+		int treeY = static_cast<int>(((*it)->stump->GetPosition().y - mapLT.y) / 72);
 		
 		if (treeX == x && treeY == y)
 		{
@@ -834,7 +848,8 @@ void SceneGame::HitTree(int x, int y)
 			{
 				(*it)->TreeRotation();
 			}
-			else if ((*it)->stump->GetHp() == 0)  
+
+			if ((*it)->stump->GetHp() == 0)  
 			{
 				sf::FloatRect wal = (*it)->stump->GetCollider();
 				auto wallIt = std::find(walls.begin(), walls.end(), wal);
@@ -849,6 +864,48 @@ void SceneGame::HitTree(int x, int y)
 				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
+
+				for (int i = 0; i < walls.size(); ++i)
+				{
+					player2->SetWallBounds(walls[i]);
+				}
+			}
+			break;
+		}
+		else
+		{
+			++it;
+		}
+
+	}
+}
+
+void SceneGame::HitWeed(int x, int y)
+{
+	for (auto it = weeds.begin(); it != weeds.end();)
+	{
+		int weedX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
+		int weedY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+
+		if (weedX == x && weedY == y)
+		{
+			(*it)->Hit(1);
+	
+			if ((*it)->GetHp() == 0)
+			{
+				sf::FloatRect wal = (*it)->GetCollider();
+				auto wallIt = std::find(walls.begin(), walls.end(), wal);
+				if (wallIt != walls.end())
+				{
+					walls.erase(wallIt);
+				}
+
+				(*it)->SetActive(false);
+				it = weeds.erase(it);
+
+				player2->ClearWalls();
+
+				SpawnRootingItem(ItemId::fiver, { tileSize.x * weedX + mapLT.x, tileSize.y * weedY + mapLT.y });
 
 				for (int i = 0; i < walls.size(); ++i)
 				{

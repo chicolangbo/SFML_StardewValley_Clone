@@ -61,19 +61,21 @@ void SceneTitle::Init()
 	logo->SetOrigin(Origins::MC);   
 	logo->SetPosition(0,-600.f); 
 
-	start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png","newGame1","newGame1")); 
-	start->SetOrigin(Origins::TL); 
-	start->SetPosition(-390.f,30.f); 
-	start->SetScale(2.5f,2.5f);  
-	start->sortLayer = 100; 
-	start->SetActive(false);
+	//start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png","newGame1","newGame1")); 
+	//start->SetOrigin(Origins::TL); 
+	//start->SetPosition(-390.f,30.f); 
+	//start->SetScale(2.5f,2.5f);  
+	//start->sortLayer = 100; 
+	//start->SetActive(false);
 
-	exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1")); 
-	exit->SetOrigin(Origins::TL); 
-	exit->SetPosition(210.f,30.f); 
-	exit->SetScale(2.5f, 2.5f); 
-	exit->sortLayer = 100; 
-	exit->SetActive(false);
+	ShowStartButton();
+	ShowExitButton();
+	//exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1")); 
+	//exit->SetOrigin(Origins::TL); 
+	//exit->SetPosition(210.f,30.f); 
+	//exit->SetScale(2.5f, 2.5f); 
+	//exit->sortLayer = 100; 
+	//exit->SetActive(false);
 
 	start->OnClick = [this]()
 	{
@@ -180,7 +182,7 @@ void SceneTitle::ShowStartButton()
 	start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "newGame1", "newGame1"));
 	start->SetOrigin(Origins::TL);
 	start->SetPosition(-390.f, 30.f);
-	start->SetScale(2.f, 2.f);
+	start->SetScale(2.5f, 2.5f);
 	start->sortLayer = 100;
 
 	start->OnClick = [this]()
@@ -193,8 +195,8 @@ void SceneTitle::ShowExitButton()
 {
 	exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1"));
 	exit->SetOrigin(Origins::TL);
-	exit->SetPosition(250.f, 30.f);
-	exit->SetScale(2.f, 2.f);
+	exit->SetPosition(210.f, 30.f);
+	exit->SetScale(2.5f, 2.5f);
 	exit->sortLayer = 100;
 
 	exit->OnClick = [this]()
