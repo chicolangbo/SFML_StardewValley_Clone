@@ -169,6 +169,7 @@ void SceneTitle::ShowStartButton()
 
 	start->OnClick = [this]()
 	{
+		loadData = false;
 		SCENE_MGR.ChangeScene(SceneId::Game);
 	};
 }

@@ -292,27 +292,6 @@ void SceneGame::Enter()
 	// FILE LOAD & NEW GAME
 	{
 		// 맵을 비워줘야 함
-		for (auto i : stones)
-		{
-			RemoveGo(i);
-		}
-		for (auto i : timbers)
-		{
-			RemoveGo(i);
-		}
-		for (auto i : weeds)
-		{
-			RemoveGo(i);
-		}
-		for (auto i : trees)
-		{
-			RemoveGo(i);
-		}
-		stones.clear();
-		timbers.clear();
-		weeds.clear();
-		trees.clear();
-
 		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
 		{
 			SAVELOAD_DATA.LoadCSV(&sData);
@@ -332,6 +311,7 @@ void SceneGame::Enter()
 			Objtable = (ObjectTable*)(new ObjectTable());
 			Objtable->Load();
 			ObjectLoad(Objtable->GetTable());
+			player2->load = false;
 		}
 	}
 
@@ -388,7 +368,6 @@ void SceneGame::Enter()
 	}
 
 	Scene::Enter();
-
 
 	// PLAYER COLLIDER SETTING
 	{
@@ -493,6 +472,32 @@ void SceneGame::Exit()
 	ClearObjectPool(parsnipPool);
 	ClearObjectPool(potatoPool);
 	ClearObjectPool(cauliflowerPool);
+	for (auto i : rootingItems)
+	{
+		RemoveGo(i);
+	}
+	rootingItems.clear();
+
+	for (auto i : stones)
+	{
+		RemoveGo(i);
+	}
+	for (auto i : timbers)
+	{
+		RemoveGo(i);
+	}
+	for (auto i : weeds)
+	{
+		RemoveGo(i);
+	}
+	for (auto i : trees)
+	{
+		RemoveGo(i);
+	}
+	stones.clear();
+	timbers.clear();
+	weeds.clear();
+	trees.clear();
 
 	Scene::Exit();
 }
@@ -1029,6 +1034,7 @@ void SceneGame::HitStone(int x, int y)
 				(*it)->SetBang();
 
 				//(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
+				RemoveGo(*it);
 				it = stones.erase(it);//돌의 백터 배열에서 제거
 				//RemoveGo(*it);
 				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
@@ -1082,6 +1088,7 @@ void SceneGame::HitTimber(int x, int y)
 
 				(*it)->SetBang();
 				//(*it)->SetActive(false);
+				RemoveGo(*it);
 				it = timbers.erase(it);
 			
 				player2->ClearWalls();
@@ -1130,6 +1137,7 @@ void SceneGame::HitTree(int x, int y)
 				auto wallIt = std::find(farmWalls.begin(), farmWalls.end(), wal);
 				if (wallIt != farmWalls.end())
 				{
+					RemoveGo(*it);
 					farmWalls.erase(wallIt);
 				}
 
@@ -1194,6 +1202,7 @@ void SceneGame::HitWeed(int x, int y)
 				}
 				(*it)->SetBang();
 				//(*it)->SetActive(false);
+				RemoveGo(*it);
 				it = weeds.erase(it);
 
 				player2->ClearWalls();

@@ -217,9 +217,9 @@ void QuickInventory::Draw(sf::RenderWindow& window)
 
 void QuickInventory::IconUpdate()
 {
-	for (tagItemInfo& pl : *playerItemList)
+	for (Slot* sl : quickslots)
 	{
-		for (Slot* sl : quickslots)
+		for (tagItemInfo& pl : *playerItemList)
 		{
 			if (pl.index == sl->slotIndex)
 			{
@@ -230,6 +230,11 @@ void QuickInventory::IconUpdate()
 					sl->SetItemId(pl.itemId);
 					break;
 				}
+			}
+			else
+			{
+				sl->SetItemIcon(nullptr);
+				sl->SetItemId(ItemId::none);
 			}
 		}
 	}

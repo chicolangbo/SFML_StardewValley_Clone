@@ -59,7 +59,6 @@ protected:
 	bool playingAnimation = false;
 	bool one = true;
 	bool boundwall = false;
-	bool load = false;
 
 	std::list<tagItemInfo> playerItemList;
 	std::list<RootingItem*>*rootingItemList;
@@ -70,7 +69,7 @@ protected:
 	sf::Vector2i mouseTileIndex;
 
 public:
-
+	bool load = false;
 	//플레이어 포지션 / 타일 한칸의 사이즈 == 2차원 배열의 인덱스?
 	Player2(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}

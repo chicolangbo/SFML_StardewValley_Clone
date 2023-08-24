@@ -498,11 +498,11 @@ void Inventory::PlayerInfoUpdate()
 {
     std::stringstream ss;
     ss << *curFundsInt;
-    curFundsValue.SetString(ss.str()); // ���� ������
+    curFundsValue.SetString(ss.str());
 
     ss.str("");
     ss << *totalEarningsInt;
-    totalEarningsValue.SetString(ss.str()); // ���� �ڱ�
+    totalEarningsValue.SetString(ss.str());
 }
 
 void Inventory::SortGos()
