@@ -126,6 +126,7 @@ protected:
 	float arrowSpin = 0.f;
 	int energys;
 	float time = 0.f;
+	float timer = 0.f;
 	int min = 0;
 	int hour = 6;
 	int day = 1;
@@ -138,7 +139,7 @@ protected:
 	bool once = false;
 
 	//test
-	RectangleGo* testbox;
+	//RectangleGo* testbox;
 	//RectangleGo* night; 
 	
 public:

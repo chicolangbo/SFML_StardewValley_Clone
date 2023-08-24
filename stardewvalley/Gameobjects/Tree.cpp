@@ -10,7 +10,7 @@ Tree::Tree(const std::string& name, const std::string& branchId, const std::stri
 {
 	stump = new Objects(stumpId, "stump", "stump");
 	this->branchId = branchId;
-	this->branchNick = branchNick;
+	this->branchNick = branchNick; //¾ê ¸®ÅÏ
 }
 
 Tree::~Tree()
@@ -78,11 +78,19 @@ void Tree::Update(float dt)
 
 	if (treeRotation)
 	{
-		rotation += dt * 0.1f;
+		rotation = 0.15f;
+		totalrotation += rotation;
 		branch.rotate(rotation);
+
+		sf::Vector2f pos = branch.getPosition();
+		pos.x += dt * 2000.f;
+		pos.y -= dt * 2000.f;
+		branch.setPosition(pos);
 		time += dt;
-		if (time >= 1.6f)
+		//if (time >= 1.6f)
+		if (totalrotation >= 90.f)
 		{
+			tree = true;
 			fallingTree = true;
 		}
 	}
@@ -95,6 +103,7 @@ void Tree::Draw(sf::RenderWindow& window)
 	{
 		window.draw(branch);
 	}
+	
 	//window.draw(hitbox);
 }
 
