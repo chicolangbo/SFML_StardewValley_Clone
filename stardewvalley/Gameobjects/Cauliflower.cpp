@@ -13,6 +13,7 @@ Cauliflower::~Cauliflower()
 void Cauliflower::Init()
 {
 	Crop::Init();
+	id = CropId::Cauliflower;
 }
 
 void Cauliflower::Release()

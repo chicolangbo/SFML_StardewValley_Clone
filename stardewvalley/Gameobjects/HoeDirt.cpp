@@ -4,6 +4,7 @@
 #include "ResourceMgr.h"
 #include "SceneMgr.h"
 #include "SceneGame.h"
+#include "Crop.h"
 
 HoeDirt::HoeDirt(const string& n, const string& textureId, const string& dirtNick, const string& waterNick)
 	:GameObject(n), textureId(textureId), dirtNick(dirtNick), waterNick(waterNick)
@@ -40,10 +41,10 @@ void HoeDirt::Reset()
 
 	SetOrigin(origin);
 
-	int day = 0;
-	bool plantedCrop = false;
-	bool isWatered = false;
-
+	day = 0;
+	currentDay = 0;
+	plantedCrop = false;
+	isWatered = false; 
 }
 
 void HoeDirt::Update(float dt)
@@ -99,4 +100,27 @@ void HoeDirt::SetOrigin(float x, float y)
 	GameObject::SetOrigin(x, y);
 	dirt.setOrigin(x, y);
 	waterDirt.setOrigin(x, y);
+}
+
+void HoeDirt::SetIsWatered(bool is)
+{
+	isWatered = is;
+	if (crop != nullptr)
+	{
+		crop->SetIsWatered(is);
+	}
+}
+
+void HoeDirt::PlatCrop(Crop* c)
+{
+	crop = c;
+	cropId = crop->GetCropId();
+	plantedCrop = true;
+}
+
+void HoeDirt::HarvestCrop()
+{
+	crop = nullptr;
+	plantedCrop = false;
+	cropId = CropId::None;
 }

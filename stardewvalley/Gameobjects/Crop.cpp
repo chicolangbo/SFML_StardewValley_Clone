@@ -20,13 +20,6 @@ void Crop::Init()
 {
 	SpriteGo::Init();
 
-	date = 0; //심은 날짜 
-	day = 0; //심은 이후의 날짜
-	level = 0;
-	currentday = 0;
-	index = { 0, 0 };
-	allPeriod = 0;
-
 	SpriteGo::textureId = "graphics/crops.png";
 
 	SetScale({ 4.5f, 4.5f });
@@ -40,6 +33,14 @@ void Crop::Release()
 void Crop::Reset()
 {
 	SpriteGo::Reset();
+
+	date = 0; //심은 날짜 
+	day = 0; //심은 이후의 날짜
+	level = 0;
+	currentday = 0;
+	index = { 0, 0 };
+	isWatered = false;
+
 	SetOrigin(Origins::ML);
 }
 
