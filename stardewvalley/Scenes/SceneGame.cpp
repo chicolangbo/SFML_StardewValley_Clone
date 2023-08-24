@@ -473,11 +473,13 @@ void SceneGame::Exit()
 	ClearObjectPool(parsnipPool);
 	ClearObjectPool(potatoPool);
 	ClearObjectPool(cauliflowerPool);
+
 	for (auto i : rootingItems)
 	{
 		RemoveGo(i);
 	}
 	rootingItems.clear();
+
 	ClearMapObj(stones);
 	ClearMapObj(timbers);
 	ClearMapObj(weeds);

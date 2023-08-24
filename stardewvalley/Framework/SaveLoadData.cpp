@@ -231,7 +231,7 @@ void SaveLoadData::LoadCSV(DataLoad* sdata)
 		}
 	}
 
-	// DIRT LOAD
+	// DIRTARRAY DATA LOAD
 	{
 		const std::string fileName4 = "tables/save_dirtArrayIndex.csv";
 		rapidcsv::Document dirt_doc(fileName4);
@@ -246,6 +246,14 @@ void SaveLoadData::LoadCSV(DataLoad* sdata)
 		{
 			sdata->activeDirtIndex.push_back(std::make_pair(y[i], x[i]));
 		}
+	}
+
+	// CROPS DATA LOAD
+	{
+		const std::string fileName5 = "tables/save_crops.csv";
+		rapidcsv::Document crops_doc(fileName5);
+
+		
 	}
 	
 	// LOAD WITH CHANGES : stone, timber, weed, tree LEFT
