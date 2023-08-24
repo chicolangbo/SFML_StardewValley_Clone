@@ -42,8 +42,10 @@ struct DataLoad
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
 	vector<Tree*> trees;
-
-	vector<vector<HoeDirt*>> dirtArray;
+	std::vector<std::pair<int, int>> activeDirtIndex;
+	std::list<Parsnip*> parsnipPool;
+	std::list<Potato*> potatoPool;
+	std::list<Cauliflower*> cauliflowerPool;
 };
 
 class SceneGame : public Scene

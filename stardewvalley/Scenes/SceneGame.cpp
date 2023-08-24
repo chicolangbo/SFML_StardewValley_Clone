@@ -301,6 +301,7 @@ void SceneGame::Enter()
 			hour = sData.game_hour;
 			day = sData.game_day;
 			ObjectLoad(SAVELOAD_DATA.table);
+			activeDirtIndex = sData.activeDirtIndex;
 
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
@@ -313,6 +314,7 @@ void SceneGame::Enter()
 			Objtable->Load();
 			ObjectLoad(Objtable->GetTable());
 			player2->load = false;
+			activeDirtIndex.clear();
 		}
 	}
 
@@ -747,7 +749,8 @@ void SceneGame::Update(float dt)
 				{
 					if (homeTap->save)
 					{
-						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, dirtArray };
+						
+						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList()};
 						SAVELOAD_DATA.SaveCSV(&sData);
 						homeTap->save = false;
 					}

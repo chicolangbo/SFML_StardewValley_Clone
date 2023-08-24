@@ -7,6 +7,9 @@
 #include "Weed.h"
 #include "Tree.h"
 #include "HoeDirt.h"
+#include "Parsnip.h"
+#include "Potato.h"
+#include "Cauliflower.h"
 
 SaveLoadData::~SaveLoadData()
 {
@@ -103,9 +106,73 @@ void SaveLoadData::SaveCSV(DataLoad* sdata)
 		outputFile.close();
 	}
 
-	// CROPS & DIRTARRAY SAVE
+	// DIRTARRAY DATA SAVE
 	{
+		const std::string fileName4 = "tables/save_dirtArrayIndex.csv";
+		rapidcsv::Document dirt_doc(fileName4);
+		dirt_doc.Clear();
 
+		dirt_doc.SetColumnName(0, "Y");
+		dirt_doc.SetColumnName(1, "X");
+
+		std::vector<int> y;
+		std::vector<int> x;
+
+		for (auto &i : sdata->activeDirtIndex)
+		{
+			y.push_back(i.first);
+			x.push_back(i.second);
+		}
+		dirt_doc.SetColumn("Y", y);
+		dirt_doc.SetColumn("X", x);
+
+		dirt_doc.Save();
+	}
+
+	// CROPS DATA SAVE
+	{
+		const std::string fileName5 = "tables/save_crops.csv";
+		rapidcsv::Document crops_doc(fileName5);
+		crops_doc.Clear();
+
+		crops_doc.SetColumnName(0, "TYPE");
+		crops_doc.SetColumnName(1, "INDEX_X");
+		crops_doc.SetColumnName(2, "INDEX_Y");
+		crops_doc.SetColumnName(3, "DATE");
+		crops_doc.SetColumnName(4, "DAY");
+		crops_doc.SetColumnName(5, "LEVEL");
+		crops_doc.SetColumnName(6, "CURRENTDAY");
+		crops_doc.SetColumnName(7, "WATERED");
+		crops_doc.SetColumnName(8, "SORTLAYER");
+		crops_doc.SetColumnName(9, "SORTORDER");
+
+		std::vector<int> type;
+		std::vector<int> x;
+		std::vector<int> y;
+		std::vector<int> date;
+		std::vector<int> day;
+		std::vector<int> level;
+		std::vector<int> curday;
+		std::vector<int> water;
+		std::vector<int> sortl;
+		std::vector<int> sorto;
+
+		SaveCrops(sdata->parsnipPool, type, x, y, date, day, level, curday, water, sortl, sorto);
+		SaveCrops(sdata->potatoPool, type, x, y, date, day, level, curday, water, sortl, sorto);
+		SaveCrops(sdata->cauliflowerPool, type, x, y, date, day, level, curday, water, sortl, sorto);
+
+		crops_doc.SetColumn("TYPE", type);
+		crops_doc.SetColumn("INDEX_X", x);
+		crops_doc.SetColumn("INDEX_Y", y);
+		crops_doc.SetColumn("DATE", date);
+		crops_doc.SetColumn("DAY", day);
+		crops_doc.SetColumn("LEVEL", level);
+		crops_doc.SetColumn("CURRENTDAY", curday);
+		crops_doc.SetColumn("WATERED", water);
+		crops_doc.SetColumn("SORTLAYER", sortl);
+		crops_doc.SetColumn("SORTORDER", sorto);
+
+		crops_doc.Save();
 	}
 }
 
@@ -161,6 +228,23 @@ void SaveLoadData::LoadCSV(DataLoad* sdata)
 				rows[1], rows[2], (float)rows[3], (float)rows[4], (float)rows[5], (float)rows[6], (ObjType)rows[7]
 			};
 			table.insert({ rows[0], oInfo });
+		}
+	}
+
+	// DIRT LOAD
+	{
+		const std::string fileName4 = "tables/save_dirtArrayIndex.csv";
+		rapidcsv::Document dirt_doc(fileName4);
+
+		std::vector<int> y;
+		std::vector<int> x;
+
+		y = dirt_doc.GetColumn<int>("Y");
+		x = dirt_doc.GetColumn<int>("X");
+		
+		for (int i = 0; i < y.size(); ++i)
+		{
+			sdata->activeDirtIndex.push_back(std::make_pair(y[i], x[i]));
 		}
 	}
 	

@@ -145,3 +145,20 @@ void Crop::FullLevUp()
 	sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level - 1]));
 	canHarvest = true;
 }
+
+SaveData Crop::GetLoadData()
+{
+	cropSaveData =
+	{
+		id,
+		date,
+		day,
+		currentday,
+		level,
+		index,
+		isWatered,
+		sortLayer,
+		sortOrder
+	};
+	return cropSaveData;
+}
