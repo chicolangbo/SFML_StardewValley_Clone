@@ -5,7 +5,10 @@
 void Weed::Init()
 {
 	Objects::Init();
-	
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Weed.csv"));
+	animation.SetTarget(&sprite);
+
+	SetOrigin(Origins::TL);
 
 }
 
@@ -14,15 +17,10 @@ void Weed::Reset()
 	Objects::Reset();
 
 	SetPosition(position);
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Weed.csv"));
-	animation.SetTarget(&sprite);
-	SetOrigin(Origins::TL);
 }
 
 void Weed::Update(float dt)
 {
-	
 	Objects::Update(dt);
 	if (bang)
 	{
