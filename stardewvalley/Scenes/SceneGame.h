@@ -135,7 +135,6 @@ protected:
 	int min = 0;
 	int hour = 6;
 	int day = 1;
-
 	// INVEN & ITEMS
 	Inventory* inven;
 	std::list<RootingItem*>rootingItems;

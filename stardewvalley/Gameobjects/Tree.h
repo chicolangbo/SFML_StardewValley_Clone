@@ -56,5 +56,6 @@ public:
 	void Hit() { hit = true; }
 
 	string GetBranchNick() { return branchNick; }
+	float GetRotation() { return totalrotation; }
 };
 

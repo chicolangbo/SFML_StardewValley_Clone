@@ -33,6 +33,14 @@ void SceneTitle::Init()
 	star->SetOrigin(Origins::MC);
 	star->SetPosition(0.f, -600.f);
 
+	cloud = (SpriteGo*)AddGo(new SpriteGo("graphics/Clouds.png","bigCloud","bigCloud"));
+	cloud->SetOrigin(Origins::MC); 
+	cloud->SetPosition(500.f, -600.f);
+
+	cloud2 = (SpriteGo*)AddGo(new SpriteGo("graphics/Clouds.png", "cloud1", "cloud1"));
+	cloud2->SetOrigin(Origins::MC);
+	cloud2->SetPosition(300.f, -500.f);
+
 	mountBack = (SpriteGo*)AddGo(new SpriteGo("graphics/Cursors.ko-KR.png", "mount2", "mount2"));
 	mountBack->SetScale(1.5f, 1.5f);
 	mountBack->SetOrigin(Origins::MC);
@@ -120,6 +128,22 @@ void SceneTitle::Update(float dt)
 	birdPos -= dt * 100.f;
 	bird2->SetPosition(birdPos, 50.f);
 
+	sf::Vector2f cloudPos = cloud->GetPosition();
+	sf::Vector2f cloudPos2 = cloud2->GetPosition();
+	if (cloudPos.x < -1000.f)
+	{
+		cloudPos.x = 1000.f;
+	}
+	if (cloudPos2.x < -1000.f)
+	{
+		cloudPos2.x = 1000.f;
+	}
+	cloudPos.x -= dt * 30.f;
+	cloudPos2.x -= dt * 50.f;
+	cloud->SetPosition(cloudPos);
+	cloud2->SetPosition(cloudPos2);
+	
+
 	timer += dt;
 	if (viewPos >= -500.f && timer >= 1.5f)
 	{
@@ -127,11 +151,16 @@ void SceneTitle::Update(float dt)
 		worldView.setCenter(0.f, viewPos);
 
 		float mountPos = mountBack->GetPosition().y;
+		float bushPos = bush->GetPosition().y; 
 		if (mountPos >= 30.f)
 		{
 			mountPos -= dt * 50.f; 
 			mountBack->SetPosition(0.f, mountPos);
+		
+			bushPos += dt * 100.f; 
+			bush->SetPosition(0.f, bushPos);
 		}
+	
 	}
 	else
 	{

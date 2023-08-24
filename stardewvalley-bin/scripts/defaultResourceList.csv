@@ -8,7 +8,7 @@
 0,graphics/TitleButtons.ko-KR.png,exit2,222,245,74,58,
 0,graphics/TitleButtons.ko-KR.png,back1,296,252,66,27,
 0,graphics/TitleButtons.ko-KR.png,back2,296,279,66,27,
-0,graphics/Clouds.png,cloud1,0,471,148,65,
+0,graphics/Clouds.png,cloud1,0,336,474,201,
 0,graphics/Clouds.png,cloud2,153,447,123,55,
 0,graphics/Clouds.png,cloud3,410,467,64,36,
 0,graphics/sky.png,sky,117,934,536,264,
@@ -219,3 +219,4 @@
 0,graphics/crops.png,cauli4,96,32,16,32,
 3,animations/Timber.csv,N,-1,-1,-1,-1,
 3,animations/Weed.csv,N,-1,-1,-1,-1,
+0,graphics/Clouds.png,bigCloud,14,6,480,330,

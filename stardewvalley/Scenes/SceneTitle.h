@@ -14,6 +14,9 @@ protected:
 	SpriteGo* mountBack;
 	SpriteGo* bush;
 	SpriteGo* star;
+	SpriteGo* cloud;
+	SpriteGo* cloud2;
+	
 
 	UiButton* start;  
 	UiButton* exit;

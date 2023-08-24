@@ -879,7 +879,7 @@ void SceneGame::Update(float dt)
 			inven->invenTapOn = true;
 		}
 	}
-
+	timer+=dt; 
 	// PLAYER OBJECT HIT TEST CODE
 	{
 		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
@@ -912,46 +912,66 @@ void SceneGame::Update(float dt)
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 				{
-					HitStone(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
-					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (timer >= 0.5f)
 					{
-						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+						timer = 0.f;
+						HitStone(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 						{
-						case true:
-							break;
-						case false:
-							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
-							dirtArray[mouseTileY][mouseTileX]->Reset();
-							break;
-						default:
-							break;
+							switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+							{
+							case true:
+								break;
+							case false:
+								dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+								dirtArray[mouseTileY][mouseTileX]->Reset();
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 				{
-					HitTree(mouseTileX, mouseTileY);
-					HitTimber(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitTree(mouseTileX, mouseTileY);
+						HitTimber(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
 				{
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (timer >= 0.5f)
 					{
-						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
-						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						timer = 0.f;
+						if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive())
+						{
+							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+							dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
 				{
-					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (timer >= 0.5f)
 					{
-						dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
+						timer = 0.f;
+						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+						{
+							dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
+						}
 					}
 				}
 			}
@@ -982,7 +1002,7 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	rootingItems.back()->SetPosition(pos); 
 	rootingItems.back()->SetPlayer(player2); 
 	rootingItems.back()->SetPosY(pos.y); 
-	rootingItems.back()->sprite.setScale(4.f, 4.f);
+	rootingItems.back()->sprite.setScale(4.f, 4.f); 
 	rootingItems.back()->SetOrigin(Origins::MC);
 
 
@@ -1015,7 +1035,9 @@ void SceneGame::HitStone(int x, int y)
 
 		if (stoneX == x && stoneY == y)
 		{
+			
 			(*it)->Hit(1);
+			
 			//std::cout << (*it)->GetHp() << std::endl;
 			if ((*it)->GetHp() <= 0)
 			{
@@ -1118,12 +1140,14 @@ void SceneGame::HitTree(int x, int y)
 			if ((*it)->stump->GetHp() == 5)
 			{
 				(*it)->TreeRotation();
+			
 				for (int i = 0; i < 7; ++i)
 				{
-					SpawnRootingItem(ItemId::branch, { (tileSize.x * treeX + mapLT.x)/* + 200.f*/, (tileSize.y * treeY + mapLT.y) });
+					SpawnRootingItem(ItemId::branch, { (tileSize.x * treeX + mapLT.x) + 200.f, (tileSize.y * treeY + mapLT.y) });
 				}
+				
 			}
-
+			
 			if ((*it)->stump->GetHp() == 0)  
 			{
 				sf::FloatRect wal = (*it)->stump->GetCollider();
