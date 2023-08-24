@@ -102,6 +102,11 @@ void SaveLoadData::SaveCSV(DataLoad* sdata)
 		}
 		outputFile.close();
 	}
+
+	// CROPS & DIRTARRAY SAVE
+	{
+
+	}
 }
 
 void SaveLoadData::LoadCSV(DataLoad* sdata)

@@ -193,10 +193,6 @@ void SceneGame::Init()
 		night->sortLayer = 3;
 		night->SetColor(sf::Color(0, 0, 128, 200));*/
 	}
-
-	//Objtable = (ObjectTable*)(new ObjectTable());
-	//Objtable->Load();
-	//ObjectLoad(Objtable->GetTable());
 	
 	//FARMING
 	{
@@ -480,27 +476,10 @@ void SceneGame::Exit()
 		RemoveGo(i);
 	}
 	rootingItems.clear();
-
-	for (auto i : stones)
-	{
-		RemoveGo(i);
-	}
-	for (auto i : timbers)
-	{
-		RemoveGo(i);
-	}
-	for (auto i : weeds)
-	{
-		RemoveGo(i);
-	}
-	for (auto i : trees)
-	{
-		RemoveGo(i);
-	}
-	stones.clear();
-	timbers.clear();
-	weeds.clear();
-	trees.clear();
+	ClearMapObj(stones);
+	ClearMapObj(timbers);
+	ClearMapObj(weeds);
+	ClearMapObj(trees);
 
 	Scene::Exit();
 }
