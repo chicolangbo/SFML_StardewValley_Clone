@@ -21,9 +21,6 @@ Tree::~Tree()
 void Tree::Init()
 {
 	stump->Init();
-	branch.setScale({ 4.5f, 4.5f });
-
-	
 }
 
 void Tree::Release()
@@ -34,6 +31,7 @@ void Tree::Reset()
 {
 	stump->Reset();
 
+	branch.setScale({ 4.5f, 4.5f });
 	branch.setTexture(*RESOURCE_MGR.GetTexture(branchId));
 	sf::IntRect texRect = RESOURCE_MGR.GetTextureRect(branchNick);
 	branch.setTextureRect(texRect);

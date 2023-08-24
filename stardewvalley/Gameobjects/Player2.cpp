@@ -13,6 +13,7 @@
 #include "DataTableMgr.h"
 #include "Inventory.h"
 #include "Slot.h"
+#include "SceneTitle.h"
 
 void Player2::Init()
 {
@@ -85,22 +86,28 @@ void Player2::Reset()
 
 	playerDie = false;
 	one = true;
-	energy = maxEnergy;
-	money = 500;
-	tempMoney = 0;
-	totalEarningsInt = 500;
+
+	if (!load) // NEW GAME
+	{
+		energy = maxEnergy;
+		money = 500;
+		tempMoney = 0;
+		totalEarningsInt = 500;
+		playerItemList.clear();
+		playerItemList.push_back({ ItemId::ax, 1, 0 });
+		playerItemList.push_back({ ItemId::homi, 1, 1 });
+		playerItemList.push_back({ ItemId::hook, 1, 2 });
+		playerItemList.push_back({ ItemId::pick, 1, 3 });
+		playerItemList.push_back({ ItemId::waterCan, 1, 4 });
+		playerItemList.push_back({ ItemId::parsnipSeed, 5, 5 });
+		playerItemList.push_back({ ItemId::potatoSeed, 5, 6 });
+		playerItemList.push_back({ ItemId::coliSeed, 5, 7 });
+		item = ItemId::none;
+	}
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
 	collider.setScale({ 0.2f, 0.3f });
 	SetOrigin(origin);
-
-	playerItemList.clear();
-	playerItemList.push_back({ ItemId::ax, 1, 0 });
-	playerItemList.push_back({ ItemId::homi, 1, 1 });
-	playerItemList.push_back({ ItemId::hook, 1, 2 });
-	playerItemList.push_back({ ItemId::pick, 1, 3 });
-	playerItemList.push_back({ ItemId::waterCan, 1, 4 });
-	item = ItemId::none;
 }
 
 void Player2::Update(float dt)
@@ -506,6 +513,7 @@ void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM, int 
 	money = loadM;
 	energy = loadE;
 	item = ItemId::none;
+	load = true;
 }
 
 void Player2::AddRootingItem() // 자석화 해야 함 // 했음

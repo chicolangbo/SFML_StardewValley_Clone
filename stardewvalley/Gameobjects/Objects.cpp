@@ -4,13 +4,11 @@
 void Objects::Init()
 {
 	SpriteGo::Init();
-
-	
-	sprite.setScale({ 4.5f, 4.5f });
 }
 
 void Objects::Reset()
 {
+	sprite.setScale({ 4.5f, 4.5f });
 	SpriteGo::Reset();
 
 	sprite.setTextureRect(texRect);

@@ -28,5 +28,6 @@ public:
 	void SetMapLT(sf::Vector2f pos);
 
 	sf::Vector2f GetIndex() { return sf::Vector2f(indexX, indexY); }
+	sf::IntRect GetTexRect() { return texRect; }
 };
 

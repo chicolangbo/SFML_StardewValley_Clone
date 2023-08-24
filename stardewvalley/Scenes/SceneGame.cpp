@@ -27,7 +27,6 @@
 #include "rapidcsv.h"
 #include "HomeInterior.h"
 #include "HomeTap.h"
-#include "ObjectTable.h"
 #include "Stone.h"
 #include "Timber.h"
 #include "Weed.h"
@@ -82,76 +81,6 @@ void SceneGame::Init()
 		shopExterior->sprite.setScale(4.f, 4.f);
 		shopExterior->SetOrigin(Origins::BC);
 		shopExterior->collider.setScale(1.f, 0.3f);
-	}
-
-	// OBJECT
-	{
-		Objtable = (ObjectTable*)(new ObjectTable());
-		Objtable->Load();
-		for (auto obj : Objtable->GetTable())
-		{
-			auto objInfo = obj.second;
-			sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
-			if (obj.second.type == ObjType::Stone)
-			{
-				Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone"+to_string(stoneCount)));
-				stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
-				stone->SetHp(1);
-				stones.push_back(stone);
-				stone->sortLayer = 1;
-				stoneCount++;
-			}
-			else if (obj.second.type == ObjType::Timber)
-			{
-				Timber* timber = (Timber*)AddGo(new Timber("map/object.png", "timber" + to_string(timberCount)));
-				timber->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
-				timber->SetHp(1);
-				timbers.push_back(timber);
-				timber->sortLayer = 1;
-				timberCount++;
-			}
-			else if (obj.second.type == ObjType::Weed)
-			{
-				Weed* weed = (Weed*)AddGo(new Weed("map/object.png", "weed" + to_string(weedCount)));
-				weed->SetHp(1);
-				weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
-				weeds.push_back(weed);
-				weed->sortLayer = 1;
-				weedCount++;
-			}
-			else if (obj.second.type == ObjType::Tree)
-			{
-				switch ((int)objInfo.left)
-				{
-				case 144: //2
-				{
-					branchNick = "branch2";
-					branchId = "map/tree2_spring.png";
-					break;
-				}
-				case 160: //1
-				{
-					branchNick = "branch";
-					branchId = "map/tree1_spring.png";
-					break;
-				}
-				case 176: //3
-				{
-					branchNick = "branch3";
-					branchId = "map/tree3_spring.png";
-					break;
-				}
-				default:
-					break;
-				}
-				Tree* tree = (Tree*)AddGo(new Tree("tree" + to_string(treeCount), branchId, "map/object.png", branchNick, "stump"));
-				tree->stump->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
-				tree->stump->SetHp(15);
-				trees.push_back(tree);
-				tree->sortLayer = 2;
-				treeCount++;
-			}
-		}
 	}
 
 	// PLAYER
@@ -261,6 +190,10 @@ void SceneGame::Init()
 		night->sortLayer = 3;
 		night->SetColor(sf::Color(0, 0, 128, 200));*/
 	}
+
+	//Objtable = (ObjectTable*)(new ObjectTable());
+	//Objtable->Load();
+	//ObjectLoad(Objtable->GetTable());
 	
 	//FARMING
 	{
@@ -318,7 +251,6 @@ void SceneGame::Init()
 		cauliflowerPool.Init();
 	}
 
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -350,6 +282,65 @@ void SceneGame::Enter()
 		uiView.setCenter(size * 0.5f);
 	}
 
+	// DIRT POSITION SETTING
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+			}
+		}
+	}
+
+	stoneCount = 0;
+	timberCount = 0;
+	weedCount = 0;
+	treeCount = 0;
+
+	// FILE LOAD & NEW GAME
+	{
+		// 맵을 비워줘야 함
+		for (auto i : stones)
+		{
+			RemoveGo(i);
+		}
+		for (auto i : timbers)
+		{
+			RemoveGo(i);
+		}
+		for (auto i : weeds)
+		{
+			RemoveGo(i);
+		}
+		for (auto i : trees)
+		{
+			RemoveGo(i);
+		}
+		stones.clear();
+		timbers.clear();
+		weeds.clear();
+		trees.clear();
+
+		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
+		{
+			SAVELOAD_DATA.LoadCSV(&sData);
+			player2->LoadData(sData.pl_ItemList, sData.pl_totalMoney, sData.pl_money, sData.pl_energy);
+			min = sData.game_min;
+			hour = sData.game_hour;
+			day = sData.game_day;
+			ObjectLoad(SAVELOAD_DATA.table);
+
+			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
+		}
+		else
+		{
+			Objtable = (ObjectTable*)(new ObjectTable());
+			Objtable->Load();
+			ObjectLoad(Objtable->GetTable());
+		}
+	}
+
 	// OBJECT SET MAP LT
 	{
 		tileSize = testFarmMap->GetTileSize();
@@ -372,7 +363,7 @@ void SceneGame::Enter()
 			trees[i]->stump->SetMapLT(mapLT);
 		}
 	}
-
+	
 	// SHOP, HOUSE
 	{
 		// SHOP
@@ -390,19 +381,8 @@ void SceneGame::Enter()
 			bedding->SetActive(false);
 		}
 	}
-
-	// DIRT POSITION SETTING
-	{
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
-			}
-		}
-	}
-	
 	Scene::Enter();
+
 
 	// PLAYER COLLIDER SETTING
 	{
@@ -425,6 +405,7 @@ void SceneGame::Enter()
 			}
 		}
 	}
+
 	// SET HOME COLLIDER
 	{
 		for (auto wall : homeInterior->GetWall().Walls)
@@ -479,14 +460,6 @@ void SceneGame::Enter()
 	}
 
 	// FARM TEST SETTING
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			player2->AddPlayerItem(ItemId::parsnipSeed);
-			player2->AddPlayerItem(ItemId::potatoSeed);
-			player2->AddPlayerItem(ItemId::coliSeed);
-		}
-	}
 	
 	// INIT SETTING
 	{
@@ -508,18 +481,6 @@ void SceneGame::Enter()
 		init = false;
 	}
 	
-	// FILE LOAD
-	{
-		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
-		{
-			SAVELOAD_DATA.LoadCSV(&lData);
-			player2->LoadData(lData.pl_ItemList, lData.pl_totalMoney, lData.pl_money, lData.pl_energy);
-			min = lData.game_min;
-			hour = lData.game_hour;
-			day = lData.game_day;
-			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
-		}
-	}
 }
 
 void SceneGame::Exit()
@@ -710,7 +671,7 @@ void SceneGame::Update(float dt)
 			}
 			player2->SetPosition(houseInEnter);
 		}
-		else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) &&
+		else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
 		{
 			for (auto go : gameObjects)
@@ -740,110 +701,111 @@ void SceneGame::Update(float dt)
 	}
 
 	// LOCATION PATTERN
-	switch (location)
-		{
-		case Location::Home:
-			// BEDDING COLLIDE
+	{
+		switch (location)
 			{
-				if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+			case Location::Home:
+				// BEDDING COLLIDE
 				{
-					init = true;
-				}
-
-				if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
-				{
-					if (!once)
+					if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 					{
-						homeTap->homeTapOn = true;
+						init = true;
+					}
+
+					if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+					{
+						if (!once)
+						{
+							homeTap->homeTapOn = true;
+							homeTap->TapOnOff();
+							once = true;
+						}
+					}
+					else
+					{
+						once = false;
+						homeTap->homeTapOn = false;
 						homeTap->TapOnOff();
-						once = true;
 					}
 				}
-				else
+				// SAVE
 				{
-					once = false;
-					homeTap->homeTapOn = false;
-					homeTap->TapOnOff();
-				}
-			}
-			// SAVE
-			{
-				if (homeTap->save)
-				{
-					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day };
-					SAVELOAD_DATA.SaveData(&sData);
-					SAVELOAD_DATA.SaveCSV();
-					homeTap->save = false;
-				}
-			}
-			// OUT
-			{
-				//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
-				if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
-				{
-					for (auto go : gameObjects)
+					if (homeTap->save)
 					{
-						if (go->GetActive())
+						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, dirtArray };
+						SAVELOAD_DATA.SaveCSV(&sData);
+						homeTap->save = false;
+					}
+				}
+				// OUT
+				{
+					//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
+					{
+						for (auto go : gameObjects)
 						{
-							if (go->GetName() == "homeTap")
-								continue;
-							go->SetActive(false);
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
 
+							}
+							else
+							{
+								if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
 						}
-						else
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < farmWalls.size(); ++i)
 						{
-							if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
-								continue;
-							go->SetActive(true);
+							player2->SetWallBounds(farmWalls[i]);
 						}
+						player2->SetPosition(207.f, -424.f);
+						location = Location::Farm;
 					}
-					SetAct(true);
-					player2->ClearWalls();
-					for (int i = 0; i < farmWalls.size(); ++i)
-					{
-						player2->SetWallBounds(farmWalls[i]);
-					}
-					player2->SetPosition(207.f, -424.f);
-					location = Location::Farm;
 				}
-			}
-			break;
-		case Location::Shop:
-			// OUT
-			{
-				//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
-				if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
+				break;
+			case Location::Shop:
+				// OUT
 				{
-					for (auto go : gameObjects)
+					//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
+					if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
 					{
-						if (go->GetActive())
+						for (auto go : gameObjects)
 						{
-							if (go->GetName() == "homeTap")
-								continue;
-							go->SetActive(false);
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
+							}
+							else
+							{
+								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
 						}
-						else
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < farmWalls.size(); ++i)
 						{
-							if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-								continue;
-							go->SetActive(true);
+							player2->SetWallBounds(farmWalls[i]);
 						}
-					}
-					SetAct(true);
-					player2->ClearWalls();
-					for (int i = 0; i < farmWalls.size(); ++i)
-					{
-						player2->SetWallBounds(farmWalls[i]);
-					}
-					player2->SetPosition(shopOutEnter);
+						player2->SetPosition(shopOutEnter);
 
-					location = Location::Farm;
+						location = Location::Farm;
+					}
 				}
+				break;
+			case Location::Farm:
+				break;
 			}
-			break;
-		case Location::Farm:
-			break;
-		}
+	}
 	
 	//SET VIEW
 	{
@@ -1326,4 +1288,72 @@ void SceneGame::ChangeDate()
 	hour = 6;
 	min = 0;
 	arrowSpin = 0;
+}
+
+void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
+{
+	for (auto obj : table)
+	{
+		auto objInfo = obj.second;
+		sf::IntRect objRect(objInfo.left, objInfo.top, objInfo.width, objInfo.height);
+		if (obj.second.type == ObjType::Stone)
+		{
+			Stone* stone = (Stone*)AddGo(new Stone("map/object.png", "stone" + to_string(stoneCount)));
+			stone->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+			stone->SetHp(1);
+			stones.push_back(stone);
+			stone->sortLayer = 1;
+			stoneCount++;
+		}
+		else if (obj.second.type == ObjType::Timber)
+		{
+			Timber* timber = (Timber*)AddGo(new Timber("map/object.png", "timber" + to_string(timberCount)));
+			timber->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+			timber->SetHp(1);
+			timbers.push_back(timber);
+			timber->sortLayer = 1;
+			timberCount++;
+		}
+		else if (obj.second.type == ObjType::Weed)
+		{
+			Weed* weed = (Weed*)AddGo(new Weed("map/object.png", "weed" + to_string(weedCount)));
+			weed->SetHp(1);
+			weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+			weeds.push_back(weed);
+			weed->sortLayer = 1;
+			weedCount++;
+		}
+		else if (obj.second.type == ObjType::Tree)
+		{
+			switch ((int)objInfo.left)
+			{
+			case 144: //2
+			{
+				branchNick = "branch2";
+				branchId = "map/tree2_spring.png";
+				break;
+			}
+			case 160: //1
+			{
+				branchNick = "branch";
+				branchId = "map/tree1_spring.png";
+				break;
+			}
+			case 176: //3
+			{
+				branchNick = "branch3";
+				branchId = "map/tree3_spring.png";
+				break;
+			}
+			default:
+				break;
+			}
+			Tree* tree = (Tree*)AddGo(new Tree("tree" + to_string(treeCount), branchId, "map/object.png", branchNick, "stump"));
+			tree->stump->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
+			tree->stump->SetHp(15);
+			trees.push_back(tree);
+			tree->sortLayer = 2;
+			treeCount++;
+		}
+	}
 }
