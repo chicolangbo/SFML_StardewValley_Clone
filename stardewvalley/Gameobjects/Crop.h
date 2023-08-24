@@ -14,6 +14,7 @@ protected:
 	sf::Vector2i index; //위치
 	int allPeriod; //수확까지 성장 기간
 	bool isWatered; //물줬는지
+	bool canHarvest = false;
 
 	CropId id;
 	int period[4];
@@ -42,6 +43,10 @@ public:
 	void SetIsWatered(bool is) { isWatered = is; }
 
 	void LevelUp();
+	bool GetCanHarvest() { return canHarvest; }
+
+	//TEST CODE
+	void FullLevUp();
 	
 	sf::Vector2i GetIndex() { return index; }
 };

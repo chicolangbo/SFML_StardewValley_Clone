@@ -586,6 +586,25 @@ void SceneGame::Update(float dt)
 		}
 	}
 
+	// TEST CODE : Crop lev up
+	{
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Numpad1))
+		{
+			for (auto crop : parsnipPool.GetUseList())
+			{
+				crop->FullLevUp();
+			}
+			for (auto crop : potatoPool.GetUseList())
+			{
+				crop->FullLevUp();
+			}
+			for (auto crop : cauliflowerPool.GetUseList())
+			{
+				crop->FullLevUp();
+			}
+		}
+	}
+
 	// UI : TIME DATA SETTING
 	{
 		time +=dt;
@@ -925,8 +944,33 @@ void SceneGame::Update(float dt)
 
 	// PLAYER OBJECT HIT TEST CODE
 	{
-		int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
-		int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
+		int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / tileSize.x);
+		int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / tileSize.y);
+
+		// HARVEST CROP
+		{
+			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+			{
+				if (dirtArray[BtileY][BtileX]->GetIsPlanted())
+				{
+					CropId id = dirtArray[BtileY][BtileX]->GetCropId();
+					switch (id)
+					{
+					case CropId::Parsnip:
+						HarvestParsnip(BtileX, BtileY);
+						break;
+					case CropId::Potato:
+						HarvestPotato(BtileX, BtileY);
+						break;
+					case CropId::Cauliflower:
+						HarvestCauli(BtileX, BtileY);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
 
 		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 		{
@@ -1316,6 +1360,66 @@ void SceneGame::PlantCauli(int x, int y)
 	dirtArray[y][x]->SetCropId(CropId::Cauliflower);
 
 	player2->RemovePlayerItem(ItemId::coliSeed);
+}
+
+void SceneGame::HarvestParsnip(int x, int y)
+{
+	for (auto crop : parsnipPool.GetUseList())
+	{
+		if (crop->GetIndex().x == x && crop->GetIndex().y == y)
+		{
+			if (crop->GetCanHarvest())
+			{
+				parsnipPool.Return(crop);
+
+				dirtArray[y][x]->SetPlantedCrop(false);
+				dirtArray[y][x]->SetCropId(CropId::None);
+
+				player2->AddPlayerItem(ItemId::parsnip);
+				return;
+			}
+		}
+	}
+}
+
+void SceneGame::HarvestPotato(int x, int y)
+{
+	for (auto crop : potatoPool.GetUseList())
+	{
+		if (crop->GetIndex().x == x && crop->GetIndex().y == y)
+		{
+			if (crop->GetCanHarvest())
+			{
+				potatoPool.Return(crop);
+
+				dirtArray[y][x]->SetPlantedCrop(false);
+				dirtArray[y][x]->SetCropId(CropId::None);
+
+				player2->AddPlayerItem(ItemId::potato);
+				return;
+			}
+		}
+	}
+}
+
+void SceneGame::HarvestCauli(int x, int y)
+{
+	for (auto crop : cauliflowerPool.GetUseList())
+	{
+		if (crop->GetIndex().x == x && crop->GetIndex().y == y)
+		{
+			if (crop->GetCanHarvest())
+			{
+				cauliflowerPool.Return(crop);
+
+				dirtArray[y][x]->SetPlantedCrop(false);
+				dirtArray[y][x]->SetCropId(CropId::None);
+
+				player2->AddPlayerItem(ItemId::coli);
+				return;
+			}
+		}
+	}
 }
 
 void SceneGame::ChangeDate()

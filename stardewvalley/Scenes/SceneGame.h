@@ -169,6 +169,10 @@ public:
 	void PlantPotato(int x, int y);
 	void PlantCauli(int x, int y);
 
+	void HarvestParsnip(int x, int y);
+	void HarvestPotato(int x, int y);
+	void HarvestCauli(int x, int y);
+
 	int GetDay() { return day; }
 
 	void ChangeDate();

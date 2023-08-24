@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class Crop;
+
 class HoeDirt :public GameObject
 {
 protected:

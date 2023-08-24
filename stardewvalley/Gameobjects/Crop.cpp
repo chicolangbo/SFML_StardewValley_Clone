@@ -86,7 +86,6 @@ void Crop::SetType(CropId id)
 
 	int randNum = Utils::RandomRange(0, 2);
 	SpriteGo::nickName = seedNick[randNum];
-
 }
 
 void Crop::SetDirtTile(HoeDirt* tile)
@@ -111,4 +110,13 @@ void Crop::LevelUp()
 
 		cout << (int)id << "," << level << endl;
 	}
+	if (level == 4)
+		canHarvest = true;
+}
+
+void Crop::FullLevUp()
+{
+	level = 4;
+	sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level - 1]));
+	canHarvest = true;
 }
