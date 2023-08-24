@@ -386,6 +386,7 @@ void SceneGame::Enter()
 			bedding->SetActive(false);
 		}
 	}
+
 	Scene::Enter();
 
 
@@ -483,6 +484,7 @@ void SceneGame::Enter()
 		player2->SetPosition(playerSpwan);
 		init = false;
 	}
+	
 	
 }
 
@@ -878,64 +880,10 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-	// PLAYER HEADING TILE
-	{
-		int tileX = playerTileX;
-		int tileY = playerTileY;
-		sf::Vector2f direction = player2->GetDirection(); 
-		
-		//if (direction.x > 0.f)
-		//{
-		//	tileX += 1;
-		//	//tileSize.x* tileX + mapLT.x;
-		//	//testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-		//}
-		//else if (direction.x < 0.f)
-		//{
-		//	tileX -= 1;
-		//	//tileSize.x* tileX + mapLT.x;
-		//	//testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-		//}
-		//else if (direction.y > 0.f)
-		//{
-		//	tileY += 1;
-		//	//tileSize.y* tileY + mapLT.y;
-		//	//testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-		//}
-		//else if (direction.y < 0.f)
-		//{
-		//	tileY -= 1;
-		//	//tileSize.y* tileY + mapLT.y;
-		//	//testbox->SetPosition(tileSize.x* tileX + mapLT.x, tileSize.y* tileY + mapLT.y);
-		//}
-	}
-
 	// PLAYER OBJECT HIT TEST CODE
 	{
-		//int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / 72);
-		//int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / 72);
-
-		selectTile->SetActive(true);
-		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
-
-		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
-			/*&& dirtArray[mouseTileY][mouseTileX]->GetActive()
-			&& !dirtArray[mouseTileY][mouseTileX]->GetIsPlanted()*/)
+		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
 		{
-			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
-			canPlant = true;
-		}
-		else
-		{
-			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
-			canPlant = false;
-		}
-
-		// PLAYER OBJECT HIT TEST CODE
-		{
-			//int BtileX = static_cast<int>((testbox->GetPosition().x - mapLT.x) / tileSize.x);
-			//int BtileY = static_cast<int>((testbox->GetPosition().y - mapLT.y) / tileSize.y);
-
 			// HARVEST CROP
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
@@ -960,54 +908,59 @@ void SceneGame::Update(float dt)
 					}
 				}
 			}
-
-			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
+			if (!(abs(mouseTileX - playerTileX) == 0 && abs(mouseTileY - playerTileY) == 0))
 			{
-				HitStone(mouseTileX, mouseTileY);
-				HitWeed(mouseTileX, mouseTileY);
-				if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 				{
-					switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+					HitStone(mouseTileX, mouseTileY);
+					HitWeed(mouseTileX, mouseTileY);
+					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 					{
-					case true:
-						break;
-					case false:
-						dirtArray[mouseTileY][mouseTileX]->SetActive(false);
-						dirtArray[mouseTileY][mouseTileX]->Reset();
-						break;
-					default:
-						break;
+						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+						{
+						case true:
+							break;
+						case false:
+							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+							dirtArray[mouseTileY][mouseTileX]->Reset();
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+				{
+					HitTree(mouseTileX, mouseTileY);
+					HitTimber(mouseTileX, mouseTileY);
+					HitWeed(mouseTileX, mouseTileY);
+				}
+				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
+				{
+					HitWeed(mouseTileX, mouseTileY);
+				}
+				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
+				{
+					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive())
+					{
+						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+					}
+				}
+				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
+				{
+					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					{
+						dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
 					}
 				}
 			}
-			else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
-			{
-				HitTree(mouseTileX, mouseTileY);
-				HitTimber(mouseTileX, mouseTileY);
-				HitWeed(mouseTileX, mouseTileY);
-			}
-			else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
-			{
-				HitWeed(mouseTileX, mouseTileY);
-			}
-			else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
-			{
-				if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileX][mouseTileY]->GetActive())
-				{
-					dirtArray[mouseTileX][mouseTileY]->SetActive(true);
-					dirtArray[mouseTileX][mouseTileY]->SetCurrentDay(day);
-				}
-			}
-			else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
-			{
-				if (dirtArray[mouseTileX][mouseTileY]->GetActive())
-				{
-					dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
-				}
-
-			}
 		}
+	}
 
+	//SET NIGHT TEST CODE
+	{
+		
 		//night->SetOrigin(Origins::MC);
 		//night->SetPosition(player2->GetPosition());
 	}
@@ -1056,8 +1009,8 @@ void SceneGame::HitStone(int x, int y)
 {
 	for (auto it = stones.begin(); it != stones.end();)
 	{
-		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
-		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
+		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / tileSize.x);
+		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / tileSize.y);
 		//ItemId* itme = player2->GetPlayerItemId();
 
 		if (stoneX == x && stoneY == y)
