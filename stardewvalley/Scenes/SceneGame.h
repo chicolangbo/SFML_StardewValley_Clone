@@ -75,7 +75,7 @@ protected:
 	string branchId;
 
 	// HOE DIRT
-	vector<HoeDirt*> tempDirt;
+	std::vector<std::pair<int,int>> activeDirtIndex;
 	HoeDirt* dirt;
 	vector<vector<HoeDirt*>> dirtArray;
 	SpriteGo* selectTile; //red or green box

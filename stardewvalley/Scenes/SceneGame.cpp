@@ -468,8 +468,6 @@ void SceneGame::Enter()
 		player2->SetPosition(playerSpwan);
 		init = false;
 	}
-	
-	
 }
 
 void SceneGame::Exit()
@@ -777,7 +775,6 @@ void SceneGame::Update(float dt)
 				}
 				// OUT
 				{
-					//if (player2->GetPosition().y >= houseInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
 					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
 					{
 						for (auto go : gameObjects)
@@ -803,6 +800,20 @@ void SceneGame::Update(float dt)
 							player2->SetWallBounds(farmWalls[i]);
 						}
 						player2->SetPosition(207.f, -424.f);
+						for (int i = 0; i < row; i++)
+						{
+							for (int j = 0; j < col; j++)
+							{
+								auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+									[&](const std::pair<int, int>& pair) {
+										return pair.first == i && pair.second == j;
+									});
+								if (foundIt != activeDirtIndex.end())
+								{
+									dirtArray[i][j]->SetActive(true);
+								}
+							}
+						}
 						location = Location::Farm;
 					}
 				}
@@ -810,7 +821,6 @@ void SceneGame::Update(float dt)
 			case Location::Shop:
 				// OUT
 				{
-					//if (player2->GetPosition().y >= shopInEnter.y + 50.f && 0 < player2->GetDirection().y && player2->GetDirection().y <= 1)
 					if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
 					{
 						for (auto go : gameObjects)
@@ -835,7 +845,20 @@ void SceneGame::Update(float dt)
 							player2->SetWallBounds(farmWalls[i]);
 						}
 						player2->SetPosition(shopOutEnter);
-
+						for (int i = 0; i < row; i++)
+						{
+							for (int j = 0; j < col; j++)
+							{
+								auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+									[&](const std::pair<int, int>& pair) {
+										return pair.first == i && pair.second == j;
+									});
+								if (foundIt != activeDirtIndex.end())
+								{
+									dirtArray[i][j]->SetActive(true);
+								}
+							}
+						}
 						location = Location::Farm;
 					}
 				}
@@ -935,6 +958,12 @@ void SceneGame::Update(float dt)
 							break;
 						case false:
 							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+							activeDirtIndex.erase(
+								std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+									[&](const std::pair<int, int>& pair) {
+										return pair.first == mouseTileY || pair.second == mouseTileX;
+									}),
+								activeDirtIndex.end());
 							dirtArray[mouseTileY][mouseTileX]->Reset();
 							break;
 						default:
@@ -958,6 +987,7 @@ void SceneGame::Update(float dt)
 						&& location == Location::Farm)
 					{
 						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+						activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX ));
 						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
 					}
 				}
