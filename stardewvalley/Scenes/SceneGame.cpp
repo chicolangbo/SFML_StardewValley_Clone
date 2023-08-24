@@ -893,12 +893,14 @@ void SceneGame::Update(float dt)
 
 	// PLAYER OBJECT HIT TEST CODE
 	{
+		timer += dt;
 		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
 		{
 			// HARVEST CROP
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 				{
+
 					if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 					{
 						CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
@@ -923,42 +925,58 @@ void SceneGame::Update(float dt)
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 				{
-					HitStone(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
-					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (timer >= 0.5f)
 					{
-						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+						timer = 0.f;
+						HitStone(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 						{
-						case true:
-							dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
-							dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
-							break;
-						case false:
-							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
-							dirtArray[mouseTileY][mouseTileX]->Reset();
-							break;
-						default:
-							break;
+							switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+							{
+							case true:
+								dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
+								dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
+								break;
+							case false:
+								dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+								dirtArray[mouseTileY][mouseTileX]->Reset();
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 				{
-					HitTree(mouseTileX, mouseTileY);
-					HitTimber(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitTree(mouseTileX, mouseTileY);
+						HitTimber(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
 				{
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
-						&& location == Location::Farm)
+					if (timer >= 0.5f)
 					{
-						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
-						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						timer = 0.f;
+						if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
+							&& location == Location::Farm)
+						{
+							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+							dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
@@ -1211,7 +1229,7 @@ void SceneGame::HitWeed(int x, int y)
 				}
 				(*it)->SetBang();
 				//(*it)->SetActive(false);
-				RemoveGo(*it);
+				RemoveGo(*it); 
 				it = weeds.erase(it);
 
 				player2->ClearWalls();
