@@ -146,6 +146,7 @@ void SaveLoadData::LoadCSV(DataLoad* sdata)
 	{
 		const std::string fileName3 = "tables/save_mapObj.csv";
 		rapidcsv::Document mapObj_doc(fileName3);
+		table.clear();
 
 		for (int i = 2; i < mapObj_doc.GetRowCount(); i++)
 		{

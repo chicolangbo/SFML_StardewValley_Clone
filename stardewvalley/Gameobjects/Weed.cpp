@@ -12,7 +12,6 @@ void Weed::Reset()
 	Objects::Reset();
 
 	SetPosition(position);
-
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Weed.csv"));
 	animation.SetTarget(&sprite);
 

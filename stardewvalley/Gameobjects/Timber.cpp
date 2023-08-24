@@ -5,7 +5,6 @@
 void Timber::Init()
 {
 	Objects::Init();
-
 }
 
 void Timber::Reset()
@@ -13,7 +12,6 @@ void Timber::Reset()
 	Objects::Reset();
 
 	SetPosition(position);
-
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Timber.csv"));
 	animation.SetTarget(&sprite);
 
