@@ -59,6 +59,7 @@ protected:
 	bool playingAnimation = false;
 	bool one = true;
 	bool boundwall = false;
+	bool load = false;
 
 	std::list<tagItemInfo> playerItemList;
 	std::list<RootingItem*>*rootingItemList;

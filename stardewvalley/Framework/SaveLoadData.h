@@ -2,6 +2,7 @@
 #include "Item.h"
 #include "Singleton.h"
 #include "SceneGame.h"
+#include "ObjectTable.h"
 
 class Stone;
 class Timber;
@@ -13,23 +14,6 @@ class SaveLoadData : public Singleton<SaveLoadData>
 	friend Singleton<SaveLoadData>;
 
 protected:
-	// PLAYER
-	std::list<tagItemInfo> playerItemList;
-	int totalEarningsInt;
-	int money;
-	int energy;
-
-	// SCENEGAME
-	int min;
-	int hour;
-	int day;
-
-	// MAP OBJECT
-	vector<Stone*> stones;
-	vector<Timber*> timbers;
-	vector<Weed*> weeds;
-	vector<Tree*> trees;
-	vector<vector<HoeDirt*>> dirtArray;
 	int cols = 38;
 	int rows = 41;
 
@@ -37,11 +21,11 @@ protected:
 	// crops : 성장상태, pos, GetAcitve 정보 저장?
 
 public:
+	unordered_map<int, ObjectInfo> table;
 	SaveLoadData() = default;
 	virtual ~SaveLoadData() override;
 
-	void SaveData(DataLoad* sdata);
-	void SaveCSV();
+	void SaveCSV(DataLoad* sdata);
 	void LoadCSV(DataLoad* ldata);
 };
 
