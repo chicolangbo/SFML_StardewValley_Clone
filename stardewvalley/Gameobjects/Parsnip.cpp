@@ -13,6 +13,7 @@ Parsnip::~Parsnip()
 void Parsnip::Init()
 {
 	Crop::Init();
+	id = CropId::Parsnip;
 }
 
 void Parsnip::Release()

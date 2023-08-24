@@ -13,6 +13,7 @@ Potato::~Potato()
 void Potato::Init()
 {
 	Crop::Init();
+	id = CropId::Potato;
 }
 
 void Potato::Release()

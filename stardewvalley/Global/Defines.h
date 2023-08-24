@@ -96,6 +96,7 @@ enum class CropId
 	Parsnip,
 	Potato,
 	Cauliflower,
+	None,
 };
 enum class Location
 {
