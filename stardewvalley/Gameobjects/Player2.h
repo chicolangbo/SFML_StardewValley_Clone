@@ -66,7 +66,8 @@ protected:
 
 	Inventory* inven;
 
-	
+	sf::Vector2i playerTileIndex;
+	sf::Vector2i mouseTileIndex;
 
 public:
 
@@ -105,7 +106,8 @@ public:
 	void SetItemId(ItemId id) { item = id; }
 	void ZeroEnergy() { energy = 0; }
 	sf::Vector2f GetDirection() { return direction; }
-
+	void SetDirection(sf::Vector2f f) { direction = f; }
 	ItemId GetPlayerItemId() { return item; } 
+	void SetMPIndex(sf::Vector2i p, sf::Vector2i m) { playerTileIndex = p; mouseTileIndex = m; }
 };
 

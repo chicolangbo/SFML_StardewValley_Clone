@@ -120,9 +120,11 @@ void Player2::Update(float dt)
 
 	if (!playerDie)
 	{
-		direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
-		direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-
+		if (!playingAnimation)
+		{
+			direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+			direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+		}
 		float magnitude = Utils::Magnitude(direction);
 		if (magnitude > 1.f)
 		{
@@ -239,28 +241,32 @@ void Player2::Update(float dt)
 			switch (item)
 			{
 			case ItemId::hook:
-				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				if (playerTileIndex.y < mouseTileIndex.y)
 				{
 					animation.Play("Attack");
 					scythe.SetFlipX(true);
 					scythe.PlayAnimation("ScytheFront");
 				}
-				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 				{
-					animation.Play("AttackSide");
-					if (filpX)
+					
+					if (playerTileIndex.x < mouseTileIndex.x)
 					{
 						scythe.SetFlipX(true);
 						scythe.PlayAnimation("ScytheSide");
+						SetScale(4.5f, 4.5f);
+						animation.Play("AttackSide");
 					}
-					else
+					if (playerTileIndex.x > mouseTileIndex.x)
 					{
 						scythe.SetFlipX(false);
 						scythe.PlayAnimation("ScytheSide");
+						SetScale(-4.5f, 4.5f); 
+						animation.Play("AttackSide");
 
 					}
 				}
-				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				else if (playerTileIndex.y > mouseTileIndex.y)
 				{
 					animation.Play("AttackUp");
 					scythe.SetFlipX(true);
@@ -268,31 +274,35 @@ void Player2::Update(float dt)
 				}
 				energy -= 2;
 				playingAnimation = true;
+				direction = { 0,0 };
 				break;
 
 			case ItemId::ax:
-				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				if (playerTileIndex.y < mouseTileIndex.y)
 				{
 					animation.Play("Tool");
 					axe.SetFlipX(true);
 					axe.PlayAnimation("AxeFront");
 				}
-				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 				{
-					animation.Play("ToolSide");
-					if (filpX)
+					
+					if (playerTileIndex.x < mouseTileIndex.x)
 					{
 						axe.SetFlipX(true);
 						axe.PlayAnimation("AxeSide");
+						SetScale(4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
-					else
+					if(playerTileIndex.x > mouseTileIndex.x)
 					{
 						axe.SetFlipX(false);
 						axe.PlayAnimation("AxeSide");
-
+						SetScale(-4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
 				}
-				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				else if (playerTileIndex.y > mouseTileIndex.y)
 				{
 					animation.Play("ToolUp");
 					axe.SetFlipX(true);
@@ -300,29 +310,34 @@ void Player2::Update(float dt)
 				}
 				energy -= 2;
 				playingAnimation = true;
+				direction = { 0,0 };
 				break;
 			case ItemId::pick:
-				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				if (playerTileIndex.y < mouseTileIndex.y)
 				{
 					animation.Play("Tool");
 					pickax.SetFlipX(true);
 					pickax.PlayAnimation("PickaxFront");
 				}
-				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 				{
-					animation.Play("ToolSide");
-					if (filpX)
+					
+					if (playerTileIndex.x < mouseTileIndex.x)
 					{
 						pickax.SetFlipX(true);
 						pickax.PlayAnimation("PickaxSide");
+						SetScale(4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
-					else
+					if(playerTileIndex.x > mouseTileIndex.x)
 					{
 						pickax.SetFlipX(false);
 						pickax.PlayAnimation("PickaxSide");
+						SetScale(-4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
 				}
-				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				else if (playerTileIndex.y > mouseTileIndex.y)
 				{
 					animation.Play("ToolUp");
 					pickax.SetFlipX(true);
@@ -330,30 +345,35 @@ void Player2::Update(float dt)
 				}
 				energy -= 2;
 				playingAnimation = true;
+				direction = { 0,0 };
 				break;
 
 			case ItemId::homi:
-				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				if (playerTileIndex.y < mouseTileIndex.y)
 				{
 					animation.Play("Tool");
 					hoe.SetFlipX(true);
 					hoe.PlayAnimation("HoeFront");
 				}
-				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 				{
-					animation.Play("ToolSide");
-					if (filpX)
+					
+					if (playerTileIndex.x < mouseTileIndex.x)
 					{
 						hoe.SetFlipX(true);
 						hoe.PlayAnimation("HoeSide");
+						SetScale(4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
-					else
+					if(playerTileIndex.x > mouseTileIndex.x)
 					{
 						hoe.SetFlipX(false);
 						hoe.PlayAnimation("HoeSide");
+						SetScale(-4.5f, 4.5f);
+						animation.Play("ToolSide");
 					}
 				}
-				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				else if (playerTileIndex.y > mouseTileIndex.y)
 				{
 					animation.Play("ToolUp");
 					hoe.SetFlipX(true);
@@ -361,32 +381,37 @@ void Player2::Update(float dt)
 				}
 				energy -= 2;
 				playingAnimation = true;
+				direction = { 0,0 };
 				break;
 
 			case ItemId::waterCan:
 				SetOrigin(Origins::BC);
-				if (animation.GetCurrentClipId() == "Idle" || animation.GetCurrentClipId() == "Move")
+				if (playerTileIndex.y < mouseTileIndex.y)
 				{
 					animation.Play("Water");
 					watering.SetFlipX(true);
 					watering.PlayAnimation("WateringFront");
 				}
-				else if (animation.GetCurrentClipId() == "IdleSide" || animation.GetCurrentClipId() == "MoveSide")
+				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 				{
-					animation.Play("WaterSide");
+					
 
-					if (filpX)
+					if (playerTileIndex.x < mouseTileIndex.x)
 					{
 						watering.SetFlipX(true);
 						watering.PlayAnimation("WateringSide");
+						SetScale(4.5f, 4.5f);
+						animation.Play("WaterSide");
 					}
-					else
+					if(playerTileIndex.x > mouseTileIndex.x)
 					{
 						watering.SetFlipX(false);
 						watering.PlayAnimation("WateringSide");
+						SetScale(-4.5f, 4.5f);
+						animation.Play("WaterSide");
 					}
 				}
-				else if (animation.GetCurrentClipId() == "IdleUp" || animation.GetCurrentClipId() == "MoveUp")
+				else if (playerTileIndex.y > mouseTileIndex.y)
 				{
 					animation.Play("WaterUp");
 					watering.SetFlipX(true);
@@ -394,6 +419,7 @@ void Player2::Update(float dt)
 				}
 				energy -= 2;
 				playingAnimation = true;
+				direction = { 0,0 };
 				break;
 			
 			case ItemId::none:

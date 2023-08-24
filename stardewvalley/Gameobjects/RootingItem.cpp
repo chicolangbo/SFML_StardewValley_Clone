@@ -29,7 +29,7 @@ void RootingItem::Reset()
 	
 	//directionX = Utils::RandomRange(-1, 1);
 	pongspeed = Utils::RandomRange(-1300, -700);
-	randX = Utils::RadomOneOrTwo(-1, 1);
+	randX = Utils::RandomRange(-1.f, 1.f);
 }
 
 void RootingItem::Update(float dt)
@@ -64,7 +64,7 @@ void RootingItem::Update(float dt)
 	}
 	else
 	{
-		//pos.x += speed * dt * randX; 
+		pos.x += speed * dt * randX; 
 		pos.y += speed * dt;
 
 		SetPosition(pos);
