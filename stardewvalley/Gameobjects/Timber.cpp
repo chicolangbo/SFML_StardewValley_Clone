@@ -5,11 +5,6 @@
 void Timber::Init()
 {
 	Objects::Init();
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Timber.csv"));
-	animation.SetTarget(&sprite);
-
-	SetOrigin(Origins::TL);
-
 
 }
 
@@ -18,6 +13,11 @@ void Timber::Reset()
 	Objects::Reset();
 
 	SetPosition(position);
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Timber.csv"));
+	animation.SetTarget(&sprite);
+
+	SetOrigin(Origins::TL);
 }
 
 void Timber::Update(float dt)

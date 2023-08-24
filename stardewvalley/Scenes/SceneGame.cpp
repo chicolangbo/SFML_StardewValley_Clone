@@ -919,6 +919,7 @@ void SceneGame::Update(float dt)
 						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 						{
 						case true:
+							dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
 							break;
 						case false:
 							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
@@ -941,7 +942,8 @@ void SceneGame::Update(float dt)
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
+						&& location == Location::Farm)
 					{
 						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
 						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);

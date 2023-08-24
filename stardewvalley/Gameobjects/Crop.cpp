@@ -23,11 +23,15 @@ void Crop::Init()
 	SpriteGo::textureId = "graphics/crops.png";
 
 	SetScale({ 4.5f, 4.5f });
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
+	animation.SetTarget(&sprite);
 }
 
 void Crop::Release()
 {
 	SpriteGo::Release();
+
 }
 
 void Crop::Reset()
@@ -40,6 +44,10 @@ void Crop::Reset()
 	currentday = 0;
 	index = { 0, 0 };
 	isWatered = false;
+	bang = false;
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
+	animation.SetTarget(&sprite);
 
 	SetOrigin(Origins::ML);
 }
@@ -61,6 +69,15 @@ void Crop::Update(float dt)
 			LevelUp();
 		}
 		isWatered = false;
+	}
+
+	if (bang)
+	{
+		//SetScale(1.5f, 1.5f);
+		//SetPosition(position);
+		//SetOrigin(Origins::BC);
+		animation.Play("Crop");
+		bang = false;
 	}
 }
 
