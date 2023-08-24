@@ -30,4 +30,8 @@ void Weed::Update(float dt)
 		bang = false;
 	}
 	animation.Update(dt);
+	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
+	{
+		endAnimation = true;
+	}
 }

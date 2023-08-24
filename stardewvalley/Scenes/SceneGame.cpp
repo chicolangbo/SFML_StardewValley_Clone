@@ -38,6 +38,7 @@
 #include "Crop.h"
 #include "Cauliflower.h"
 #include "Potato.h"
+#include "EffectGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -989,7 +990,7 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
-
+	
 	//SET NIGHT TEST CODE
 	{
 		
@@ -1075,7 +1076,16 @@ void SceneGame::HitStone(int x, int y)
 				{
 					SpawnRootingItem(ItemId::coal, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
 				}
-			
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Stone.csv", "Stone"));
+				effect->sortLayer = 10;
+				effect->SetPosition(tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y);
+				effect->Init();
+				effect->Reset();
+				effect->SetScale(4.5f, 4.5f);
+				effect->SetOrigin(Origins::TL);
+				effects.push_back(effect);
+
 				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
@@ -1121,6 +1131,13 @@ void SceneGame::HitTimber(int x, int y)
 				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::branch, { tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y });
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Timber.csv", "Timber"));
+				effect->sortLayer = 10; 
+				effect->SetPosition(tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y); 
+				effect->Init();
+				effect->Reset();
+				effects.push_back(effect);
 
 				
 				for (int i = 0; i < farmWalls.size(); ++i)
@@ -1190,9 +1207,8 @@ void SceneGame::HitTree(int x, int y)
 				for (int i = 0; i < 7; ++i)
 				{
 					SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
-
 				}
-			
+
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
 					player2->SetWallBounds(farmWalls[i]);
@@ -1214,11 +1230,11 @@ void SceneGame::HitWeed(int x, int y)
 	{
 		int weedX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
 		int weedY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
-
+		
 		if (weedX == x && weedY == y)
 		{
 			(*it)->Hit(1);
-	
+			
 			if ((*it)->GetHp() == 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -1227,14 +1243,20 @@ void SceneGame::HitWeed(int x, int y)
 				{
 					farmWalls.erase(wallIt);
 				}
-				(*it)->SetBang();
-				//(*it)->SetActive(false);
+				(*it)->SetBang(); 
 				RemoveGo(*it); 
 				it = weeds.erase(it);
 
 				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::fiver, { tileSize.x * weedX + mapLT.x, tileSize.y * weedY + mapLT.y });
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Weed.csv", "Weed")); 
+				effect->sortLayer = 10; 
+				effect->SetPosition(tileSize.x * weedX + mapLT.x, tileSize.y * weedY + mapLT.y); 
+				effect->Init(); 
+				effect->Reset(); 
+				effects.push_back(effect); 
 
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
@@ -1249,6 +1271,8 @@ void SceneGame::HitWeed(int x, int y)
 		}
 
 	}
+	
+
 }
 
 bool SceneGame::HasObjectAt(int x, int y)

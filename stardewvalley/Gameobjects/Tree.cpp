@@ -10,7 +10,7 @@ Tree::Tree(const std::string& name, const std::string& branchId, const std::stri
 {
 	stump = new Objects(stumpId, "stump", "stump");
 	this->branchId = branchId;
-	this->branchNick = branchNick; //¾ê ¸®ÅÏ
+	this->branchNick = branchNick; 
 }
 
 Tree::~Tree()

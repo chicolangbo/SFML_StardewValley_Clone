@@ -7,7 +7,7 @@ class Weed :public Objects
 protected:
 	AnimationController animation;
 	bool bang = false;
-
+	bool endAnimation = false;
 public:
 	Weed(const std::string& textureId = "", const std::string& n = "", const string& nickName = "")
 		: Objects(textureId, n, nickName) {}
@@ -18,5 +18,6 @@ public:
 	virtual void Update(float dt) override;
 
 	void SetBang() { bang = true; }
+	bool EndAnimation() { return endAnimation; } 
 };
 
