@@ -291,7 +291,6 @@ void SceneGame::Enter()
 
 	// FILE LOAD & NEW GAME
 	{
-		// 맵을 비워줘야 함
 		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
 		{
 			SAVELOAD_DATA.LoadCSV(&sData);
@@ -1137,7 +1136,6 @@ void SceneGame::HitTree(int x, int y)
 				auto wallIt = std::find(farmWalls.begin(), farmWalls.end(), wal);
 				if (wallIt != farmWalls.end())
 				{
-					RemoveGo(*it);
 					farmWalls.erase(wallIt);
 				}
 
@@ -1159,6 +1157,7 @@ void SceneGame::HitTree(int x, int y)
 
 				(*it)->SetActive(false);
 				player2->ClearWalls();
+				RemoveGo(*it);
 				it = trees.erase(it); 
 				for (int i = 0; i < 7; ++i)
 				{
