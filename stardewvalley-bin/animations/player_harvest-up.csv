@@ -1,0 +1,8 @@
+﻿ID,FPS,LOOPTYPE,,
+HarvestUp,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,1,572,20,30
+graphics/farmer_base.png,21,572,20,30
+graphics/farmer_base.png,44,572,20,30
+graphics/farmer_base.png,65,572,20,30

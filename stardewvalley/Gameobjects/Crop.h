@@ -1,5 +1,6 @@
 #pragma once
 #include "SpriteGo.h"
+#include "AnimationController.h"
 
 class HoeDirt;
 
@@ -15,6 +16,7 @@ protected:
 	int allPeriod = 0; //수확까지 성장 기간
 	bool isWatered; //물줬는지
 	bool canHarvest = false;
+	
 
 	CropId id;
 	int period[4];
@@ -25,7 +27,12 @@ protected:
 
 	sf::Vector2f tileSize;
 
+	AnimationController animation;
+	float time = 0;
+	float animationTime = 8 / 12;
+
 public:
+	bool bang;
 	Crop(const string& textureId = "", const string& n = "", const string& nickname = "");
 	virtual ~Crop() override;
 

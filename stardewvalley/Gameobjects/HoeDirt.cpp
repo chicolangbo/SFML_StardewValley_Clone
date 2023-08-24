@@ -118,7 +118,7 @@ void HoeDirt::PlatCrop(Crop* c)
 	plantedCrop = true;
 }
 
-void HoeDirt::HarvestCrop()
+void HoeDirt::RemoveCrop()
 {
 	crop = nullptr;
 	plantedCrop = false;

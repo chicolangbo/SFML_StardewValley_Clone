@@ -5,12 +5,6 @@
 void Stone::Init()
 {
 	Objects::Init();
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Stone.csv"));
-
-	animation.SetTarget(&sprite);
-	//sprite.setScale(0.5f, 0.5f);
-	SetOrigin(Origins::TL);
-
 }
 
 void Stone::Reset()
@@ -18,6 +12,12 @@ void Stone::Reset()
 	Objects::Reset();
 
 	SetPosition(position);
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Stone.csv"));
+
+	animation.SetTarget(&sprite);
+	//sprite.setScale(0.5f, 0.5f);
+	SetOrigin(Origins::TL);
 }
 
 void Stone::Update(float dt)

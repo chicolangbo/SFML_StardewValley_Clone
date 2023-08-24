@@ -76,10 +76,13 @@ void SceneGame::Init()
 		houseExterior->SetOrigin(Origins::BC);
 		houseExterior->collider.setScale(1.f, 0.3f);
 		houseExterior->sortLayer = 1;
+		houseExterior->sortOrder = housePos.y - 2;
 
 		shopExterior = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
 		shopExterior->sprite.setScale(4.f, 4.f);
 		shopExterior->SetOrigin(Origins::BC);
+		shopExterior->sortLayer = 1;
+		shopExterior->sortOrder = shopPos.y - 1;
 		shopExterior->collider.setScale(1.f, 0.3f);
 	}
 
@@ -87,7 +90,7 @@ void SceneGame::Init()
 	{
 		player2 = (Player2*)AddGo(new Player2());
 		player2->SetOrigin(Origins::BC);
-		player2->sortLayer = 2; 
+		player2->sortLayer = 1; 
 		player2->sortOrder = 100;
 		player2->collider.setScale(0.5f, 0.1f);
 		player2->SetRootingItems(&rootingItems);
@@ -233,6 +236,7 @@ void SceneGame::Init()
 		{
 			parsnip->sortLayer = 1;
 			parsnip->SetType(CropId::Parsnip);
+			parsnip->SetPool(&parsnipPool);
 		};
 		parsnipPool.Init();
 
@@ -240,6 +244,7 @@ void SceneGame::Init()
 		{
 			potato->sortLayer = 1;
 			potato->SetType(CropId::Potato);
+			potato->SetPool(&potatoPool);
 		};
 		potatoPool.Init();
 
@@ -247,6 +252,7 @@ void SceneGame::Init()
 		{
 			cauli->sortLayer = 1;
 			cauli->SetType(CropId::Cauliflower);
+			cauli->SetPool(&cauliflowerPool);
 		};
 		cauliflowerPool.Init();
 	}
@@ -533,6 +539,7 @@ void SceneGame::Update(float dt)
 	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 
 	player2->SetMPIndex({ playerTileX,playerTileY }, { mouseTileX,mouseTileY });
+	player2->sortOrder = playerTileY;
 	
 	// PLAYER EQUIP
 	{
@@ -919,6 +926,8 @@ void SceneGame::Update(float dt)
 						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 						{
 						case true:
+							dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
+							dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
 							break;
 						case false:
 							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
@@ -941,7 +950,8 @@ void SceneGame::Update(float dt)
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
+						&& location == Location::Farm)
 					{
 						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
 						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
@@ -1303,7 +1313,7 @@ void SceneGame::HarvestParsnip(int x, int y)
 	auto crop = (Parsnip*)dirtArray[y][x]->GetCrop();
 	if (crop->GetCanHarvest())
 	{
-		dirtArray[y][x]->HarvestCrop();
+		dirtArray[y][x]->RemoveCrop();
 
 		RemoveGo(crop);
 		parsnipPool.Return(crop);
@@ -1318,7 +1328,7 @@ void SceneGame::HarvestPotato(int x, int y)
 	auto crop = (Potato*)dirtArray[y][x]->GetCrop();
 	if (crop->GetCanHarvest())
 	{
-		dirtArray[y][x]->HarvestCrop();
+		dirtArray[y][x]->RemoveCrop();
 
 		RemoveGo(crop);
 		potatoPool.Return(crop);
@@ -1331,7 +1341,7 @@ void SceneGame::HarvestCauli(int x, int y)
 	auto crop = (Cauliflower*)dirtArray[y][x]->GetCrop();
 	if (crop->GetCanHarvest())
 	{
-		dirtArray[y][x]->HarvestCrop();
+		dirtArray[y][x]->RemoveCrop();
 
 		RemoveGo(crop);
 		cauliflowerPool.Return(crop);
@@ -1363,6 +1373,7 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			stone->SetHp(1);
 			stones.push_back(stone);
 			stone->sortLayer = 1;
+			stone->sortOrder = obj.second.indexY;
 			stoneCount++;
 		}
 		else if (obj.second.type == ObjType::Timber)
@@ -1372,6 +1383,7 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			timber->SetHp(1);
 			timbers.push_back(timber);
 			timber->sortLayer = 1;
+			timber->sortOrder = obj.second.indexY;
 			timberCount++;
 		}
 		else if (obj.second.type == ObjType::Weed)
@@ -1381,6 +1393,7 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			weed->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
 			weeds.push_back(weed);
 			weed->sortLayer = 1;
+			weed->sortOrder = obj.second.indexY;
 			weedCount++;
 		}
 		else if (obj.second.type == ObjType::Tree)
@@ -1413,6 +1426,7 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			tree->stump->SetHp(15);
 			trees.push_back(tree);
 			tree->sortLayer = 2;
+			tree->sortOrder = obj.second.indexY;
 			treeCount++;
 		}
 	}

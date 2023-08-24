@@ -23,11 +23,15 @@ void Crop::Init()
 	SpriteGo::textureId = "graphics/crops.png";
 
 	SetScale({ 4.5f, 4.5f });
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
+	animation.SetTarget(&sprite);
 }
 
 void Crop::Release()
 {
 	SpriteGo::Release();
+
 }
 
 void Crop::Reset()
@@ -40,6 +44,11 @@ void Crop::Reset()
 	currentday = 0;
 	index = { 0, 0 };
 	isWatered = false;
+	bang = false;
+	animationTime = 0.7;
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
+	animation.SetTarget(&sprite);
 
 	SetOrigin(Origins::ML);
 }
@@ -47,6 +56,8 @@ void Crop::Reset()
 void Crop::Update(float dt)
 {
 	SpriteGo::Update(dt);
+
+	animation.Update(dt);
 
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneGame* sceneGame = dynamic_cast<SceneGame*>(scene);
@@ -61,6 +72,19 @@ void Crop::Update(float dt)
 			LevelUp();
 		}
 		isWatered = false;
+	}
+
+	if (bang)
+	{
+		cout << "bang" << endl;
+		SetScale(1.125f, 1.125f);
+		sprite.setColor(sf::Color(52, 134, 46, 255));
+		animation.Play("Crop");
+		bang = false;
+	}
+	if (animation.GetCurrentClipId() == "Crop")
+	{
+		time += dt;
 	}
 }
 
