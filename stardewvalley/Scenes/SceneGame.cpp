@@ -284,17 +284,6 @@ void SceneGame::Enter()
 		uiView.setCenter(size * 0.5f);
 	}
 
-	// DIRT POSITION SETTING
-	{
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
-			}
-		}
-	}
-
 	stoneCount = 0;
 	timberCount = 0;
 	weedCount = 0;
@@ -337,6 +326,9 @@ void SceneGame::Enter()
 		}
 		else
 		{
+			min = 0;
+			hour = 6;
+			day = 1;
 			Objtable = (ObjectTable*)(new ObjectTable());
 			Objtable->Load();
 			ObjectLoad(Objtable->GetTable());
@@ -363,6 +355,17 @@ void SceneGame::Enter()
 		for (int i = 0; i < trees.size(); i++)
 		{
 			trees[i]->stump->SetMapLT(mapLT);
+		}
+	}
+
+	// DIRT POSITION SETTING
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->SetPosition(mapLT.x + tileSize.x * j, mapLT.y + tileSize.y * i);
+			}
 		}
 	}
 	
@@ -460,8 +463,6 @@ void SceneGame::Enter()
 			player2->SetWallBounds(houseWalls[i]);
 		}
 	}
-
-	// FARM TEST SETTING
 	
 	// INIT SETTING
 	{
