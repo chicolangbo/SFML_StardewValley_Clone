@@ -1,0 +1,8 @@
+﻿ID,FPS,LOOPTYPE,,
+Harvest,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,2,499,16,31
+graphics/farmer_base.png,18,499,16,31
+graphics/farmer_base.png,34,499,16,31
+graphics/farmer_base.png,50,499,16,31

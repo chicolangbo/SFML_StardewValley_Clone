@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Parsnip.h"
+#include "SceneMgr.h"
+#include "Scene.h"
 
 Parsnip::Parsnip(const string& textureId, const string& n, const string& nickname)
 	:Crop(textureId, n, nickname)
@@ -29,4 +31,11 @@ void Parsnip::Reset()
 void Parsnip::Update(float dt)
 {
 	Crop::Update(dt);
+
+	if (animationTime <= time)
+	{
+		time = 0;
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
+		pool->Return(this);
+	}
 }

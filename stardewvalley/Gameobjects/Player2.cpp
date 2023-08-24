@@ -41,10 +41,17 @@ void Player2::Init()
 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Die.csv"));
 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem-up.csv"));
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-up.csv"));
+
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
 	SetOrigin(Origins::BC);
-
 
 	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({-1.f, -1.f})});
 	clipInfos.push_back({ "IdleUp", "MoveUp", true, {0.f, -1.f} });

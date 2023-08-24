@@ -28,6 +28,8 @@ protected:
 	sf::Vector2f tileSize;
 
 	AnimationController animation;
+	float time = 0;
+	float animationTime = 8 / 12;
 
 public:
 	bool bang;

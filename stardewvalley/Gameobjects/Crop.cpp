@@ -45,6 +45,7 @@ void Crop::Reset()
 	index = { 0, 0 };
 	isWatered = false;
 	bang = false;
+	animationTime = 0.7;
 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
 	animation.SetTarget(&sprite);
@@ -55,6 +56,8 @@ void Crop::Reset()
 void Crop::Update(float dt)
 {
 	SpriteGo::Update(dt);
+
+	animation.Update(dt);
 
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneGame* sceneGame = dynamic_cast<SceneGame*>(scene);
@@ -73,11 +76,15 @@ void Crop::Update(float dt)
 
 	if (bang)
 	{
-		//SetScale(1.5f, 1.5f);
-		//SetPosition(position);
-		//SetOrigin(Origins::BC);
+		cout << "bang" << endl;
+		SetScale(1.125f, 1.125f);
+		sprite.setColor(sf::Color(52, 134, 46, 255));
 		animation.Play("Crop");
 		bang = false;
+	}
+	if (animation.GetCurrentClipId() == "Crop")
+	{
+		time += dt;
 	}
 }
 
