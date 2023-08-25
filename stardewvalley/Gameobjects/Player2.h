@@ -8,10 +8,11 @@
 #include "Scythe.h"
 #include "Wateringcan.h"
 #include "Item.h"
-
+#include "Slot.h"
 
 class RootingItem;
 class Inventory;
+class SpriteGo; 
 
 class Player2 : public SpriteGo
 {
@@ -24,6 +25,21 @@ public:
 		sf::Vector2f point;
 	};
 
+	struct HandOnItem
+	{
+		std::string idleItem;
+		std::string moveItem;
+		bool flipX = false;
+		sf::Vector2f point;
+	};
+
+	struct ItemIcoinInfo
+	{
+		string textureId;
+		string name;
+		string nickName;
+	};
+
 protected:
 	AnimationController animation;
 	Axe axe;
@@ -32,14 +48,21 @@ protected:
 	Scythe scythe;
 	Wateringcan watering;
 
+	SpriteGo* handitem = nullptr;
+	std::unordered_map<ItemId, ItemIcoinInfo> itemIconList;
+
 	sf::Vector2f direction;
 	float speed = 500.f;
 
 	bool filpX = false;
+	bool notherItem = true;
 	//bool isGround = true;
 
 	std::vector<ClipInfo> clipInfos;
 	ClipInfo currentClipInfo;
+
+	std::vector<HandOnItem> clipInfosItem;
+	HandOnItem currentClipInfoItem;
 
 	ItemId item;
 
@@ -108,5 +131,6 @@ public:
 	void SetDirection(sf::Vector2f f) { direction = f; }
 	ItemId GetPlayerItemId() { return item; } 
 	void SetMPIndex(sf::Vector2i p, sf::Vector2i m) { playerTileIndex = p; mouseTileIndex = m; }
+	void ItemIconSetUp();
 };
 

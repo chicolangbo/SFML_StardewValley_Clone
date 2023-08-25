@@ -39,6 +39,7 @@
 #include "Cauliflower.h"
 #include "Potato.h"
 #include "EffectGo.h"
+#include "Slot.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -253,6 +254,8 @@ void SceneGame::Init()
 		};
 		cauliflowerPool.Init();
 	}
+
+
 
 	for (auto go : gameObjects)
 	{
@@ -1035,6 +1038,8 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 
 
 }
+
+
 
 void SceneGame::SetAct(bool is)
 {
