@@ -152,9 +152,16 @@ protected:
 	//test
 	//RectangleGo* testbox;
 	//RectangleGo* night; 
-	
-	
-	
+
+	//FADE
+	RectangleGo* fadeRectangle;
+	float fadeAlpha = 0;
+	float fadeSpeed = 200.0f;
+	bool fadingIn = false;
+	bool fadingOut = false;
+	bool changeLocation = true;
+	Location nextlocation = Location::Farm;
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
@@ -198,6 +205,9 @@ public:
 	void ClearMapObj(vector<T>& obj);
 
 	void ObjectLoad(unordered_map<int, ObjectInfo> table);
+
+	void FadeIn(float dt);
+	void FadeOut(float dt);
 };
 
 template<typename T>
