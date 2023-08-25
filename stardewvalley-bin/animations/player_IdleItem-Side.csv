@@ -1,0 +1,5 @@
+﻿ID,FPS,LOOPTYPE,,
+IdleItemSide,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/farmer_base.png,1,435,17,31

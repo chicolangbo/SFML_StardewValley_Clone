@@ -30,6 +30,7 @@ class Parsnip;
 class Potato;
 class Cauliflower;
 class EffectGo;
+class Slot;
 
 struct DataLoad
 {
@@ -145,6 +146,7 @@ protected:
 	// INVEN & ITEMS
 	Inventory* inven;
 	std::list<RootingItem*>rootingItems;
+	std::list<RootingItem*>handsUpItems;
 	QuickInventory* quickinven;
 	bool off = false;
 	bool once = false;
@@ -152,7 +154,6 @@ protected:
 	//test
 	//RectangleGo* testbox;
 	//RectangleGo* night; 
-	
 	
 	
 public:
@@ -168,7 +169,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SpawnRootingItem(ItemId id, sf::Vector2f pos);
+	void SpawnRootingItem(ItemId id, sf::Vector2f pos); 
 	void SetAct(bool is);
 
 	void HitStone(int x, int y);

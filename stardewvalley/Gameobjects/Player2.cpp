@@ -18,7 +18,7 @@
 void Player2::Init()
 {
 	SpriteGo::Init();
-
+	
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-up.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Idle-side.csv"));
@@ -27,27 +27,32 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move-up.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Move.csv"));
 
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-side.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-up.csv"));
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-side.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-up.csv"));
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-up.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-side.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water.csv"));
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Die.csv"));
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem.csv"));//아이템 들고 이동
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem-side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_MoveItem-up.csv"));
 
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-side.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-up.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_IdleItem.csv"));//아이템 들고 서있음
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_IdleItem-Side.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_IdleItem-Up.csv"));
+	
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-side.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-up.csv")); 
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-side.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Attack-up.csv")); 
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-up.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water-side.csv")); 
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Water.csv"));
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest.csv"));//작물 뽑을때 Hatvest
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-side.csv")); //HarvestSide
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_harvest-up.csv"));  //HarvestUp
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Die.csv"));
 
 	animation.SetTarget(&sprite);
 	sprite.setScale(4.5f, 4.5f);
@@ -64,16 +69,25 @@ void Player2::Init()
 	clipInfos.push_back({ "Idle", "Move", true,{0.f, 1.f} });
 	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, 1.f }) });
 
-	//axe = (Axe*)SCENE_MGR.GetCurrScene()->AddGo(new Axe());
+	
+
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", false, Utils::Normalize({-1.f, -1.f}) });
+	clipInfosItem.push_back({ "IdleItemUp", "MoveItemUp", true, {0.f, -1.f} });
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", true, Utils::Normalize({ 1.f, -1.f }) });
+
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", false, {-1.f, 0.f} });
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", true, {1.f, 0.f} });
+
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", false, Utils::Normalize({ -1.f, 1.f }) });
+	clipInfosItem.push_back({ "IdleItem", "MoveItem", true,{0.f, 1.f} });
+	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", true, Utils::Normalize({ 1.f, 1.f }) });
+
 	axe.Init();
 	pickax.Init();
 	hoe.Init();
 	scythe.Init();
 	watering.Init(); 
-
-	/*hitBox.setSize({ 20.f,20.f });
-	hitBox.setFillColor(sf::Color::Green);*/
-
+	ItemIconSetUp();
 }
 
 void Player2::Reset()
@@ -89,7 +103,8 @@ void Player2::Reset()
 	scythe.Reset();
 	watering.Reset();
 
-	currentClipInfo = clipInfos[6];
+	currentClipInfo = clipInfos[6];  
+	currentClipInfoItem = clipInfosItem[6]; 
 
 	playerDie = false;
 	one = true;
@@ -113,8 +128,11 @@ void Player2::Reset()
 	}
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
-	collider.setScale({ 0.2f, 0.3f });
+	collider.setScale({ 0.5f, 0.15f });
 	SetOrigin(origin);
+
+	handitem = nullptr;
+	
 }
 
 void Player2::Update(float dt)
@@ -123,8 +141,29 @@ void Player2::Update(float dt)
 
 	//hitBox.setPosition(GetPosition());
 	
+
 	sf::Vector2f playerPos = GetPosition();
 
+	if (item != ItemId::pick && item != ItemId::ax && item != ItemId::homi && item != ItemId::waterCan && item != ItemId::hook && item != ItemId::none)
+	{
+		auto it = itemIconList.find(item);
+		if (it != itemIconList.end())
+		{
+			handitem = new SpriteGo(it->second.textureId, it->second.name, it->second.nickName);
+			handitem->Reset();
+			handitem->SetScale({ 4.5f,4.5f });
+			handitem->SetOrigin(Origins::MC);
+			handitem->SetPosition(playerPos.x, playerPos.y - 130.f);
+		}
+	}
+	else
+	{
+		delete handitem;
+		handitem = nullptr; 
+	}
+
+
+	std::cout << (int)item << std::endl;
 	if (!playerDie)
 	{
 		if (!playingAnimation)
@@ -150,7 +189,7 @@ void Player2::Update(float dt)
 				{
 					if (INPUT_MGR.GetKey(sf::Keyboard::A))
 					{
-						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 					}
 					else
 					{
@@ -217,27 +256,59 @@ void Player2::Update(float dt)
 		watering.SetPosition(position);
 		watering.SetOrigins();
 
+
 		if ((direction.x != 0.f || direction.y != 0.f))
 		{
-			auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
-				[this](const ClipInfo& lhs, const ClipInfo& rhs) {
-					return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-				});
-			currentClipInfo = *min;
-		}
-		std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
-		if (GetFlipX() != currentClipInfo.flipX)
-		{
-			SetFlipX(currentClipInfo.flipX);
-		}
-		if (!playingAnimation)
-		{
-			if (animation.GetCurrentClipId() != clipId)
+			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
 			{
-				animation.Play(clipId);
+				auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
+					[this](const ClipInfo& lhs, const ClipInfo& rhs) {
+						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+					});
+				currentClipInfo = *min;
+			}
+			else
+			{
+				auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
+					[this](const HandOnItem& lhs, const HandOnItem& rhs) {
+						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+					});
+				currentClipInfoItem = *mins;
 			}
 		}
-
+		//아이템 들고있는것에따라 모션
+		{
+			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+			{
+				std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
+				if (GetFlipX() != currentClipInfo.flipX)
+				{
+					SetFlipX(currentClipInfo.flipX);
+				}
+				if (!playingAnimation)
+				{
+					if (animation.GetCurrentClipId() != clipId) 
+					{
+						animation.Play(clipId); 
+					}
+				}
+			}
+			else
+			{
+				std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
+				if (GetFlipX() != currentClipInfoItem.flipX)
+				{
+					SetFlipX(currentClipInfoItem.flipX);
+				}
+				if (!playingAnimation)
+				{
+					if (animation.GetCurrentClipId() != clipId)
+					{
+						animation.Play(clipId);
+					}
+				}
+			}
+		}
 		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
 		{
 			energy = 0;
@@ -252,34 +323,65 @@ void Player2::Update(float dt)
 				case ItemId::hook:
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
-						animation.Play("Attack");
-						scythe.SetFlipX(true);
-						scythe.PlayAnimation("ScytheFront");
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("Attack");
+							scythe.SetFlipX(true);
+							scythe.PlayAnimation("ScytheFront");
+						}
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
 
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
-							scythe.SetFlipX(true);
-							scythe.PlayAnimation("ScytheSide");
-							SetScale(4.5f, 4.5f);
-							animation.Play("AttackSide");
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide"); 
+							}
+							else
+							{
+								scythe.SetFlipX(true);
+								scythe.PlayAnimation("ScytheSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("AttackSide");
+							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
 						{
-							scythe.SetFlipX(false);
-							scythe.PlayAnimation("ScytheSide");
-							SetScale(-4.5f, 4.5f);
-							animation.Play("AttackSide");
-
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f); 
+								animation.Play("HarvestSide");
+							}
+							else
+							{
+								scythe.SetFlipX(false);
+								scythe.PlayAnimation("ScytheSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("AttackSide");
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
-						animation.Play("AttackUp");
-						scythe.SetFlipX(true);
-						scythe.PlayAnimation("ScytheBack");
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+						}
+						else 
+						{
+							animation.Play("AttackUp");
+							scythe.SetFlipX(true);
+							scythe.PlayAnimation("ScytheBack");
+						}
+						
 					}
 					energy -= 2;
 					playingAnimation = true;
@@ -289,33 +391,67 @@ void Player2::Update(float dt)
 				case ItemId::ax:
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
-						animation.Play("Tool");
-						axe.SetFlipX(true);
-						axe.PlayAnimation("AxeFront");
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("Tool");
+							axe.SetFlipX(true);
+							axe.PlayAnimation("AxeFront");
+						}
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
 
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
-							axe.SetFlipX(true);
-							axe.PlayAnimation("AxeSide");
-							SetScale(4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								axe.SetFlipX(true);
+								axe.PlayAnimation("AxeSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
 						{
-							axe.SetFlipX(false);
-							axe.PlayAnimation("AxeSide");
-							SetScale(-4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								axe.SetFlipX(false);
+								axe.PlayAnimation("AxeSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
-						animation.Play("ToolUp");
-						axe.SetFlipX(true);
-						axe.PlayAnimation("AxeBack");
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("ToolUp");
+							axe.SetFlipX(true);
+							axe.PlayAnimation("AxeBack");
+						}
 					}
 					energy -= 2;
 					playingAnimation = true;
@@ -324,33 +460,68 @@ void Player2::Update(float dt)
 				case ItemId::pick:
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
-						animation.Play("Tool");
-						pickax.SetFlipX(true);
-						pickax.PlayAnimation("PickaxFront");
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("Tool");
+							pickax.SetFlipX(true);
+							pickax.PlayAnimation("PickaxFront");
+						}
+						
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
 
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
-							pickax.SetFlipX(true);
-							pickax.PlayAnimation("PickaxSide");
-							SetScale(4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								pickax.SetFlipX(true);
+								pickax.PlayAnimation("PickaxSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
 						{
-							pickax.SetFlipX(false);
-							pickax.PlayAnimation("PickaxSide");
-							SetScale(-4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								pickax.SetFlipX(false);
+								pickax.PlayAnimation("PickaxSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
-						animation.Play("ToolUp");
-						pickax.SetFlipX(true);
-						pickax.PlayAnimation("PickaxBack");
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("ToolUp");
+							pickax.SetFlipX(true);
+							pickax.PlayAnimation("PickaxBack");
+						}
 					}
 					energy -= 2;
 					playingAnimation = true;
@@ -360,33 +531,67 @@ void Player2::Update(float dt)
 				case ItemId::homi:
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
-						animation.Play("Tool");
-						hoe.SetFlipX(true);
-						hoe.PlayAnimation("HoeFront");
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("Tool");
+							hoe.SetFlipX(true);
+							hoe.PlayAnimation("HoeFront");
+						}
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
 
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
-							hoe.SetFlipX(true);
-							hoe.PlayAnimation("HoeSide");
-							SetScale(4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								hoe.SetFlipX(true);
+								hoe.PlayAnimation("HoeSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
 						{
-							hoe.SetFlipX(false);
-							hoe.PlayAnimation("HoeSide");
-							SetScale(-4.5f, 4.5f);
-							animation.Play("ToolSide");
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+							else
+							{
+								hoe.SetFlipX(false);
+								hoe.PlayAnimation("HoeSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("ToolSide");
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
-						animation.Play("ToolUp");
-						hoe.SetFlipX(true);
-						hoe.PlayAnimation("HoeBack");
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("ToolUp");
+							hoe.SetFlipX(true);
+							hoe.PlayAnimation("HoeBack");
+						}
 					}
 					energy -= 2;
 					playingAnimation = true;
@@ -397,47 +602,94 @@ void Player2::Update(float dt)
 					SetOrigin(Origins::BC);
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
-						animation.Play("Water");
-						watering.SetFlipX(true);
-						watering.PlayAnimation("WateringFront");
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-
-
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
-							watering.SetFlipX(true);
-							watering.PlayAnimation("WateringSide");
-							SetScale(4.5f, 4.5f);
-							animation.Play("WaterSide");
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
 						{
-							watering.SetFlipX(false);
-							watering.PlayAnimation("WateringSide");
-							SetScale(-4.5f, 4.5f);
-							animation.Play("WaterSide");
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
-						animation.Play("WaterUp");
-						watering.SetFlipX(true);
-						watering.PlayAnimation("WateringBack");
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
 					}
 					energy -= 2;
 					playingAnimation = true;
 					direction = { 0,0 };
 					break;
 
-				case ItemId::none:
+				default:
 					SetOrigin(Origins::BC);
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+					}
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+					{
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							if (harvest)
+							{
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							if (harvest)
+							{
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
+								harvest = false;
+							}
+						}
+					}
+					else if (playerTileIndex.y > mouseTileIndex.y)
+					{
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
+					}
+					playingAnimation = true;
+					direction = { 0,0 };
 					break;
 				}
 			}
 		}
 	}
+
+
     else if (playerDie&&one)
 	{
 		animation.Play("Die");
@@ -452,6 +704,7 @@ void Player2::Update(float dt)
 	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
 	{
 		playingAnimation = false;
+		//harvest = false;
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
 	{
@@ -504,6 +757,11 @@ void Player2::Draw(sf::RenderWindow& window)
 	window.draw(hoe.sprite);
 	window.draw(scythe.sprite);
 	window.draw(watering.sprite);
+	if (handitem!=nullptr && !playingAnimation) 
+	{
+		window.draw(handitem->sprite);
+	}
+	//handitem->Draw(window);
 }
 
 bool Player2::GetFlipX() const
@@ -642,4 +900,25 @@ void Player2::MoneyUpdate()
 		}
 	}
 	tempMoney = 0;
+}
+
+void Player2::ItemIconSetUp()
+{
+	AllItemTable* allItem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem);
+	std::unordered_map<ItemId, ItemInfo>& item = allItem->table;
+	for (auto& i : item)
+	{
+		//SpriteGo temp(i.second.resource, i.second.name_e, i.second.nickName);
+		itemIconList.insert({ i.first,
+			{ i.second.resource, i.second.name_e, i.second.nickName},
+			}); 
+	}
+
+	/*for (auto& it : itemIconList)
+	{
+		it.second.Reset(); 
+		it.second.colliderOnOff = false;
+		it.second.SetOrigin(Origins::MC);
+		it.second.SetScale(4.5f, 4.5f);
+	}*/
 }

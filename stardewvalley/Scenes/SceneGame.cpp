@@ -39,6 +39,7 @@
 #include "Potato.h"
 #include "EffectGo.h"
 #include "SaveLoadData.h"
+#include "Slot.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -93,7 +94,7 @@ void SceneGame::Init()
 		player2->SetOrigin(Origins::BC);
 		player2->sortLayer = 1; 
 		player2->sortOrder = 100;
-		player2->collider.setScale(0.5f, 0.1f);
+		player2->collider.setScale(1.f, 1.f);
 		player2->SetRootingItems(&rootingItems);
 	}
 
@@ -254,6 +255,8 @@ void SceneGame::Init()
 		cauliflowerPool.Init();
 	}
 
+
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -303,7 +306,7 @@ void SceneGame::Enter()
 			day = sData.game_day;
 			ObjectLoad(SAVELOAD_DATA.table);
 			activeDirtIndex = sData.activeDirtIndex;
-			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip);
+			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip); 
 			CropLoad(potatoPool, SAVELOAD_DATA.potato);
 			CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
 
@@ -518,9 +521,47 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
 
+	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
+
+	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x); 
+	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y); 
+
+	// PLAYER TILE
+	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x); 
+	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y); 
+
+	if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+	{
+		// HARVEST CROP
+		{
+			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+			{
+
+				if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+				{
+					CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
+					switch (id)
+					{
+					case CropId::Parsnip:
+						HarvestParsnip(mouseTileX, mouseTileY);
+						break;
+					case CropId::Potato:
+						HarvestPotato(mouseTileX, mouseTileY);
+						break;
+					case CropId::Cauliflower:
+						HarvestCauli(mouseTileX, mouseTileY);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+	}
 	Scene::Update(dt);
+	
 
 	// TREE TRANSPARENT
 	{
@@ -542,16 +583,16 @@ void SceneGame::Update(float dt)
 	}
 
 	// MOUSE POS
-	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
-	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
+	/*sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
+	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);*/
 
 	// MOUSE TILE
-	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
-	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
+	//int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
+	//int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
 
-	// PLAYER TILE
-	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
-	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
+	//// PLAYER TILE
+	//int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+	//int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 
 	player2->SetMPIndex({ playerTileX,playerTileY }, { mouseTileX,mouseTileY });
 	player2->sortOrder = playerTileY;
@@ -935,7 +976,7 @@ void SceneGame::Update(float dt)
 		{
 			// HARVEST CROP
 			{
-				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+				/*if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 				{
 
 					if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
@@ -956,7 +997,7 @@ void SceneGame::Update(float dt)
 							break;
 						}
 					}
-				}
+				}*/
 			}
 			if (!(abs(mouseTileX - playerTileX) == 0 && abs(mouseTileY - playerTileY) == 0))
 			{
@@ -1041,6 +1082,8 @@ void SceneGame::Update(float dt)
 		//night->SetOrigin(Origins::MC);
 		//night->SetPosition(player2->GetPosition());
 	}
+
+		
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 
@@ -1064,6 +1107,8 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 
 
 }
+
+
 
 void SceneGame::SetAct(bool is)
 {
@@ -1398,6 +1443,7 @@ void SceneGame::PlantCauli(int x, int y)
 
 void SceneGame::HarvestParsnip(int x, int y)
 {
+	
 	auto crop = (Parsnip*)dirtArray[y][x]->GetCrop();
 	if (crop->GetCanHarvest())
 	{
@@ -1405,8 +1451,9 @@ void SceneGame::HarvestParsnip(int x, int y)
 
 		RemoveGo(crop);
 		parsnipPool.Return(crop);
-
+		player2->Harvest();
 		player2->AddPlayerItem(ItemId::parsnip);
+		
 	}
 	
 }
@@ -1420,6 +1467,7 @@ void SceneGame::HarvestPotato(int x, int y)
 
 		RemoveGo(crop);
 		potatoPool.Return(crop);
+		player2->Harvest();
 		player2->AddPlayerItem(ItemId::potato);
 	}
 }
@@ -1433,7 +1481,7 @@ void SceneGame::HarvestCauli(int x, int y)
 
 		RemoveGo(crop);
 		cauliflowerPool.Return(crop);
-
+		player2->Harvest();
 		player2->AddPlayerItem(ItemId::coli);
 	}
 }
