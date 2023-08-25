@@ -17,13 +17,11 @@ public:
 	virtual void Release() override;
 	virtual void Reset() override;
 
-	// �����, 230813, �߰�
 	virtual void SetPosition(const sf::Vector2f& p);
 	virtual void SetPosition(float x, float y);
 
 	virtual void SetOrigin(Origins origin);
 	virtual void SetOrigin(float x, float y);
-	//
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
@@ -34,6 +32,5 @@ public:
 	function<void()> OnClickWorld;
 	function<void()> OnEnterWorld;
 	function<void()> OnExitWorld;
-
 };
 

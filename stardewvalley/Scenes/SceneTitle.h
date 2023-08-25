@@ -18,6 +18,7 @@ protected:
 	UiButton* start;  
 	UiButton* exit;
 	UiButton* load;
+	UiButton* editor;
 
 	Bird* bird1;
 	Bird* bird2;
@@ -43,5 +44,6 @@ public:
 	void ShowStartButton();
 	void ShowExitButton();
 	void ShowLoadButton();
+	void ShowEditorButton();
 };
 
