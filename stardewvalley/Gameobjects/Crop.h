@@ -2,6 +2,19 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 
+struct SaveData
+{
+	CropId id;
+	int date;
+	int day;
+	int currentday;
+	int level;
+	sf::Vector2i index;
+	bool isWatered;
+	int sortLayer;
+	int sortOrder;
+};
+
 class HoeDirt;
 
 class Crop :public SpriteGo
@@ -16,7 +29,8 @@ protected:
 	int allPeriod = 0; //수확까지 성장 기간
 	bool isWatered; //물줬는지
 	bool canHarvest = false;
-	
+
+	SaveData cropSaveData;
 
 	CropId id;
 	int period[4];
@@ -51,12 +65,13 @@ public:
 
 	void LevelUp();
 	bool GetCanHarvest() { return canHarvest; }
-	sf::Vector2i GetIndex() { return index; }
 	CropId GetCropId() { return id; }
+
 
 	//TEST CODE
 	void FullLevUp();
 	
-	
+	sf::Vector2i GetIndex() { return index; }
+	SaveData GetLoadData();
 };
 

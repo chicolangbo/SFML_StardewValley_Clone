@@ -42,7 +42,10 @@ struct DataLoad
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
 	vector<Tree*> trees;
-	vector<vector<HoeDirt*>> dirtArray;
+	std::vector<std::pair<int, int>> activeDirtIndex;
+	std::list<Parsnip*> parsnipPool;
+	std::list<Potato*> potatoPool;
+	std::list<Cauliflower*> cauliflowerPool;
 };
 
 class SceneGame : public Scene
@@ -75,7 +78,7 @@ protected:
 	string branchId;
 
 	// HOE DIRT
-	vector<HoeDirt*> tempDirt;
+	std::vector<std::pair<int,int>> activeDirtIndex;
 	HoeDirt* dirt;
 	vector<vector<HoeDirt*>> dirtArray;
 	SpriteGo* selectTile; //red or green box
@@ -186,6 +189,9 @@ public:
 	template <typename T>
 	void ClearObjectPool(ObjectPool<T>& pool);
 
+	template <typename T>
+	void ClearMapObj(vector<T>& obj);
+
 	void ObjectLoad(unordered_map<int, ObjectInfo> table);
 };
 
@@ -197,4 +203,14 @@ inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
 		RemoveGo(obj);
 	}
 	pool.Clear();
+}
+
+template<typename T>
+inline void SceneGame::ClearMapObj(vector<T>& obj)
+{
+	for (auto i : obj)
+	{
+		RemoveGo(i);
+	}
+	obj.clear();
 }
