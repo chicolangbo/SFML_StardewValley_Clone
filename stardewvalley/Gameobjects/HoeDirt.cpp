@@ -17,7 +17,7 @@ HoeDirt::~HoeDirt()
 
 void HoeDirt::Init()
 {
-	
+	load = false;
 }
 
 void HoeDirt::Release()
@@ -43,10 +43,13 @@ void HoeDirt::Reset()
 
 	SetOrigin(origin);
 
-	day = 0;
-	currentDay = 0;
-	plantedCrop = false;
-	isWatered = false; 
+	if (!load)
+	{
+		day = 0;
+		currentDay = 0;
+		plantedCrop = false;
+		isWatered = false;
+	}
 }
 
 void HoeDirt::Update(float dt)

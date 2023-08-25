@@ -40,12 +40,16 @@ void Crop::Reset()
 
 	if (!load)
 	{
-		date = 0; //심은 날짜 
-		day = 0; //심은 이후의 날짜
+		date = 0;
+		day = 0;
 		level = 0;
 		currentday = 0;
 		index = { 0, 0 };
 		//isWatered = false;
+	}
+	else
+	{
+		sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level - 1]));
 	}
 	bang = false;
 	animationTime = 0.7;
@@ -68,7 +72,7 @@ void Crop::Update(float dt)
 	if (tempcurrentday != currentday)
 	{
 		currentday = tempcurrentday;
-		if (isWatered && level<4)
+		if (isWatered && level<=4)
 		{
 			day++;
 			LevelUp();

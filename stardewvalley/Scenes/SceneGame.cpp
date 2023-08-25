@@ -314,6 +314,13 @@ void SceneGame::Enter()
 			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip); 
 			CropLoad(potatoPool, SAVELOAD_DATA.potato);
 			CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
+			for (int i = 0; i < row; i++)
+			{
+				for (int j = 0; j < col; j++)
+				{
+					dirtArray[i][j]->load = true;
+				}
+			}
 
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
@@ -337,6 +344,13 @@ void SceneGame::Enter()
 			for (auto i : cauliflowerPool.GetPool())
 			{
 				i->load = false;
+			}
+			for (int i = 0; i < row; i++)
+			{
+				for (int j = 0; j < col; j++)
+				{
+					dirtArray[i][j]->load = false;
+				}
 			}
 			activeDirtIndex.clear();
 		}
@@ -1659,7 +1673,6 @@ void SceneGame::HarvestParsnip(int x, int y)
 		player2->AddPlayerItem(ItemId::parsnip);
 		
 	}
-	
 }
 
 void SceneGame::HarvestPotato(int x, int y)
