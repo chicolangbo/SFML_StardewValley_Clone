@@ -51,9 +51,6 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 	// VIEW
 	sf::Vector2f centerPos = size * 0.5f;
-
-	
-
 	// PLAYER
 	{
 		player2 = (Player2*)AddGo(new Player2());
@@ -231,6 +228,7 @@ void SceneGame::Enter()
 		testFarmMap->sortOrder = 0;
 		col = testFarmMap->GetSize().x;
 		row = testFarmMap->GetSize().y;
+		
 
 		//울타리나 절벽
 		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
@@ -324,6 +322,7 @@ void SceneGame::Enter()
 	// OBJECT SET MAP LT & SET SORT ORDER
 	{
 		tileSize = testFarmMap->GetTileSize();
+		mapSize = testFarmMap->GetTileMapSize();
 		mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
 
 		for (int i = 0; i < stones.size(); i++)
@@ -646,19 +645,22 @@ void SceneGame::Update(float dt)
 			//PLANT CROP
 			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
 			{
-				switch (itemId)
+				if (player2->GetItemCount() > 0)
 				{
-				case ItemId::parsnipSeed:
-					PlantParsnip(mouseTileX, mouseTileY);
-					break;
-				case ItemId::potatoSeed:
-					PlantPotato(mouseTileX, mouseTileY);
-					break;
-				case ItemId::coliSeed:
-					PlantCauli(mouseTileX, mouseTileY);
-					break;
-				default:
-					break;
+					switch (itemId)
+					{
+					case ItemId::parsnipSeed:
+						PlantParsnip(mouseTileX, mouseTileY);
+						break;
+					case ItemId::potatoSeed:
+						PlantPotato(mouseTileX, mouseTileY);
+						break;
+					case ItemId::coliSeed:
+						PlantCauli(mouseTileX, mouseTileY);
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
@@ -861,7 +863,31 @@ void SceneGame::Update(float dt)
 	
 	//SET VIEW
 	{
-		worldView.setCenter(player2->GetPosition());
+		if(location == Location::Farm)
+		{
+			sf::Vector2f newCenter = player2->GetPosition();
+			if (player2->GetPosition().x <= mapLT.x + FRAMEWORK.GetWindowSize().x / 2)
+			{
+				newCenter.x = mapLT.x + FRAMEWORK.GetWindowSize().x / 2;
+			}
+			if(player2->GetPosition().y <= mapLT.y + FRAMEWORK.GetWindowSize().y / 2)
+			{
+				newCenter.y = mapLT.y + FRAMEWORK.GetWindowSize().y / 2;
+			}
+			if (player2->GetPosition().x >= mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2)
+			{
+				newCenter.x = mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2;
+			}
+			if (player2->GetPosition().y >= mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2)
+			{
+				newCenter.y = mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2;
+			}
+			worldView.setCenter(newCenter);
+		}
+		else
+		{
+			worldView.setCenter(player2->GetPosition());
+		}
 	}
 
 	// EDITOR ON
@@ -1336,7 +1362,7 @@ void SceneGame::PlantParsnip(int x, int y)
 	parsnip->sortOrder = y;
 	AddGo(parsnip);
 
-	dirtArray[y][x]->PlatCrop(parsnip);
+	dirtArray[y][x]->PlantCrop(parsnip);
 
 	player2->RemovePlayerItem(ItemId::parsnipSeed);
 }
@@ -1351,7 +1377,7 @@ void SceneGame::PlantPotato(int x, int y)
 	potato->SetIsWatered(dirtArray[y][x]->GetIsWatered());
 	AddGo(potato);
 
-	dirtArray[y][x]->PlatCrop(potato);
+	dirtArray[y][x]->PlantCrop(potato);
 
 	player2->RemovePlayerItem(ItemId::potatoSeed);
 }
@@ -1366,7 +1392,7 @@ void SceneGame::PlantCauli(int x, int y)
 	cauli->SetIsWatered(dirtArray[y][x]->GetIsWatered());
 	AddGo(cauli);
 
-	dirtArray[y][x]->PlatCrop(cauli);
+	dirtArray[y][x]->PlantCrop(cauli);
 
 	player2->RemovePlayerItem(ItemId::coliSeed);
 }

@@ -98,13 +98,13 @@ void SceneTitle::Enter()
 	bird1->SetPosition(0.f, 0.f);
 	bird2->SetPosition(50.f, 50.f);
 	viewPos = 0;
+	timer = 0;
+	time = 0;
+
 	start->SetActive(false);
 	exit->SetActive(false);
 	load->SetActive(false);
 	editor->SetActive(false);
-	
-	
-
 }
 
 void SceneTitle::Exit()
@@ -115,6 +115,7 @@ void SceneTitle::Exit()
 void SceneTitle::Update(float dt) 
 {
 	Scene::Update(dt);
+
 	float logoPos = logo->GetPosition().y;
 	logoPos += dt * 300.f;
 
@@ -153,8 +154,6 @@ void SceneTitle::Update(float dt)
 		if (time >= 2.5f && !exit->GetActive())
 		{
 			editor->SetActive(true);
-			cout << editor->sprite.getGlobalBounds().width << endl;
-			cout << logo->sprite.getGlobalBounds().width << endl;
 		}
 		if (time >= 3.f && !exit->GetActive())
 		{

@@ -203,6 +203,26 @@ void SceneEditor::Init()
 	selColl->sortLayer = 3;
 	selColl->SetActive(false);
 
+	//타이틀로 돌아가는 버튼
+	buttonBack = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "back1", "back1"));
+	buttonBack->SetOrigin(Origins::ML);
+	buttonBack->sortLayer = 101;
+	buttonBack->SetScale({ 2.f,2.f });
+	buttonBack->OnClick = [this]()
+	{
+		SCENE_MGR.ChangeScene(SceneId::Title);
+	};
+
+	buttonBack->OnEnter = [this]()
+	{
+		buttonBack->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("back2"));
+	};
+
+	buttonBack->OnExit = [this]()
+	{
+		buttonBack->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("back1"));
+	};
+
 	/*----타일 팔레트----*/
 	tilePallet = (SpriteGo*)AddGo(new SpriteGo("map/spring_outdoorsTileSheet_cut.png", "tilePallet"));
 	tilePallet->SetOrigin(Origins::TL);
@@ -523,6 +543,8 @@ void SceneEditor::Enter()
 	buttonColDown->SetPosition(numUI->GetPosition().x + 88.f, numUI->GetPosition().y + 54.f);
 	buttonRowUp->SetPosition(numUI->GetPosition().x + 53.f*4, buttonColUp->GetPosition().y);
 	buttonRowDown->SetPosition(numUI->GetPosition().x + 212.f, numUI->GetPosition().y + 54.f);
+
+	buttonBack->SetPosition(buttonCreate->GetPosition().x + 100.f, buttonCreate->GetPosition().y);
 
 	//행열 텍스트
 	colText->text.setOutlineThickness(1.5f);

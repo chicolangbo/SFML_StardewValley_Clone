@@ -93,6 +93,7 @@ protected:
 	SpriteGo* shopExterior;
 	sf::Vector2f mapLT;
 	sf::Vector2f tileSize;
+	sf::Vector2f mapSize;
 	int col = 0;
 	int row = 0;
 

@@ -27,7 +27,6 @@ protected:
 	float timer;
 	float viewPos = 0.f;
 
-
 public:
 	bool loadData = false;
 	SceneTitle();

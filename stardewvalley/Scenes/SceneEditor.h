@@ -87,6 +87,8 @@ protected:
 	UiButton* buttonSave;
 	UiButton* buttonLoad;
 
+	UiButton* buttonBack;
+
 	SpriteGo* numUI;
 	TextGo* colText;
 	TextGo* rowText;

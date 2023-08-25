@@ -108,5 +108,6 @@ public:
 	void SetDirection(sf::Vector2f f) { direction = f; }
 	ItemId GetPlayerItemId() { return item; } 
 	void SetMPIndex(sf::Vector2i p, sf::Vector2i m) { playerTileIndex = p; mouseTileIndex = m; }
+	int GetItemCount();
 };
 

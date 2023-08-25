@@ -643,3 +643,16 @@ void Player2::MoneyUpdate()
 	}
 	tempMoney = 0;
 }
+
+int Player2::GetItemCount()
+{
+	for (auto& i : playerItemList)
+	{
+		if (i.itemId == item)
+		{
+			return i.count;
+		}
+	}
+	cout << "ERR: Don't have Item" << endl;
+	return -1;
+}

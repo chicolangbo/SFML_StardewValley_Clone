@@ -47,7 +47,7 @@ public:
 	//void SetPlantedCrop(bool is) { plantedCrop = is; }
 	void SetCurrentDay(bool is) { currentDay = is; }
 	//void SetCropId(CropId id) { cropId = id; }
-	void PlatCrop(Crop* c);
+	void PlantCrop(Crop* c);
 	void RemoveCrop();
 
 	sf::Vector2i GetIndex() { return sf::Vector2i(indexX, indexY); }
