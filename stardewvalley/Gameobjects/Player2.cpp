@@ -599,7 +599,6 @@ void Player2::Update(float dt)
 					break;
 
 				case ItemId::waterCan:
-					SetOrigin(Origins::BC);
 					if (playerTileIndex.y < mouseTileIndex.y)
 					{
 						if (harvest)
@@ -607,9 +606,16 @@ void Player2::Update(float dt)
 							animation.Play("Harvest");
 							harvest = false;
 						}
+						else
+						{
+							animation.Play("Water");
+							watering.SetFlipX(true);
+							watering.PlayAnimation("WateringFront");
+						}
 					}
 					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
+
 						if (playerTileIndex.x < mouseTileIndex.x)
 						{
 							if (harvest)
@@ -617,6 +623,13 @@ void Player2::Update(float dt)
 								SetScale(4.5f, 4.5f);
 								animation.Play("HarvestSide");
 								harvest = false;
+							}
+							else
+							{
+								watering.SetFlipX(true);
+								watering.PlayAnimation("WateringSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("WaterSide");
 							}
 						}
 						if (playerTileIndex.x > mouseTileIndex.x)
@@ -627,6 +640,13 @@ void Player2::Update(float dt)
 								animation.Play("HarvestSide");
 								harvest = false;
 							}
+							else
+							{
+								watering.SetFlipX(false);
+								watering.PlayAnimation("WateringSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("WaterSide");
+							}
 						}
 					}
 					else if (playerTileIndex.y > mouseTileIndex.y)
@@ -635,6 +655,12 @@ void Player2::Update(float dt)
 						{
 							animation.Play("HarvestUp");
 							harvest = false;
+						}
+						else
+						{
+							animation.Play("WaterUp");
+							watering.SetFlipX(true);
+							watering.PlayAnimation("WateringBack");
 						}
 					}
 					energy -= 2;
