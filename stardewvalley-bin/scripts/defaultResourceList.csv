@@ -1,7 +1,7 @@
 "RESOURCE_TYPES(1: �ؽ���, 2: ��Ʈ, 3: ����Ŭ��, 4: �ִϸ��̼�Ŭ��)",RESOURCE_PATH,NAME,LEFT,TOP,WIDTH,HEIGHT,
 0,graphics/TitleButtons.ko-KR.png,logo,1,4,397,182,
 0,graphics/TitleButtons.ko-KR.png,newGame1,0,187,74,58,
-0,graphics/TitleButtons.ko-KR.png,newGame2,0,244,74,58,
+0,graphics/TitleButtons.ko-KR.png,newGame2,0,245,74,58,
 0,graphics/TitleButtons.ko-KR.png,load1,74,187,74,58,
 0,graphics/TitleButtons.ko-KR.png,load2,74,245,74,58,
 0,graphics/TitleButtons.ko-KR.png,exit1,222,187,74,58,
