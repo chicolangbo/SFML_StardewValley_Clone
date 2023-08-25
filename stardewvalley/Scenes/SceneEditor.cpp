@@ -818,15 +818,16 @@ ObjType SceneEditor::GetObjType(sf::IntRect rect)
 			return ObjType::Tree;
 		}
 	}
-	else if(rect.top == 16)
+	else
 	{
-
+		return ObjType::None;
 	}
 }
 
 void SceneEditor::AddObject(int indexX, int indexY, sf::IntRect rect, ObjType type)
 {
-	if ((int)type < 0 || (int)type > 3)
+	//if ((int)type < 0 || (int)type > 3)
+	if(type == ObjType::None)
 	{
 		for (int i = 0; i < objects.size(); i++)
 		{
