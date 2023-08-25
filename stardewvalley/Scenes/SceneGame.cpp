@@ -867,9 +867,9 @@ void SceneGame::Update(float dt)
 				{
 					if (homeTap->save)
 					{
-						
 						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList()};
 						SAVELOAD_DATA.SaveCSV(&sData);
+						//ChangeDate();
 						homeTap->save = false;
 					}
 				}
@@ -1715,14 +1715,17 @@ void SceneGame::ChangeDate()
 	for (auto i : parsnipPool.GetUseList())
 	{
 		i->SetIsWatered(false);
+		i->Reset();
 	}
 	for (auto i : potatoPool.GetUseList())
 	{
 		i->SetIsWatered(false);
+		i->Reset();
 	}
 	for (auto i : cauliflowerPool.GetUseList())
 	{
 		i->SetIsWatered(false);
+		i->Reset();
 	}
 }
 
