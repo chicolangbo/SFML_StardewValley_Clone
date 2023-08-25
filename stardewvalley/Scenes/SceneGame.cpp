@@ -1044,12 +1044,10 @@ void SceneGame::HitStone(int x, int y)
 	{
 		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / tileSize.x);
 		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / tileSize.y);
-		//ItemId* itme = player2->GetPlayerItemId();
 
 		if (stoneX == x && stoneY == y)
 		{
 			(*it)->Hit(1);
-			//std::cout << (*it)->GetHp() << std::endl;
 			if ((*it)->GetHp() <= 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -1064,12 +1062,8 @@ void SceneGame::HitStone(int x, int y)
 				//(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
 				RemoveGo(*it);
 				it = stones.erase(it);//돌의 백터 배열에서 제거
-				//RemoveGo(*it);
 				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
 
-				//testbox->SetPosition(tileSize.x * tileX + mapLT.x, tileSize.y * tileY + mapLT.y);
-
-				
 				SpawnRootingItem(ItemId::stone, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
 				int pick = Utils::RadomOneOrTwo(1, 2);
 				if (pick == 1)
