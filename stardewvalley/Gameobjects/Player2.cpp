@@ -902,6 +902,19 @@ void Player2::MoneyUpdate()
 	tempMoney = 0;
 }
 
+int Player2::GetItemCount()
+{
+	for (auto& i : playerItemList)
+	{
+		if (i.itemId == item)
+		{
+			return i.count;
+		}
+	}
+	cout << "ERR: Don't have Item" << endl;
+	return -1;
+}
+
 void Player2::ItemIconSetUp()
 {
 	AllItemTable* allItem = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem);

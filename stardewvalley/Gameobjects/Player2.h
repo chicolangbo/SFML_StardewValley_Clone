@@ -136,5 +136,6 @@ public:
 	ItemId GetPlayerItemId() { return item; } 
 	void SetMPIndex(sf::Vector2i p, sf::Vector2i m) { playerTileIndex = p; mouseTileIndex = m; }
 	void ItemIconSetUp();
+	int GetItemCount();
 };
 

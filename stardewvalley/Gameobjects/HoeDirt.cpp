@@ -17,8 +17,7 @@ HoeDirt::~HoeDirt()
 
 void HoeDirt::Init()
 {
-	dirt.setScale({ 4.5f, 4.5f });
-	waterDirt.setScale({ 4.5f, 4.5f });
+	
 }
 
 void HoeDirt::Release()
@@ -38,6 +37,9 @@ void HoeDirt::Reset()
 
 	texRect = RESOURCE_MGR.GetTextureRect(waterNick);
 	waterDirt.setTextureRect(texRect);
+
+	dirt.setScale({ 4.5f, 4.5f });
+	waterDirt.setScale({ 4.5f, 4.5f });
 
 	SetOrigin(origin);
 
@@ -111,7 +113,7 @@ void HoeDirt::SetIsWatered(bool is)
 	}
 }
 
-void HoeDirt::PlatCrop(Crop* c)
+void HoeDirt::PlantCrop(Crop* c)
 {
 	crop = c;
 	cropId = crop->GetCropId();

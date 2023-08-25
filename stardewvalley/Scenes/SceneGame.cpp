@@ -52,42 +52,6 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 	// VIEW
 	sf::Vector2f centerPos = size * 0.5f;
-
-	// TEST MAP
-	{	//0818 맵툴 맵 적용]
-		//땅
-		testFarmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
-		testFarmMap->Reset();
-		testFarmMap->Load("tables/newMapLayer1.csv");
-		testFarmMap->SetOrigin(Origins::MC);
-		testFarmMap->sortLayer = 0;
-		testFarmMap->sortOrder = 0;
-		col = testFarmMap->GetSize().x;
-		row = testFarmMap->GetSize().y;
-
-		//울타리나 절벽
-		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
-		testFarmMap2->Reset();
-		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
-		testFarmMap2->SetOrigin(Origins::MC);
-		testFarmMap2->sortLayer = 0;
-		testFarmMap2->sortOrder = 1;
-
-		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
-		houseExterior->sprite.setScale(4.f, 4.f);
-		houseExterior->SetOrigin(Origins::BC);
-		houseExterior->collider.setScale(1.f, 0.3f);
-		houseExterior->sortLayer = 1;
-		houseExterior->sortOrder = housePos.y - 2;
-
-		shopExterior = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
-		shopExterior->sprite.setScale(4.f, 4.f);
-		shopExterior->SetOrigin(Origins::BC);
-		shopExterior->sortLayer = 1;
-		shopExterior->sortOrder = shopPos.y - 1;
-		shopExterior->collider.setScale(1.f, 0.3f);
-	}
-
 	// PLAYER
 	{
 		player2 = (Player2*)AddGo(new Player2());
@@ -206,28 +170,6 @@ void SceneGame::Init()
 		selectTile->sortOrder = 0;
 	}
 
-	//HOE DIRT
-	{
-		dirtArray.resize(row);
-		for (int i = 0; i < row; i++)
-		{
-			dirtArray[i].resize(col);
-		}
-
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
-				dirt->sortLayer = 0;
-				dirt->sortOrder = 2;
-				dirt->SetIndex(j, i);
-				dirt->SetActive(false);
-				dirtArray[i][j] = dirt;
-			}
-		}
-	}
-
 	//SET CROP POOL
 	{
 		parsnipPool.OnCreate = [this](Parsnip* parsnip)
@@ -255,7 +197,12 @@ void SceneGame::Init()
 		cauliflowerPool.Init();
 	}
 
-
+	// FADE
+	sf::Vector2f recsize = { (float)window.getSize().x, (float)window.getSize().y };
+	fadeRectangle = (RectangleGo*)AddGo(new RectangleGo(recsize));
+	fadeRectangle->rectangle.setFillColor(sf::Color::Black);
+	fadeRectangle->sortLayer = 100;
+	fadeRectangle->sortOrder = -1;
 
 	for (auto go : gameObjects)
 	{
@@ -278,6 +225,64 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
+	// TEST MAP
+	{	//0818 맵툴 맵 적용]
+		//땅
+		testFarmMap = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
+		testFarmMap->Reset();
+		testFarmMap->Load("tables/newMapLayer1.csv");
+		testFarmMap->SetOrigin(Origins::MC);
+		testFarmMap->sortLayer = 0;
+		testFarmMap->sortOrder = 0;
+		col = testFarmMap->GetSize().x;
+		row = testFarmMap->GetSize().y;
+		
+
+		//울타리나 절벽
+		testFarmMap2 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile2"));
+		testFarmMap2->Reset();
+		testFarmMap2->Load("tables/newMapLayer2.csv"); //투명한 타일 176, 0
+		testFarmMap2->SetOrigin(Origins::MC);
+		testFarmMap2->sortLayer = 0;
+		testFarmMap2->sortOrder = 1;
+
+		houseExterior = (SpriteGo*)AddGo(new SpriteGo("map/houses.png", "house", "house"));
+		houseExterior->sprite.setScale(4.f, 4.f);
+		houseExterior->SetOrigin(Origins::BC);
+		houseExterior->collider.setScale(1.f, 0.3f);
+		houseExterior->sortLayer = 1;
+		houseExterior->sortOrder = housePos.y - 2;
+
+		shopExterior = (SpriteGo*)AddGo(new SpriteGo("map/spring_town.ko-KR.png", "shop", "shop"));
+		shopExterior->sprite.setScale(4.f, 4.f);
+		shopExterior->SetOrigin(Origins::BC);
+		shopExterior->sortLayer = 1;
+		shopExterior->sortOrder = shopPos.y - 1;
+		shopExterior->collider.setScale(1.f, 0.3f);
+	}
+
+	//HOE DIRT
+	{
+		dirtArray.resize(row);
+		for (int i = 0; i < row; i++)
+		{
+			dirtArray[i].resize(col);
+		}
+
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+				dirt->sortLayer = 0;
+				dirt->sortOrder = 2;
+				dirt->SetIndex(j, i);
+				dirt->SetActive(false);
+				dirtArray[i][j] = dirt;
+			}
+		}
+	}
+
 	// VIEW
 	{
 		auto size = FRAMEWORK.GetWindowSize();
@@ -337,26 +342,31 @@ void SceneGame::Enter()
 		}
 	}
 
-	// OBJECT SET MAP LT
+	// OBJECT SET MAP LT & SET SORT ORDER
 	{
 		tileSize = testFarmMap->GetTileSize();
+		mapSize = testFarmMap->GetTileMapSize();
 		mapLT = { testFarmMap->vertexArray.getBounds().left, testFarmMap->vertexArray.getBounds().top };
 
 		for (int i = 0; i < stones.size(); i++)
 		{
 			stones[i]->SetMapLT(mapLT);
+			stones[i]->sortOrder = stones[i]->GetIndex().y;
 		}
 		for (int i = 0; i < timbers.size(); i++)
 		{
 			timbers[i]->SetMapLT(mapLT);
+			timbers[i]->sortOrder = timbers[i]->GetIndex().y;
 		}
 		for (int i = 0; i < weeds.size(); i++)
 		{
 			weeds[i]->SetMapLT(mapLT);
+			weeds[i]->sortOrder = weeds[i]->GetIndex().y;
 		}
 		for (int i = 0; i < trees.size(); i++)
 		{
 			trees[i]->stump->SetMapLT(mapLT);
+			trees[i]->sortOrder = trees[i]->stump->GetIndex().y;
 		}
 		for (auto i : parsnipPool.GetUseList())
 		{
@@ -497,6 +507,10 @@ void SceneGame::Enter()
 		player2->SetPosition(playerSpwan);
 		init = false;
 	}
+
+	//FADE
+	fadeRectangle->SetOrigin(Origins::MC);
+	fadeRectangle->SetPosition(uiView.getCenter());
 }
 
 void SceneGame::Exit()
@@ -710,19 +724,22 @@ void SceneGame::Update(float dt)
 			//PLANT CROP
 			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
 			{
-				switch (itemId)
+				if (player2->GetItemCount() > 0)
 				{
-				case ItemId::parsnipSeed:
-					PlantParsnip(mouseTileX, mouseTileY);
-					break;
-				case ItemId::potatoSeed:
-					PlantPotato(mouseTileX, mouseTileY);
-					break;
-				case ItemId::coliSeed:
-					PlantCauli(mouseTileX, mouseTileY);
-					break;
-				default:
-					break;
+					switch (itemId)
+					{
+					case ItemId::parsnipSeed:
+						PlantParsnip(mouseTileX, mouseTileY);
+						break;
+					case ItemId::potatoSeed:
+						PlantPotato(mouseTileX, mouseTileY);
+						break;
+					case ItemId::coliSeed:
+						PlantCauli(mouseTileX, mouseTileY);
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
@@ -731,12 +748,20 @@ void SceneGame::Update(float dt)
 			selectTile->SetActive(false);
 		}
 	}
-
+	//FADE
+	{
+		/*if (fadingIn)
+		{
+			fadeRectangle->SetActive(true);
+			FadeIn(dt);
+		}*/
+	}
+	
 	// LOCATION ENTER
 	{
-		if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
+		/*if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
-		{
+		{	 
 			for (auto go : gameObjects)
 			{
 				if (go->GetActive())
@@ -787,14 +812,20 @@ void SceneGame::Update(float dt)
 			}
 			location = Location::Shop;
 			player2->SetPosition(shopInEnter);
-		}
+		}*/
 	}
 
 	// LOCATION PATTERN
 	{
+		//cout << player2->GetPosition().x << "," << player2->GetPosition().y << endl;
 		switch (location)
 			{
 			case Location::Home:
+				if (fadingOut)
+				{
+					fadeRectangle->SetActive(true);
+					FadeOut(dt);
+				}
 				// BEDDING COLLIDE
 				{
 					if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
@@ -830,7 +861,11 @@ void SceneGame::Update(float dt)
 				}
 				// OUT
 				{
-					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()))
+					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()) && changeLocation)
+					{
+						fadingOut = true;
+					}
+					if (!changeLocation && !fadingOut)
 					{
 						for (auto go : gameObjects)
 						{
@@ -849,12 +884,12 @@ void SceneGame::Update(float dt)
 							}
 						}
 						SetAct(true);
+						player2->SetPosition(houseOutEnter);
 						player2->ClearWalls();
 						for (int i = 0; i < farmWalls.size(); ++i)
 						{
 							player2->SetWallBounds(farmWalls[i]);
 						}
-						player2->SetPosition(207.f, -424.f);
 						for (int i = 0; i < row; i++)
 						{
 							for (int j = 0; j < col; j++)
@@ -869,14 +904,30 @@ void SceneGame::Update(float dt)
 								}
 							}
 						}
-						location = Location::Farm;
+						location = Location::Farm; 
+						changeLocation = true;
+						fadingIn = true;
 					}
+				}
+				if (fadingIn)
+				{
+					fadeRectangle->SetActive(true);
+					FadeIn(dt);
 				}
 				break;
 			case Location::Shop:
 				// OUT
 				{
-					if(player2->GetCollider().intersects(shopExit.getGlobalBounds()))
+					if (fadingOut)
+					{
+						fadeRectangle->SetActive(true);
+						FadeOut(dt);
+					}
+					if (player2->GetCollider().intersects(shopExit.getGlobalBounds()) && changeLocation)
+					{
+						fadingOut = true;
+					}
+					if (!changeLocation && !fadingOut)
 					{
 						for (auto go : gameObjects)
 						{
@@ -915,17 +966,175 @@ void SceneGame::Update(float dt)
 							}
 						}
 						location = Location::Farm;
+						changeLocation = true;
+						fadingIn = true;
+					}
+					if (fadingIn)
+					{
+						fadeRectangle->SetActive(true);
+						FadeIn(dt);
+					}
+					break;
+				}
+			case Location::Farm:
+				if (fadingOut)
+				{
+					fadeRectangle->SetActive(true);
+					FadeOut(dt);
+				}
+				if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
+					INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+				{
+					fadingOut = true;
+					nextlocation = Location::Home;
+					/*for (auto go : gameObjects)
+					{
+						if (go->GetActive())
+						{
+							if (go->GetName() == "homeTap")
+								continue;
+							go->SetActive(false);
+						}
+						else
+						{
+							if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+								continue;
+							go->SetActive(true);
+						}
+					}
+					SetAct(true);
+					location = Location::Home;
+					player2->ClearWalls();
+					for (int i = 0; i < houseWalls.size(); ++i)
+					{
+						player2->SetWallBounds(houseWalls[i]);
+					}
+					player2->SetPosition(houseInEnter);*/
+				}
+				else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
+					INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+				{
+					fadingOut = true;
+					nextlocation = Location::Shop;
+					/*for (auto go : gameObjects)
+					{
+						if (go->GetActive())
+						{
+							if (go->GetName() == "homeTap")
+								continue;
+							go->SetActive(false);
+						}
+						else
+						{
+							if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+								continue;
+							go->SetActive(true);
+						}
+					}
+					SetAct(true);
+					player2->ClearWalls();
+					for (int i = 0; i < shopWalls.size(); ++i)
+					{
+						player2->SetWallBounds(shopWalls[i]);
+					}
+					location = Location::Shop;
+					player2->SetPosition(shopInEnter);*/
+				}
+				if (!changeLocation && !fadingOut)
+				{
+					if(nextlocation == Location::Home)
+					{
+						for (auto go : gameObjects)
+						{
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
+							}
+							else
+							{
+								if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+									continue;
+								go->SetActive(true);
+							}
+						}
+						SetAct(true);
+						location = Location::Home;
+						player2->ClearWalls();
+						for (int i = 0; i < houseWalls.size(); ++i)
+						{
+							player2->SetWallBounds(houseWalls[i]);
+						}
+						player2->SetPosition(houseInEnter);
+						changeLocation = true;
+						fadingIn = true;
+					}
+					else if (nextlocation == Location::Shop)
+					{
+						for (auto go : gameObjects)
+						{
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
+							}
+							else
+							{
+								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
+						}
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < shopWalls.size(); ++i)
+						{
+							player2->SetWallBounds(shopWalls[i]);
+						}
+						location = Location::Shop;
+						player2->SetPosition(shopInEnter);
+						changeLocation = true;
+						fadingIn = true;
 					}
 				}
-				break;
-			case Location::Farm:
+				if (fadingIn)
+				{
+					fadeRectangle->SetActive(true);
+					FadeIn(dt);
+				}
 				break;
 			}
 	}
 	
 	//SET VIEW
 	{
-		worldView.setCenter(player2->GetPosition());
+		if(location == Location::Farm)
+		{
+			sf::Vector2f newCenter = player2->GetPosition();
+			if (player2->GetPosition().x <= mapLT.x + FRAMEWORK.GetWindowSize().x / 2)
+			{
+				newCenter.x = mapLT.x + FRAMEWORK.GetWindowSize().x / 2;
+			}
+			if(player2->GetPosition().y <= mapLT.y + FRAMEWORK.GetWindowSize().y / 2)
+			{
+				newCenter.y = mapLT.y + FRAMEWORK.GetWindowSize().y / 2;
+			}
+			if (player2->GetPosition().x >= mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2)
+			{
+				newCenter.x = mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2;
+			}
+			if (player2->GetPosition().y >= mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2)
+			{
+				newCenter.y = mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2;
+			}
+			worldView.setCenter(newCenter);
+		}
+		else
+		{
+			worldView.setCenter(player2->GetPosition());
+		}
 	}
 
 	// EDITOR ON
@@ -972,13 +1181,12 @@ void SceneGame::Update(float dt)
 	// PLAYER OBJECT HIT TEST CODE
 	{
 		timer += dt;
-		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
+		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2 && location == Location::Farm)
 		{
 			// HARVEST CROP
 			{
 				/*if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 				{
-
 					if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 					{
 						CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
@@ -1075,7 +1283,7 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
-	
+
 	//SET NIGHT TEST CODE
 	{
 		
@@ -1104,8 +1312,7 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	rootingItems.back()->SetPosY(pos.y); 
 	rootingItems.back()->sprite.setScale(4.f, 4.f);
 	rootingItems.back()->SetOrigin(Origins::MC);
-
-
+	rootingItems.back()->sortLayer = 2;
 }
 
 
@@ -1352,10 +1559,7 @@ void SceneGame::HitWeed(int x, int y)
 		{
 			++it;
 		}
-
 	}
-	
-
 }
 
 bool SceneGame::HasObjectAt(int x, int y)
@@ -1406,7 +1610,7 @@ void SceneGame::PlantParsnip(int x, int y)
 	parsnip->sortOrder = y;
 	AddGo(parsnip);
 
-	dirtArray[y][x]->PlatCrop(parsnip);
+	dirtArray[y][x]->PlantCrop(parsnip);
 
 	player2->RemovePlayerItem(ItemId::parsnipSeed);
 }
@@ -1421,7 +1625,7 @@ void SceneGame::PlantPotato(int x, int y)
 	potato->SetIsWatered(dirtArray[y][x]->GetIsWatered());
 	AddGo(potato);
 
-	dirtArray[y][x]->PlatCrop(potato);
+	dirtArray[y][x]->PlantCrop(potato);
 
 	player2->RemovePlayerItem(ItemId::potatoSeed);
 }
@@ -1436,7 +1640,7 @@ void SceneGame::PlantCauli(int x, int y)
 	cauli->SetIsWatered(dirtArray[y][x]->GetIsWatered());
 	AddGo(cauli);
 
-	dirtArray[y][x]->PlatCrop(cauli);
+	dirtArray[y][x]->PlantCrop(cauli);
 
 	player2->RemovePlayerItem(ItemId::coliSeed);
 }
@@ -1574,9 +1778,35 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			tree->stump->SetType(objInfo.indexX, objInfo.indexY, objRect, testFarmMap->GetTileSize());
 			tree->stump->SetHp(15);
 			trees.push_back(tree);
-			tree->sortLayer = 2;
+			tree->sortLayer = 1;
 			tree->sortOrder = obj.second.indexY;
 			treeCount++;
 		}
+	}
+}
+
+void SceneGame::FadeIn(float dt)
+{
+	cout << "fadein" << endl;
+	fadeAlpha -= fadeSpeed * dt;
+	fadeRectangle->rectangle.setFillColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(fadeAlpha)));
+	if (fadeAlpha <= 0.0f)
+	{
+		fadeAlpha = 0.0f;
+		fadingIn = false;
+	}
+}
+
+void SceneGame::FadeOut(float dt)
+{
+	cout << "fadeOut" << endl;
+	fadeAlpha += fadeSpeed * dt;
+	fadeRectangle->rectangle.setFillColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(fadeAlpha)));
+	if (fadeAlpha >= 255.0f)
+	{
+		changeLocation = false;
+		fadeAlpha = 255.0f;
+		fadingOut = false;
+		//fadingIn = true;
 	}
 }

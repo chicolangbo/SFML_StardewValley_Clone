@@ -62,7 +62,8 @@ enum class ObjType
 	Stone,
 	Weed,
 	Tree,
-	Timber
+	Timber,
+	None
 };
 
 enum class  ItemId

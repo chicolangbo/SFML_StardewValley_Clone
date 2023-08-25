@@ -57,12 +57,14 @@ void SceneTitle::Init()
 	bush->SetPosition(0.f, 160.f);
 
 	logo = (SpriteGo*)AddGo(new SpriteGo("graphics/TitleButtons.ko-KR.png", "logo", "logo")); 
+	logo->SetScale({ 1.5f,1.5f });
 	logo->SetOrigin(Origins::MC);   
-	logo->SetPosition(0,-600.f); 
+	logo->SetPosition(0, -600.f);
 
 	ShowStartButton();
-	ShowExitButton();
 	ShowLoadButton();
+	ShowEditorButton();
+	ShowExitButton();
 	
 	for (auto go : gameObjects)
 	{
@@ -96,19 +98,24 @@ void SceneTitle::Enter()
 	bird1->SetPosition(0.f, 0.f);
 	bird2->SetPosition(50.f, 50.f);
 	viewPos = 0;
+	timer = 0;
+	time = 0;
+
 	start->SetActive(false);
 	exit->SetActive(false);
 	load->SetActive(false);
+	editor->SetActive(false);
 }
 
 void SceneTitle::Exit()
 {
-	//Scene::Exit();
+	Scene::Exit();
 }
 
 void SceneTitle::Update(float dt) 
 {
 	Scene::Update(dt);
+
 	float logoPos = logo->GetPosition().y;
 	logoPos += dt * 300.f;
 
@@ -146,6 +153,10 @@ void SceneTitle::Update(float dt)
 		}
 		if (time >= 2.5f && !exit->GetActive())
 		{
+			editor->SetActive(true);
+		}
+		if (time >= 3.f && !exit->GetActive())
+		{
 			exit->SetActive(true);
 		}
 	}
@@ -154,16 +165,14 @@ void SceneTitle::Update(float dt)
 void SceneTitle::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window); 
-	//window.draw(start->sprite);
-	
 }
 
 void SceneTitle::ShowStartButton()
 {
 	start = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "newGame1", "newGame1"));
 	start->SetOrigin(Origins::TL);
-	start->SetPosition(-390.f, 30.f);
-	start->SetScale(2.5f, 2.5f);
+	start->SetScale(3.f, 3.f);
+	start->SetPosition(-500.f, 100.f);
 	start->sortLayer = 100;
 	start->SetActive(false);
 
@@ -172,14 +181,24 @@ void SceneTitle::ShowStartButton()
 		loadData = false;
 		SCENE_MGR.ChangeScene(SceneId::Game);
 	};
+
+	start->OnEnter = [this]()
+	{
+		start->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("newGame2"));
+	};
+
+	start->OnExit = [this]()
+	{
+		start->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("newGame1"));
+	};
 }
 
 void SceneTitle::ShowExitButton()
 {
 	exit = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "exit1", "exit1"));
 	exit->SetOrigin(Origins::TL);
-	exit->SetPosition(210.f, 30.f);
-	exit->SetScale(2.5f, 2.5f);
+	exit->SetScale(3.f, 3.f);
+	exit->SetPosition(editor->GetPosition().x + 74 * 2.5 + 75, start->GetPosition().y);
 	exit->sortLayer = 100;
 	exit->SetActive(false);
 
@@ -187,14 +206,24 @@ void SceneTitle::ShowExitButton()
 	{
 		window.close();
 	};
+
+	exit->OnEnter = [this]()
+	{
+		exit->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("exit2"));
+	};
+
+	exit->OnExit = [this]()
+	{
+		exit->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("exit1"));
+	};
 }
 
 void SceneTitle::ShowLoadButton()
 {
 	load = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "load1", "load1"));
 	load->SetOrigin(Origins::TL);
-	load->SetPosition(start->GetPosition() + ((exit->GetPosition() - start->GetPosition()) / 2.f));
-	load->SetScale(2.5f, 2.5f);
+	load->SetScale(3.f, 3.f);
+	load->SetPosition(start->GetPosition().x + 74 * 2.5 + 75, start->GetPosition().y);
 	load->sortLayer = 100;
 	load->SetActive(false);
 
@@ -202,5 +231,40 @@ void SceneTitle::ShowLoadButton()
 	{
 		loadData = true;
 		SCENE_MGR.ChangeScene(SceneId::Game);
+	};
+
+	load->OnEnter = [this]()
+	{
+		load->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("load2"));
+	};
+
+	load->OnExit = [this]()
+	{
+		load->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("load1"));
+	};
+}
+
+void SceneTitle::ShowEditorButton()
+{
+	editor = (UiButton*)AddGo(new UiButton("graphics/TitleButtons.ko-KR.png", "editor1", "editor1"));
+	editor->SetOrigin(Origins::TL);
+	editor->SetScale(3.f, 3.f);
+	editor->SetPosition(load->GetPosition().x + 74 * 2.5 + 75, start->GetPosition().y);
+	editor->sortLayer = 100;
+	editor->SetActive(false);
+
+	editor->OnClick = [this]()
+	{
+		SCENE_MGR.ChangeScene(SceneId::Editor);
+	};
+
+	editor->OnEnter = [this]()
+	{
+		editor->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("editor2"));
+	};
+
+	editor->OnExit = [this]()
+	{
+		editor->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("editor1"));
 	};
 }

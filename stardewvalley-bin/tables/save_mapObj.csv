@@ -1,5 +1,5 @@
-cols,rows
-38,41
+cols,rows,,,,,,
+38,41,,,,,,
 index,indexX,indexY,left,top,width,height,type
 0,8,23,48,0,16,16,0
 1,10,28,48,0,16,16,0

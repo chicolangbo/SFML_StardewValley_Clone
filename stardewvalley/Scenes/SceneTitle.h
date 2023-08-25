@@ -18,6 +18,7 @@ protected:
 	UiButton* start;  
 	UiButton* exit;
 	UiButton* load;
+	UiButton* editor;
 
 	Bird* bird1;
 	Bird* bird2;
@@ -25,7 +26,6 @@ protected:
 	float time;
 	float timer;
 	float viewPos = 0.f;
-
 
 public:
 	bool loadData = false;
@@ -43,5 +43,6 @@ public:
 	void ShowStartButton();
 	void ShowExitButton();
 	void ShowLoadButton();
+	void ShowEditorButton();
 };
 
