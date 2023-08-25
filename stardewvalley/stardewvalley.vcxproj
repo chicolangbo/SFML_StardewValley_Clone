@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gameobjects\EffectGo.cpp" />
     <ClCompile Include="Gameobjects\Cauliflower.cpp" />
     <ClCompile Include="DataTables\CropTable.cpp" />
     <ClCompile Include="Gameobjects\Crop.cpp" />
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="Gameobjects\EffectGo.h" />
     <ClInclude Include="Gameobjects\Cauliflower.h" />
     <ClInclude Include="DataTables\CropTable.h" />
     <ClInclude Include="Gameobjects\Crop.h" />

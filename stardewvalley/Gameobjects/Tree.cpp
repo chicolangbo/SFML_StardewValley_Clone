@@ -10,7 +10,7 @@ Tree::Tree(const std::string& name, const std::string& branchId, const std::stri
 {
 	stump = new Objects(stumpId, "stump", "stump");
 	this->branchId = branchId;
-	this->branchNick = branchNick; //¾ê ¸®ÅÏ
+	this->branchNick = branchNick; 
 }
 
 Tree::~Tree()
@@ -56,18 +56,18 @@ void Tree::Update(float dt)
 	if (hit)
 	{
 		time += dt;
-		if (shake >= 0.1f)
+		if (shake >= 0.05f)
 		{
 			direction = -1.f;
 		}
-		else if (shake <= -0.1f)
+		else if (shake <= -0.05f)
 		{
 			direction = 1.f;
 		}
 
 		shake += dt * direction;
 		branch.rotate(shake);
-		if (time >= 0.5f)
+		if (time >= 0.2f)
 		{
 			hit = false;
 			time = 0;
@@ -80,10 +80,10 @@ void Tree::Update(float dt)
 		totalrotation += rotation;
 		branch.rotate(rotation);
 
-		sf::Vector2f pos = branch.getPosition();
+	/*	sf::Vector2f pos = branch.getPosition();
 		pos.x += dt * 2000.f;
 		pos.y -= dt * 2000.f;
-		branch.setPosition(pos);
+		branch.setPosition(pos);*/
 		time += dt;
 		//if (time >= 1.6f)
 		if (totalrotation >= 90.f)

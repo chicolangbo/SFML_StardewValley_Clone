@@ -245,195 +245,197 @@ void Player2::Update(float dt)
 
 		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 		{
-			switch (item)
+			if (!playingAnimation)
 			{
-			case ItemId::hook:
-				if (playerTileIndex.y < mouseTileIndex.y)
+				switch (item)
 				{
-					animation.Play("Attack");
-					scythe.SetFlipX(true);
-					scythe.PlayAnimation("ScytheFront");
-				}
-				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-				{
-					
-					if (playerTileIndex.x < mouseTileIndex.x)
+				case ItemId::hook:
+					if (playerTileIndex.y < mouseTileIndex.y)
 					{
+						animation.Play("Attack");
 						scythe.SetFlipX(true);
-						scythe.PlayAnimation("ScytheSide");
-						SetScale(4.5f, 4.5f);
-						animation.Play("AttackSide");
+						scythe.PlayAnimation("ScytheFront");
 					}
-					if (playerTileIndex.x > mouseTileIndex.x)
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-						scythe.SetFlipX(false);
-						scythe.PlayAnimation("ScytheSide");
-						SetScale(-4.5f, 4.5f); 
-						animation.Play("AttackSide");
 
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							scythe.SetFlipX(true);
+							scythe.PlayAnimation("ScytheSide");
+							SetScale(4.5f, 4.5f);
+							animation.Play("AttackSide");
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							scythe.SetFlipX(false);
+							scythe.PlayAnimation("ScytheSide");
+							SetScale(-4.5f, 4.5f);
+							animation.Play("AttackSide");
+
+						}
 					}
-				}
-				else if (playerTileIndex.y > mouseTileIndex.y)
-				{
-					animation.Play("AttackUp");
-					scythe.SetFlipX(true);
-					scythe.PlayAnimation("ScytheBack");
-				}
-				energy -= 2;
-				playingAnimation = true;
-				direction = { 0,0 };
-				break;
-
-			case ItemId::ax:
-				if (playerTileIndex.y < mouseTileIndex.y)
-				{
-					animation.Play("Tool");
-					axe.SetFlipX(true);
-					axe.PlayAnimation("AxeFront");
-				}
-				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-				{
-					
-					if (playerTileIndex.x < mouseTileIndex.x)
+					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
+						animation.Play("AttackUp");
+						scythe.SetFlipX(true);
+						scythe.PlayAnimation("ScytheBack");
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
+
+				case ItemId::ax:
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						animation.Play("Tool");
 						axe.SetFlipX(true);
-						axe.PlayAnimation("AxeSide");
-						SetScale(4.5f, 4.5f);
-						animation.Play("ToolSide");
+						axe.PlayAnimation("AxeFront");
 					}
-					if(playerTileIndex.x > mouseTileIndex.x)
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-						axe.SetFlipX(false);
-						axe.PlayAnimation("AxeSide");
-						SetScale(-4.5f, 4.5f);
-						animation.Play("ToolSide");
+
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							axe.SetFlipX(true);
+							axe.PlayAnimation("AxeSide");
+							SetScale(4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							axe.SetFlipX(false);
+							axe.PlayAnimation("AxeSide");
+							SetScale(-4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
 					}
-				}
-				else if (playerTileIndex.y > mouseTileIndex.y)
-				{
-					animation.Play("ToolUp");
-					axe.SetFlipX(true);
-					axe.PlayAnimation("AxeBack");
-				}
-				energy -= 2;
-				playingAnimation = true;
-				direction = { 0,0 };
-				break;
-			case ItemId::pick:
-				if (playerTileIndex.y < mouseTileIndex.y)
-				{
-					animation.Play("Tool");
-					pickax.SetFlipX(true);
-					pickax.PlayAnimation("PickaxFront");
-				}
-				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-				{
-					
-					if (playerTileIndex.x < mouseTileIndex.x)
+					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
+						animation.Play("ToolUp");
+						axe.SetFlipX(true);
+						axe.PlayAnimation("AxeBack");
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
+				case ItemId::pick:
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						animation.Play("Tool");
 						pickax.SetFlipX(true);
-						pickax.PlayAnimation("PickaxSide");
-						SetScale(4.5f, 4.5f);
-						animation.Play("ToolSide");
+						pickax.PlayAnimation("PickaxFront");
 					}
-					if(playerTileIndex.x > mouseTileIndex.x)
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-						pickax.SetFlipX(false);
-						pickax.PlayAnimation("PickaxSide");
-						SetScale(-4.5f, 4.5f);
-						animation.Play("ToolSide");
-					}
-				}
-				else if (playerTileIndex.y > mouseTileIndex.y)
-				{
-					animation.Play("ToolUp");
-					pickax.SetFlipX(true);
-					pickax.PlayAnimation("PickaxBack");
-				}
-				energy -= 2;
-				playingAnimation = true;
-				direction = { 0,0 };
-				break;
 
-			case ItemId::homi:
-				if (playerTileIndex.y < mouseTileIndex.y)
-				{
-					animation.Play("Tool");
-					hoe.SetFlipX(true);
-					hoe.PlayAnimation("HoeFront");
-				}
-				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-				{
-					
-					if (playerTileIndex.x < mouseTileIndex.x)
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							pickax.SetFlipX(true);
+							pickax.PlayAnimation("PickaxSide");
+							SetScale(4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							pickax.SetFlipX(false);
+							pickax.PlayAnimation("PickaxSide");
+							SetScale(-4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
+					}
+					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
+						animation.Play("ToolUp");
+						pickax.SetFlipX(true);
+						pickax.PlayAnimation("PickaxBack");
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
+
+				case ItemId::homi:
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						animation.Play("Tool");
 						hoe.SetFlipX(true);
-						hoe.PlayAnimation("HoeSide");
-						SetScale(4.5f, 4.5f);
-						animation.Play("ToolSide");
+						hoe.PlayAnimation("HoeFront");
 					}
-					if(playerTileIndex.x > mouseTileIndex.x)
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-						hoe.SetFlipX(false);
-						hoe.PlayAnimation("HoeSide");
-						SetScale(-4.5f, 4.5f);
-						animation.Play("ToolSide");
+
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							hoe.SetFlipX(true);
+							hoe.PlayAnimation("HoeSide");
+							SetScale(4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							hoe.SetFlipX(false);
+							hoe.PlayAnimation("HoeSide");
+							SetScale(-4.5f, 4.5f);
+							animation.Play("ToolSide");
+						}
 					}
-				}
-				else if (playerTileIndex.y > mouseTileIndex.y)
-				{
-					animation.Play("ToolUp");
-					hoe.SetFlipX(true);
-					hoe.PlayAnimation("HoeBack");
-				}
-				energy -= 2;
-				playingAnimation = true;
-				direction = { 0,0 };
-				break;
-
-			case ItemId::waterCan:
-				SetOrigin(Origins::BC);
-				if (playerTileIndex.y < mouseTileIndex.y)
-				{
-					animation.Play("Water");
-					watering.SetFlipX(true);
-					watering.PlayAnimation("WateringFront");
-				}
-				else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-				{
-					
-
-					if (playerTileIndex.x < mouseTileIndex.x)
+					else if (playerTileIndex.y > mouseTileIndex.y)
 					{
+						animation.Play("ToolUp");
+						hoe.SetFlipX(true);
+						hoe.PlayAnimation("HoeBack");
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
+
+				case ItemId::waterCan:
+					SetOrigin(Origins::BC);
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						animation.Play("Water");
 						watering.SetFlipX(true);
-						watering.PlayAnimation("WateringSide");
-						SetScale(4.5f, 4.5f);
-						animation.Play("WaterSide");
+						watering.PlayAnimation("WateringFront");
 					}
-					if(playerTileIndex.x > mouseTileIndex.x)
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 					{
-						watering.SetFlipX(false);
-						watering.PlayAnimation("WateringSide");
-						SetScale(-4.5f, 4.5f);
-						animation.Play("WaterSide");
-					}
-				}
-				else if (playerTileIndex.y > mouseTileIndex.y)
-				{
-					animation.Play("WaterUp");
-					watering.SetFlipX(true);
-					watering.PlayAnimation("WateringBack");
-				}
-				energy -= 2;
-				playingAnimation = true;
-				direction = { 0,0 };
-				break;
-			
-			case ItemId::none:
-				SetOrigin(Origins::BC);
-				break;
-			}
 
+
+						if (playerTileIndex.x < mouseTileIndex.x)
+						{
+							watering.SetFlipX(true);
+							watering.PlayAnimation("WateringSide");
+							SetScale(4.5f, 4.5f);
+							animation.Play("WaterSide");
+						}
+						if (playerTileIndex.x > mouseTileIndex.x)
+						{
+							watering.SetFlipX(false);
+							watering.PlayAnimation("WateringSide");
+							SetScale(-4.5f, 4.5f);
+							animation.Play("WaterSide");
+						}
+					}
+					else if (playerTileIndex.y > mouseTileIndex.y)
+					{
+						animation.Play("WaterUp");
+						watering.SetFlipX(true);
+						watering.PlayAnimation("WateringBack");
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
+
+				case ItemId::none:
+					SetOrigin(Origins::BC);
+					break;
+				}
+			}
 		}
 	}
     else if (playerDie&&one)

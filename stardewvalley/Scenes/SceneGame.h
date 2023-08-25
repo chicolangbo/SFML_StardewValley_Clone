@@ -28,6 +28,7 @@ class HoeDirt;
 class Parsnip;
 class Potato;
 class Cauliflower;
+class EffectGo;
 
 struct DataLoad
 {
@@ -70,6 +71,7 @@ protected:
 	vector<Timber*> timbers;
 	vector<Weed*> weeds;
 	vector<Tree*> trees;
+	std::vector<EffectGo*> effects;
 	int stoneCount = 0;
 	int timberCount = 0;
 	int weedCount = 0;
@@ -149,6 +151,8 @@ protected:
 	//test
 	//RectangleGo* testbox;
 	//RectangleGo* night; 
+	
+	
 	
 public:
 	SceneGame();

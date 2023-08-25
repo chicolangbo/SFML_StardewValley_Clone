@@ -38,6 +38,7 @@
 #include "Crop.h"
 #include "Cauliflower.h"
 #include "Potato.h"
+#include "EffectGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -900,12 +901,14 @@ void SceneGame::Update(float dt)
 
 	// PLAYER OBJECT HIT TEST CODE
 	{
+		timer += dt;
 		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
 		{
 			// HARVEST CROP
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 				{
+
 					if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 					{
 						CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
@@ -930,49 +933,66 @@ void SceneGame::Update(float dt)
 			{
 				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 				{
-					HitStone(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
-					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					if (timer >= 0.5f)
 					{
-						switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+						timer = 0.f;
+						HitStone(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 						{
-						case true:
-							dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
-							dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
-							break;
-						case false:
-							dirtArray[mouseTileY][mouseTileX]->SetActive(false);
-							activeDirtIndex.erase(
-								std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
-									[&](const std::pair<int, int>& pair) {
-										return pair.first == mouseTileY || pair.second == mouseTileX;
-									}),
-								activeDirtIndex.end());
-							dirtArray[mouseTileY][mouseTileX]->Reset();
-							break;
-						default:
-							break;
+							switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+							{
+							case true:
+								dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
+								dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
+								break;
+							case false:
+								dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+								activeDirtIndex.erase(
+									std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+										[&](const std::pair<int, int>& pair) {
+											return pair.first == mouseTileY || pair.second == mouseTileX;
+										}), activeDirtIndex.end());
+
+								dirtArray[mouseTileY][mouseTileX]->Reset();
+								break;
+							default:
+								break;
+							}
 						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 				{
-					HitTree(mouseTileX, mouseTileY);
-					HitTimber(mouseTileX, mouseTileY);
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitTree(mouseTileX, mouseTileY);
+						HitTimber(mouseTileX, mouseTileY);
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
 				{
-					HitWeed(mouseTileX, mouseTileY);
+					if (timer >= 0.5f)
+					{
+						timer = 0.f;
+						HitWeed(mouseTileX, mouseTileY);
+					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
-						&& location == Location::Farm)
+					
+					if (timer >= 0.5f)
 					{
-						dirtArray[mouseTileY][mouseTileX]->SetActive(true);
-						activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX ));
-						dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						timer = 0.f;
+						if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
+							&& location == Location::Farm)
+						{
+							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+							activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX));
+							dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+						}
 					}
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
@@ -985,7 +1005,7 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
-
+	
 	//SET NIGHT TEST CODE
 	{
 		
@@ -1039,12 +1059,10 @@ void SceneGame::HitStone(int x, int y)
 	{
 		int stoneX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / tileSize.x);
 		int stoneY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / tileSize.y);
-		//ItemId* itme = player2->GetPlayerItemId();
 
 		if (stoneX == x && stoneY == y)
 		{
 			(*it)->Hit(1);
-			//std::cout << (*it)->GetHp() << std::endl;
 			if ((*it)->GetHp() <= 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -1059,19 +1077,24 @@ void SceneGame::HitStone(int x, int y)
 				//(*it)->SetActive(false);//해당 돌을 화면에서 안보이게 제거
 				RemoveGo(*it);
 				it = stones.erase(it);//돌의 백터 배열에서 제거
-				//RemoveGo(*it);
 				player2->ClearWalls();//플레이어가 가지고있는 콜라이더 배열 초기화
 
-				//testbox->SetPosition(tileSize.x * tileX + mapLT.x, tileSize.y * tileY + mapLT.y);
-
-				
 				SpawnRootingItem(ItemId::stone, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
 				int pick = Utils::RadomOneOrTwo(1, 2);
 				if (pick == 1)
 				{
 					SpawnRootingItem(ItemId::coal, { tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y });
 				}
-			
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Stone.csv", "Stone"));
+				effect->sortLayer = 10;
+				effect->SetPosition(tileSize.x * stoneX + mapLT.x, tileSize.y * stoneY + mapLT.y);
+				effect->Init();
+				effect->Reset();
+				effect->SetScale(4.5f, 4.5f);
+				effect->SetOrigin(Origins::TL);
+				effects.push_back(effect);
+
 				//walls 플레이어가 가지고있는 walls가 동일함 같은 인덱스? 일단 보류
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
@@ -1117,6 +1140,13 @@ void SceneGame::HitTimber(int x, int y)
 				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::branch, { tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y });
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Timber.csv", "Timber"));
+				effect->sortLayer = 10; 
+				effect->SetPosition(tileSize.x * timberX + mapLT.x, tileSize.y * timberY + mapLT.y); 
+				effect->Init();
+				effect->Reset();
+				effects.push_back(effect);
 
 				
 				for (int i = 0; i < farmWalls.size(); ++i)
@@ -1186,9 +1216,8 @@ void SceneGame::HitTree(int x, int y)
 				for (int i = 0; i < 7; ++i)
 				{
 					SpawnRootingItem(ItemId::branch, { tileSize.x * treeX + mapLT.x, tileSize.y * treeY + mapLT.y });
-
 				}
-			
+
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
 					player2->SetWallBounds(farmWalls[i]);
@@ -1210,11 +1239,11 @@ void SceneGame::HitWeed(int x, int y)
 	{
 		int weedX = static_cast<int>(((*it)->GetPosition().x - mapLT.x) / 72);
 		int weedY = static_cast<int>(((*it)->GetPosition().y - mapLT.y) / 72);
-
+		
 		if (weedX == x && weedY == y)
 		{
 			(*it)->Hit(1);
-	
+			
 			if ((*it)->GetHp() == 0)
 			{
 				sf::FloatRect wal = (*it)->GetCollider();
@@ -1223,14 +1252,20 @@ void SceneGame::HitWeed(int x, int y)
 				{
 					farmWalls.erase(wallIt);
 				}
-				(*it)->SetBang();
-				//(*it)->SetActive(false);
-				RemoveGo(*it);
+				(*it)->SetBang(); 
+				RemoveGo(*it); 
 				it = weeds.erase(it);
 
 				player2->ClearWalls();
 
 				SpawnRootingItem(ItemId::fiver, { tileSize.x * weedX + mapLT.x, tileSize.y * weedY + mapLT.y });
+
+				EffectGo* effect = (EffectGo*)AddGo(new EffectGo("animations/Weed.csv", "Weed")); 
+				effect->sortLayer = 10; 
+				effect->SetPosition(tileSize.x * weedX + mapLT.x, tileSize.y * weedY + mapLT.y); 
+				effect->Init(); 
+				effect->Reset(); 
+				effects.push_back(effect); 
 
 				for (int i = 0; i < farmWalls.size(); ++i)
 				{
@@ -1245,6 +1280,8 @@ void SceneGame::HitWeed(int x, int y)
 		}
 
 	}
+	
+
 }
 
 bool SceneGame::HasObjectAt(int x, int y)
