@@ -245,6 +245,6 @@ inline void SceneGame::CropLoad(ObjectPool<T>& pool, std::vector<CropLoadData>& 
 		tempCrop->LoadData(ldata[i]);
 		tempCrop->SetDirtTile(dirtArray[ldata[i].y][ldata[i].x]);
 		AddGo(tempCrop);
-		dirtArray[ldata[i].y][ldata[i].x]->PlatCrop(tempCrop);
+		dirtArray[ldata[i].y][ldata[i].x]->PlantCrop(tempCrop);
 	}
 }
