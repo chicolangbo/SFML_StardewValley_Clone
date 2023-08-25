@@ -41,6 +41,7 @@ public:
 	};
 
 protected:
+	bool harvest = false;
 	AnimationController animation;
 	Axe axe;
 	Pickax pickax;
@@ -91,12 +92,15 @@ protected:
 	sf::Vector2i playerTileIndex;
 	sf::Vector2i mouseTileIndex;
 
+
 public:
 	bool load = false;
 	//플레이어 포지션 / 타일 한칸의 사이즈 == 2차원 배열의 인덱스?
 	Player2(const std::string& textureId = "", const std::string& n = "")
 		: SpriteGo(textureId, n) {}
 	virtual ~Player2() override { Release(); }
+
+	void Harvest() { harvest = true; }
 
 	virtual void Init() override;
 	virtual void Reset() override;
