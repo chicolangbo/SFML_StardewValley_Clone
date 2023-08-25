@@ -250,10 +250,50 @@ void SaveLoadData::LoadCSV(DataLoad* sdata)
 
 	// CROPS DATA LOAD
 	{
+		parsnip.clear();
+		potato.clear();
+		cauliflower.clear();
+
 		const std::string fileName5 = "tables/save_crops.csv";
 		rapidcsv::Document crops_doc(fileName5);
 
-		
+		std::vector<int> type;
+		std::vector<int> x;
+		std::vector<int> y;
+		std::vector<int> date;
+		std::vector<int> day;
+		std::vector<int> level;
+		std::vector<int> curday;
+		std::vector<int> water;
+		std::vector<int> sortl;
+		std::vector<int> sorto;
+
+		type = crops_doc.GetColumn<int>("TYPE");
+		x = crops_doc.GetColumn<int>("INDEX_X");
+		y = crops_doc.GetColumn<int>("INDEX_Y");
+		date = crops_doc.GetColumn<int>("DATE");
+		day = crops_doc.GetColumn<int>("DAY");
+		level = crops_doc.GetColumn<int>("LEVEL");
+		curday = crops_doc.GetColumn<int>("CURRENTDAY");
+		water = crops_doc.GetColumn<int>("WATERED");
+		sortl = crops_doc.GetColumn<int>("SORTLAYER");
+		sorto = crops_doc.GetColumn<int>("SORTORDER");
+
+		for (int i = 0; i < type.size(); ++i)
+		{
+			if (type[i] == 0) // PARSNIP
+			{
+				parsnip.push_back({ type[i], x[i], y[i], date[i], day[i], level[i], curday[i], water[i], sortl[i], sorto[i] });
+			}
+			else if (type[i] == 1) // POTATO
+			{
+				potato.push_back({ type[i], x[i], y[i], date[i], day[i], level[i], curday[i], water[i], sortl[i], sorto[i] });
+			}
+			else if (type[i] == 2) // CAULIFLOWER
+			{
+				cauliflower.push_back({ type[i], x[i], y[i], date[i], day[i], level[i], curday[i], water[i], sortl[i], sorto[i] });
+			}
+		}
 	}
 	
 	// LOAD WITH CHANGES : stone, timber, weed, tree LEFT

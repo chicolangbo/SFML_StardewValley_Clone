@@ -38,15 +38,17 @@ void Crop::Reset()
 {
 	SpriteGo::Reset();
 
-	date = 0; //심은 날짜 
-	day = 0; //심은 이후의 날짜
-	level = 0;
-	currentday = 0;
-	index = { 0, 0 };
-	isWatered = false;
+	if (!load)
+	{
+		date = 0; //심은 날짜 
+		day = 0; //심은 이후의 날짜
+		level = 0;
+		currentday = 0;
+		index = { 0, 0 };
+		//isWatered = false;
+	}
 	bang = false;
 	animationTime = 0.7;
-
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Crop.csv"));
 	animation.SetTarget(&sprite);
 
@@ -71,7 +73,6 @@ void Crop::Update(float dt)
 			day++;
 			LevelUp();
 		}
-		isWatered = false;
 	}
 
 	if (bang)
@@ -125,6 +126,21 @@ void Crop::SetDate(int date)
 	currentday = date;
 }
 
+void Crop::LoadData(CropLoadData ldata)
+{
+	index.x = ldata.x;
+	index.y = ldata.y;
+	date = ldata.date;
+	day = ldata.day;
+	level = ldata.level;
+	currentday = ldata.curday;
+	isWatered = ldata.water;
+	sortLayer = ldata.sortl;
+	sortOrder = ldata.sorto;
+	//LevelUp();
+	load = true;
+}
+
 void Crop::LevelUp()
 {
 	if (period[level] == day)
@@ -146,7 +162,7 @@ void Crop::FullLevUp()
 	canHarvest = true;
 }
 
-SaveData Crop::GetLoadData()
+CropSaveData Crop::GetLoadData()
 {
 	cropSaveData =
 	{

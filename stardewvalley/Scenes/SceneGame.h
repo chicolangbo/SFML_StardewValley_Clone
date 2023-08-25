@@ -3,6 +3,7 @@
 #include "Item.h"
 #include "ObjectPool.h"
 #include "ObjectTable.h"
+#include "HoeDirt.h"
 
 class VertexArrayGo;
 class Player2;
@@ -24,7 +25,7 @@ class Stone;
 class Timber;
 class Weed;
 class Tree;
-class HoeDirt;
+//class HoeDirt;
 class Parsnip;
 class Potato;
 class Cauliflower;
@@ -197,6 +198,9 @@ public:
 	void ClearMapObj(vector<T>& obj);
 
 	void ObjectLoad(unordered_map<int, ObjectInfo> table);
+
+	template <typename T>
+	void CropLoad(ObjectPool<T>& pool, std::vector<CropLoadData>& ldata );
 };
 
 template<typename T>
@@ -217,4 +221,17 @@ inline void SceneGame::ClearMapObj(vector<T>& obj)
 		RemoveGo(i);
 	}
 	obj.clear();
+}
+
+template<typename T>
+inline void SceneGame::CropLoad(ObjectPool<T>& pool, std::vector<CropLoadData>& ldata)
+{
+	for (int i = 0; i < ldata.size(); ++i)
+	{
+		T* tempCrop = pool.Get();
+		tempCrop->LoadData(ldata[i]);
+		tempCrop->SetDirtTile(dirtArray[ldata[i].y][ldata[i].x]);
+		AddGo(tempCrop);
+		dirtArray[ldata[i].y][ldata[i].x]->PlatCrop(tempCrop);
+	}
 }

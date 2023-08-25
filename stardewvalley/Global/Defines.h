@@ -98,11 +98,39 @@ enum class CropId
 	Cauliflower,
 	None,
 };
+
 enum class Location
 {
 	Farm,
 	Shop,
 	Home
 };
+
+struct CropLoadData
+{
+	int type;
+	int x;
+	int y;
+	int date;
+	int day;
+	int level;
+	int curday;
+	int water;
+	int sortl;
+	int sorto;
+};
+//
+//struct CropSaveData
+//{
+//	CropId id;
+//	int date;
+//	int day;
+//	int currentday;
+//	int level;
+//	sf::Vector2i index;
+//	bool isWatered;
+//	int sortLayer;
+//	int sortOrder;
+//};
 
 #include "AnimationClip.h"

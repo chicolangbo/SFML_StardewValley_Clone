@@ -5,6 +5,20 @@
 #include "ObjectTable.h"
 #include "Crop.h"
 
+//struct CropLoadData
+//{
+//	int type;
+//	int x;
+//	int y;
+//	int date;
+//	int day;
+//	int level;
+//	int curday;
+//	int water;
+//	int sortl;
+//	int sorto;
+//};
+
 class Stone;
 class Timber;
 class Weed;
@@ -20,6 +34,10 @@ protected:
 
 public:
 	unordered_map<int, ObjectInfo> table;
+	std::vector<CropLoadData> parsnip;
+	std::vector<CropLoadData> potato;
+	std::vector<CropLoadData> cauliflower;
+
 	SaveLoadData() = default;
 	virtual ~SaveLoadData() override;
 
@@ -31,7 +49,7 @@ public:
 	{
 		for (auto i : pool)
 		{
-			SaveData parsnip = i->GetLoadData();
+			CropSaveData parsnip = i->GetLoadData();
 			type.push_back((int)parsnip.id);
 			x.push_back(parsnip.index.x);
 			y.push_back(parsnip.index.y);

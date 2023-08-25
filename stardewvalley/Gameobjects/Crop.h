@@ -2,7 +2,7 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 
-struct SaveData
+struct CropSaveData
 {
 	CropId id;
 	int date;
@@ -27,10 +27,10 @@ protected:
 	int level; //성장단계
 	sf::Vector2i index; //위치
 	int allPeriod = 0; //수확까지 성장 기간
-	bool isWatered; //물줬는지
 	bool canHarvest = false;
+	bool isWatered; //물줬는지
 
-	SaveData cropSaveData;
+	CropSaveData cropSaveData;
 
 	CropId id;
 	int period[4];
@@ -47,6 +47,8 @@ protected:
 
 public:
 	bool bang;
+	bool load = false;
+
 	Crop(const string& textureId = "", const string& n = "", const string& nickname = "");
 	virtual ~Crop() override;
 
@@ -62,16 +64,16 @@ public:
 	void SetDirtTile(HoeDirt* tile);
 	void SetDate(int date);
 	void SetIsWatered(bool is) { isWatered = is; }
+	void LoadData(CropLoadData ldata);
 
 	void LevelUp();
 	bool GetCanHarvest() { return canHarvest; }
 	CropId GetCropId() { return id; }
 
-
 	//TEST CODE
 	void FullLevUp();
 	
 	sf::Vector2i GetIndex() { return index; }
-	SaveData GetLoadData();
+	CropSaveData GetLoadData();
 };
 

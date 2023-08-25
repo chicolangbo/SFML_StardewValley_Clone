@@ -32,13 +32,13 @@
 #include "Weed.h"
 #include "Tree.h"
 #include "HoeDirt.h"
-#include "SaveLoadData.h"
 #include "SceneTitle.h"
 #include "Parsnip.h"
 #include "Crop.h"
 #include "Cauliflower.h"
 #include "Potato.h"
 #include "EffectGo.h"
+#include "SaveLoadData.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -303,6 +303,9 @@ void SceneGame::Enter()
 			day = sData.game_day;
 			ObjectLoad(SAVELOAD_DATA.table);
 			activeDirtIndex = sData.activeDirtIndex;
+			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip);
+			CropLoad(potatoPool, SAVELOAD_DATA.potato);
+			CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
 
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
@@ -315,6 +318,18 @@ void SceneGame::Enter()
 			Objtable->Load();
 			ObjectLoad(Objtable->GetTable());
 			player2->load = false;
+			for (auto i : parsnipPool.GetPool())
+			{
+				i->load = false;
+			}
+			for (auto i : potatoPool.GetPool())
+			{
+				i->load = false;
+			}
+			for (auto i : cauliflowerPool.GetPool())
+			{
+				i->load = false;
+			}
 			activeDirtIndex.clear();
 		}
 	}
@@ -339,6 +354,18 @@ void SceneGame::Enter()
 		for (int i = 0; i < trees.size(); i++)
 		{
 			trees[i]->stump->SetMapLT(mapLT);
+		}
+		for (auto i : parsnipPool.GetUseList())
+		{
+			i->SetPosition({ i->GetIndex().x * tileSize.x + mapLT.x, i->GetIndex().y * tileSize.y + mapLT.y});
+		}
+		for (auto i : potatoPool.GetUseList())
+		{
+			i->SetPosition({ i->GetIndex().x * tileSize.x + mapLT.x, i->GetIndex().y * tileSize.y + mapLT.y});
+		}
+		for (auto i : cauliflowerPool.GetUseList())
+		{
+			i->SetPosition({ i->GetIndex().x * tileSize.x + mapLT.x, i->GetIndex().y * tileSize.y + mapLT.y});
 		}
 	}
 
@@ -491,6 +518,8 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
+	std::cout << player2->GetPosition().x << "," << player2->GetPosition().y << std::endl;
+
 	Scene::Update(dt);
 
 	// TREE TRANSPARENT
@@ -1417,6 +1446,19 @@ void SceneGame::ChangeDate()
 	hour = 6;
 	min = 0;
 	arrowSpin = 0;
+
+	for (auto i : parsnipPool.GetUseList())
+	{
+		i->SetIsWatered(false);
+	}
+	for (auto i : potatoPool.GetUseList())
+	{
+		i->SetIsWatered(false);
+	}
+	for (auto i : cauliflowerPool.GetUseList())
+	{
+		i->SetIsWatered(false);
+	}
 }
 
 void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
