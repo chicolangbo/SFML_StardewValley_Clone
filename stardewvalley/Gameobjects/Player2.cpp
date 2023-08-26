@@ -140,616 +140,619 @@ void Player2::Reset()
 
 void Player2::Update(float dt)
 {
-	SpriteGo::Update(dt);
+	if (move)
+	{
+		SpriteGo::Update(dt);
 
-	//hitBox.setPosition(GetPosition());
+		//hitBox.setPosition(GetPosition());
 	
 
-	sf::Vector2f playerPos = GetPosition();
+		sf::Vector2f playerPos = GetPosition();
 
-	if (item != ItemId::pick && item != ItemId::ax && item != ItemId::homi && item != ItemId::waterCan && item != ItemId::hook && item != ItemId::none)
-	{
-		auto it = itemIconList.find(item);
-		if (it != itemIconList.end())
+		if (item != ItemId::pick && item != ItemId::ax && item != ItemId::homi && item != ItemId::waterCan && item != ItemId::hook && item != ItemId::none)
 		{
-			handitem = new SpriteGo(it->second.textureId, it->second.name, it->second.nickName);
-			handitem->Reset();
-			handitem->SetScale({ 4.5f,4.5f });
-			handitem->SetOrigin(Origins::MC);
-			handitem->SetPosition(playerPos.x, playerPos.y - 130.f);
-		}
-	}
-	else
-	{
-		delete handitem;
-		handitem = nullptr; 
-	}
-
-
-	//std::cout << (int)item << std::endl;
-	if (!playerDie)
-	{
-		if (!playingAnimation)
-		{
-			direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
-			direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-		}
-		float magnitude = Utils::Magnitude(direction);
-		if (magnitude > 1.f)
-		{
-			direction /= magnitude;
-		}
-
-		//sf::Vector2f newPosition = position + direction * dt * speed;
-		//collider.setPosition(newPosition);
-
-		playerBound = collider.getGlobalBounds(); 
-		for (int i = 0; i < wallBounds.size(); ++i)
-		{
-			if (collider.getGlobalBounds().intersects(wallBounds[i]))
+			auto it = itemIconList.find(item);
+			if (it != itemIconList.end())
 			{
-				if (position.x < wallBoundsLT[i].x)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::A))
-					{
-						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
-					}
-					else
-					{
-						direction.x = 0;
-					}
-				}
-				else if (position.x > wallBoundsRB[i].x)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::D))
-					{
-						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
-					}
-					else
-					{
-						direction.x = 0;
-					}
-				}
-				else if (position.y < wallBoundsRB[i].y)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::W))
-					{
-						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
-					}
-					else
-					{
-						direction.y = 0;
-					}
-				}
-				else if (position.y > wallBoundsRB[i].y)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::S))
-					{
-						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-					}
-					else
-					{
-						direction.y = 0;
-					}
-				}
+				handitem = new SpriteGo(it->second.textureId, it->second.name, it->second.nickName);
+				handitem->Reset();
+				handitem->SetScale({ 4.5f,4.5f });
+				handitem->SetOrigin(Origins::MC);
+				handitem->SetPosition(playerPos.x, playerPos.y - 130.f);
 			}
 		}
-		position += direction * speed * dt;
-		SetPosition(position);
-
-
-		//도구 사용
-		axe.Update(dt);
-		axe.SetPosition(position);
-		axe.SetOrigins();
-
-		pickax.Update(dt);
-		pickax.SetPosition(position);
-		pickax.SetOrigins();
-
-		hoe.Update(dt);
-		hoe.SetPosition(position);
-		hoe.SetOrigins();
-
-		scythe.Update(dt);
-		scythe.SetPosition(position);
-		scythe.SetOrigins();
-
-		watering.Update(dt);
-		watering.SetPosition(position);
-		watering.SetOrigins();
-
-
-		if ((direction.x != 0.f || direction.y != 0.f))
+		else
 		{
-			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
-			{
-				auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
-					[this](const ClipInfo& lhs, const ClipInfo& rhs) {
-						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-					});
-				currentClipInfo = *min;
-			}
-			else
-			{
-				auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
-					[this](const HandOnItem& lhs, const HandOnItem& rhs) {
-						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-					});
-				currentClipInfoItem = *mins;
-			}
-		}
-		//아이템 들고있는것에따라 모션
-		{
-			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
-			{
-				std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
-				if (GetFlipX() != currentClipInfo.flipX)
-				{
-					SetFlipX(currentClipInfo.flipX);
-				}
-				if (!playingAnimation)
-				{
-					if (animation.GetCurrentClipId() != clipId) 
-					{
-						animation.Play(clipId); 
-					}
-				}
-			}
-			else
-			{
-				std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
-				if (GetFlipX() != currentClipInfoItem.flipX)
-				{
-					SetFlipX(currentClipInfoItem.flipX);
-				}
-				if (!playingAnimation)
-				{
-					if (animation.GetCurrentClipId() != clipId)
-					{
-						animation.Play(clipId);
-					}
-				}
-			}
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
-		{
-			energy = 0;
+			delete handitem;
+			handitem = nullptr; 
 		}
 
-		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+
+		//std::cout << (int)item << std::endl;
+		if (!playerDie)
 		{
 			if (!playingAnimation)
 			{
-				switch (item)
+				direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+				direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+			}
+			float magnitude = Utils::Magnitude(direction);
+			if (magnitude > 1.f)
+			{
+				direction /= magnitude;
+			}
+
+			//sf::Vector2f newPosition = position + direction * dt * speed;
+			//collider.setPosition(newPosition);
+
+			playerBound = collider.getGlobalBounds(); 
+			for (int i = 0; i < wallBounds.size(); ++i)
+			{
+				if (collider.getGlobalBounds().intersects(wallBounds[i]))
 				{
-				case ItemId::hook:
-					if (playerTileIndex.y < mouseTileIndex.y)
+					if (position.x < wallBoundsLT[i].x)
 					{
-						if (harvest)
+						if (INPUT_MGR.GetKey(sf::Keyboard::A))
 						{
-							animation.Play("Harvest");
-							harvest = false;
+							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 						}
 						else
 						{
-							animation.Play("Attack");
-							scythe.SetFlipX(true);
-							scythe.PlayAnimation("ScytheFront");
+							direction.x = 0;
 						}
 					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+					else if (position.x > wallBoundsRB[i].x)
 					{
+						if (INPUT_MGR.GetKey(sf::Keyboard::D))
+						{
+							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+						}
+						else
+						{
+							direction.x = 0;
+						}
+					}
+					else if (position.y < wallBoundsRB[i].y)
+					{
+						if (INPUT_MGR.GetKey(sf::Keyboard::W))
+						{
+							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
+						}
+						else
+						{
+							direction.y = 0;
+						}
+					}
+					else if (position.y > wallBoundsRB[i].y)
+					{
+						if (INPUT_MGR.GetKey(sf::Keyboard::S))
+						{
+							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+						}
+						else
+						{
+							direction.y = 0;
+						}
+					}
+				}
+			}
+			position += direction * speed * dt;
+			SetPosition(position);
 
-						if (playerTileIndex.x < mouseTileIndex.x)
+
+			//도구 사용
+			axe.Update(dt);
+			axe.SetPosition(position);
+			axe.SetOrigins();
+
+			pickax.Update(dt);
+			pickax.SetPosition(position);
+			pickax.SetOrigins();
+
+			hoe.Update(dt);
+			hoe.SetPosition(position);
+			hoe.SetOrigins();
+
+			scythe.Update(dt);
+			scythe.SetPosition(position);
+			scythe.SetOrigins();
+
+			watering.Update(dt);
+			watering.SetPosition(position);
+			watering.SetOrigins();
+
+
+			if ((direction.x != 0.f || direction.y != 0.f))
+			{
+				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+				{
+					auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
+						[this](const ClipInfo& lhs, const ClipInfo& rhs) {
+							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+						});
+					currentClipInfo = *min;
+				}
+				else
+				{
+					auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
+						[this](const HandOnItem& lhs, const HandOnItem& rhs) {
+							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+						});
+					currentClipInfoItem = *mins;
+				}
+			}
+			//아이템 들고있는것에따라 모션
+			{
+				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+				{
+					std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
+					if (GetFlipX() != currentClipInfo.flipX)
+					{
+						SetFlipX(currentClipInfo.flipX);
+					}
+					if (!playingAnimation)
+					{
+						if (animation.GetCurrentClipId() != clipId) 
+						{
+							animation.Play(clipId); 
+						}
+					}
+				}
+				else
+				{
+					std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
+					if (GetFlipX() != currentClipInfoItem.flipX)
+					{
+						SetFlipX(currentClipInfoItem.flipX);
+					}
+					if (!playingAnimation)
+					{
+						if (animation.GetCurrentClipId() != clipId)
+						{
+							animation.Play(clipId);
+						}
+					}
+				}
+			}
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
+			{
+				energy = 0;
+			}
+
+			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+			{
+				if (!playingAnimation)
+				{
+					switch (item)
+					{
+					case ItemId::hook:
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide"); 
+								animation.Play("Harvest");
+								harvest = false;
 							}
 							else
 							{
+								animation.Play("Attack");
 								scythe.SetFlipX(true);
-								scythe.PlayAnimation("ScytheSide");
-								SetScale(4.5f, 4.5f);
-								animation.Play("AttackSide");
+								scythe.PlayAnimation("ScytheFront");
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide"); 
+								}
+								else
+								{
+									scythe.SetFlipX(true);
+									scythe.PlayAnimation("ScytheSide");
+									SetScale(4.5f, 4.5f);
+									animation.Play("AttackSide");
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f); 
+									animation.Play("HarvestSide");
+								}
+								else
+								{
+									scythe.SetFlipX(false);
+									scythe.PlayAnimation("ScytheSide");
+									SetScale(-4.5f, 4.5f);
+									animation.Play("AttackSide");
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f); 
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 							}
-							else
+							else 
 							{
-								scythe.SetFlipX(false);
-								scythe.PlayAnimation("ScytheSide");
-								SetScale(-4.5f, 4.5f);
-								animation.Play("AttackSide");
+								animation.Play("AttackUp");
+								scythe.SetFlipX(true);
+								scythe.PlayAnimation("ScytheBack");
 							}
-						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-						}
-						else 
-						{
-							animation.Play("AttackUp");
-							scythe.SetFlipX(true);
-							scythe.PlayAnimation("ScytheBack");
-						}
 						
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
-
-				case ItemId::ax:
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
 						}
-						else
-						{
-							animation.Play("Tool");
-							axe.SetFlipX(true);
-							axe.PlayAnimation("AxeFront");
-						}
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 
-						if (playerTileIndex.x < mouseTileIndex.x)
+					case ItemId::ax:
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("Harvest");
 								harvest = false;
 							}
 							else
 							{
+								animation.Play("Tool");
 								axe.SetFlipX(true);
-								axe.PlayAnimation("AxeSide");
-								SetScale(4.5f, 4.5f);
-								animation.Play("ToolSide");
+								axe.PlayAnimation("AxeFront");
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 						{
-							if (harvest)
-							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
-								harvest = false;
-							}
-							else
-							{
-								axe.SetFlipX(false);
-								axe.PlayAnimation("AxeSide");
-								SetScale(-4.5f, 4.5f);
-								animation.Play("ToolSide");
-							}
-						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("ToolUp");
-							axe.SetFlipX(true);
-							axe.PlayAnimation("AxeBack");
-						}
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
-				case ItemId::pick:
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("Tool");
-							pickax.SetFlipX(true);
-							pickax.PlayAnimation("PickaxFront");
-						}
-						
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
 
-						if (playerTileIndex.x < mouseTileIndex.x)
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									axe.SetFlipX(true);
+									axe.PlayAnimation("AxeSide");
+									SetScale(4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									axe.SetFlipX(false);
+									axe.PlayAnimation("AxeSide");
+									SetScale(-4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 							else
 							{
+								animation.Play("ToolUp");
+								axe.SetFlipX(true);
+								axe.PlayAnimation("AxeBack");
+							}
+						}
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
+					case ItemId::pick:
+						if (playerTileIndex.y < mouseTileIndex.y)
+						{
+							if (harvest)
+							{
+								animation.Play("Harvest");
+								harvest = false;
+							}
+							else
+							{
+								animation.Play("Tool");
 								pickax.SetFlipX(true);
-								pickax.PlayAnimation("PickaxSide");
-								SetScale(4.5f, 4.5f);
-								animation.Play("ToolSide");
+								pickax.PlayAnimation("PickaxFront");
+							}
+						
+						}
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									pickax.SetFlipX(true);
+									pickax.PlayAnimation("PickaxSide");
+									SetScale(4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									pickax.SetFlipX(false);
+									pickax.PlayAnimation("PickaxSide");
+									SetScale(-4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 							else
 							{
-								pickax.SetFlipX(false);
-								pickax.PlayAnimation("PickaxSide");
-								SetScale(-4.5f, 4.5f);
-								animation.Play("ToolSide");
+								animation.Play("ToolUp");
+								pickax.SetFlipX(true);
+								pickax.PlayAnimation("PickaxBack");
 							}
 						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("ToolUp");
-							pickax.SetFlipX(true);
-							pickax.PlayAnimation("PickaxBack");
-						}
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 
-				case ItemId::homi:
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("Tool");
-							hoe.SetFlipX(true);
-							hoe.PlayAnimation("HoeFront");
-						}
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
-
-						if (playerTileIndex.x < mouseTileIndex.x)
+					case ItemId::homi:
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("Harvest");
 								harvest = false;
 							}
 							else
 							{
+								animation.Play("Tool");
 								hoe.SetFlipX(true);
-								hoe.PlayAnimation("HoeSide");
-								SetScale(4.5f, 4.5f);
-								animation.Play("ToolSide");
+								hoe.PlayAnimation("HoeFront");
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									hoe.SetFlipX(true);
+									hoe.PlayAnimation("HoeSide");
+									SetScale(4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									hoe.SetFlipX(false);
+									hoe.PlayAnimation("HoeSide");
+									SetScale(-4.5f, 4.5f);
+									animation.Play("ToolSide");
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 							else
 							{
-								hoe.SetFlipX(false);
-								hoe.PlayAnimation("HoeSide");
-								SetScale(-4.5f, 4.5f);
-								animation.Play("ToolSide");
+								animation.Play("ToolUp");
+								hoe.SetFlipX(true);
+								hoe.PlayAnimation("HoeBack");
 							}
 						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("ToolUp");
-							hoe.SetFlipX(true);
-							hoe.PlayAnimation("HoeBack");
-						}
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 
-				case ItemId::waterCan:
-					SetOrigin(Origins::BC);
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
-						}
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
-						if (playerTileIndex.x < mouseTileIndex.x)
+					case ItemId::waterCan:
+						SetOrigin(Origins::BC);
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("Harvest");
 								harvest = false;
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 
-				default:
-					SetOrigin(Origins::BC);
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
-						}
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
-						if (playerTileIndex.x < mouseTileIndex.x)
+					default:
+						SetOrigin(Origins::BC);
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("Harvest");
 								harvest = false;
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 						}
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-					}
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
 				}
 			}
 		}
-	}
 
 
-    else if (playerDie&&one)
-	{
-		animation.Play("Die");
-		one = false;
-	}
-	
-	if (energy == 0)
-	{
-		playerDie = true;
-	}
-
-	if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
-	{
-		playingAnimation = false;
-		//harvest = false;
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
-	{
-		Reset(); 
-	}
-
-	if (INPUT_MGR.GetKey(sf::Keyboard::Add))
-	{
-		money += 100;
-	}
-	if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
-	{
-		money -= 100;
-	}
-	animation.Update(dt);
-
-	// 아이템 관련
-	AddRootingItem();
-		
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
-	{
-		int a = 0;
-		for (auto& i : playerItemList)
+		else if (playerDie&&one)
 		{
-			std::cout << "============ pushnum: " << a << "============" << std::endl;
-			std::cout << "count: "<< i.count << std::endl;
-			std::cout << "index: "<< i.index << std::endl;
-			a++;
+			animation.Play("Die");
+			one = false;
 		}
-	}
+	
+		if (energy == 0)
+		{
+			playerDie = true;
+		}
 
-	// MONEY TEST CODE
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
-	{
-		tempMoney = 300;
+		if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
+		{
+			playingAnimation = false;
+			//harvest = false;
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
+		{
+			Reset(); 
+		}
+
+		if (INPUT_MGR.GetKey(sf::Keyboard::Add))
+		{
+			money += 100;
+		}
+		if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
+		{
+			money -= 100;
+		}
+		animation.Update(dt);
+
+		// 아이템 관련
+		AddRootingItem();
+		
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
+		{
+			int a = 0;
+			for (auto& i : playerItemList)
+			{
+				std::cout << "============ pushnum: " << a << "============" << std::endl;
+				std::cout << "count: "<< i.count << std::endl;
+				std::cout << "index: "<< i.index << std::endl;
+				a++;
+			}
+		}
+
+		// MONEY TEST CODE
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
+		{
+			tempMoney = 300;
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
+		{
+			tempMoney = -300;
+		}
+		MoneyUpdate();
+		//타일맵 베이스
 	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
-	{
-		tempMoney = -300;
-	}
-	MoneyUpdate();
-	//타일맵 베이스
 }
 
 void Player2::Draw(sf::RenderWindow& window)

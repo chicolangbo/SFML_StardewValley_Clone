@@ -78,7 +78,6 @@ void QuickInventory::Reset()
 
 	for (int i = 0; i < 12; ++i)
 	{
-
 		quickslots[i]->SetPosition({ 575.f + (i * 70.f),1025.f });
 		quickslots[i]->sortLayer = 150;
 		quickslots[i]->SetCountPos(quickslots[i]->GetPosition() + (sf::Vector2f{quickslots[i]->sprite.getGlobalBounds().width, quickslots[i]->sprite.getGlobalBounds().height}) / 2.f);

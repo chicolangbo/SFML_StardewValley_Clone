@@ -988,36 +988,36 @@ void SceneGame::Update(float dt)
 				}
 				else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
 					INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
-				{
-					fadingOut = true;
-					nextlocation = Location::Shop;
-					/*for (auto go : gameObjects)
 					{
-						if (go->GetActive())
+						fadingOut = true;
+						nextlocation = Location::Shop;
+						/*for (auto go : gameObjects)
 						{
-							if (go->GetName() == "homeTap")
-								continue;
-							go->SetActive(false);
+							if (go->GetActive())
+							{
+								if (go->GetName() == "homeTap")
+									continue;
+								go->SetActive(false);
+							}
+							else
+							{
+								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+									continue;
+								go->SetActive(true);
+							}
 						}
-						else
+						SetAct(true);
+						player2->ClearWalls();
+						for (int i = 0; i < shopWalls.size(); ++i)
 						{
-							if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-								continue;
-							go->SetActive(true);
+							player2->SetWallBounds(shopWalls[i]);
 						}
-					}
-					SetAct(true);
-					player2->ClearWalls();
-					for (int i = 0; i < shopWalls.size(); ++i)
-					{
-						player2->SetWallBounds(shopWalls[i]);
-					}
-					location = Location::Shop;
-					player2->SetPosition(shopInEnter);*/
+						location = Location::Shop;
+						player2->SetPosition(shopInEnter);*/
 				}
 				if (!changeLocation && !fadingOut)
 				{
-					if(nextlocation == Location::Home)
+					if (nextlocation == Location::Home)
 					{
 						for (auto go : gameObjects)
 						{
@@ -1081,6 +1081,19 @@ void SceneGame::Update(float dt)
 				}
 				break;
 			}
+	}
+
+	// PLAYER MOVE PATTERN
+	{
+		if (homeTap->homeTapOn || shopTap->shopTapOn || inven->GetInvenOff())
+		{
+			player2->move = false;
+			player2->MoneyUpdate();
+		}
+		else
+		{
+			player2->move = true;
+		}
 	}
 	
 	//SET VIEW
