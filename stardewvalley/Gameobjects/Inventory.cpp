@@ -42,6 +42,7 @@ Inventory::Inventory(const std::string& n)
     xButton("graphics/Cursors.ko-KR.png", "xButton", "xButton"),
     title("graphics/setButton.png", "title"),
     end("graphics/setButton.png", "end"),
+    langChange("graphics/setButton.png", "end"),
     mapImage("graphics/map.png", "map", "map"),
     ring("graphics/MenuTiles.png", "invenRing", "invenRing"),
     shoes("graphics/MenuTiles.png", "invenShoes", "invenShoes"),
@@ -73,6 +74,7 @@ Inventory::Inventory(const std::string& n)
     AddUi(&title);
     AddUi(&end);
     AddUi(&scareCrow);
+    AddUi(&langChange);
 
     for (int i = 0; i < 3; ++i)
     {
@@ -201,6 +203,8 @@ void Inventory::Reset()
         charBg.colliderOnOff = false;
         charBg.sortLayer = (int)UiType::ITEM;
 
+        //Variables::CurrentLang = Languages::KOR;
+
         StringTable* stringTable1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
         curFunds.SetString(stringTable1->Get("CUR_MONEY"));
         curFunds.text.setCharacterSize(60);
@@ -235,24 +239,33 @@ void Inventory::Reset()
         totalEarningsValue.sortLayer = (int)UiType::ITEM;
 
         title.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
-        title.text.setString(stringTable1->Get("TOTITLE"));
-        title.text.setCharacterSize(100);
+        title.SetString(stringTable1->Get("TOTITLE"));
+        title.text.setCharacterSize(70);
         title.text.setFillColor(sf::Color::Black);
-        title.SetPosition(position.x, position.y - 80.f);
-        title.text.setPosition(title.GetPosition().x, title.GetPosition().y - 40.f);
-        title.SetScale(1.5f, 1.5f);
+        title.SetPosition(position.x, position.y - 150.f);
+        title.text.setPosition(title.GetPosition().x, title.GetPosition().y - 30.f);
+        //title.SetScale(1.5f, 1.5f);
         title.SetOrigin(Origins::MC);
         title.sortLayer = (int)UiType::CHANEGE;
 
         end.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
-        end.text.setString(stringTable1->Get("END"));
-        end.text.setCharacterSize(100);
+        end.SetString(stringTable1->Get("END"));
+        end.text.setCharacterSize(70);
         end.text.setFillColor(sf::Color::Black);
         end.SetPosition(title.GetPosition().x,title.GetPosition().y + title.sprite.getGlobalBounds().height + 30.f);
-        end.text.setPosition(end.GetPosition().x, end.GetPosition().y - 40.f);
-        end.SetScale(1.5f, 1.5f);
+        end.text.setPosition(end.GetPosition().x, end.GetPosition().y - 30.f);
+       // end.SetScale(1.5f, 1.5f);
         end.SetOrigin(Origins::MC);
         end.sortLayer = (int)UiType::CHANEGE;
+
+        langChange.text.setFont(*RESOURCE_MGR.GetFont("fonts/SDMiSaeng.ttf"));
+        langChange.SetString(stringTable1->Get("CHANGE_LANG"));
+        langChange.text.setCharacterSize(70);
+        langChange.text.setFillColor(sf::Color::Black);
+        langChange.SetPosition(end.GetPosition().x, end.GetPosition().y + end.sprite.getGlobalBounds().height + 30.f);
+        langChange.text.setPosition(langChange.GetPosition().x, langChange.GetPosition().y - 30.f);
+        langChange.SetOrigin(Origins::MC);
+        langChange.sortLayer = (int)UiType::CHANEGE;
 
         player->GetAnimation().Play("Idle");
         pl.sprite = player->sprite;
@@ -489,6 +502,18 @@ void Inventory::ButtonSetUp()
     };
     scareCrow.OnClick = [this]() {
         scareCrow.Craft(player, scareCrow.GetId());
+    };
+    langChange.OnClick = [this]() {
+        if (Variables::CurrentLang == Languages::KOR)
+        {
+            Variables::CurrentLang = Languages::ENG;
+        }
+        else if (Variables::CurrentLang == Languages::ENG)
+        {
+            Variables::CurrentLang = Languages::KOR;
+        }
+        Reset();
+        //SCENE_MGR.GetCurrScene()->Enter();
     };
 }
 

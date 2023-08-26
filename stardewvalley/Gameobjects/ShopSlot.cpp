@@ -65,8 +65,18 @@ void ShopSlot::Reset()
     itemIcon.SetScale(5.f, 5.f);
     itemIcon.colliderOnOff = false;
 
-    wstring name = DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->GetUniName(id);
-    itemText.SetText(name, 70, sf::Color::Black, Origins::ML, 100, position.x, position.y);
+    if (Variables::CurrentLang == Languages::ENG)
+    {
+        itemText.SetString(DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->GetName(id));
+    }
+    else
+    {
+        itemText.text.setString(DATATABLE_MGR.Get<AllItemTable>(DataTable::Ids::AllItem)->GetUniName(id));
+    }
+    itemText.text.setCharacterSize(70);
+    itemText.text.setFillColor(sf::Color::Black);
+    itemText.SetOrigin(Origins::ML);
+    itemText.SetPosition(position.x, position.y);
 
     coin.SetOrigin(Origins::MC);
     coin.SetScale(6.f, 6.f);

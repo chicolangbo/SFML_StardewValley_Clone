@@ -31,7 +31,10 @@ public:
     virtual void Release() override;
 
     const ItemInfo* Get(ItemId);
+    const std::string GetName(ItemId id);
     const std::wstring GetUniName(ItemId id);
+
+    const std::string GetDescription(ItemId id);
     const std::wstring GetUniDescription(ItemId id);
     wstring multibyte_to_uni(const std::string& str);
 };

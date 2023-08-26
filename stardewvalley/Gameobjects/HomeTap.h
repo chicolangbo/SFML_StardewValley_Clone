@@ -20,6 +20,7 @@ protected:
     TextGo question;
     RectButton yes;
     RectButton no;
+    Languages prevLang;
 
 public:
     bool save = false;

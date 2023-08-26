@@ -40,6 +40,7 @@
 #include "EffectGo.h"
 #include "SaveLoadData.h"
 #include "Slot.h"
+#include "StringTable.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -704,8 +705,9 @@ void SceneGame::Update(float dt)
 		collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
 		texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
 
+		StringTable* stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
 		texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
-		dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
+		dayday->SetText(stringTable->Get("DAY"), 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
 	
 		energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
 		energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);

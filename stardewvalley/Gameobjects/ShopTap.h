@@ -43,6 +43,7 @@ protected:
     SliceImageGo invenBox;
     UiButton scrollUp;
     UiButton scrollDown;
+    Languages prevLang;
 
 public:
     bool shopTapOn = false;

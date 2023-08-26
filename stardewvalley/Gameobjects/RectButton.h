@@ -19,6 +19,7 @@ public:
 
 	virtual void SetPosition(const sf::Vector2f p);
 	virtual void SetPosition(float x, float y);
+	void SetString(const string& str);
 
 	virtual void SetOrigin(Origins origin);
 	virtual void SetOrigin(float x, float y);

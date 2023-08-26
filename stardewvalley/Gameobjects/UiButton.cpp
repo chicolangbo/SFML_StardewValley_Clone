@@ -122,3 +122,10 @@ void UiButton::Draw(sf::RenderWindow& window)
 	// ±è¹ÎÁö, 230813, Ãß°¡
 	window.draw(text);
 }
+
+void UiButton::SetString(const string& str)
+{
+	std::string utf8String = str;
+	sf::String unicodeString = sf::String::fromUtf8(utf8String.begin(), utf8String.end());
+	text.setString(unicodeString);
+}

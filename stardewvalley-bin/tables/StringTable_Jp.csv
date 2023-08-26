@@ -1,5 +1,24 @@
-ID,JAPANESE
-HELLO,Hello (�Ϻ���)
-BYE,Bye (�Ϻ���)
-YOU_DIE,You Die�� (�Ϻ���)
-TITLE,Zombie Survival (�Ϻ���)
+ID,JAPAN
+HELLO,こんにちは
+BYE,バイバイ
+YOU_DIE,あなたは死にます
+TITLE,スターデューバレー
+CUR_MONEY,当座預金 :
+TOTAL_MONEY,総収入 :
+TOTITLE,タイトルメニューに
+END,ゲーム終了
+LAYER1,レイヤ 1
+LAYER2,レイヤ 2
+LAYER_OBJ,オブジェ
+LAYER_COLL,衝突体
+SAVE,保存する
+LOAD,呼び寄せる
+PIERRE1,ピエールネへ
+PIERRE2,ようこそ!
+PIERRE3,必要なものが
+PIERRE4,あるの？
+SAVE_Q,今日はこれで寝ましょうか？
+SAVE_YES,はい。
+SAVE_UNDO,いいえ。
+DAY,日数:
+CHANGE_LANG,日本語

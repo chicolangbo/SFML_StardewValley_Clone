@@ -12,15 +12,12 @@ protected:
 
 	string resourceListPath;
 
-	//std::vector<std::tuple<ResourceTypes, std::string>> resources;
-
 	std::list<GameObject*> gameObjects; 
 	std::list<GameObject*> removeGameObjects;
 
 	sf::View worldView;
 	sf::View uiView;
 
-	// �����, 230812, ��ũ�� ������ �߰�
 	sf::Vector2f windowSize;
 	
 	sf::RenderWindow& window;
@@ -36,9 +33,7 @@ public:
 	void RemoveGo(GameObject* go);
 	void SortGos();
 
-	//0816, ������, �����̵� ��ȯ �Լ�
 	SceneId GetSceneId();
-	//
 	sf::View& GetWorldView() { return worldView; }
 	sf::View& GetUiView() { return uiView; }
 	sf::Vector2f ScreenToWorldPos(sf::Vector2f screenPos);

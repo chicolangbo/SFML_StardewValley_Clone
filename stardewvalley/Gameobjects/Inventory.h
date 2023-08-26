@@ -52,6 +52,7 @@ private:
 	UiButton xButton;
 	UiButton title;
 	UiButton end;
+	UiButton langChange;
 	CraftScareCrow scareCrow;
 
 	sf::Vector2f bagPos;

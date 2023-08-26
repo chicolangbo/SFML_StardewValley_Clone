@@ -572,10 +572,10 @@ void SceneEditor::Enter()
 	buttonLayerColl->SetPosition(buttonLayer2->GetPosition().x, buttonLayerObj->GetPosition().y);
 
 	stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
-	Layer1->SetText(stringTable->GetUni("LAYER1", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width/2, buttonLayer1->GetPosition().y +18.f);
-	Layer2->SetText(stringTable->GetUni("LAYER2", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width / 2, buttonLayer2->GetPosition().y + 18.f);
-	LayerObj->SetText(stringTable->GetUni("LAYER_OBJ", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerObj->GetPosition().x + buttonLayerObj->sprite.getGlobalBounds().width / 2, buttonLayerObj->GetPosition().y + 20.f);
-	LayerColl->SetText(stringTable->GetUni("LAYER_COLL", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerColl->GetPosition().x + buttonLayerColl->sprite.getGlobalBounds().width / 2, buttonLayerColl->GetPosition().y + 23.f);
+	Layer1->SetText(stringTable->Get("LAYER1"), 50, sf::Color::White, Origins::MC, 101, buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width/2, buttonLayer1->GetPosition().y +18.f);
+	Layer2->SetText(stringTable->Get("LAYER2"), 50, sf::Color::White, Origins::MC, 101, buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width / 2, buttonLayer2->GetPosition().y + 18.f);
+	LayerObj->SetText(stringTable->Get("LAYER_OBJ"), 50, sf::Color::White, Origins::MC, 101, buttonLayerObj->GetPosition().x + buttonLayerObj->sprite.getGlobalBounds().width / 2, buttonLayerObj->GetPosition().y + 20.f);
+	LayerColl->SetText(stringTable->Get("LAYER_COLL"), 50, sf::Color::White, Origins::MC, 101, buttonLayerColl->GetPosition().x + buttonLayerColl->sprite.getGlobalBounds().width / 2, buttonLayerColl->GetPosition().y + 23.f);
 
 	//세이브로드
 	buttonSave->SetPosition(buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width + 30.f
@@ -583,11 +583,11 @@ void SceneEditor::Enter()
 	buttonLoad->SetPosition(buttonSave->GetPosition().x,
 		buttonSave->GetPosition().y + buttonSave->sprite.getGlobalBounds().height + 10.f);
 
-	saveText->SetText(stringTable->GetUni("SAVE", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+	saveText->SetText(stringTable->Get("SAVE"), 45, sf::Color::White, Origins::MC, 102,
 		buttonSave->GetPosition().x + buttonSave->sprite.getGlobalBounds().width / 2,
 		buttonSave->GetPosition().y + 15);
 
-	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+	loadText->SetText(stringTable->Get("LOAD"), 45, sf::Color::White, Origins::MC, 102,
 		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
 		buttonLoad->GetPosition().y + 15);
 	
