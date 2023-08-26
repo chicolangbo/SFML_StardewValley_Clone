@@ -63,8 +63,8 @@
     <ClCompile Include="Gameobjects\Cauliflower.cpp" />
     <ClCompile Include="Gameobjects\Potato.cpp" />
     <ClCompile Include="Gameobjects\EffectGo.cpp" />
-    <ClCompile Include="CraftGo.cpp" />
-    <ClCompile Include="CraftScareCrow.cpp" />
+    <ClCompile Include="Gameobjects\CraftGo.cpp" />
+    <ClCompile Include="Gameobjects\CraftScareCrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -134,7 +134,7 @@
     <ClInclude Include="Gameobjects\Cauliflower.h" />
     <ClInclude Include="Gameobjects\Potato.h" />
     <ClInclude Include="Gameobjects\EffectGo.h" />
-    <ClInclude Include="CraftGo.h" />
-    <ClInclude Include="CraftScareCrow.h" />
+    <ClInclude Include="Gameobjects\CraftGo.h" />
+    <ClInclude Include="Gameobjects\CraftScareCrow.h" />
   </ItemGroup>
 </Project>
