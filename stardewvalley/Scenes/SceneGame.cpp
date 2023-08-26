@@ -305,55 +305,12 @@ void SceneGame::Enter()
 	{
 		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
 		{
-			SAVELOAD_DATA.LoadCSV(&sData);
-			player2->LoadData(sData.pl_ItemList, sData.pl_totalMoney, sData.pl_money, sData.pl_energy);
-			min = sData.game_min;
-			hour = sData.game_hour;
-			day = sData.game_day;
-			ObjectLoad(SAVELOAD_DATA.table);
-			activeDirtIndex = sData.activeDirtIndex;
-			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip); 
-			CropLoad(potatoPool, SAVELOAD_DATA.potato);
-			CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
-			for (int i = 0; i < row; i++)
-			{
-				for (int j = 0; j < col; j++)
-				{
-					dirtArray[i][j]->load = true;
-				}
-			}
-
+			FileLoad(true);
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
 		else
 		{
-			min = 0;
-			hour = 6;
-			day = 1;
-			Objtable = (ObjectTable*)(new ObjectTable());
-			Objtable->Load();
-			ObjectLoad(Objtable->GetTable());
-			player2->load = false;
-			for (auto i : parsnipPool.GetPool())
-			{
-				i->load = false;
-			}
-			for (auto i : potatoPool.GetPool())
-			{
-				i->load = false;
-			}
-			for (auto i : cauliflowerPool.GetPool())
-			{
-				i->load = false;
-			}
-			for (int i = 0; i < row; i++)
-			{
-				for (int j = 0; j < col; j++)
-				{
-					dirtArray[i][j]->load = false;
-				}
-			}
-			activeDirtIndex.clear();
+			FileLoad(false);
 		}
 	}
 
@@ -873,6 +830,7 @@ void SceneGame::Update(float dt)
 						SAVELOAD_DATA.SaveCSV(&sData);
 						//ChangeDate();
 						homeTap->save = false;
+						ChangeDate();
 					}
 				}
 				// OUT
@@ -1302,12 +1260,9 @@ void SceneGame::Update(float dt)
 
 	//SET NIGHT TEST CODE
 	{
-		
 		//night->SetOrigin(Origins::MC);
 		//night->SetPosition(player2->GetPosition());
 	}
-
-		
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 
@@ -1713,22 +1668,6 @@ void SceneGame::ChangeDate()
 	hour = 6;
 	min = 0;
 	arrowSpin = 0;
-
-	for (auto i : parsnipPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-		i->Reset();
-	}
-	for (auto i : potatoPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-		i->Reset();
-	}
-	for (auto i : cauliflowerPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-		i->Reset();
-	}
 }
 
 void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
@@ -1800,6 +1739,60 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			tree->sortOrder = obj.second.indexY;
 			treeCount++;
 		}
+	}
+}
+
+void SceneGame::FileLoad(bool load)
+{
+	if (load)
+	{
+		SAVELOAD_DATA.LoadCSV(&sData);
+		player2->LoadData(sData.pl_ItemList, sData.pl_totalMoney, sData.pl_money, sData.pl_energy);
+		min = sData.game_min;
+		hour = sData.game_hour;
+		day = sData.game_day;
+		ObjectLoad(SAVELOAD_DATA.table);
+		activeDirtIndex = sData.activeDirtIndex;
+		CropLoad(parsnipPool, SAVELOAD_DATA.parsnip);
+		CropLoad(potatoPool, SAVELOAD_DATA.potato);
+		CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->load = true;
+			}
+		}
+	}
+	else
+	{
+		min = 0;
+		hour = 6;
+		day = 1;
+		Objtable = (ObjectTable*)(new ObjectTable());
+		Objtable->Load();
+		ObjectLoad(Objtable->GetTable());
+		player2->load = false;
+		for (auto i : parsnipPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (auto i : potatoPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (auto i : cauliflowerPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->load = false;
+			}
+		}
+		activeDirtIndex.clear();
 	}
 }
 
