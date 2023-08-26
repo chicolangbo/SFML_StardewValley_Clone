@@ -231,9 +231,9 @@ void Player2::Update(float dt)
 				}
 			}
 		}
+
 		position += direction * speed * dt;
 		SetPosition(position);
-
 
 		//도구 사용
 		axe.Update(dt);
@@ -255,7 +255,6 @@ void Player2::Update(float dt)
 		watering.Update(dt);
 		watering.SetPosition(position);
 		watering.SetOrigins();
-
 
 		if ((direction.x != 0.f || direction.y != 0.f))
 		{

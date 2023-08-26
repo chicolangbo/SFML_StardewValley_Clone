@@ -608,8 +608,10 @@ void SceneEditor::Update(float dt)
 	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 	sf::Vector2f uiMousePos = ScreenToUiPos(mousePosition);
 
-	//cout << mousePosition.x << "," << mousePosition.y << endl;
-	//cout << uiMousePos.x << "," << uiMousePos.y << endl;
+	/*cout << "*------------------------------------------------------*" << endl;
+	cout << mousePosition.x << "," << mousePosition.y << endl;
+	cout << uiMousePos.x << "," << uiMousePos.y << endl;
+	cout << "*------------------------------------------------------*" << endl;*/
 	
 	//¸Ê
 	if (worldMousPos.x >= MapLT.x && worldMousPos.x <= MapLT.x + MapSize.x

@@ -165,6 +165,20 @@ protected:
 	bool changeLocation = true;
 	Location nextlocation = Location::Farm;
 
+	RectangleGo* test1; 
+	RectangleGo* test2; 
+	RectangleGo* test3; 
+	RectangleGo* test4; 
+	RectangleGo* test5; 
+	RectangleGo* test6; 
+	RectangleGo* test7; 
+	RectangleGo* test8;  
+	RectangleGo* test9; 
+	RectangleGo* test10; 
+	RectangleGo* test11; 
+	RectangleGo* test12; 
+	RectangleGo* test13; 
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

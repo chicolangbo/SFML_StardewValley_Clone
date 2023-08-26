@@ -204,6 +204,65 @@ void SceneGame::Init()
 	fadeRectangle->sortLayer = 100;
 	fadeRectangle->sortOrder = -1;
 
+	//최후의 수단
+	{
+		sf::Vector2f sizes = { 2000.f,10.f };
+		test1 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test1->sortLayer = 0;
+
+		sizes = { 576.f,10.f };
+		test2 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test2->sortLayer = 0;
+
+		sizes = { 288.f,74.f };
+		test3 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test3->sortLayer = 0;
+
+		sizes = { 432.f,74.f };
+		test4 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test4->sortLayer = 0;
+
+		sizes = { 144.f,74.f };
+		test5 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test5->sortLayer = 0;
+
+		sizes = { 360.f,10.f };
+		test6 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test6->sortLayer = 0;
+
+		sizes = { 144.f,10.f };
+		test7 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test7->sortLayer = 0;
+
+		sizes = { 144.f,10.f };
+		test8 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test8->sortLayer = 0;
+
+		sizes = { 144.f,10.f };
+		test8 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test8->sortLayer = 0;
+
+		sizes = { 648.f,73.f };
+		test9 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test9->sortLayer = 0;
+
+		sizes = { 1728.f,73.f };
+		test10 = (RectangleGo*)AddGo(new RectangleGo(sizes)); 
+		test10->sortLayer = 0;
+
+		sizes = { 288.f,73.f };
+		test11 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test11->sortLayer = 0;
+
+		sizes = { 216.f,73.f };
+		test12 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test12->sortLayer = 0;
+
+		sizes = { 216.f,73.f };
+		test13 = (RectangleGo*)AddGo(new RectangleGo(sizes));
+		test13->sortLayer = 0;
+	}
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -410,8 +469,41 @@ void SceneGame::Enter()
 			bedding->SetActive(false);
 		}
 	}
+	//최후의 수단
+	{
+		test1->SetPosition(-500.f, -760.f);
+		test2->SetPosition(-144.f, -685.f);
+		test3->SetPosition(-144.f, -397.f);
+		test4->SetPosition(-72.f, -541.f);
+		test5->SetPosition(288.f, -397.f);
+		test6->SetPosition(648.f, 539.f);
+		test7->SetPosition(1008.f, 971.f);
+		test8->SetPosition(720.f, 971.f);
+		test9->SetPosition(-1152.f, -972.f);
+		test10->SetPosition(-1152.f, 1403.f);
+		test11->SetPosition(576.f, 1259.f);
+		test12->SetPosition(1152.f, -181.f);
+		test13->SetPosition(1223.f, -468.f);
+	}
 
 	Scene::Enter();
+
+	//최후의 수단
+	{
+		farmWalls.push_back(test1->rectangle.getGlobalBounds());
+		farmWalls.push_back(test2->rectangle.getGlobalBounds());
+		farmWalls.push_back(test3->rectangle.getGlobalBounds());
+		farmWalls.push_back(test4->rectangle.getGlobalBounds());
+		farmWalls.push_back(test5->rectangle.getGlobalBounds());
+		farmWalls.push_back(test6->rectangle.getGlobalBounds());
+		farmWalls.push_back(test7->rectangle.getGlobalBounds());
+		farmWalls.push_back(test8->rectangle.getGlobalBounds());
+		farmWalls.push_back(test9->rectangle.getGlobalBounds());
+		farmWalls.push_back(test10->rectangle.getGlobalBounds());
+		farmWalls.push_back(test11->rectangle.getGlobalBounds());
+		farmWalls.push_back(test12->rectangle.getGlobalBounds());
+		farmWalls.push_back(test13->rectangle.getGlobalBounds());
+	}
 
 	// PLAYER COLLIDER SETTING
 	{
@@ -485,7 +577,8 @@ void SceneGame::Enter()
 		{
 			//player2->SetWallBounds(walls[i]);
 			player2->SetWallBounds(houseWalls[i]);
-		}
+		} 
+		
 	}
 	
 	// INIT SETTING
@@ -542,6 +635,13 @@ void SceneGame::Update(float dt)
 	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x); 
 	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y); 
 
+	int mousePosX = tileSize.x * mouseTileX + mapLT.x;
+	int mousePosY = tileSize.y * mouseTileY + mapLT.y;
+	
+	std::cout << "*------------------------------------------*" << std::endl;
+	std::cout << mousePosX << "," << mousePosY << std::endl;
+	std::cout << "*------------------------------------------*" << std::endl;
+
 	// PLAYER TILE
 	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x); 
 	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y); 
@@ -574,6 +674,7 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
+
 	Scene::Update(dt);
 	
 
@@ -1314,8 +1415,6 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	rootingItems.back()->SetOrigin(Origins::MC);
 	rootingItems.back()->sortLayer = 2;
 }
-
-
 
 void SceneGame::SetAct(bool is)
 {
