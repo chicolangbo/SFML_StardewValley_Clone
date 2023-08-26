@@ -50,6 +50,9 @@ public:
 	void PlantCrop(Crop* c);
 	void RemoveCrop();
 
+	void SetDirtTex(string name);
+	void SetWaterDirtTex(string name);
+
 	sf::Vector2i GetIndex() { return sf::Vector2i(indexX, indexY); }
 	bool GetIsWatered() { return isWatered; }
 	bool GetIsPlanted() { return plantedCrop; }

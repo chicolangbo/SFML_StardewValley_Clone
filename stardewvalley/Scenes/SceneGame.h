@@ -215,6 +215,9 @@ public:
 
 	template <typename T>
 	void CropLoad(ObjectPool<T>& pool, std::vector<CropLoadData>& ldata );
+
+	string GetHoeDirtNick(int indexX, int indexY);
+	string GetWaterDirtNick(int indexX, int indexY);
 };
 
 template<typename T>

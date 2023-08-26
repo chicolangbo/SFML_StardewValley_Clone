@@ -273,7 +273,7 @@ void SceneGame::Enter()
 		{
 			for (int j = 0; j < col; j++)
 			{
-				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "dirt", "waterdirt"));
+				dirt = (HoeDirt*)AddGo(new HoeDirt("hoedirt", "map/hoeDirt.png", "hoeDirtN", "hoeDirtNW"));
 				dirt->sortLayer = 0;
 				dirt->sortOrder = 2;
 				dirt->SetIndex(j, i);
@@ -1330,6 +1330,13 @@ void SceneGame::Update(float dt)
 							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
 							activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX));
 							dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+							for (auto dirts : dirtArray)
+							{
+								for (auto dirt : dirts)
+								{
+									dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+								}
+							}
 						}
 					}
 				}
@@ -1338,6 +1345,14 @@ void SceneGame::Update(float dt)
 					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 					{
 						dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
+
+						for (auto dirts : dirtArray)
+						{
+							for (auto dirt : dirts)
+							{
+								dirt->SetWaterDirtTex(GetWaterDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+							}
+						}
 					}
 				}
 			}
@@ -1869,4 +1884,142 @@ void SceneGame::FadeOut(float dt)
 		fadingOut = false;
 		//fadingIn = true;
 	}
+}
+
+string SceneGame::GetHoeDirtNick(int indexX, int indexY)
+{
+	string dirtNick;
+
+	bool above = (indexY > 0) ? dirtArray[indexY - 1][indexX]->GetActive() : false;
+	bool below = (indexY < row - 1) ? dirtArray[indexY + 1][indexX]->GetActive() : false;
+	bool left = (indexX > 0) ? dirtArray[indexY][indexX - 1]->GetActive() : false;
+	bool right = (indexX < col - 1) ? dirtArray[indexY][indexX + 1]->GetActive() : false;
+
+	int configuration = (above ? 1 : 0) * 8 + (below ? 1 : 0) * 4 +
+		(left ? 1 : 0) * 2 + (right ? 1 : 0);
+
+	// Switch-case based on neighboring element configuration
+	switch (configuration) {
+	case 0:
+		dirtNick = "hoeDirtN";
+		break;
+	case 1:
+		dirtNick = "hoeDirtR";
+		break;
+	case 2:
+		dirtNick = "hoeDirtL";
+		break;
+	case 3:
+		dirtNick = "hoeDirtLR";
+		break;
+	case 4:
+		dirtNick = "hoeDirtD";
+		break;
+	case 5:
+		dirtNick = "hoeDirtDR";
+		break;
+	case 6:
+		dirtNick = "hoeDirtDL";
+		break;
+	case 7:
+		dirtNick = "hoeDirtDLR";
+		break;
+	case 8:
+		dirtNick = "hoeDirtU";
+		break;
+	case 9:
+		dirtNick = "hoeDirtUR";
+		break;
+	case 10:
+		dirtNick = "hoeDirtUL";
+		break;
+	case 11:
+		dirtNick = "hoeDirtULR";
+		break;
+	case 12:
+		dirtNick = "hoeDirtUD";
+		break;
+	case 13:
+		dirtNick = "hoeDirtUDR";
+		break;
+	case 14:
+		dirtNick = "hoeDirtUDL";
+		break;
+	case 15:
+		dirtNick = "hoeDirtA";
+		break;
+	default:
+		std::cout << "Other configuration" << std::endl;
+		break;
+	}
+	return dirtNick;
+}
+
+string SceneGame::GetWaterDirtNick(int indexX, int indexY)
+{
+	string waterNick;
+
+	bool above = (indexY > 0) ? dirtArray[indexY - 1][indexX]->GetIsWatered() : false;
+	bool below = (indexY < row - 1) ? dirtArray[indexY + 1][indexX]->GetIsWatered() : false;
+	bool left = (indexX > 0) ? dirtArray[indexY][indexX - 1]->GetIsWatered() : false;
+	bool right = (indexX < col - 1) ? dirtArray[indexY][indexX + 1]->GetIsWatered() : false;
+
+	int configuration = (above ? 1 : 0) * 8 + (below ? 1 : 0) * 4 +
+		(left ? 1 : 0) * 2 + (right ? 1 : 0);
+
+	// Switch-case based on neighboring element configuration
+	switch (configuration) {
+	case 0:
+		waterNick = "hoeDirtNW";
+		break;
+	case 1:
+		waterNick = "hoeDirtRW";
+		break;
+	case 2:
+		waterNick = "hoeDirtLW";
+		break;
+	case 3:
+		waterNick = "hoeDirtLRW";
+		break;
+	case 4:
+		waterNick = "hoeDirtDW";
+		break;
+	case 5:
+		waterNick = "hoeDirtDRW";
+		break;
+	case 6:
+		waterNick = "hoeDirtDLW";
+		break;
+	case 7:
+		waterNick = "hoeDirtDLRW";
+		break;
+	case 8:
+		waterNick = "hoeDirtUW";
+		break;
+	case 9:
+		waterNick = "hoeDirtURW";
+		break;
+	case 10:
+		waterNick = "hoeDirtULW";
+		break;
+	case 11:
+		waterNick = "hoeDirtULRW";
+		break;
+	case 12:
+		waterNick = "hoeDirtUDW";
+		break;
+	case 13:
+		waterNick = "hoeDirtUDRW";
+		break;
+	case 14:
+		waterNick = "hoeDirtUDLW";
+		break;
+	case 15:
+		waterNick = "hoeDirtAW";
+		break;
+	default:
+		std::cout << "Other configuration" << std::endl;
+		break;
+	}
+	return waterNick;
 }
