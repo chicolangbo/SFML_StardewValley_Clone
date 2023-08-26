@@ -815,7 +815,7 @@ void Player2::LoadData(std::list<tagItemInfo> loadI, int loadTM, int loadM, int 
 	load = true;
 }
 
-void Player2::AddRootingItem() // 자석화 해야 함 // 했음
+void Player2::AddRootingItem()
 {
 	SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
 	Inventory* inven = (Inventory*)scene->FindGo("inven");
@@ -832,8 +832,8 @@ void Player2::AddRootingItem() // 자석화 해야 함 // 했음
 		{
 			if (item->PongEnd())
 			{
-				item->SetActive(false);
 				AddPlayerItem(item->GetRootingItemId());
+				SCENE_MGR.GetCurrScene()->RemoveGo(item);
 			}
 			//check = false;
 		}
