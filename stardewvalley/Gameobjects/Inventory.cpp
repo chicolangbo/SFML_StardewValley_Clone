@@ -50,7 +50,8 @@ Inventory::Inventory(const std::string& n)
     curFunds("curFunds", "fonts/SDMiSaeng.ttf"),
     curFundsValue("curFundsValue", "fonts/SDMiSaeng.ttf"),
     totalEarnings("totalEarnings", "fonts/SDMiSaeng.ttf"),
-    totalEarningsValue("totalEarnings", "fonts/SDMiSaeng.ttf")
+    totalEarningsValue("totalEarnings", "fonts/SDMiSaeng.ttf"),
+    scareCrow("graphics/Craftables.png", "craftScareCrow", "craftScareCrow")
 {
     AddUi(&invenBox);
     AddUi(&invenLine);
@@ -71,6 +72,7 @@ Inventory::Inventory(const std::string& n)
     AddUi(&pl);
     AddUi(&title);
     AddUi(&end);
+    AddUi(&scareCrow);
 
     for (int i = 0; i < 3; ++i)
     {
@@ -263,6 +265,11 @@ void Inventory::Reset()
 
         invenOnOff = false; 
         invenTapOn = false;
+
+        scareCrow.SetScale(4.5f, 4.5f);
+        scareCrow.SetOrigin(Origins::TL);
+        scareCrow.SetPosition(bagPos.x + 50.f, bagPos.y + 50.f);
+        scareCrow.sortLayer = (int)UiType::MAKE;
     }
 
     SetWindowClear();
@@ -405,6 +412,7 @@ void Inventory::SetMakeWindow()
     map.SetPosition(mapPos);
     changeScene.SetPosition(changeScenePos);
     xButton.SetPosition(xButtonPos);
+    scareCrow.CheckCraftPossiblity(playerItemList);
 }
 
 void Inventory::SetChangeSceneWindow()
@@ -479,7 +487,9 @@ void Inventory::ButtonSetUp()
         SCENE_MGR.GetCurrScene()->Exit();
         FRAMEWORK.GetWindow().close();
     };
-    
+    scareCrow.OnClick = [this]() {
+        scareCrow.Craft(player, scareCrow.GetId());
+    };
 }
 
 void Inventory::SetPlayer(Player2* p)

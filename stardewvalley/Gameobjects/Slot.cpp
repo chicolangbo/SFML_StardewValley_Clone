@@ -80,11 +80,22 @@ void Slot::Update(float dt)
 {
 	UiButton::Update(dt);
 	UpdateIsEmpty();
+
 }
 
 void Slot::Draw(sf::RenderWindow& window)
 {
 	UiButton::Draw(window);
+	if (id == ItemId::craftScareCrow)
+	{
+		itemIcon->SetScale(2.5f, 2.5f);
+		itemIcon->sprite.setRotation(30.f);
+	}
+	//if (id == ItemId::craftScareCrow)
+	//{
+	//	itemIcon->SetScale(3.0f, 3.0f);
+	//	itemIcon->sprite.setRotation(30.f);
+	//}
 	if (itemIcon != nullptr)
 	{
 		itemIcon->SetPosition(position);

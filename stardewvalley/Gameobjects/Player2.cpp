@@ -124,6 +124,9 @@ void Player2::Reset()
 		playerItemList.push_back({ ItemId::parsnipSeed, 5, 5 });
 		playerItemList.push_back({ ItemId::potatoSeed, 5, 6 });
 		playerItemList.push_back({ ItemId::coliSeed, 5, 7 });
+		playerItemList.push_back({ ItemId::branch, 50, 8 });
+		playerItemList.push_back({ ItemId::coal, 1, 9 });
+		playerItemList.push_back({ ItemId::fiver, 20, 10 });
 		item = ItemId::none;
 	}
 
@@ -163,7 +166,7 @@ void Player2::Update(float dt)
 	}
 
 
-	std::cout << (int)item << std::endl;
+	//std::cout << (int)item << std::endl;
 	if (!playerDie)
 	{
 		if (!playingAnimation)
@@ -836,7 +839,6 @@ void Player2::AddRootingItem() // 자석화 해야 함 // 했음
 
 void Player2::AddPlayerItem(ItemId id)
 {
-	inven->IconUpdate();
 	bool found = false;
 
 	for (auto& playerItem : playerItemList)
@@ -850,6 +852,7 @@ void Player2::AddPlayerItem(ItemId id)
 	}
 	if (!found)
 	{
+		inven->IconUpdate();
 		int index = 0;
 		for (auto slot : *inven->GetSlot())
 		{
@@ -861,6 +864,7 @@ void Player2::AddPlayerItem(ItemId id)
 		}
 		playerItemList.push_back({ id,1,index });
 	}
+	inven->IconUpdate();
 }
 
 bool Player2::RemovePlayerItem(ItemId id)
