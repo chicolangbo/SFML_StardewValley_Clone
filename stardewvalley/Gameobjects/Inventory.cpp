@@ -130,6 +130,7 @@ void Inventory::Reset()
             for (int j = 0; j < 12; ++j)
             {
                 slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
+                slot[(i * 12) + j]->SetCountPos(slot[(i * 12) + j]->GetPosition() + (sf::Vector2f{slot[(i * 12) + j]->sprite.getGlobalBounds().width, slot[(i * 12) + j]->sprite.getGlobalBounds().height})/2.f);
                 slot[(i * 12) + j]->sortLayer = (int)UiType::LINE;
                 slot[(i * 12) + j]->SetMouseIcon(mouseSlot);
             }
@@ -597,6 +598,7 @@ void Inventory::IconUpdate()
                 {
                     sl->SetItemIcon(&(foundItem->second));
                     sl->SetItemId(pl.itemId);
+                    sl->SetCountString(pl.count);
                     break;
                 }
             }

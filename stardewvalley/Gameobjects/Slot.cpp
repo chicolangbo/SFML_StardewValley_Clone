@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Slot.h"
+#include "ResourceMgr.h"
 
 Slot::Slot(const std::string& textureId, const std::string& n, const std::string& nickName)
-	: UiButton(textureId, n, nickName)
+	: UiButton(textureId, n, nickName),
+	count("count", "fonts/Galmuri7.ttf")
 {
 }
 
@@ -25,6 +27,7 @@ void Slot::Init()
 			// 마우스에 아이콘이 따라다니도록 한다.
 			mouseIcon->SetItemIcon(itemIcon);
 			mouseIcon->SetItemId(id);
+			mouseIcon->SetCountString(countValue);
 			id = ItemId::none;
 			itemIcon = nullptr;
 			isEmpty = true;
@@ -39,6 +42,7 @@ void Slot::Init()
 			itemIcon = mouseIcon->GetItemIcon();
 			mouseIcon->SetItemIcon(nullptr);
 			mouseIcon->SetItemId(ItemId::none);
+			SetCountString(mouseIcon->GetCountValue());
 			isEmpty = false;
 			return;
 		}
@@ -49,9 +53,12 @@ void Slot::Init()
 			// 마우스에 달린 아이콘은 해당 셀에 정착, 셀에 있던 아이콘이 마우스에 정착
 			SpriteGo* tempIcon = mouseIcon->GetItemIcon();
 			ItemId tempId = mouseIcon->GetItemId();
+			int tempCount = mouseIcon->GetCountValue();
 			mouseIcon->SetItemIcon(itemIcon);
 			mouseIcon->SetItemId(id);
+			mouseIcon->SetCountString(countValue);
 			SetItemIcon(tempIcon);
+			SetCountString(tempCount);
 			id = tempId;
 			isEmpty = false;
 			return;
@@ -74,13 +81,19 @@ void Slot::Release()
 void Slot::Reset()
 {
 	UiButton::Reset();
+	count.Reset();
+	count.SetString("0");
+	count.SetOrigin(Origins::BR);
+	count.text.setCharacterSize(15);
+	count.text.setFillColor(sf::Color::White);
+	count.text.setOutlineThickness(2);
+	count.text.setOutlineColor(sf::Color::Black);
 }
 
 void Slot::Update(float dt)
 {
 	UiButton::Update(dt);
 	UpdateIsEmpty();
-
 }
 
 void Slot::Draw(sf::RenderWindow& window)
@@ -91,15 +104,11 @@ void Slot::Draw(sf::RenderWindow& window)
 		itemIcon->SetScale(2.5f, 2.5f);
 		itemIcon->sprite.setRotation(30.f);
 	}
-	//if (id == ItemId::craftScareCrow)
-	//{
-	//	itemIcon->SetScale(3.0f, 3.0f);
-	//	itemIcon->sprite.setRotation(30.f);
-	//}
 	if (itemIcon != nullptr)
 	{
 		itemIcon->SetPosition(position);
 		itemIcon->Draw(window);
+		count.Draw(window);
 	}
 }
 

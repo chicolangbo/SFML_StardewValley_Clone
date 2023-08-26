@@ -135,6 +135,7 @@
 3,animations/Axe_Side.csv,N,-1,-1,-1,-1,
 3,animations/Pickax_Side.csv,N,-1,-1,-1,-1,
 1,fonts/SDMiSaeng.ttf,N,-1,-1,-1,-1,
+1,fonts/Galmuri7.ttf,N,-1,-1,-1,-1,
 0,map/spring_outdoorsTileSheet.png,dirtTile,48,96,16,16,������
 0,map/walls_and_floors.png,N,-1,-1,-1,-1,
 0,graphics/tools.png,SideAxe,260,158,10,23,

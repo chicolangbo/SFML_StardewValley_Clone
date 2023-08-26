@@ -546,8 +546,8 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
+
 	Scene::Update(dt);
-	
 
 	// TREE TRANSPARENT
 	{
@@ -721,6 +721,7 @@ void SceneGame::Update(float dt)
 			selectTile->SetActive(false);
 		}
 	}
+
 	//FADE
 	{
 		/*if (fadingIn)
@@ -806,9 +807,9 @@ void SceneGame::Update(float dt)
 						init = true;
 					}
 
-					if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+					if (init && player2->collider.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 					{
-						if (!once)
+						if (!once && player2->collider.getPosition().x >= bedding->GetPosition().x + bedding->sprite.getGlobalBounds().width / 2.f)
 						{
 							homeTap->homeTapOn = true;
 							homeTap->TapOnOff();
