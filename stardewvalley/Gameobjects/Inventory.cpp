@@ -373,6 +373,7 @@ void Inventory::SetItemWindow()
         for (int j = 0; j < 12; ++j)
         {
             slot[(i * 12) + j]->SetPosition(slotPos.x + (j * 80.f), slotPos.y + (i * 80.f));
+            slot[(i * 12) + j]->SetCountPos(slot[(i * 12) + j]->GetPosition() + (sf::Vector2f{ slot[(i * 12) + j]->sprite.getGlobalBounds().width, slot[(i * 12) + j]->sprite.getGlobalBounds().height}) / 2.f);
         }
     }
     ItemIndexUpdate();
@@ -419,6 +420,7 @@ void Inventory::SetMakeWindow()
     for (int i = 0; i < slot.size(); ++i)
     {
         slot[i]->SetPosition(slot[i]->GetPosition() + diff);
+        slot[i]->SetCountPos(slot[i]->GetPosition() + (sf::Vector2f{slot[i]->sprite.getGlobalBounds().width, slot[i]->sprite.getGlobalBounds().height}) / 2.f);
     }
     ItemIndexUpdate();
     make.SetPosition(makePos.x, makePos.y + 10.f);

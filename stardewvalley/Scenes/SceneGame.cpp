@@ -1300,8 +1300,6 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	rootingItems.back()->sortLayer = 2;
 }
 
-
-
 void SceneGame::SetAct(bool is)
 {
 	player2->SetActive(is);
