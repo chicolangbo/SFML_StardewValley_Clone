@@ -163,7 +163,7 @@ void Player2::Update(float dt)
 	}
 
 
-	std::cout << (int)item << std::endl;
+	//std::cout << (int)item << std::endl;
 	if (!playerDie)
 	{
 		if (!playingAnimation)
