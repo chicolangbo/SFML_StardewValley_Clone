@@ -14,6 +14,13 @@ struct Collider
 	int indexY;
 };
 
+//struct CanFarm
+//{
+//	int indexX;
+//	int indexY;
+//	bool canFarm;
+//};
+
 struct Object
 {
 	int indexX;
@@ -38,6 +45,7 @@ protected:
 	TileMap* farmMapT2 = nullptr;
 	TileMap* farmMapObj = nullptr;
 	TileMap* farmMapColl = nullptr;
+	TileMap* farmMapCanFarm = nullptr;
 	TileMap* selectMap = nullptr;
 
 	sf::Vector2f MapLT;
@@ -60,6 +68,7 @@ protected:
 
 	sf::Vector2f texTileSize = { 16.f, 16.f };
 	sf::Vector2f palletTileSize = { 48.f, 48.f };
+	sf::Vector2f tileScale = { 4.5f, 4.5f };
 	sf::Vector2f palletLT;
 	sf::Vector2f palletSize;
 	sf::Vector2f palletTexSize = { 192.f, 112.f };
@@ -83,6 +92,7 @@ protected:
 	UiButton* buttonLayer2;
 	UiButton* buttonLayerObj;
 	UiButton* buttonLayerColl;
+	UiButton* buttonLayerFarm;
 
 	UiButton* buttonSave;
 	UiButton* buttonLoad;
@@ -97,6 +107,7 @@ protected:
 	TextGo* Layer2;
 	TextGo* LayerObj;
 	TextGo* LayerColl;
+	TextGo* LayerFarm;
 
 	TextGo* saveText;
 	TextGo* loadText;
@@ -118,7 +129,11 @@ protected:
 	//오브젝트
 	std::vector<Object> objects;
 
-	sf::Vector2f tileScale = { 4.5f, 4.5f };
+	//농사 가능 구역
+	std::vector<CanFarm> tempCanFarm;
+	std::vector<RectangleGo*> canFarms;
+	bool IsFarmActive = false;
+	
 
 public:
 	SceneEditor();
@@ -136,7 +151,12 @@ public:
 	void ChangePallet();
 	bool SaveCollider(const string& filePath);
 	bool LoadCollider(const string& filePath);
+
+	bool SaveCanFarm(const string& filePath);
+	bool LoadCanFarm(const string& filePath);
+
 	void SetColliders();
+	void SetCanFarms();
 	string GetCurrentLayer();
 	ObjType GetObjType(sf::IntRect rect);
 	void AddObject(int indexX, int indexY, sf::IntRect rect, ObjType type);
@@ -144,6 +164,7 @@ public:
 	bool LoadObject(const std::string& filePath);
 
 	bool IsObjectAdded(int indexX, int indexY, ObjType type);
+
 	
 };
 

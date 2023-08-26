@@ -87,6 +87,7 @@ protected:
 	vector<vector<HoeDirt*>> dirtArray;
 	SpriteGo* selectTile; //red or green box
 	bool canPlant = false;
+	std::vector<CanFarm> canFarm;
 
 	// FARM MAP
 	TileMap* testFarmMap;

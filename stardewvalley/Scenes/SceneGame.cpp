@@ -447,6 +447,17 @@ void SceneGame::Enter()
 		}
 	}
 
+	// LOAD CANT FARM AREA
+	{
+		rapidcsv::Document doc("tables/newMapCanFarm.csv"); 
+		for (int i = 2; i < doc.GetRowCount(); i++)
+		{
+			auto rows = doc.GetRow<int>(i);
+			CanFarm temp = { rows[0], rows[1], (bool)rows[2] };
+			canFarm.push_back(temp);
+		}
+	}
+
 	// MAP COLLIDER SETTING
 	{
 		rapidcsv::Document doc("tables/newMapCollider.csv");
@@ -707,7 +718,7 @@ void SceneGame::Update(float dt)
 	//		ItemId itemId = player2->GetPlayerItemId();
 	//		selectTile->SetActive(true);
 	//		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
-
+	//
 	//		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
 	//			&& dirtArray[mouseTileY][mouseTileX]->GetActive()
 	//			&& !dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
@@ -720,7 +731,7 @@ void SceneGame::Update(float dt)
 	//			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
 	//			canPlant = false;
 	//		}
-
+	//
 	//		//PLANT CROP
 	//		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
 	//		{
@@ -977,7 +988,7 @@ void SceneGame::Update(float dt)
 					break;
 				}
 			case Location::Farm:
-				// FARMING
+			// FARMING
 			{
 				if (player2->GetPlayerItemId() == ItemId::parsnipSeed
 					|| player2->GetPlayerItemId() == ItemId::potatoSeed
@@ -1310,12 +1321,11 @@ void SceneGame::Update(float dt)
 				}
 				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
 				{
-					
 					if (timer >= 0.5f)
 					{
 						timer = 0.f;
 						if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
-							&& location == Location::Farm)
+							&& canFarm[mouseTileY*col + mouseTileX].canFarm /*location == Location::Farm*/)
 						{
 							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
 							activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX));

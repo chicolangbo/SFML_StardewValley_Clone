@@ -97,28 +97,7 @@ void SceneEditor::Init()
 		curTile = selectTile;
 		IsCollActive = false;
 		SetColliders();
-		/*if (!colliders.empty())
-		{
-			for (auto rect : colliders)
-			{
-				RemoveGo(rect);
-			}
-			colliders.clear();
-		}
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				RectangleGo* newRect = new RectangleGo(tilesize);
-				newRect->rectangle.setFillColor(sf::Color::Transparent);
-				newRect->rectangle.setOutlineThickness(1.f);
-				newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
-				newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
-				AddGo(newRect);
-				newRect->SetActive(false);
-				colliders.push_back(newRect);
-			}
-		}*/
+		SetCanFarms();
 	};
 
 	buttonColUp = (UiButton*)AddGo(new UiButton("graphics/Cursors.ko-KR.png", "arrowUp", "arrowUp"));
@@ -344,8 +323,52 @@ void SceneEditor::Init()
 				tilePallet->SetActive(true);
 			}
 		}
+		if (IsFarmActive)
+		{
+			IsFarmActive = false;
+			for (auto rect : canFarms)
+			{
+				rect->SetActive(false);
+			}
+		}
 		nowLayer->SetString("current layer: " + GetCurrentLayer());
 	}; 
+
+	buttonLayerFarm= (UiButton*)AddGo(new UiButton("graphics/BigUiBox.png", "layerUIFarm"));
+	buttonLayerFarm->sortLayer = 101;
+	buttonLayerFarm->SetScale({ 3.f, 3.f });
+	buttonLayerFarm->OnClick = [this]()
+	{
+		IsFarmActive = !IsFarmActive;
+		for (auto rect : canFarms)
+		{
+			rect->SetActive(IsFarmActive);
+		}
+		if (IsFarmActive)
+		{
+			selectMap = farmMapCanFarm;
+			currentLayer = 4;
+		}
+		else
+		{
+			selectMap = farmMapT1;
+			currentLayer = 0;
+			if (ObjPallet->GetActive())
+			{
+				ObjPallet->SetActive(false);
+				tilePallet->SetActive(true);
+			}
+		}
+		if (IsCollActive)
+		{
+			IsCollActive = false;
+			for (auto rect : colliders)
+			{
+				rect->SetActive(false);
+			}
+		}
+		nowLayer->SetString("current layer: " + GetCurrentLayer());
+	};
 
 	//텍스트
 	Layer1 = (TextGo*)AddGo(new TextGo("Layer1Text", "fonts/SDMiSaeng.ttf"));
@@ -363,6 +386,10 @@ void SceneEditor::Init()
 	LayerColl = (TextGo*)AddGo(new TextGo("LayerCollText", "fonts/SDMiSaeng.ttf"));
 	LayerColl->text.setOutlineThickness(1.f);
 	LayerColl->text.setOutlineColor(sf::Color::Black);
+
+	LayerFarm = (TextGo*)AddGo(new TextGo("LayerCollText", "fonts/SDMiSaeng.ttf"));
+	LayerFarm->text.setOutlineThickness(1.f);
+	LayerFarm->text.setOutlineColor(sf::Color::Black);
 
 	/*----세이브로드----*/
 	buttonSave = (UiButton*)AddGo(new UiButton("graphics/setButton.png", "buttonSave"));
@@ -404,6 +431,14 @@ void SceneEditor::Init()
 		{
 			cout << "충돌체 레이어 세이브 실패" << endl;
 		}
+		if (SaveCanFarm("tables/newMapCanFarm.csv"))
+		{
+			cout << "농사 불가능 레이어 세이브 성공" << endl;
+		}
+		else
+		{
+			cout << "농사 불가능 레이어 세이브 실패" << endl;
+		}
 		
 	};
 
@@ -413,6 +448,8 @@ void SceneEditor::Init()
 	buttonLoad->OnClick = [this]()
 	{
 		IsCollActive = false;
+		IsFarmActive = false;
+
 		TileMap* tempFarmMapT1 = (TileMap*)AddGo(new TileMap("map/spring_outdoorsTileSheet_cut.png", "MapTile1"));
 		tempFarmMapT1->Reset();
 		tempFarmMapT1->Load("tables/newMapLayer1.csv");
@@ -473,12 +510,25 @@ void SceneEditor::Init()
 
 		SetColliders();
 		LoadCollider("tables/newMapCollider.csv");
-		LoadObject("tables/newMapObj.csv");
 		for (int i = 0; i < tempcolliders.size(); i++)
 		{
 			int index = tempcolliders[i].indexY * col + tempcolliders[i].indexX;
 			colliders[index]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
 			colliders[index]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
+		}
+
+		LoadObject("tables/newMapObj.csv");
+
+		SetCanFarms();
+		LoadCanFarm("tables/newMapCanFarm.csv");
+		for (int i = 0; i < tempCanFarm.size(); i++)
+		{
+			if (!tempCanFarm[i].canFarm)
+			{
+				int index = tempCanFarm[i].indexY * col + tempCanFarm[i].indexX;
+				canFarms[index]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
+				canFarms[index]->rectangle.setFillColor(sf::Color(95, 0, 255, 70));
+			}
 		}
 		
 	};
@@ -556,7 +606,7 @@ void SceneEditor::Enter()
 	rowText->SetText(to_string(row), 70, sf::Color::White, Origins::BC, 103, buttonRowDown->GetPosition().x, numUI->GetPosition().y - 13.f);
 	
 	//팔레트
-	tilePallet->SetPosition(numUI->GetPosition().x, 600.f);
+	tilePallet->SetPosition(numUI->GetPosition().x, 700.f);
 	palletLT = tilePallet->GetPosition();
 	palletSize = { tilePallet->sprite.getGlobalBounds().width, tilePallet->sprite.getGlobalBounds().height };
 
@@ -570,12 +620,14 @@ void SceneEditor::Enter()
 	buttonLayer2->SetPosition(buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width + 10.f, 300.f);
 	buttonLayerObj->SetPosition(buttonLayer1->GetPosition().x, buttonLayer1->GetPosition().y + buttonLayer1->sprite.getGlobalBounds().height + 10.f);
 	buttonLayerColl->SetPosition(buttonLayer2->GetPosition().x, buttonLayerObj->GetPosition().y);
+	buttonLayerFarm->SetPosition(buttonLayer1->GetPosition().x, buttonLayerObj->GetPosition().y + buttonLayerObj->sprite.getGlobalBounds().height + 10.f);
 
 	stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
 	Layer1->SetText(stringTable->GetUni("LAYER1", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer1->GetPosition().x + buttonLayer1->sprite.getGlobalBounds().width/2, buttonLayer1->GetPosition().y +18.f);
 	Layer2->SetText(stringTable->GetUni("LAYER2", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width / 2, buttonLayer2->GetPosition().y + 18.f);
 	LayerObj->SetText(stringTable->GetUni("LAYER_OBJ", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerObj->GetPosition().x + buttonLayerObj->sprite.getGlobalBounds().width / 2, buttonLayerObj->GetPosition().y + 20.f);
 	LayerColl->SetText(stringTable->GetUni("LAYER_COLL", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerColl->GetPosition().x + buttonLayerColl->sprite.getGlobalBounds().width / 2, buttonLayerColl->GetPosition().y + 23.f);
+	LayerFarm->SetText(stringTable->GetUni("LAYER_FARM", Languages::KOR), 50, sf::Color::White, Origins::MC, 101, buttonLayerFarm->GetPosition().x + buttonLayerFarm->sprite.getGlobalBounds().width / 2, buttonLayerFarm->GetPosition().y + 23.f);
 
 	//세이브로드
 	buttonSave->SetPosition(buttonLayer2->GetPosition().x + buttonLayer2->sprite.getGlobalBounds().width + 30.f
@@ -613,17 +665,18 @@ void SceneEditor::Update(float dt)
 	
 	//맵
 	if (worldMousPos.x >= MapLT.x && worldMousPos.x <= MapLT.x + MapSize.x
-		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y && mousePosition.x > palletBg->GetTileMapSize().x)
+		&& worldMousPos.y >= MapLT.y && worldMousPos.y <= MapLT.y + MapSize.y 
+		&& mousePosition.x > palletBg->GetTileMapSize().x)
 	{
 		int tileX = static_cast<int>((worldMousPos.x - MapLT.x) / tilesize.x);
 		int tileY = static_cast<int>((worldMousPos.y - MapLT.y) / tilesize.y);
 
-		if (!IsCollActive && curTile!=nullptr)
+		if (!IsCollActive && curTile!=nullptr && !IsFarmActive)
 		{
 			curTile->SetActive(true);
 			curTile->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
 		}
-		else
+		else if(IsCollActive || IsFarmActive)
 		{
 			selColl->SetActive(true);
 			selColl->SetPosition({ tileX * tilesize.x + MapLT.x, tileY * tilesize.y + MapLT.y });
@@ -631,7 +684,7 @@ void SceneEditor::Update(float dt)
 		
 		if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
 		{
-			if (!IsCollActive)
+			if (!IsCollActive && !IsFarmActive)
 			{
 				sf::IntRect texRect = curTile->sprite.getTextureRect();
 				selectMap->ChangeTexRect(tileX, tileY, texRect);
@@ -640,16 +693,29 @@ void SceneEditor::Update(float dt)
 					AddObject(tileX, tileY, texRect, GetObjType(texRect));
 				}
 			}
-			else
+			else if(IsCollActive)
 			{
 				colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 0, 0, 255));
 				colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color(255, 0, 0, 70));
 			}
+			else if (IsFarmActive)
+			{
+				canFarms[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(95, 0, 255, 255));
+				canFarms[tileY * col + tileX]->rectangle.setFillColor(sf::Color(95, 0, 255, 70));
+			}
 		}
-		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right) && IsCollActive)
+		if (INPUT_MGR.GetMouseButton(sf::Mouse::Right))
 		{
-			colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
-			colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color::Transparent);
+			if (IsCollActive)
+			{
+				colliders[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+				colliders[tileY * col + tileX]->rectangle.setFillColor(sf::Color::Transparent);
+			}
+			else if (IsFarmActive)
+			{
+				canFarms[tileY * col + tileX]->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+				canFarms[tileY * col + tileX]->rectangle.setFillColor(sf::Color::Transparent);
+			}
 		}
 	}
 	else
@@ -776,6 +842,55 @@ bool SceneEditor::LoadCollider(const string& filePath)
 	return true;
 }
 
+bool SceneEditor::SaveCanFarm(const string& filePath)
+{
+	std::ofstream outputFile(filePath);
+
+	if (!outputFile.is_open())
+	{
+		cout << "ERR: 파일을 열 수 없습니다." << endl;
+		return false;
+	}
+
+	// 파일 헤더
+	outputFile << "cols,rows" << endl;
+	outputFile << col << "," << row << endl;
+
+	outputFile << "indexX,indexY,CanFarm" << endl;
+
+	for (int i = 0; i < canFarms.size(); ++i)
+	{
+		auto rect = canFarms[i];
+		bool canFarm = true;
+		if (rect->rectangle.getFillColor() == sf::Color(95, 0, 255, 70))
+		{
+			canFarm = false;
+		}
+		int tileX = static_cast<int>((rect->GetPosition().x - MapLT.x) / tilesize.x);
+		int tileY = static_cast<int>((rect->GetPosition().y - MapLT.y) / tilesize.y);
+		outputFile << tileX << "," << tileY << "," << canFarm << endl;
+	}
+
+	outputFile.close();
+	return true;
+}
+
+bool SceneEditor::LoadCanFarm(const string& filePath)
+{
+	rapidcsv::Document doc(filePath);
+
+	if (!tempCanFarm.empty())
+	{
+		tempCanFarm.clear();
+	}
+	for (int i = 2; i < doc.GetRowCount(); i++)
+	{
+		auto rows = doc.GetRow<int>(i);
+		tempCanFarm.push_back({ rows[0], rows[1], (bool)rows[2]});
+	}
+	return true;
+}
+
 void SceneEditor::SetColliders()
 {
 	if (!colliders.empty())
@@ -802,6 +917,32 @@ void SceneEditor::SetColliders()
 	}
 }
 
+void SceneEditor::SetCanFarms()
+{
+	if (!canFarms.empty())
+	{
+		for (auto rect : canFarms)
+		{
+			RemoveGo(rect);
+		}
+		canFarms.clear();
+	}
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			RectangleGo* newRect = new RectangleGo(tilesize);
+			newRect->rectangle.setFillColor(sf::Color::Transparent);
+			newRect->rectangle.setOutlineThickness(1.f);
+			newRect->rectangle.setOutlineColor(sf::Color(255, 255, 255, 128));
+			newRect->SetPosition(MapLT.x + j * tilesize.x, MapLT.y + i * tilesize.y);
+			AddGo(newRect);
+			newRect->SetActive(false);
+			canFarms.push_back(newRect);
+		}
+	}
+}
+
 string SceneEditor::GetCurrentLayer()
 {
 	switch (currentLayer)
@@ -814,6 +955,9 @@ string SceneEditor::GetCurrentLayer()
 		return "Layer Object";
 	case 3:
 		return "Layer Collider";
+	case 4:
+		return "Layer CanFarm";
+		
 	default:
 		break;
 	}

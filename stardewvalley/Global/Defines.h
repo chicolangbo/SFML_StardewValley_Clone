@@ -120,6 +120,14 @@ struct CropLoadData
 	int sortl;
 	int sorto;
 };
+
+struct CanFarm
+{
+	int indexX;
+	int indexY;
+	bool canFarm;
+};
+
 //
 //struct CropSaveData
 //{

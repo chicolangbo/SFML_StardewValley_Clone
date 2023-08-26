@@ -57,7 +57,6 @@ void Crop::Reset()
 
 void Crop::Update(float dt)
 {
-
 	SpriteGo::Update(dt);
 	animation.Update(dt);
 
