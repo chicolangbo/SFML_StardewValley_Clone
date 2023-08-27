@@ -715,67 +715,65 @@ void Player2::Update(float dt)
 					}
 				}
 			}
-
-
-
-			else if (playerDie && one)
-			{
-				animation.Play("Die");
-				one = false;
-			}
-
-			if (energy == 0)
-			{
-				playerDie = true;
-			}
-
-			if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
-			{
-				playingAnimation = false;
-				//harvest = false;
-			}
-			if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
-			{
-				Reset();
-			}
-
-			if (INPUT_MGR.GetKey(sf::Keyboard::Add))
-			{
-				money += 100;
-			}
-			if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
-			{
-				money -= 100;
-			}
-			animation.Update(dt);
-
-			// 아이템 관련
-			AddRootingItem();
-
-			if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
-			{
-				int a = 0;
-				for (auto& i : playerItemList)
-				{
-					std::cout << "============ pushnum: " << a << "============" << std::endl;
-					std::cout << "count: " << i.count << std::endl;
-					std::cout << "index: " << i.index << std::endl;
-					a++;
-				}
-			}
-
-			// MONEY TEST CODE
-			if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
-			{
-				tempMoney = 300;
-			}
-			if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
-			{
-				tempMoney = -300;
-			}
-			MoneyUpdate();
-			//타일맵 베이스
 		}
+		else if (playerDie && one)
+		{
+			animation.Play("Die");
+			one = false;
+		}
+
+		if (energy == 0)
+		{
+			playerDie = true;
+		}
+
+		if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
+		{
+			playingAnimation = false;
+			//harvest = false;
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
+		{
+			Reset();
+		}
+
+		if (INPUT_MGR.GetKey(sf::Keyboard::Add))
+		{
+			money += 100;
+		}
+		if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
+		{
+			money -= 100;
+		}
+		animation.Update(dt);
+
+		// 아이템 관련
+		AddRootingItem();
+
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
+		{
+			int a = 0;
+			for (auto& i : playerItemList)
+			{
+				std::cout << "============ pushnum: " << a << "============" << std::endl;
+				std::cout << "count: " << i.count << std::endl;
+				std::cout << "index: " << i.index << std::endl;
+				a++;
+			}
+		}
+
+		// MONEY TEST CODE
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
+		{
+			tempMoney = 300;
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
+		{
+			tempMoney = -300;
+		}
+		MoneyUpdate();
+		//타일맵 베이스
+		
 	}
 }
 

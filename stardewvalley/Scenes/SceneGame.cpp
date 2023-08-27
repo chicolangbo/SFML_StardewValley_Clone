@@ -749,22 +749,21 @@ void SceneGame::Update(float dt)
 		}
 		if (hour == 24)
 		{
-			ChangeDate();
-			/*hour = 0;
+			//ChangeDate();
+			hour = 0;
 			day += 1;
-			arrowSpin = 0;*/
+			//arrowSpin = 0;
 		}
 		if (hour == 2)
 		{
+			ChangeDate(); 
 			player2->ZeroEnergy();
-			/*hour = 6;*/
-			ChangeDate();
 		}
 		arrowSpin += dt * 0.2381f;
 		timeArrow->SetOrigin(Origins::BC);
 		timeArrow->sprite.setRotation(arrowSpin);
 	}
-
+	
 	// UI : MONEY, TIME, DATE
 	{
 		texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
@@ -1889,8 +1888,8 @@ void SceneGame::ChangeDate()
 
 	time = 0;
 	hour = 6;
-	min = 0;
-	arrowSpin = 0;
+	min = 0; 
+	arrowSpin = 0; 
 }
 
 void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
