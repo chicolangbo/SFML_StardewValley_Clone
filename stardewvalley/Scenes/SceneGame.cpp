@@ -988,6 +988,13 @@ void SceneGame::Update(float dt)
 								dirtArray[i][j]->SetActive(true);
 							}
 						}
+						for (auto dirts : dirtArray)
+						{
+							for (auto dirt : dirts)
+							{
+								dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+							}
+						}
 					}
 					location = Location::Farm;
 					changeLocation = true;
@@ -1048,6 +1055,13 @@ void SceneGame::Update(float dt)
 						{
 							dirtArray[i][j]->SetActive(true);
 						}
+					}
+				}
+				for (auto dirts : dirtArray)
+				{
+					for (auto dirt : dirts)
+					{
+						dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
 					}
 				}
 				location = Location::Farm;
