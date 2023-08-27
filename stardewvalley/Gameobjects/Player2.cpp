@@ -854,12 +854,14 @@ void Player2::AddRootingItem()
 
 	for (auto item : *rootingItemList)
 	{
+		//addRI = false;
 		if (sprite.getGlobalBounds().intersects(item->sprite.getGlobalBounds()) && item->GetActive())
 		{
 			if (item->PongEnd())
 			{
-				AddPlayerItem(item->GetRootingItemId());
 				SCENE_MGR.GetCurrScene()->RemoveGo(item);
+				AddPlayerItem(item->GetRootingItemId());
+				item->SetActive(false);
 			}
 			//check = false;
 		}

@@ -621,9 +621,9 @@ void SceneGame::Update(float dt)
 	int mousePosX = tileSize.x * mouseTileX + mapLT.x;
 	int mousePosY = tileSize.y * mouseTileY + mapLT.y;
 	
-	std::cout << "*------------------------------------------*" << std::endl;
-	std::cout << mousePosX << "," << mousePosY << std::endl;
-	std::cout << "*------------------------------------------*" << std::endl;
+	//std::cout << "*------------------------------------------*" << std::endl;
+	//std::cout << mousePosX << "," << mousePosY << std::endl;
+	//std::cout << "*------------------------------------------*" << std::endl;
 
 	// PLAYER TILE
 	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
