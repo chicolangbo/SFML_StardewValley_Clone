@@ -1,6 +1,7 @@
 #pragma once
 #include "UiButton.h"
 #include "Item.h"
+#include "TextGo.h"
 
 class ShopInvenSlot :
     public UiButton
@@ -9,6 +10,8 @@ protected:
     ItemId id = ItemId::none;
     SpriteGo* itemIcon = nullptr;
     bool isEmpty = true;
+    TextGo count;
+    int countValue = 0;
 
 public:
     int slotIndex = 0;
@@ -28,5 +31,8 @@ public:
     void UpdateIsEmpty();
     void SetItemId(ItemId i) { id = i; }
     ItemId GetItemId() { return id; }
+    void SetCountPos(sf::Vector2f p) { count.SetPosition(p); }
+    void SetCountString(int c) { count.SetString(to_string(c)); countValue = c; }
+    int GetCountValue() { return countValue; }
 };
 
