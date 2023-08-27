@@ -6,6 +6,7 @@
 #include "UiButton.h"
 #include "TextGo.h"
 #include "Player2.h"
+#include "CraftScareCrow.h"
 
 class Slot;
 
@@ -28,18 +29,16 @@ private:
 	// 아이템리스트 벡터 포인터(플레이어에 있음)
 	std::list<tagItemInfo>* playerItemList;
 	std::unordered_map<ItemId,SpriteGo> itemIconList; // 여기서 만들어두고 slot에는 포인터만 전달
+	std::list<GameObject*> invenUiObjects;
 	
 	// 슬롯클래스 벡터
 	std::vector<Slot*> slot;
 	Slot* mouseSlot;
 
+	Player2* player;
 	int itemCapacity = 36;
 	int* curFundsInt; // 현재 소지금
 	int* totalEarningsInt; // 총합 자금
-
-	std::list<GameObject*> invenUiObjects;
-
-	Player2* player;
 
 	bool invenOnOff = false;
 
@@ -53,6 +52,8 @@ private:
 	UiButton xButton;
 	UiButton title;
 	UiButton end;
+	UiButton langChange;
+	CraftScareCrow scareCrow;
 
 	sf::Vector2f bagPos;
 	sf::Vector2f mapPos;

@@ -22,6 +22,7 @@ protected:
 	Crop* crop;
 
 public:
+	bool load = false;
 	sf::Sprite dirt;
 	sf::Sprite waterDirt;
 

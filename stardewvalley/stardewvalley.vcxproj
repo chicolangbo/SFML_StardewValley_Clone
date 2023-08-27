@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gameobjects\CraftGo.cpp" />
+    <ClCompile Include="Gameobjects\CraftScareCrow.cpp" />
     <ClCompile Include="Gameobjects\EffectGo.cpp" />
     <ClCompile Include="Gameobjects\Cauliflower.cpp" />
     <ClCompile Include="DataTables\CropTable.cpp" />
@@ -229,6 +231,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="Gameobjects\CraftGo.h" />
+    <ClInclude Include="Gameobjects\CraftScareCrow.h" />
     <ClInclude Include="Gameobjects\EffectGo.h" />
     <ClInclude Include="Gameobjects\Cauliflower.h" />
     <ClInclude Include="DataTables\CropTable.h" />

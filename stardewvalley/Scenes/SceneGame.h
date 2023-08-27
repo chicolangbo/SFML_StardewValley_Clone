@@ -209,6 +209,7 @@ public:
 	void ClearMapObj(vector<T>& obj);
 
 	void ObjectLoad(unordered_map<int, ObjectInfo> table);
+	void FileLoad(bool load);
 
 	void FadeIn(float dt);
 	void FadeOut(float dt);

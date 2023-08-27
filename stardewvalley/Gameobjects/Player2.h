@@ -39,6 +39,7 @@ public:
 		string name;
 		string nickName;
 	};
+	bool move = true;
 
 protected:
 	bool harvest = false;

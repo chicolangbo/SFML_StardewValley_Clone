@@ -15,6 +15,7 @@ HomeTap::HomeTap(const std::string& n)
     AddUi(&question);
     AddUi(&yes);
     AddUi(&no);
+    prevLang = Variables::CurrentLang;
 }
 
 HomeTap::~HomeTap()
@@ -69,9 +70,9 @@ void HomeTap::Reset()
     StringTable* stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
     float border = 25.f;
 
-    question.SetText(stringTable->GetUni("SAVE_Q", Languages::KOR), 70, sf::Color::Black, Origins::TL, 101, box.GetPosition().x + border*2, box.GetPosition().y - box.GetSize().y + border);
+    question.SetText(stringTable->Get("SAVE_Q"), 70, sf::Color::Black, Origins::TL, 101, box.GetPosition().x + border*2, box.GetPosition().y - box.GetSize().y + border);
 
-    yes.text.setString(stringTable->GetUni("SAVE_YES", Languages::KOR));
+    yes.SetString(stringTable->Get("SAVE_YES"));
     yes.text.setCharacterSize(70);
     yes.text.setFillColor(sf::Color::Black);
     yes.SetSize(box.GetSize().x - border*2.f, box.GetSize().y / 3.f - border);
@@ -80,7 +81,7 @@ void HomeTap::Reset()
     yes.text.setPosition(yes.GetPosition().x + border, yes.GetPosition().y - yes.text.getCharacterSize());
     yes.rectangle.setOutlineThickness(5);
 
-    no.text.setString(stringTable->GetUni("SAVE_UNDO", Languages::KOR));
+    no.SetString(stringTable->Get("SAVE_UNDO"));
     no.text.setCharacterSize(70);
     no.text.setFillColor(sf::Color::Black);
     no.SetSize(box.GetSize().x - border*2.f, box.GetSize().y / 3.f - border);
@@ -101,6 +102,12 @@ void HomeTap::Update(float dt)
     {
         i->Update(dt);
     }
+
+    if (Variables::CurrentLang != prevLang)
+    {
+        Reset();
+    }
+    prevLang = Variables::CurrentLang;
 }
 
 void HomeTap::Draw(sf::RenderWindow& window)

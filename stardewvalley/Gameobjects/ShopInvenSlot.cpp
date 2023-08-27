@@ -36,6 +36,12 @@ void ShopInvenSlot::Update(float dt)
 void ShopInvenSlot::Draw(sf::RenderWindow& window)
 {
 	UiButton::Draw(window);
+	if (id == ItemId::craftScareCrow)
+	{
+		itemIcon->SetScale(2.2f, 2.2f);
+		itemIcon->sprite.setRotation(30.f);
+	}
+
 	if (itemIcon != nullptr)
 	{
 		itemIcon->SetPosition(position);

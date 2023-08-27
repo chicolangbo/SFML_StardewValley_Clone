@@ -44,6 +44,13 @@ void RectButton::SetPosition(float x, float y)
 	text.setPosition(x,y);
 }
 
+void RectButton::SetString(const string& str)
+{
+	std::string utf8String = str;
+	sf::String unicodeString = sf::String::fromUtf8(utf8String.begin(), utf8String.end());
+	text.setString(unicodeString);
+}
+
 void RectButton::SetOrigin(Origins origin)
 {
 	RectangleGo::SetOrigin(origin);

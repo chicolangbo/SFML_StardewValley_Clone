@@ -635,11 +635,11 @@ void SceneEditor::Enter()
 	buttonLoad->SetPosition(buttonSave->GetPosition().x,
 		buttonSave->GetPosition().y + buttonSave->sprite.getGlobalBounds().height + 10.f);
 
-	saveText->SetText(stringTable->GetUni("SAVE", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+	saveText->SetText(stringTable->Get("SAVE"), 45, sf::Color::White, Origins::MC, 102,
 		buttonSave->GetPosition().x + buttonSave->sprite.getGlobalBounds().width / 2,
 		buttonSave->GetPosition().y + 15);
 
-	loadText->SetText(stringTable->GetUni("LOAD", Languages::KOR), 45, sf::Color::White, Origins::MC, 102,
+	loadText->SetText(stringTable->Get("LOAD"), 45, sf::Color::White, Origins::MC, 102,
 		buttonLoad->GetPosition().x + buttonLoad->sprite.getGlobalBounds().width / 2,
 		buttonLoad->GetPosition().y + 15);
 	

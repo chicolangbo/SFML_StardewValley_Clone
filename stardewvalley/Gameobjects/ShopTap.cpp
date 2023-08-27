@@ -67,7 +67,7 @@ ShopTap::ShopTap(const std::string& n)
             AddUi(shopInvenSlot[i * 12 + j]);
         }
     }
-
+    prevLang = Variables::CurrentLang;
 }
 
 ShopTap::~ShopTap()
@@ -133,14 +133,11 @@ void ShopTap::Reset()
         pierreTextBox.SetPosition(pierrePortrait.GetPosition().x, pierrePortrait.GetPosition().y + pierrePortrait.sprite.getGlobalBounds().height + 10.f);
 
         // PIERRE WORD
-        wstring pierreVerse1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->GetUni("PIERRE1", Languages::KOR);
-        pierreText1.SetText(pierreVerse1, 50, sf::Color::Black, Origins::TL, 100, pierreTextBox.vertexArray[0].position.x + 30.f, pierreTextBox.GetPosition().y + 20.f);
-        wstring pierreVerse2 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->GetUni("PIERRE2", Languages::KOR);
-        pierreText2.SetText(pierreVerse2, 50, sf::Color::Black, Origins::TL, 100, pierreText1.GetPosition().x, pierreText1.GetPosition().y + 50.f);
-        wstring pierreVerse3 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->GetUni("PIERRE3", Languages::KOR);
-        pierreText3.SetText(pierreVerse3, 50, sf::Color::Black, Origins::TL, 100, pierreText1.GetPosition().x, pierreText2.GetPosition().y + 50.f);
-        wstring pierreVerse4 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->GetUni("PIERRE4", Languages::KOR);
-        pierreText4.SetText(pierreVerse4, 50, sf::Color::Black, Origins::TL, 100, pierreText1.GetPosition().x, pierreText3.GetPosition().y + 50.f);
+        string pierreVerse1 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->Get("PIERRE1");
+        string pierreVerse2 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->Get("PIERRE2");
+        string pierreVerse3 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->Get("PIERRE3");
+        string pierreVerse4 = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String)->Get("PIERRE4");
+        pierreText1.SetText(pierreVerse1 + "\n" + pierreVerse2 + "\n" + pierreVerse3 + "\n" + pierreVerse4, 50, sf::Color::Black, Origins::TL, 100, pierreTextBox.vertexArray[0].position.x + 30.f, pierreTextBox.GetPosition().y + 20.f);
 
         // SHOP BOX
         shopBox.SetSize({ size.x / 1.5f, 120.f*4.f });
@@ -242,6 +239,12 @@ void ShopTap::Update(float dt)
     PlayerInfoUpdate();
     IconUpdate();
     ItemIndexUpdate();
+
+    if (Variables::CurrentLang != prevLang)
+    {
+        Reset();
+    }
+    prevLang = Variables::CurrentLang;
 }
 
 void ShopTap::Draw(sf::RenderWindow& window)

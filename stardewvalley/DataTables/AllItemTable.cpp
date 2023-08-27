@@ -54,7 +54,12 @@ const ItemInfo* AllItemTable::Get(ItemId id)
 	}
 }
 
-const std::wstring AllItemTable::GetUniName(ItemId id) // Kor
+const std::string AllItemTable::GetName(ItemId id)
+{
+	return Get(id)->name_e;
+}
+
+const std::wstring AllItemTable::GetUniName(ItemId id)
 {
 	string multibyteString = Get(id)->name_k;
 	return multibyte_to_uni(multibyteString);
@@ -64,6 +69,11 @@ const std::wstring AllItemTable::GetUniDescription(ItemId id)
 {
 	string multibyteString = Get(id)->description_k;
 	return multibyte_to_uni(multibyteString);
+}
+
+const std::string AllItemTable::GetDescription(ItemId id)
+{
+	return Get(id)->description_e;
 }
 
 wstring AllItemTable::multibyte_to_uni(const std::string& str)

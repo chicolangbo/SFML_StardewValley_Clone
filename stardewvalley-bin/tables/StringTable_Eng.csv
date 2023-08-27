@@ -20,3 +20,5 @@ PIERRE4,you want.
 SAVE_Q,Will you go to sleep today?
 SAVE_YES,Yes
 SAVE_UNDO,No
+DAY,Day
+CHANGE_LANG,English

@@ -40,6 +40,7 @@
 #include "EffectGo.h"
 #include "SaveLoadData.h"
 #include "Slot.h"
+#include "StringTable.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -304,41 +305,12 @@ void SceneGame::Enter()
 	{
 		if (dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData)
 		{
-			SAVELOAD_DATA.LoadCSV(&sData);
-			player2->LoadData(sData.pl_ItemList, sData.pl_totalMoney, sData.pl_money, sData.pl_energy);
-			min = sData.game_min;
-			hour = sData.game_hour;
-			day = sData.game_day;
-			ObjectLoad(SAVELOAD_DATA.table);
-			activeDirtIndex = sData.activeDirtIndex;
-			CropLoad(parsnipPool, SAVELOAD_DATA.parsnip); 
-			CropLoad(potatoPool, SAVELOAD_DATA.potato);
-			CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
-
+			FileLoad(true);
 			dynamic_cast<SceneTitle*>(SCENE_MGR.GetTitleScene())->loadData = false;
 		}
 		else
 		{
-			min = 0;
-			hour = 6;
-			day = 1;
-			Objtable = (ObjectTable*)(new ObjectTable());
-			Objtable->Load();
-			ObjectLoad(Objtable->GetTable());
-			player2->load = false;
-			for (auto i : parsnipPool.GetPool())
-			{
-				i->load = false;
-			}
-			for (auto i : potatoPool.GetPool())
-			{
-				i->load = false;
-			}
-			for (auto i : cauliflowerPool.GetPool())
-			{
-				i->load = false;
-			}
-			activeDirtIndex.clear();
+			FileLoad(false);
 		}
 	}
 
@@ -550,12 +522,12 @@ void SceneGame::Update(float dt)
 	sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousPos = ScreenToWorldPos(mousePosition);
 
-	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x); 
-	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y); 
+	int mouseTileX = static_cast<int>((worldMousPos.x - mapLT.x) / tileSize.x);
+	int mouseTileY = static_cast<int>((worldMousPos.y - mapLT.y) / tileSize.y);
 
 	// PLAYER TILE
-	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x); 
-	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y); 
+	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
+	int playerTileY = static_cast<int>((player2->GetPosition().y - mapLT.y) / tileSize.y);
 
 	if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2)
 	{
@@ -585,8 +557,8 @@ void SceneGame::Update(float dt)
 			}
 		}
 	}
+
 	Scene::Update(dt);
-	
 
 	// TREE TRANSPARENT
 	{
@@ -621,10 +593,10 @@ void SceneGame::Update(float dt)
 
 	player2->SetMPIndex({ playerTileX,playerTileY }, { mouseTileX,mouseTileY });
 	player2->sortOrder = playerTileY;
-	
+
 	// PLAYER EQUIP
 	{
-		player2->SetItemId(quickinven->GetItemId()); 
+		player2->SetItemId(quickinven->GetItemId());
 	}
 
 	// TEST CODE : HOUR +1
@@ -664,7 +636,7 @@ void SceneGame::Update(float dt)
 
 	// UI : TIME DATA SETTING
 	{
-		time +=dt;
+		time += dt;
 		if (time >= 7.f)
 		{
 			min += 10;
@@ -696,16 +668,17 @@ void SceneGame::Update(float dt)
 	// UI : MONEY, TIME, DATE
 	{
 		texMoney->SetText(to_string(*player2->GetMoney()), 50, sf::Color::Black, Origins::TL, 101, 1675.f, 195.f);
-	
+
 		texHour->SetText(to_string(hour), 50, sf::Color::Black, Origins::TL, 101, 1710.f, 115.f);
 		collon->SetText(":", 50, sf::Color::Black, Origins::TL, 101, 1755, 115.f);
 		texMin->SetText(to_string(min), 50, sf::Color::Black, Origins::TL, 101, 1770.f, 115.f);
 
+		StringTable* stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
 		texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
-		dayday->SetText("Day: ", 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
-	
+		dayday->SetText(stringTable->Get("DAY"), 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
+
 		energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
-		energyBar->SetPosition(energy->GetPosition().x- 26.f,energy->GetPosition().y - 10.f);
+		energyBar->SetPosition(energy->GetPosition().x - 26.f, energy->GetPosition().y - 10.f);
 		energyBar->SetOrigin(Origins::BC);
 	}
 
@@ -767,12 +740,12 @@ void SceneGame::Update(float dt)
 			FadeIn(dt);
 		}*/
 	}
-	
+
 	// LOCATION ENTER
 	{
 		/*if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
 			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
-		{	 
+		{
 			for (auto go : gameObjects)
 			{
 				if (go->GetActive())
@@ -830,224 +803,282 @@ void SceneGame::Update(float dt)
 	{
 		//cout << player2->GetPosition().x << "," << player2->GetPosition().y << endl;
 		switch (location)
+		{
+		case Location::Home:
+			if (fadingOut)
 			{
-			case Location::Home:
-				if (fadingOut)
+				fadeRectangle->SetActive(true);
+				FadeOut(dt);
+			}
+			// BEDDING COLLIDE
+			{
+				if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
 				{
-					fadeRectangle->SetActive(true);
-					FadeOut(dt);
+					init = true;
 				}
-				// BEDDING COLLIDE
-				{
-					if (!player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
-					{
-						init = true;
-					}
 
-					if (init && player2->sprite.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+				if (init && player2->collider.getGlobalBounds().intersects(bedding->sprite.getGlobalBounds()))
+				{
+					if (!once && player2->collider.getPosition().x >= bedding->GetPosition().x + bedding->sprite.getGlobalBounds().width / 2.f)
 					{
-						if (!once)
-						{
-							homeTap->homeTapOn = true;
-							homeTap->TapOnOff();
-							once = true;
-						}
-					}
-					else
-					{
-						once = false;
-						homeTap->homeTapOn = false;
+						homeTap->homeTapOn = true;
 						homeTap->TapOnOff();
-					}
-				}
-				// SAVE
-				{
-					if (homeTap->save)
-					{
-						
-						sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList()};
-						SAVELOAD_DATA.SaveCSV(&sData);
-						homeTap->save = false;
-					}
-				}
-				// OUT
-				{
-					if (player2->GetCollider().intersects(homeExit.getGlobalBounds()) && changeLocation)
-					{
-						fadingOut = true;
-					}
-					if (!changeLocation && !fadingOut)
-					{
-						for (auto go : gameObjects)
-						{
-							if (go->GetActive())
-							{
-								if (go->GetName() == "homeTap")
-									continue;
-								go->SetActive(false);
-
-							}
-							else
-							{
-								if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
-									continue;
-								go->SetActive(true);
-							}
-						}
-						SetAct(true);
-						player2->SetPosition(houseOutEnter);
-						player2->ClearWalls();
-						for (int i = 0; i < farmWalls.size(); ++i)
-						{
-							player2->SetWallBounds(farmWalls[i]);
-						}
-						for (int i = 0; i < row; i++)
-						{
-							for (int j = 0; j < col; j++)
-							{
-								auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
-									[&](const std::pair<int, int>& pair) {
-										return pair.first == i && pair.second == j;
-									});
-								if (foundIt != activeDirtIndex.end())
-								{
-									dirtArray[i][j]->SetActive(true);
-								}
-							}
-						}
-						location = Location::Farm; 
-						changeLocation = true;
-						fadingIn = true;
-					}
-				}
-				if (fadingIn)
-				{
-					fadeRectangle->SetActive(true);
-					FadeIn(dt);
-				}
-				break;
-			case Location::Shop:
-				// OUT
-				{
-					if (fadingOut)
-					{
-						fadeRectangle->SetActive(true);
-						FadeOut(dt);
-					}
-					if (player2->GetCollider().intersects(shopExit.getGlobalBounds()) && changeLocation)
-					{
-						fadingOut = true;
-					}
-					if (!changeLocation && !fadingOut)
-					{
-						for (auto go : gameObjects)
-						{
-							if (go->GetActive())
-							{
-								if (go->GetName() == "homeTap")
-									continue;
-								go->SetActive(false);
-							}
-							else
-							{
-								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-									continue;
-								go->SetActive(true);
-							}
-						}
-						SetAct(true);
-						player2->ClearWalls();
-						for (int i = 0; i < farmWalls.size(); ++i)
-						{
-							player2->SetWallBounds(farmWalls[i]);
-						}
-						player2->SetPosition(shopOutEnter);
-						for (int i = 0; i < row; i++)
-						{
-							for (int j = 0; j < col; j++)
-							{
-								auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
-									[&](const std::pair<int, int>& pair) {
-										return pair.first == i && pair.second == j;
-									});
-								if (foundIt != activeDirtIndex.end())
-								{
-									dirtArray[i][j]->SetActive(true);
-								}
-							}
-						}
-						location = Location::Farm;
-						changeLocation = true;
-						fadingIn = true;
-					}
-					if (fadingIn)
-					{
-						fadeRectangle->SetActive(true);
-						FadeIn(dt);
-					}
-					break;
-				}
-			case Location::Farm:
-			// FARMING
-			{
-				if (player2->GetPlayerItemId() == ItemId::parsnipSeed
-					|| player2->GetPlayerItemId() == ItemId::potatoSeed
-					|| player2->GetPlayerItemId() == ItemId::coliSeed)
-				{
-					ItemId itemId = player2->GetPlayerItemId();
-					selectTile->SetActive(true);
-					selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
-
-					if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
-						&& dirtArray[mouseTileY][mouseTileX]->GetActive()
-						&& !dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
-					{
-						selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
-						canPlant = true;
-					}
-					else
-					{
-						selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
-						canPlant = false;
-					}
-
-					//PLANT CROP
-					if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
-					{
-						if (player2->GetItemCount() > 0)
-						{
-							switch (itemId)
-							{
-							case ItemId::parsnipSeed:
-								PlantParsnip(mouseTileX, mouseTileY);
-								break;
-							case ItemId::potatoSeed:
-								PlantPotato(mouseTileX, mouseTileY);
-								break;
-							case ItemId::coliSeed:
-								PlantCauli(mouseTileX, mouseTileY);
-								break;
-							default:
-								break;
-							}
-						}
+						once = true;
 					}
 				}
 				else
 				{
-					selectTile->SetActive(false);
+					once = false;
+					homeTap->homeTapOn = false;
+					homeTap->TapOnOff();
 				}
-				if (fadingOut)
+			}
+			// SAVE
+			{
+				if (homeTap->save)
 				{
-					fadeRectangle->SetActive(true);
-					FadeOut(dt);
+					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList() };
+					SAVELOAD_DATA.SaveCSV(&sData);
+					//ChangeDate();
+					homeTap->save = false;
+					ChangeDate();
 				}
-				if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
-					INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+			}
+			// OUT
+			{
+				if (player2->GetCollider().intersects(homeExit.getGlobalBounds()) && changeLocation)
 				{
 					fadingOut = true;
-					nextlocation = Location::Home;
-					/*for (auto go : gameObjects)
+				}
+				if (!changeLocation && !fadingOut)
+				{
+					for (auto go : gameObjects)
+					{
+						if (go->GetActive())
+						{
+							if (go->GetName() == "homeTap")
+								continue;
+							go->SetActive(false);
+
+						}
+						else
+						{
+							if (go->GetName() == "shopInterior" || go->GetName() == "hoedirt")
+								continue;
+							go->SetActive(true);
+						}
+					}
+					SetAct(true);
+					player2->SetPosition(houseOutEnter);
+					player2->ClearWalls();
+					for (int i = 0; i < farmWalls.size(); ++i)
+					{
+						player2->SetWallBounds(farmWalls[i]);
+					}
+					for (int i = 0; i < row; i++)
+					{
+						for (int j = 0; j < col; j++)
+						{
+							auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+								[&](const std::pair<int, int>& pair) {
+									return pair.first == i && pair.second == j;
+								});
+							if (foundIt != activeDirtIndex.end())
+							{
+								dirtArray[i][j]->SetActive(true);
+							}
+						}
+					}
+					location = Location::Farm;
+					changeLocation = true;
+					fadingIn = true;
+				}
+			}
+			if (fadingIn)
+			{
+				fadeRectangle->SetActive(true);
+				FadeIn(dt);
+			}
+			break;
+		case Location::Shop:
+			// OUT
+		{
+			if (fadingOut)
+			{
+				fadeRectangle->SetActive(true);
+				FadeOut(dt);
+			}
+			if (player2->GetCollider().intersects(shopExit.getGlobalBounds()) && changeLocation)
+			{
+				fadingOut = true;
+			}
+			if (!changeLocation && !fadingOut)
+			{
+				for (auto go : gameObjects)
+				{
+					if (go->GetActive())
+					{
+						if (go->GetName() == "homeTap")
+							continue;
+						go->SetActive(false);
+					}
+					else
+					{
+						if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+							continue;
+						go->SetActive(true);
+					}
+				}
+				SetAct(true);
+				player2->ClearWalls();
+				for (int i = 0; i < farmWalls.size(); ++i)
+				{
+					player2->SetWallBounds(farmWalls[i]);
+				}
+				player2->SetPosition(shopOutEnter);
+				for (int i = 0; i < row; i++)
+				{
+					for (int j = 0; j < col; j++)
+					{
+						auto foundIt = std::find_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+							[&](const std::pair<int, int>& pair) {
+								return pair.first == i && pair.second == j;
+							});
+						if (foundIt != activeDirtIndex.end())
+						{
+							dirtArray[i][j]->SetActive(true);
+						}
+					}
+				}
+				location = Location::Farm;
+				changeLocation = true;
+				fadingIn = true;
+			}
+			if (fadingIn)
+			{
+				fadeRectangle->SetActive(true);
+				FadeIn(dt);
+			}
+			break;
+		}
+		case Location::Farm:
+			// FARMING
+		{
+			if (player2->GetPlayerItemId() == ItemId::parsnipSeed
+				|| player2->GetPlayerItemId() == ItemId::potatoSeed
+				|| player2->GetPlayerItemId() == ItemId::coliSeed)
+			{
+				ItemId itemId = player2->GetPlayerItemId();
+				selectTile->SetActive(true);
+				selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
+
+				if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
+					&& dirtArray[mouseTileY][mouseTileX]->GetActive()
+					&& !dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+				{
+					selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
+					canPlant = true;
+				}
+				else
+				{
+					selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
+					canPlant = false;
+				}
+
+				//PLANT CROP
+				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
+				{
+					if (player2->GetItemCount() > 0)
+					{
+						switch (itemId)
+						{
+						case ItemId::parsnipSeed:
+							PlantParsnip(mouseTileX, mouseTileY);
+							break;
+						case ItemId::potatoSeed:
+							PlantPotato(mouseTileX, mouseTileY);
+							break;
+						case ItemId::coliSeed:
+							PlantCauli(mouseTileX, mouseTileY);
+							break;
+						default:
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				selectTile->SetActive(false);
+			}
+			if (fadingOut)
+			{
+				fadeRectangle->SetActive(true);
+				FadeOut(dt);
+			}
+			if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
+				INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+			{
+				fadingOut = true;
+				nextlocation = Location::Home;
+				/*for (auto go : gameObjects)
+				{
+					if (go->GetActive())
+					{
+						if (go->GetName() == "homeTap")
+							continue;
+						go->SetActive(false);
+					}
+					else
+					{
+						if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+							continue;
+						go->SetActive(true);
+					}
+				}
+				SetAct(true);
+				location = Location::Home;
+				player2->ClearWalls();
+				for (int i = 0; i < houseWalls.size(); ++i)
+				{
+					player2->SetWallBounds(houseWalls[i]);
+				}
+				player2->SetPosition(houseInEnter);*/
+			}
+			else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
+				INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+			{
+				fadingOut = true;
+				nextlocation = Location::Shop;
+				/*for (auto go : gameObjects)
+				{
+					if (go->GetActive())
+					{
+						if (go->GetName() == "homeTap")
+							continue;
+						go->SetActive(false);
+					}
+					else
+					{
+						if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
+							continue;
+						go->SetActive(true);
+					}
+				}
+				SetAct(true);
+				player2->ClearWalls();
+				for (int i = 0; i < shopWalls.size(); ++i)
+				{
+					player2->SetWallBounds(shopWalls[i]);
+				}
+				location = Location::Shop;
+				player2->SetPosition(shopInEnter);*/
+			}
+			if (!changeLocation && !fadingOut)
+			{
+				if (nextlocation == Location::Home)
+				{
+					for (auto go : gameObjects)
 					{
 						if (go->GetActive())
 						{
@@ -1068,15 +1099,14 @@ void SceneGame::Update(float dt)
 					for (int i = 0; i < houseWalls.size(); ++i)
 					{
 						player2->SetWallBounds(houseWalls[i]);
+						player2->SetPosition(houseInEnter);
+						changeLocation = true;
+						fadingIn = true;
 					}
-					player2->SetPosition(houseInEnter);*/
 				}
-				else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
-					INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
+				else if (nextlocation == Location::Shop)
 				{
-					fadingOut = true;
-					nextlocation = Location::Shop;
-					/*for (auto go : gameObjects)
+					for (auto go : gameObjects)
 					{
 						if (go->GetActive())
 						{
@@ -1098,275 +1128,229 @@ void SceneGame::Update(float dt)
 						player2->SetWallBounds(shopWalls[i]);
 					}
 					location = Location::Shop;
-					player2->SetPosition(shopInEnter);*/
+					player2->SetPosition(shopInEnter);
+					changeLocation = true;
+					fadingIn = true;
 				}
-				if (!changeLocation && !fadingOut)
+			}
+			if (fadingIn)
+			{
+				fadeRectangle->SetActive(true);
+				FadeIn(dt);
+			}
+			break;
+		}
+		}
+
+		// PLAYER MOVE PATTERN
+		{
+			if (homeTap->homeTapOn || shopTap->shopTapOn || inven->GetInvenOff())
+			{
+				player2->move = false;
+				player2->MoneyUpdate();
+			}
+			else
+			{
+				player2->move = true;
+			}
+		}
+
+		//SET VIEW
+		{
+			if (location == Location::Farm)
+			{
+				sf::Vector2f newCenter = player2->GetPosition();
+				if (player2->GetPosition().x <= mapLT.x + FRAMEWORK.GetWindowSize().x / 2)
 				{
-					if (nextlocation == Location::Home)
-					{
-						for (auto go : gameObjects)
-						{
-							if (go->GetActive())
-							{
-								if (go->GetName() == "homeTap")
-									continue;
-								go->SetActive(false);
-							}
-							else
-							{
-								if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
-									continue;
-								go->SetActive(true);
-							}
-						}
-						SetAct(true);
-						location = Location::Home;
-						player2->ClearWalls();
-						for (int i = 0; i < houseWalls.size(); ++i)
-						{
-							player2->SetWallBounds(houseWalls[i]);
-							player2->SetPosition(houseInEnter);
-							changeLocation = true;
-							fadingIn = true;
-						}
-					}
-					else if (nextlocation == Location::Shop)
-					{
-						for (auto go : gameObjects)
-						{
-							if (go->GetActive())
-							{
-								if (go->GetName() == "homeTap")
-									continue;
-								go->SetActive(false);
-							}
-							else
-							{
-								if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-									continue;
-								go->SetActive(true);
-							}
-						}
-						SetAct(true);
-						player2->ClearWalls();
-						for (int i = 0; i < shopWalls.size(); ++i)
-						{
-							player2->SetWallBounds(shopWalls[i]);
-						}
-						location = Location::Shop;
-						player2->SetPosition(shopInEnter);
-						changeLocation = true;
-						fadingIn = true;
-					}
+					newCenter.x = mapLT.x + FRAMEWORK.GetWindowSize().x / 2;
 				}
-				if (fadingIn)
+				if (player2->GetPosition().y <= mapLT.y + FRAMEWORK.GetWindowSize().y / 2)
 				{
-					fadeRectangle->SetActive(true);
-					FadeIn(dt);
+					newCenter.y = mapLT.y + FRAMEWORK.GetWindowSize().y / 2;
 				}
-				break;
-			}
-		}
-	}
-	
-	//SET VIEW
-	{
-		if(location == Location::Farm)
-		{
-			sf::Vector2f newCenter = player2->GetPosition();
-			if (player2->GetPosition().x <= mapLT.x + FRAMEWORK.GetWindowSize().x / 2)
-			{
-				newCenter.x = mapLT.x + FRAMEWORK.GetWindowSize().x / 2;
-			}
-			if(player2->GetPosition().y <= mapLT.y + FRAMEWORK.GetWindowSize().y / 2)
-			{
-				newCenter.y = mapLT.y + FRAMEWORK.GetWindowSize().y / 2;
-			}
-			if (player2->GetPosition().x >= mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2)
-			{
-				newCenter.x = mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2;
-			}
-			if (player2->GetPosition().y >= mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2)
-			{
-				newCenter.y = mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2;
-			}
-			worldView.setCenter(newCenter);
-		}
-		else
-		{
-			worldView.setCenter(player2->GetPosition());
-		}
-	}
-
-	// EDITOR ON
-	{
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
-		{
-			SCENE_MGR.ChangeScene(SceneId::Editor);
-		}
-	}
-
-	// ITEM ROOTING TEST CODE
-	{
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
-		{
-			SpawnRootingItem(ItemId::branch, {0,0});
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
-		{
-			SpawnRootingItem(ItemId::coal, { 0,0 });
-		}
-	}
-	
-	// QUICK & INVEN ONOFF
-	{
-		if (inven->GetInvenOff() || shopTap->shopTapOn || homeTap->homeTapOn)
-		{
-			quickinven->SetActive(false);
-		}
-		else
-		{
-			quickinven->SetActive(true);
-		}
-
-		if (shopTap->shopTapOn || homeTap->homeTapOn)
-		{
-			inven->invenTapOn = false;
-		}
-		else
-		{
-			inven->invenTapOn = true;
-		}
-	}
-
-	// PLAYER OBJECT HIT TEST CODE
-	{
-		timer += dt;
-		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2 && location == Location::Farm)
-		{
-			// HARVEST CROP
-			{
-				/*if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+				if (player2->GetPosition().x >= mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2)
 				{
-					if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
-					{
-						CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
-						switch (id)
-						{
-						case CropId::Parsnip:
-							HarvestParsnip(mouseTileX, mouseTileY);
-							break;
-						case CropId::Potato:
-							HarvestPotato(mouseTileX, mouseTileY);
-							break;
-						case CropId::Cauliflower:
-							HarvestCauli(mouseTileX, mouseTileY);
-							break;
-						default:
-							break;
-						}
-					}
-				}*/
-			}
-			if (!(abs(mouseTileX - playerTileX) == 0 && abs(mouseTileY - playerTileY) == 0))
-			{
-				if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
+					newCenter.x = mapLT.x + mapSize.x - FRAMEWORK.GetWindowSize().x / 2;
+				}
+				if (player2->GetPosition().y >= mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2)
 				{
-					if (timer >= 0.5f)
+					newCenter.y = mapLT.y + mapSize.y - FRAMEWORK.GetWindowSize().y / 2;
+				}
+				worldView.setCenter(newCenter);
+			}
+			else
+			{
+				worldView.setCenter(player2->GetPosition());
+			}
+		}
+
+		// EDITOR ON
+		{
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+			{
+				SCENE_MGR.ChangeScene(SceneId::Editor);
+			}
+		}
+
+		// ITEM ROOTING TEST CODE
+		{
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+			{
+				SpawnRootingItem(ItemId::branch, { 0,0 });
+			}
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
+			{
+				SpawnRootingItem(ItemId::coal, { 0,0 });
+			}
+		}
+
+		// QUICK & INVEN ONOFF
+		{
+			if (inven->GetInvenOff() || shopTap->shopTapOn || homeTap->homeTapOn)
+			{
+				quickinven->SetActive(false);
+			}
+			else
+			{
+				quickinven->SetActive(true);
+			}
+
+			if (shopTap->shopTapOn || homeTap->homeTapOn)
+			{
+				inven->invenTapOn = false;
+			}
+			else
+			{
+				inven->invenTapOn = true;
+			}
+		}
+
+		// PLAYER OBJECT HIT TEST CODE
+		{
+			timer += dt;
+			if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2 && location == Location::Farm)
+			{
+				// HARVEST CROP
+				{
+					/*if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 					{
-						timer = 0.f;
-						HitStone(mouseTileX, mouseTileY);
-						HitWeed(mouseTileX, mouseTileY);
-						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+						if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 						{
-							switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
+							CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
+							switch (id)
 							{
-							case true:
-								dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
-								dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
+							case CropId::Parsnip:
+								HarvestParsnip(mouseTileX, mouseTileY);
 								break;
-							case false:
-								dirtArray[mouseTileY][mouseTileX]->SetActive(false);
-								activeDirtIndex.erase(
-									std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
-										[&](const std::pair<int, int>& pair) {
-											return pair.first == mouseTileY || pair.second == mouseTileX;
-										}), activeDirtIndex.end());
-
-								dirtArray[mouseTileY][mouseTileX]->Reset();
+							case CropId::Potato:
+								HarvestPotato(mouseTileX, mouseTileY);
+								break;
+							case CropId::Cauliflower:
+								HarvestCauli(mouseTileX, mouseTileY);
 								break;
 							default:
 								break;
 							}
 						}
-					}
+					}*/
 				}
-				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
+				if (!(abs(mouseTileX - playerTileX) == 0 && abs(mouseTileY - playerTileY) == 0))
 				{
-					if (timer >= 0.5f)
+					if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::pick)
 					{
-						timer = 0.f;
-						HitTree(mouseTileX, mouseTileY);
-						HitTimber(mouseTileX, mouseTileY);
-						HitWeed(mouseTileX, mouseTileY);
-					}
-				}
-				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
-				{
-					if (timer >= 0.5f)
-					{
-						timer = 0.f;
-						HitWeed(mouseTileX, mouseTileY);
-					}
-				}
-				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
-				{
-					if (timer >= 0.5f)
-					{
-						timer = 0.f;
-						if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
-							&& canFarm[mouseTileY*col + mouseTileX].canFarm /*location == Location::Farm*/)
+						if (timer >= 0.5f)
 						{
-							dirtArray[mouseTileY][mouseTileX]->SetActive(true);
-							activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX));
-							dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
-							for (auto dirts : dirtArray)
+							timer = 0.f;
+							HitStone(mouseTileX, mouseTileY);
+							HitWeed(mouseTileX, mouseTileY);
+							if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 							{
-								for (auto dirt : dirts)
+								switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 								{
-									dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+								case true:
+									dirtArray[mouseTileY][mouseTileX]->GetCrop()->bang = true;
+									dirtArray[mouseTileY][mouseTileX]->RemoveCrop();
+									break;
+								case false:
+									dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+									activeDirtIndex.erase(
+										std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
+											[&](const std::pair<int, int>& pair) {
+												return pair.first == mouseTileY || pair.second == mouseTileX;
+											}), activeDirtIndex.end());
+
+									dirtArray[mouseTileY][mouseTileX]->Reset();
+									break;
+								default:
+									break;
 								}
 							}
 						}
 					}
-				}
-				else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
-				{
-					if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+					else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::ax)
 					{
-						dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
-
-						for (auto dirts : dirtArray)
+						if (timer >= 0.5f)
 						{
-							for (auto dirt : dirts)
+							timer = 0.f;
+							HitTree(mouseTileX, mouseTileY);
+							HitTimber(mouseTileX, mouseTileY);
+							HitWeed(mouseTileX, mouseTileY);
+						}
+					}
+					else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::hook)
+					{
+						if (timer >= 0.5f)
+						{
+							timer = 0.f;
+							HitWeed(mouseTileX, mouseTileY);
+						}
+					}
+					else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::homi)
+					{
+						if (timer >= 0.5f)
+						{
+							timer = 0.f;
+							if (!HasObjectAt(mouseTileX, mouseTileY) && !dirtArray[mouseTileY][mouseTileX]->GetActive()
+								&& canFarm[mouseTileY * col + mouseTileX].canFarm /*location == Location::Farm*/)
 							{
-								dirt->SetWaterDirtTex(GetWaterDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+								dirtArray[mouseTileY][mouseTileX]->SetActive(true);
+								activeDirtIndex.push_back(std::make_pair(mouseTileY, mouseTileX));
+								dirtArray[mouseTileY][mouseTileX]->SetCurrentDay(day);
+								for (auto dirts : dirtArray)
+								{
+									for (auto dirt : dirts)
+									{
+										dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+									}
+								}
+							}
+						}
+					}
+					else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::waterCan)
+					{
+						if (dirtArray[mouseTileY][mouseTileX]->GetActive())
+						{
+							dirtArray[mouseTileY][mouseTileX]->SetIsWatered(true);
+
+							for (auto dirts : dirtArray)
+							{
+								for (auto dirt : dirts)
+								{
+									dirt->SetWaterDirtTex(GetWaterDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	//SET NIGHT TEST CODE
-	{
-		
-		//night->SetOrigin(Origins::MC);
-		//night->SetPosition(player2->GetPosition());
+		//SET NIGHT TEST CODE
+		{
+			//night->SetOrigin(Origins::MC);
+			//night->SetPosition(player2->GetPosition());
+		}
 	}
-
-		
 }
 
 void SceneGame::Draw(sf::RenderWindow& window) 
@@ -1389,8 +1373,6 @@ void SceneGame::SpawnRootingItem(ItemId id, sf::Vector2f pos)
 	rootingItems.back()->SetOrigin(Origins::MC);
 	rootingItems.back()->sortLayer = 2;
 }
-
-
 
 void SceneGame::SetAct(bool is)
 {
@@ -1734,7 +1716,6 @@ void SceneGame::HarvestParsnip(int x, int y)
 		player2->AddPlayerItem(ItemId::parsnip);
 		
 	}
-	
 }
 
 void SceneGame::HarvestPotato(int x, int y)
@@ -1773,19 +1754,6 @@ void SceneGame::ChangeDate()
 	hour = 6;
 	min = 0;
 	arrowSpin = 0;
-
-	/*for (auto i : parsnipPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-	}
-	for (auto i : potatoPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-	}
-	for (auto i : cauliflowerPool.GetUseList())
-	{
-		i->SetIsWatered(false);
-	}*/
 }
 
 void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
@@ -1857,6 +1825,60 @@ void SceneGame::ObjectLoad(unordered_map<int, ObjectInfo> table)
 			tree->sortOrder = obj.second.indexY;
 			treeCount++;
 		}
+	}
+}
+
+void SceneGame::FileLoad(bool load)
+{
+	if (load)
+	{
+		SAVELOAD_DATA.LoadCSV(&sData);
+		player2->LoadData(sData.pl_ItemList, sData.pl_totalMoney, sData.pl_money, sData.pl_energy);
+		min = sData.game_min;
+		hour = sData.game_hour;
+		day = sData.game_day;
+		ObjectLoad(SAVELOAD_DATA.table);
+		activeDirtIndex = sData.activeDirtIndex;
+		CropLoad(parsnipPool, SAVELOAD_DATA.parsnip);
+		CropLoad(potatoPool, SAVELOAD_DATA.potato);
+		CropLoad(cauliflowerPool, SAVELOAD_DATA.cauliflower);
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->load = true;
+			}
+		}
+	}
+	else
+	{
+		min = 0;
+		hour = 6;
+		day = 1;
+		Objtable = (ObjectTable*)(new ObjectTable());
+		Objtable->Load();
+		ObjectLoad(Objtable->GetTable());
+		player2->load = false;
+		for (auto i : parsnipPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (auto i : potatoPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (auto i : cauliflowerPool.GetPool())
+		{
+			i->load = false;
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				dirtArray[i][j]->load = false;
+			}
+		}
+		activeDirtIndex.clear();
 	}
 }
 
