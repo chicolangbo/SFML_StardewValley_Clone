@@ -38,7 +38,7 @@ protected:
 	float top;
 	float width;
 	float height;
-	bool colliderOnOff;
+	bool colliderOnOff = false;
 
 	struct wallstruct
 	{

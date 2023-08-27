@@ -30,7 +30,7 @@ void Wall::Reset()
 
 void Wall::Update(float dt)
 {
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	/*if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
 		if (colliderOnOff)
 		{
@@ -40,14 +40,14 @@ void Wall::Update(float dt)
 		{
 			colliderOnOff = true;
 		}
-	}
+	}*/
 	//GameObject::Update(dt);
 }
 
 void Wall::Draw(sf::RenderWindow& window)
 {
 	//GameObject::Draw(window);
-	//if (colliderOnOff)
+	if (colliderOnOff)
 	{
 		for (auto it : Walls)
 		{

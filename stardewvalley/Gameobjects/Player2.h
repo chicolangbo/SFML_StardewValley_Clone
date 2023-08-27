@@ -139,5 +139,7 @@ public:
 	void SetMPIndex(sf::Vector2i p, sf::Vector2i m) { playerTileIndex = p; mouseTileIndex = m; }
 	void ItemIconSetUp();
 	int GetItemCount();
+	bool GetDie() { return playerDie; }
+	bool GetDieAnimation() { return playingAnimation; }
 };
 
