@@ -35,7 +35,6 @@ void Player2::Init()
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_IdleItem-Side.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_IdleItem-Up.csv"));
 	
-
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool.csv")); 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-side.csv")); 
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/player_Tool-up.csv")); 
@@ -68,8 +67,6 @@ void Player2::Init()
 	clipInfos.push_back({ "IdleSide", "MoveSide", false, Utils::Normalize({ -1.f, 1.f }) });
 	clipInfos.push_back({ "Idle", "Move", true,{0.f, 1.f} });
 	clipInfos.push_back({ "IdleSide", "MoveSide", true, Utils::Normalize({ 1.f, 1.f }) });
-
-	
 
 	clipInfosItem.push_back({ "IdleItemSide", "MoveItemSide", false, Utils::Normalize({-1.f, -1.f}) });
 	clipInfosItem.push_back({ "IdleItemUp", "MoveItemUp", true, {0.f, -1.f} });
@@ -127,7 +124,7 @@ void Player2::Reset()
 		playerItemList.push_back({ ItemId::branch, 50, 8 });
 		playerItemList.push_back({ ItemId::coal, 1, 9 });
 		playerItemList.push_back({ ItemId::fiver, 20, 10 });
-		item = ItemId::none;
+		item = ItemId::ax; 
 	}
 
 	collider.setSize({ sprite.getGlobalBounds().width, sprite.getGlobalBounds().height });
@@ -145,7 +142,7 @@ void Player2::Update(float dt)
 		SpriteGo::Update(dt);
 
 		//hitBox.setPosition(GetPosition());
-	
+
 
 		sf::Vector2f playerPos = GetPosition();
 
@@ -164,81 +161,81 @@ void Player2::Update(float dt)
 		else
 		{
 			delete handitem;
-			handitem = nullptr; 
+			handitem = nullptr;
 		}
 
 
-	//std::cout << (int)item << std::endl;
-	if (!playerDie)
-	{
-		if (!playingAnimation)
+		//std::cout << (int)item << std::endl;
+		if (!playerDie)
 		{
-			direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
-			direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-		}
-		float magnitude = Utils::Magnitude(direction);
-		if (magnitude > 1.f)
-		{
-			direction /= magnitude;
-		}
+			if (!playingAnimation)
+			{
+				direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+				direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+			}
+			float magnitude = Utils::Magnitude(direction);
+			if (magnitude > 1.f)
+			{
+				direction /= magnitude;
+			}
 
 			//sf::Vector2f newPosition = position + direction * dt * speed;
 			//collider.setPosition(newPosition);
 
-		playerBound = collider.getGlobalBounds(); 
-		for (int i = 0; i < wallBounds.size(); ++i)
-		{
-			if (collider.getGlobalBounds().intersects(wallBounds[i]))
+			playerBound = collider.getGlobalBounds();
+			for (int i = 0; i < wallBounds.size(); ++i)
 			{
-				if (position.x < wallBoundsLT[i].x)
+				if (collider.getGlobalBounds().intersects(wallBounds[i]))
 				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::A))
+					if (position.x < wallBoundsLT[i].x)
 					{
-						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+						if (INPUT_MGR.GetKey(sf::Keyboard::A))
+						{
+							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+						}
+						else
+						{
+							direction.x = 0;
+						}
 					}
-					else
+					else if (position.x > wallBoundsRB[i].x)
 					{
-						direction.x = 0;
+						if (INPUT_MGR.GetKey(sf::Keyboard::D))
+						{
+							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
+						}
+						else
+						{
+							direction.x = 0;
+						}
 					}
-				}
-				else if (position.x > wallBoundsRB[i].x)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::D))
+					else if (position.y < wallBoundsRB[i].y)
 					{
-						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
+						if (INPUT_MGR.GetKey(sf::Keyboard::W))
+						{
+							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+						}
+						else
+						{
+							direction.y = 0;
+						}
 					}
-					else
+					else if (position.y > wallBoundsRB[i].y)
 					{
-						direction.x = 0;
-					}
-				}
-				else if (position.y < wallBoundsRB[i].y)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::W))
-					{
-						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
-					}
-					else
-					{
-						direction.y = 0;
-					}
-				}
-				else if (position.y > wallBoundsRB[i].y)
-				{
-					if (INPUT_MGR.GetKey(sf::Keyboard::S))
-					{
-						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-					}
-					else
-					{
-						direction.y = 0;
+						if (INPUT_MGR.GetKey(sf::Keyboard::S))
+						{
+							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+						}
+						else
+						{
+							direction.y = 0;
+						}
 					}
 				}
 			}
-		}
 
-		position += direction * speed * dt;
-		SetPosition(position);
+			position += direction * speed * dt;
+			SetPosition(position);
 
 
 			//도구 사용
@@ -262,62 +259,62 @@ void Player2::Update(float dt)
 			watering.SetPosition(position);
 			watering.SetOrigins();
 
-		if ((direction.x != 0.f || direction.y != 0.f))
-		{
-			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+			if ((direction.x != 0.f || direction.y != 0.f))
 			{
-				auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
-					[this](const ClipInfo& lhs, const ClipInfo& rhs) {
-						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-					});
-				currentClipInfo = *min;
-			}
-			else
-			{
-				auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
-					[this](const HandOnItem& lhs, const HandOnItem& rhs) {
-						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-					});
-				currentClipInfoItem = *mins;
-			}
-		}
-		//아이템 들고있는것에따라 모션
-		{
-			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
-			{
-				std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
-				if (GetFlipX() != currentClipInfo.flipX)
+				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
 				{
-					SetFlipX(currentClipInfo.flipX);
+					auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
+						[this](const ClipInfo& lhs, const ClipInfo& rhs) {
+							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+						});
+					currentClipInfo = *min;
 				}
-				if (!playingAnimation)
+				else
 				{
-					if (animation.GetCurrentClipId() != clipId) 
+					auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
+						[this](const HandOnItem& lhs, const HandOnItem& rhs) {
+							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+						});
+					currentClipInfoItem = *mins;
+				}
+			}
+			//아이템 들고있는것에따라 모션
+			{
+				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+				{
+					std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
+					if (GetFlipX() != currentClipInfo.flipX)
 					{
-						animation.Play(clipId); 
+						SetFlipX(currentClipInfo.flipX);
+					}
+					if (!playingAnimation)
+					{
+						if (animation.GetCurrentClipId() != clipId)
+						{
+							animation.Play(clipId);
+						}
+					}
+				}
+				else
+				{
+					std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
+					if (GetFlipX() != currentClipInfoItem.flipX)
+					{
+						SetFlipX(currentClipInfoItem.flipX);
+					}
+					if (!playingAnimation)
+					{
+						if (animation.GetCurrentClipId() != clipId)
+						{
+							animation.Play(clipId);
+						}
 					}
 				}
 			}
-			else
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
 			{
-				std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
-				if (GetFlipX() != currentClipInfoItem.flipX)
-				{
-					SetFlipX(currentClipInfoItem.flipX);
-				}
-				if (!playingAnimation)
-				{
-					if (animation.GetCurrentClipId() != clipId)
-					{
-						animation.Play(clipId);
-					}
-				}
+				energy = 0;
 			}
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
-		{
-			energy = 0;
-		}
 
 			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 			{
@@ -348,7 +345,7 @@ void Player2::Update(float dt)
 								if (harvest)
 								{
 									SetScale(4.5f, 4.5f);
-									animation.Play("HarvestSide"); 
+									animation.Play("HarvestSide");
 								}
 								else
 								{
@@ -362,7 +359,7 @@ void Player2::Update(float dt)
 							{
 								if (harvest)
 								{
-									SetScale(-4.5f, 4.5f); 
+									SetScale(-4.5f, 4.5f);
 									animation.Play("HarvestSide");
 								}
 								else
@@ -380,13 +377,13 @@ void Player2::Update(float dt)
 							{
 								animation.Play("HarvestUp");
 							}
-							else 
+							else
 							{
 								animation.Play("AttackUp");
 								scythe.SetFlipX(true);
 								scythe.PlayAnimation("ScytheBack");
 							}
-						
+
 						}
 						energy -= 2;
 						playingAnimation = true;
@@ -476,7 +473,7 @@ void Player2::Update(float dt)
 								pickax.SetFlipX(true);
 								pickax.PlayAnimation("PickaxFront");
 							}
-						
+
 						}
 						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
 						{
@@ -603,75 +600,75 @@ void Player2::Update(float dt)
 						direction = { 0,0 };
 						break;
 
-				case ItemId::waterCan:
-					if (playerTileIndex.y < mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("Harvest");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("Water");
-							watering.SetFlipX(true);
-							watering.PlayAnimation("WateringFront");
-						}
-					}
-					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-					{
-
-						if (playerTileIndex.x < mouseTileIndex.x)
+					case ItemId::waterCan:
+						if (playerTileIndex.y < mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("Harvest");
 								harvest = false;
 							}
 							else
 							{
+								animation.Play("Water");
 								watering.SetFlipX(true);
-								watering.PlayAnimation("WateringSide");
-								SetScale(4.5f, 4.5f);
-								animation.Play("WaterSide");
+								watering.PlayAnimation("WateringFront");
 							}
 						}
-						if (playerTileIndex.x > mouseTileIndex.x)
+						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+						{
+
+							if (playerTileIndex.x < mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									watering.SetFlipX(true);
+									watering.PlayAnimation("WateringSide");
+									SetScale(4.5f, 4.5f);
+									animation.Play("WaterSide");
+								}
+							}
+							if (playerTileIndex.x > mouseTileIndex.x)
+							{
+								if (harvest)
+								{
+									SetScale(-4.5f, 4.5f);
+									animation.Play("HarvestSide");
+									harvest = false;
+								}
+								else
+								{
+									watering.SetFlipX(false);
+									watering.PlayAnimation("WateringSide");
+									SetScale(-4.5f, 4.5f);
+									animation.Play("WaterSide");
+								}
+							}
+						}
+						else if (playerTileIndex.y > mouseTileIndex.y)
 						{
 							if (harvest)
 							{
-								SetScale(-4.5f, 4.5f);
-								animation.Play("HarvestSide");
+								animation.Play("HarvestUp");
 								harvest = false;
 							}
 							else
 							{
-								watering.SetFlipX(false);
-								watering.PlayAnimation("WateringSide");
-								SetScale(-4.5f, 4.5f);
-								animation.Play("WaterSide");
+								animation.Play("WaterUp");
+								watering.SetFlipX(true);
+								watering.PlayAnimation("WateringBack");
 							}
 						}
-					}
-					else if (playerTileIndex.y > mouseTileIndex.y)
-					{
-						if (harvest)
-						{
-							animation.Play("HarvestUp");
-							harvest = false;
-						}
-						else
-						{
-							animation.Play("WaterUp");
-							watering.SetFlipX(true);
-							watering.PlayAnimation("WateringBack");
-						}
-					}
-					energy -= 2;
-					playingAnimation = true;
-					direction = { 0,0 };
-					break;
+						energy -= 2;
+						playingAnimation = true;
+						direction = { 0,0 };
+						break;
 
 					default:
 						SetOrigin(Origins::BC);
@@ -718,66 +715,67 @@ void Player2::Update(float dt)
 					}
 				}
 			}
-		}
 
 
-		else if (playerDie&&one)
-		{
-			animation.Play("Die");
-			one = false;
-		}
-	
-		if (energy == 0)
-		{
-			playerDie = true;
-		}
 
-		if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
-		{
-			playingAnimation = false;
-			//harvest = false;
-		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
-		{
-			Reset(); 
-		}
-
-		if (INPUT_MGR.GetKey(sf::Keyboard::Add))
-		{
-			money += 100;
-		}
-		if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
-		{
-			money -= 100;
-		}
-		animation.Update(dt);
-
-		// 아이템 관련
-		AddRootingItem();
-		
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
-		{
-			int a = 0;
-			for (auto& i : playerItemList)
+			else if (playerDie && one)
 			{
-				std::cout << "============ pushnum: " << a << "============" << std::endl;
-				std::cout << "count: "<< i.count << std::endl;
-				std::cout << "index: "<< i.index << std::endl;
-				a++;
+				animation.Play("Die");
+				one = false;
 			}
-		}
 
-		// MONEY TEST CODE
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
-		{
-			tempMoney = 300;
+			if (energy == 0)
+			{
+				playerDie = true;
+			}
+
+			if (animation.GetTotalFrame() - animation.GetCurrentFrame() == 1)
+			{
+				playingAnimation = false;
+				//harvest = false;
+			}
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::LControl))
+			{
+				Reset();
+			}
+
+			if (INPUT_MGR.GetKey(sf::Keyboard::Add))
+			{
+				money += 100;
+			}
+			if (INPUT_MGR.GetKey(sf::Keyboard::Subtract))
+			{
+				money -= 100;
+			}
+			animation.Update(dt);
+
+			// 아이템 관련
+			AddRootingItem();
+
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
+			{
+				int a = 0;
+				for (auto& i : playerItemList)
+				{
+					std::cout << "============ pushnum: " << a << "============" << std::endl;
+					std::cout << "count: " << i.count << std::endl;
+					std::cout << "index: " << i.index << std::endl;
+					a++;
+				}
+			}
+
+			// MONEY TEST CODE
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::P))
+			{
+				tempMoney = 300;
+			}
+			if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
+			{
+				tempMoney = -300;
+			}
+			MoneyUpdate();
+			//타일맵 베이스
 		}
-		if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
-		{
-			tempMoney = -300;
-		}
-		MoneyUpdate();
-		//타일맵 베이스
 	}
 }
 
