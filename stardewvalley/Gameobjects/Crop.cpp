@@ -50,6 +50,10 @@ void Crop::Reset()
 	else
 	{
 		sprite.setTextureRect(RESOURCE_MGR.GetTextureRect(nickName[level - 1]));
+		if (level == 4)
+		{
+			canHarvest = true;
+		}
 	}
 	bang = false;
 	animationTime = 0.7;

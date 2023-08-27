@@ -59,5 +59,6 @@ public:
 	bool GetIsPlanted() { return plantedCrop; }
 	Crop* GetCrop() { return crop; }
 	CropId GetCropId() { return cropId; }
+	void SetIsPlanted(bool p) { plantedCrop = p; }
 };
 

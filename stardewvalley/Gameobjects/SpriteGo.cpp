@@ -121,17 +121,17 @@ void SpriteGo::Reset()
 
 void SpriteGo::Update(float dt)
 {
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
-	{
-		if (colliderOnOff)
-		{
-			colliderOnOff = false;
-		}
-		else
-		{
-			colliderOnOff = true;
-		}
-	}
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
+	//{
+	//	if (colliderOnOff)
+	//	{
+	//		colliderOnOff = false;
+	//	}
+	//	else
+	//	{
+	//		colliderOnOff = true;
+	//	}
+	//}
 }
 
 void SpriteGo::Draw(sf::RenderWindow& window)

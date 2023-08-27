@@ -777,7 +777,7 @@ void SceneGame::Update(float dt)
 		texDay->SetText(to_string(day), 50, sf::Color::Black, Origins::TL, 101, 1800.f, 12.f);
 		dayday->SetText(stringTable->Get("DAY"), 50, sf::Color::Black, Origins::TR, 101, 1795.f, 12.f);
 
-		energyBar->SetSize(sf::Vector2f(26.f, player2->GetEnergy() * 0.67));
+		energyBar->SetSize(sf::Vector2f(26.f, *player2->GetEnergy() * 0.67));
 		energyBar->SetPosition(energy->GetPosition().x - 26.f, energy->GetPosition().y - 10.f);
 		energyBar->SetOrigin(Origins::BC);
 	}
@@ -937,7 +937,7 @@ void SceneGame::Update(float dt)
 			{
 				if (homeTap->save)
 				{
-					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList() };
+					sData = { *player2->GetPlayerItemList(), *player2->GetTotalEarningsInt(), *player2->GetMoney(), *player2->GetEnergy(), min, hour, day, stones, timbers, weeds, trees, activeDirtIndex, parsnipPool.GetUseList(), potatoPool.GetUseList(), cauliflowerPool.GetUseList() };
 					SAVELOAD_DATA.SaveCSV(&sData);
 					//ChangeDate();
 					homeTap->save = false;
@@ -988,12 +988,12 @@ void SceneGame::Update(float dt)
 								dirtArray[i][j]->SetActive(true);
 							}
 						}
-						for (auto dirts : dirtArray)
+					}
+					for (auto dirts : dirtArray)
+					{
+						for (auto dirt : dirts)
 						{
-							for (auto dirt : dirts)
-							{
-								dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
-							}
+							dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
 						}
 					}
 					location = Location::Farm;
@@ -1202,7 +1202,7 @@ void SceneGame::Update(float dt)
 						}
 						else
 						{
-							if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
+							if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior" || go->GetName() == "greenTile")
 								continue;
 							go->SetActive(true);
 						}
@@ -1214,9 +1214,9 @@ void SceneGame::Update(float dt)
 					{
 						player2->SetWallBounds(houseWalls[i]);
 						player2->SetPosition(houseInEnter);
-						changeLocation = true;
-						fadingIn = true;
 					}
+					changeLocation = true;
+					fadingIn = true;
 				}
 				else if (nextlocation == Location::Shop)
 				{
@@ -1387,16 +1387,29 @@ void SceneGame::Update(float dt)
 									break;
 								case false:
 									dirtArray[mouseTileY][mouseTileX]->SetActive(false);
+									//dirtArray[mouseTileY][mouseTileX]->SetIsPlanted(false);
 									activeDirtIndex.erase(
 										std::remove_if(activeDirtIndex.begin(), activeDirtIndex.end(),
 											[&](const std::pair<int, int>& pair) {
-												return pair.first == mouseTileY || pair.second == mouseTileX;
+												return pair.first == mouseTileY && pair.second == mouseTileX;
 											}), activeDirtIndex.end());
 
 									dirtArray[mouseTileY][mouseTileX]->Reset();
+									//230827
 									break;
 								default:
 									break;
+								}
+								for (auto dirts : dirtArray)
+								{
+									for (auto dirt : dirts)
+									{
+										dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+										if (dirt->GetIsWatered())
+										{
+											dirt->SetWaterDirtTex(GetWaterDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+										}
+									}
 								}
 							}
 						}
@@ -1862,6 +1875,16 @@ void SceneGame::HarvestCauli(int x, int y)
 
 void SceneGame::ChangeDate()
 {
+	int* energy = player2->GetEnergy();
+	if (sData.game_hour >= 24)
+	{
+		*energy = sData.pl_energy - (sData.pl_energy * (((sData.game_hour - 24) * 60 + sData.game_min) / 10) * 0.025f);
+	}
+	else
+	{
+		*energy = 270;
+	}
+
 	day += 1;
 
 	time = 0;

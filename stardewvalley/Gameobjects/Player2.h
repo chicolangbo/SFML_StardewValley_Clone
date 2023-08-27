@@ -112,7 +112,7 @@ public:
 	bool GetFlipX() const;
 	void SetFlipX(bool filp);
 
-	int GetEnergy() { return energy; }
+	int* GetEnergy() { return &energy; }
 	int* GetMoney() { return &money; }
 	int* GetTempMoney() { return &tempMoney; }
 
