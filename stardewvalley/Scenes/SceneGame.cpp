@@ -621,9 +621,9 @@ void SceneGame::Update(float dt)
 	int mousePosX = tileSize.x * mouseTileX + mapLT.x;
 	int mousePosY = tileSize.y * mouseTileY + mapLT.y;
 	
-	std::cout << "*------------------------------------------*" << std::endl;
-	std::cout << mousePosX << "," << mousePosY << std::endl;
-	std::cout << "*------------------------------------------*" << std::endl;
+	//std::cout << "*------------------------------------------*" << std::endl;
+	//std::cout << mousePosX << "," << mousePosY << std::endl;
+	//std::cout << "*------------------------------------------*" << std::endl;
 
 	// PLAYER TILE
 	int playerTileX = static_cast<int>((player2->GetPosition().x - mapLT.x) / tileSize.x);
@@ -988,6 +988,13 @@ void SceneGame::Update(float dt)
 								dirtArray[i][j]->SetActive(true);
 							}
 						}
+						for (auto dirts : dirtArray)
+						{
+							for (auto dirt : dirts)
+							{
+								dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
+							}
+						}
 					}
 					location = Location::Farm;
 					changeLocation = true;
@@ -1048,6 +1055,13 @@ void SceneGame::Update(float dt)
 						{
 							dirtArray[i][j]->SetActive(true);
 						}
+					}
+				}
+				for (auto dirts : dirtArray)
+				{
+					for (auto dirt : dirts)
+					{
+						dirt->SetDirtTex(GetHoeDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
 					}
 				}
 				location = Location::Farm;

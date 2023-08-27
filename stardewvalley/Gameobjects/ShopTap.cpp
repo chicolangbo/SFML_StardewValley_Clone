@@ -177,6 +177,7 @@ void ShopTap::Reset()
             {
                 shopInvenSlot[(i * 12) + j]->SetScale(0.9f, 0.9f);
                 shopInvenSlot[(i * 12) + j]->SetPosition(invenSlotPos.x + (j * 80.f / 1.1f), invenSlotPos.y + (i * 80.f / 1.1f));
+                shopInvenSlot[(i * 12) + j]->SetCountPos(shopInvenSlot[(i * 12) + j]->GetPosition() + (sf::Vector2f{shopInvenSlot[(i * 12) + j]->sprite.getGlobalBounds().width, shopInvenSlot[(i * 12) + j]->sprite.getGlobalBounds().height}) / 2.f);
             }
         }
 
@@ -309,6 +310,7 @@ void ShopTap::IconUpdate()
                     sl->SetItemIcon(&(foundItem->second));
                     sl->SetItemId(pl.itemId);
                     sl->GetItemIcon()->SetScale(4.f, 4.f);
+                    sl->SetCountString(pl.count);
                     break;
                 }
             }

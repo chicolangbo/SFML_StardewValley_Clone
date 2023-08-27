@@ -40,6 +40,7 @@ public:
 		string nickName;
 	};
 	bool move = true;
+	bool addRI = false;
 
 protected:
 	bool harvest = false;
