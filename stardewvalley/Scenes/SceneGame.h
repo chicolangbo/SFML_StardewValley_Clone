@@ -31,6 +31,7 @@ class Potato;
 class Cauliflower;
 class EffectGo;
 class Slot;
+class CraftScareCrow;
 
 struct DataLoad
 {
@@ -166,6 +167,9 @@ protected:
 	bool changeLocation = true;
 	Location nextlocation = Location::Farm;
 
+	bool canPutObj = false;
+	vector<CraftScareCrow*> crows;
+
 	RectangleGo* test1; 
 	RectangleGo* test2; 
 	RectangleGo* test3; 
@@ -200,6 +204,7 @@ public:
 	void HitTimber(int x, int y);
 	void HitTree(int x, int y);
 	void HitWeed(int x, int y);
+	void HitScarecrow(int x, int y);
 
 	bool HasObjectAt(int x, int y);
 	void SetGreenTile();
@@ -233,6 +238,8 @@ public:
 
 	string GetHoeDirtNick(int indexX, int indexY);
 	string GetWaterDirtNick(int indexX, int indexY);
+
+	bool HasWallsAt(int x, int y);
 };
 
 template<typename T>

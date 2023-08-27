@@ -633,9 +633,9 @@ void SceneGame::Update(float dt)
 	{
 		// HARVEST CROP
 		{
-			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) || INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)
+				&& location == Location::Farm) //추가
 			{
-
 				if (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
 				{
 					CropId id = dirtArray[mouseTileY][mouseTileX]->GetCropId();
@@ -780,123 +780,6 @@ void SceneGame::Update(float dt)
 		energyBar->SetSize(sf::Vector2f(26.f, *player2->GetEnergy() * 0.67));
 		energyBar->SetPosition(energy->GetPosition().x - 26.f, energy->GetPosition().y - 10.f);
 		energyBar->SetOrigin(Origins::BC);
-	}
-
-	//// FARMING
-	//{
-	//	if (player2->GetPlayerItemId() == ItemId::parsnipSeed
-	//		|| player2->GetPlayerItemId() == ItemId::potatoSeed
-	//		|| player2->GetPlayerItemId() == ItemId::coliSeed)
-	//	{
-	//		ItemId itemId = player2->GetPlayerItemId();
-	//		selectTile->SetActive(true);
-	//		selectTile->SetPosition({ mouseTileX * tileSize.x + mapLT.x, mouseTileY * tileSize.y + mapLT.y });
-	//
-	//		if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
-	//			&& dirtArray[mouseTileY][mouseTileX]->GetActive()
-	//			&& !dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
-	//		{
-	//			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
-	//			canPlant = true;
-	//		}
-	//		else
-	//		{
-	//			selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
-	//			canPlant = false;
-	//		}
-	//
-	//		//PLANT CROP
-	//		if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && canPlant)
-	//		{
-	//			if (player2->GetItemCount() > 0)
-	//			{
-	//				switch (itemId)
-	//				{
-	//				case ItemId::parsnipSeed:
-	//					PlantParsnip(mouseTileX, mouseTileY);
-	//					break;
-	//				case ItemId::potatoSeed:
-	//					PlantPotato(mouseTileX, mouseTileY);
-	//					break;
-	//				case ItemId::coliSeed:
-	//					PlantCauli(mouseTileX, mouseTileY);
-	//					break;
-	//				default:
-	//					break;
-	//				}
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		selectTile->SetActive(false);
-	//	}
-	//}
-	//FADE
-	{
-		/*if (fadingIn)
-		{
-			fadeRectangle->SetActive(true);
-			FadeIn(dt);
-		}*/
-	}
-
-	// LOCATION ENTER
-	{
-		/*if (location == Location::Farm && Utils::Distance(houseOutEnter, player2->GetPosition()) <= 30.f &&
-			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
-		{
-			for (auto go : gameObjects)
-			{
-				if (go->GetActive())
-				{
-					if (go->GetName() == "homeTap")
-						continue;
-					go->SetActive(false);
-				}
-				else
-				{
-					if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
-						continue;
-					go->SetActive(true);
-				}
-			}
-			SetAct(true);
-			location = Location::Home;
-			player2->ClearWalls();
-			for (int i = 0; i < houseWalls.size(); ++i)
-			{
-				player2->SetWallBounds(houseWalls[i]);
-			}
-			player2->SetPosition(houseInEnter);
-		}
-		else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
-			INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right))
-		{
-			for (auto go : gameObjects)
-			{
-				if (go->GetActive())
-				{
-					if (go->GetName() == "homeTap")
-						continue;
-					go->SetActive(false);
-				}
-				else
-				{
-					if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-						continue;
-					go->SetActive(true);
-				}
-			}
-			SetAct(true);
-			player2->ClearWalls();
-			for (int i = 0; i < shopWalls.size(); ++i)
-			{
-				player2->SetWallBounds(shopWalls[i]);
-			}
-			location = Location::Shop;
-			player2->SetPosition(shopInEnter);
-		}*/
 	}
 
 	// LOCATION PATTERN
@@ -1080,7 +963,8 @@ void SceneGame::Update(float dt)
 		{
 			if (player2->GetPlayerItemId() == ItemId::parsnipSeed
 				|| player2->GetPlayerItemId() == ItemId::potatoSeed
-				|| player2->GetPlayerItemId() == ItemId::coliSeed)
+				|| player2->GetPlayerItemId() == ItemId::coliSeed
+				|| player2 ->GetPlayerItemId() == ItemId::craftScareCrow)
 			{
 				ItemId itemId = player2->GetPlayerItemId();
 				selectTile->SetActive(true);
@@ -1093,10 +977,19 @@ void SceneGame::Update(float dt)
 					selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
 					canPlant = true;
 				}
+				else if (abs(mouseTileX - playerTileX) < 2 && abs(mouseTileY - playerTileY) < 2
+					&& !dirtArray[mouseTileY][mouseTileX]->GetActive()
+					&& !HasObjectAt(mouseTileX, mouseTileY)
+					&& !HasWallsAt(mouseTileX, mouseTileY))
+				{
+					selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("greenTile"));
+					canPutObj = true;
+				}
 				else
 				{
 					selectTile->sprite.setTextureRect(RESOURCE_MGR.GetTextureRect("redTile"));
 					canPlant = false;
+					canPutObj = false;
 				}
 
 				//PLANT CROP
@@ -1135,58 +1028,12 @@ void SceneGame::Update(float dt)
 			{
 				fadingOut = true;
 				nextlocation = Location::Home;
-				/*for (auto go : gameObjects)
-				{
-					if (go->GetActive())
-					{
-						if (go->GetName() == "homeTap")
-							continue;
-						go->SetActive(false);
-					}
-					else
-					{
-						if (go->GetName() == "hoedirt" || go->GetName() == "shopInterior")
-							continue;
-						go->SetActive(true);
-					}
-				}
-				SetAct(true);
-				location = Location::Home;
-				player2->ClearWalls();
-				for (int i = 0; i < houseWalls.size(); ++i)
-				{
-					player2->SetWallBounds(houseWalls[i]);
-				}
-				player2->SetPosition(houseInEnter);*/
 			}
 			else if (location == Location::Farm && Utils::Distance(shopOutEnter, player2->GetPosition()) <= 30.f &&
 				INPUT_MGR.GetMouseButtonUp(sf::Mouse::Right) && changeLocation)
 			{
 				fadingOut = true;
 				nextlocation = Location::Shop;
-				/*for (auto go : gameObjects)
-				{
-					if (go->GetActive())
-					{
-						if (go->GetName() == "homeTap")
-							continue;
-						go->SetActive(false);
-					}
-					else
-					{
-						if (go->GetName() == "homeInterior" || go->GetName() == "bedding" || go->GetName() == "hoedirt")
-							continue;
-						go->SetActive(true);
-					}
-				}
-				SetAct(true);
-				player2->ClearWalls();
-				for (int i = 0; i < shopWalls.size(); ++i)
-				{
-					player2->SetWallBounds(shopWalls[i]);
-				}
-				location = Location::Shop;
-				player2->SetPosition(shopInEnter);*/
 			}
 			if (!changeLocation && !fadingOut)
 			{
@@ -1258,7 +1105,8 @@ void SceneGame::Update(float dt)
 
 		// PLAYER MOVE PATTERN
 		{
-			if (homeTap->homeTapOn || shopTap->shopTapOn || inven->GetInvenOff())
+			if (homeTap->homeTapOn || shopTap->shopTapOn || inven->GetInvenOff()
+				|| fadingIn ||fadingOut )
 			{
 				player2->move = false;
 				player2->MoneyUpdate();
@@ -1377,6 +1225,7 @@ void SceneGame::Update(float dt)
 							timer = 0.f;
 							HitStone(mouseTileX, mouseTileY);
 							HitWeed(mouseTileX, mouseTileY);
+							HitScarecrow(mouseTileX, mouseTileY);
 							if (dirtArray[mouseTileY][mouseTileX]->GetActive())
 							{
 								switch (dirtArray[mouseTileY][mouseTileX]->GetIsPlanted())
@@ -1466,6 +1315,44 @@ void SceneGame::Update(float dt)
 									dirt->SetWaterDirtTex(GetWaterDirtNick(dirt->GetIndex().x, dirt->GetIndex().y));
 								}
 							}
+						}
+					}
+					else if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && player2->GetPlayerItemId() == ItemId::craftScareCrow)
+					{
+						if (canPutObj)
+						{
+							//SpriteGo* crow = (SpriteGo*)AddGo(new SpriteGo("graphics/Craftables.png", "craftScareCrow", "craftScareCrow"));
+							//crow->Reset();
+							//crow->SetScale({ 4.5f, 4.5f });
+							//crow->SetOrigin(Origins::TL);
+							//crow->SetPosition(mapLT.x + mouseTileX * tileSize.x, mapLT.y + mouseTileY * tileSize.y);
+							//crow->sortLayer = 1;
+							//crow->sortOrder = mouseTileY;
+							//farmWalls.push_back(crow->GetCollider());
+							//player2->ClearWalls();
+							//for (int i = 0; i < farmWalls.size(); ++i)
+							//{
+							//	player2->SetWallBounds(farmWalls[i]);//다시 콜라이더 배열 업데이트
+							//}
+
+							CraftScareCrow* crow = (CraftScareCrow*)AddGo(new CraftScareCrow("graphics/Craftables.png", "craftScareCrow", "craftScareCrow"));
+							sf::Vector2i index = { mouseTileX, mouseTileY };
+							crow->Reset();
+							crow->SetScale({ 4.5f, 4.5f });
+							crow->SetOrigin(Origins::ML);
+							crow->sprite.setColor(sf::Color(255, 255, 255, 255));
+							crow->SetPosition(mapLT.x + mouseTileX * tileSize.x, mapLT.y + mouseTileY * tileSize.y);
+							crow->sortLayer = 1;
+							crow->sortOrder = mouseTileY;
+							crow->Setindex(index);
+							crows.push_back(crow);
+							farmWalls.push_back({mapLT.x + mouseTileX * tileSize.x, mapLT.y + mouseTileY * tileSize.y, tileSize.x, tileSize.y});
+							player2->ClearWalls();
+							for (int i = 0; i < farmWalls.size(); ++i)
+							{
+								player2->SetWallBounds(farmWalls[i]);//다시 콜라이더 배열 업데이트
+							}
+							player2->RemovePlayerItem(ItemId::craftScareCrow);
 						}
 					}
 				}
@@ -1744,6 +1631,32 @@ void SceneGame::HitWeed(int x, int y)
 			++it;
 		}
 	}
+}
+
+void SceneGame::HitScarecrow(int x, int y)
+{
+	for (int i = 0; i < farmWalls.size(); ++i)
+	{
+		if (farmWalls[i].left == mapLT.x + x * tileSize.x && farmWalls[i].top == mapLT.y + y * tileSize.y)
+		{
+			farmWalls.erase(farmWalls.begin() + i);
+		}
+	}
+	player2->ClearWalls();
+	for (int i = 0; i < farmWalls.size(); ++i)
+	{
+		player2->SetWallBounds(farmWalls[i]);//다시 콜라이더 배열 업데이트
+	}
+	for (auto it = crows.begin(); it != crows.end(); ++it)
+	{
+		if ((*it)->Getindex().x == x && (*it)->Getindex().y == y)
+		{
+			RemoveGo(*it);
+			crows.erase(it);
+			return;
+		}
+	}
+	player2->AddPlayerItem(ItemId::craftScareCrow);
 }
 
 bool SceneGame::HasObjectAt(int x, int y)
@@ -2182,3 +2095,16 @@ string SceneGame::GetWaterDirtNick(int indexX, int indexY)
 	}
 	return waterNick;
 }
+
+bool SceneGame::HasWallsAt(int x, int y)
+{
+	for (auto wall : farmWalls)
+	{
+		if (wall.left == mapLT.x + x * tileSize.x && wall.top == mapLT.y + y * tileSize.y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
