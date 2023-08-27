@@ -12,7 +12,7 @@ public:
 	//
 	// 김민지, 230809, 콜라이더 추가
 	sf::RectangleShape collider;
-	bool colliderOnOff = true;
+	bool colliderOnOff = false;
 	//
 
 	// 김민지, 230807, 스프라이트시트 속 단일이미지 사용 가능하게끔 추가
