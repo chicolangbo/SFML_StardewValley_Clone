@@ -58,8 +58,9 @@ void Crop::Reset()
 void Crop::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
 	animation.Update(dt);
+
+	cout << isWatered << endl;
 
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneGame* sceneGame = dynamic_cast<SceneGame*>(scene);
@@ -73,6 +74,7 @@ void Crop::Update(float dt)
 			day++;
 			LevelUp();
 		}
+		isWatered = false;
 	}
 
 	if (bang)
@@ -87,6 +89,7 @@ void Crop::Update(float dt)
 	{
 		time += dt;
 	}
+
 }
 
 void Crop::SetIndex(int x, int y)

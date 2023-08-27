@@ -126,3 +126,14 @@ void HoeDirt::RemoveCrop()
 	plantedCrop = false;
 	cropId = CropId::None;
 }
+
+void HoeDirt::SetWaterDirtTex(string name)
+{
+	waterDirt.setTextureRect(RESOURCE_MGR.GetTextureRect(name));
+}
+
+void HoeDirt::SetDirtTex(string name)
+{
+	dirt.setTextureRect(RESOURCE_MGR.GetTextureRect(name));
+	
+}
