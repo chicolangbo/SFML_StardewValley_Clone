@@ -185,59 +185,60 @@ void Player2::Update(float dt)
 			//sf::Vector2f newPosition = position + direction * dt * speed;
 			//collider.setPosition(newPosition);
 
-			playerBound = collider.getGlobalBounds(); 
-			for (int i = 0; i < wallBounds.size(); ++i)
+		playerBound = collider.getGlobalBounds(); 
+		for (int i = 0; i < wallBounds.size(); ++i)
+		{
+			if (collider.getGlobalBounds().intersects(wallBounds[i]))
 			{
-				if (collider.getGlobalBounds().intersects(wallBounds[i]))
+				if (position.x < wallBoundsLT[i].x)
 				{
-					if (position.x < wallBoundsLT[i].x)
+					if (INPUT_MGR.GetKey(sf::Keyboard::A))
 					{
-						if (INPUT_MGR.GetKey(sf::Keyboard::A))
-						{
-							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
-						}
-						else
-						{
-							direction.x = 0;
-						}
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal);
 					}
-					else if (position.x > wallBoundsRB[i].x)
+					else
 					{
-						if (INPUT_MGR.GetKey(sf::Keyboard::D))
-						{
-							direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
-						}
-						else
-						{
-							direction.x = 0;
-						}
+						direction.x = 0;
 					}
-					else if (position.y < wallBoundsRB[i].y)
+				}
+				else if (position.x > wallBoundsRB[i].x)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::D))
 					{
-						if (INPUT_MGR.GetKey(sf::Keyboard::W))
-						{
-							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
-						}
-						else
-						{
-							direction.y = 0;
-						}
+						direction.x = INPUT_MGR.GetAxisRaw(Axis::Horizontal); 
 					}
-					else if (position.y > wallBoundsRB[i].y)
+					else
 					{
-						if (INPUT_MGR.GetKey(sf::Keyboard::S))
-						{
-							direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
-						}
-						else
-						{
-							direction.y = 0;
-						}
+						direction.x = 0;
+					}
+				}
+				else if (position.y < wallBoundsRB[i].y)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::W))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical); 
+					}
+					else
+					{
+						direction.y = 0;
+					}
+				}
+				else if (position.y > wallBoundsRB[i].y)
+				{
+					if (INPUT_MGR.GetKey(sf::Keyboard::S))
+					{
+						direction.y = INPUT_MGR.GetAxisRaw(Axis::Vertical);
+					}
+					else
+					{
+						direction.y = 0;
 					}
 				}
 			}
-			position += direction * speed * dt;
-			SetPosition(position);
+		}
+
+		position += direction * speed * dt;
+		SetPosition(position);
 
 
 			//도구 사용
@@ -261,63 +262,62 @@ void Player2::Update(float dt)
 			watering.SetPosition(position);
 			watering.SetOrigins();
 
-
-			if ((direction.x != 0.f || direction.y != 0.f))
+		if ((direction.x != 0.f || direction.y != 0.f))
+		{
+			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
 			{
-				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
-				{
-					auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
-						[this](const ClipInfo& lhs, const ClipInfo& rhs) {
-							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-						});
-					currentClipInfo = *min;
-				}
-				else
-				{
-					auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
-						[this](const HandOnItem& lhs, const HandOnItem& rhs) {
-							return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
-						});
-					currentClipInfoItem = *mins;
-				}
+				auto min = std::min_element(clipInfos.begin(), clipInfos.end(),
+					[this](const ClipInfo& lhs, const ClipInfo& rhs) {
+						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+					});
+				currentClipInfo = *min;
 			}
-			//아이템 들고있는것에따라 모션
+			else
 			{
-				if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+				auto mins = std::min_element(clipInfosItem.begin(), clipInfosItem.end(),
+					[this](const HandOnItem& lhs, const HandOnItem& rhs) {
+						return Utils::Distance(lhs.point, direction) < Utils::Distance(rhs.point, direction);
+					});
+				currentClipInfoItem = *mins;
+			}
+		}
+		//아이템 들고있는것에따라 모션
+		{
+			if (item == ItemId::none || item == ItemId::pick || item == ItemId::ax || item == ItemId::homi || item == ItemId::waterCan || item == ItemId::hook)
+			{
+				std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
+				if (GetFlipX() != currentClipInfo.flipX)
 				{
-					std::string clipId = magnitude == 0.f ? currentClipInfo.idle : currentClipInfo.move;
-					if (GetFlipX() != currentClipInfo.flipX)
-					{
-						SetFlipX(currentClipInfo.flipX);
-					}
-					if (!playingAnimation)
-					{
-						if (animation.GetCurrentClipId() != clipId) 
-						{
-							animation.Play(clipId); 
-						}
-					}
+					SetFlipX(currentClipInfo.flipX);
 				}
-				else
+				if (!playingAnimation)
 				{
-					std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
-					if (GetFlipX() != currentClipInfoItem.flipX)
+					if (animation.GetCurrentClipId() != clipId) 
 					{
-						SetFlipX(currentClipInfoItem.flipX);
-					}
-					if (!playingAnimation)
-					{
-						if (animation.GetCurrentClipId() != clipId)
-						{
-							animation.Play(clipId);
-						}
+						animation.Play(clipId); 
 					}
 				}
 			}
-			if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
+			else
 			{
-				energy = 0;
+				std::string clipId = magnitude == 0.f ? currentClipInfoItem.idleItem : currentClipInfoItem.moveItem;
+				if (GetFlipX() != currentClipInfoItem.flipX)
+				{
+					SetFlipX(currentClipInfoItem.flipX);
+				}
+				if (!playingAnimation)
+				{
+					if (animation.GetCurrentClipId() != clipId)
+					{
+						animation.Play(clipId);
+					}
+				}
 			}
+		}
+		if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) 
+		{
+			energy = 0;
+		}
 
 			if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 			{
@@ -603,49 +603,75 @@ void Player2::Update(float dt)
 						direction = { 0,0 };
 						break;
 
-					case ItemId::waterCan:
-						SetOrigin(Origins::BC);
-						if (playerTileIndex.y < mouseTileIndex.y)
+				case ItemId::waterCan:
+					if (playerTileIndex.y < mouseTileIndex.y)
+					{
+						if (harvest)
+						{
+							animation.Play("Harvest");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("Water");
+							watering.SetFlipX(true);
+							watering.PlayAnimation("WateringFront");
+						}
+					}
+					else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
+					{
+
+						if (playerTileIndex.x < mouseTileIndex.x)
 						{
 							if (harvest)
 							{
-								animation.Play("Harvest");
+								SetScale(4.5f, 4.5f);
+								animation.Play("HarvestSide");
 								harvest = false;
 							}
-						}
-						else if (playerTileIndex.x < mouseTileIndex.x || playerTileIndex.x > mouseTileIndex.x)
-						{
-							if (playerTileIndex.x < mouseTileIndex.x)
+							else
 							{
-								if (harvest)
-								{
-									SetScale(4.5f, 4.5f);
-									animation.Play("HarvestSide");
-									harvest = false;
-								}
-							}
-							if (playerTileIndex.x > mouseTileIndex.x)
-							{
-								if (harvest)
-								{
-									SetScale(-4.5f, 4.5f);
-									animation.Play("HarvestSide");
-									harvest = false;
-								}
+								watering.SetFlipX(true);
+								watering.PlayAnimation("WateringSide");
+								SetScale(4.5f, 4.5f);
+								animation.Play("WaterSide");
 							}
 						}
-						else if (playerTileIndex.y > mouseTileIndex.y)
+						if (playerTileIndex.x > mouseTileIndex.x)
 						{
 							if (harvest)
 							{
-								animation.Play("HarvestUp");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("HarvestSide");
 								harvest = false;
 							}
+							else
+							{
+								watering.SetFlipX(false);
+								watering.PlayAnimation("WateringSide");
+								SetScale(-4.5f, 4.5f);
+								animation.Play("WaterSide");
+							}
 						}
-						energy -= 2;
-						playingAnimation = true;
-						direction = { 0,0 };
-						break;
+					}
+					else if (playerTileIndex.y > mouseTileIndex.y)
+					{
+						if (harvest)
+						{
+							animation.Play("HarvestUp");
+							harvest = false;
+						}
+						else
+						{
+							animation.Play("WaterUp");
+							watering.SetFlipX(true);
+							watering.PlayAnimation("WateringBack");
+						}
+					}
+					energy -= 2;
+					playingAnimation = true;
+					direction = { 0,0 };
+					break;
 
 					default:
 						SetOrigin(Origins::BC);

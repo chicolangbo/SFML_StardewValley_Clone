@@ -119,91 +119,71 @@ void QuickInventory::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 	{
 		mark.SetPosition(quickslots[0]->GetPosition());
-
-		itemid = quickslots[0]->GetItemId();
-
-		/*if (quickslots[0]->GetItemId() == ItemId::pick) 
-		{
-			itemid = ItemId::pick;
-		}
-		else if (quickslots[0]->GetItemId() == ItemId::ax)
-		{
-			itemid = ItemId::ax;
-		}
-		else if (quickslots[0]->GetItemId() == ItemId::homi)
-		{
-			itemid = ItemId::homi;
-		}
-		else if (quickslots[0]->GetItemId() == ItemId::hook)
-		{
-			itemid = ItemId::hook;
-		}
-		else if (quickslots[0]->GetItemId() == ItemId::waterCan)
-		{
-			itemid = ItemId::waterCan;
-		}
-		else
-		{
-			itemid = ItemId::none;
-		}*/
-		
+		//itemid = quickslots[0]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
 	{
 		mark.SetPosition(quickslots[1]->GetPosition());
-		itemid = quickslots[1]->GetItemId();
-		
+		//itemid = quickslots[1]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
 	{
 		mark.SetPosition(quickslots[2]->GetPosition());
-		itemid = quickslots[2]->GetItemId();
+		//itemid = quickslots[2]->GetItemId();
 		
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
 	{
 		mark.SetPosition(quickslots[3]->GetPosition());
-		itemid = quickslots[3]->GetItemId();
+		//itemid = quickslots[3]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
 	{
 		mark.SetPosition(quickslots[4]->GetPosition());
-		itemid = quickslots[4]->GetItemId();
+		//itemid = quickslots[4]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
 	{
 		mark.SetPosition(quickslots[5]->GetPosition());
-		itemid = quickslots[5]->GetItemId();
-		
+		//itemid = quickslots[5]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7))
 	{
 		mark.SetPosition(quickslots[6]->GetPosition());
-		itemid = quickslots[6]->GetItemId();
+		//itemid = quickslots[6]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num8))
 	{
 		mark.SetPosition(quickslots[7]->GetPosition());
-		itemid = quickslots[7]->GetItemId();
+		//itemid = quickslots[7]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num9))
 	{
 		mark.SetPosition(quickslots[8]->GetPosition());
-		itemid = quickslots[8]->GetItemId();
+		//itemid = quickslots[8]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num0))
 	{
 		mark.SetPosition(quickslots[9]->GetPosition());
+		//itemid = quickslots[9]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Hyphen))
 	{
 		mark.SetPosition(quickslots[10]->GetPosition());
-		itemid = quickslots[10]->GetItemId();
+		//itemid = quickslots[10]->GetItemId();
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Equal))
 	{
 		mark.SetPosition(quickslots[11]->GetPosition());
-		itemid = quickslots[11]->GetItemId();
+		//itemid = quickslots[11]->GetItemId();
+	}
+
+	for (int i = 0; i < 12; ++i)
+	{
+		if (quickslots[i]->GetPosition() == mark.GetPosition())
+		{
+			itemid = quickslots[i]->GetItemId();
+		}
 	}
 }
 
